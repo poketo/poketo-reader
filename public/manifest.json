@@ -1,0 +1,9 @@
+{
+  "name": "Poketo",
+  "short_name": "Poketo",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff",
+  "theme_color": "#ff8b8b"
+}
