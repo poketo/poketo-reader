@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
+import ErrorBoundary from './components/error-boundary';
 import FeedView from './views/feed-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
@@ -18,14 +19,16 @@ export default class App extends Component {
             🔖
           </span>
         </header>
-        <Switch>
-          <Route
-            path="/:collectionId/read/:seriesId/:chapterId+"
-            component={ReaderView}
-          />
-          <Route path="/:collectionId?" component={FeedView} />
-          <Route component={NotFoundView} />
-        </Switch>
+        <ErrorBoundary>
+          <Switch>
+            <Route
+              path="/:collectionId/read/:seriesId/:chapterId+"
+              component={ReaderView}
+            />
+            <Route path="/:collectionId?" component={FeedView} />
+            <Route component={NotFoundView} />
+          </Switch>
+        </ErrorBoundary>
       </div>
     );
   }

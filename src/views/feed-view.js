@@ -3,14 +3,16 @@ import Button from '../components/button';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
-const mostRecent = arr => arr.reduce((a, b) => a.createdAt > b.createdAt ? a : b);
-const leastRecent = arr => arr.reduce((a, b) => a.createdAt < b.createdAt ? a : b);
+const mostRecent = arr => arr.reduce((a, b) => a.createdAt > b.createdAt ? a : b, {});
+const leastRecent = arr => arr.reduce((a, b) => a.createdAt < b.createdAt ? a : b, {});
 
 export default class FeedView extends Component {
   state = {
     isNotFound: false,
     isFetching: false,
+    isError: false,
     isChangingList: false,
+    errorMessage: null,
     series: [],
     newSeriesUrl: '',
   };
@@ -108,13 +110,19 @@ export default class FeedView extends Component {
         this.setState({ series: response.data, isFetching: false });
       })
       .catch(err => {
-        this.setState({ isFetching: false, isNotFound: err.status === 404 });
+        console.log(err);
+        this.setState({
+          isFetching: false,
+          isNotFound: err.status === 404,
+          isError: err.status !== 404,
+          errorMessage: err.stack,
+        });
       });
   };
 
   render() {
     const { match } = this.props;
-    const { series, isChangingList, isFetching, isNotFound } = this.state;
+    const { series, errorMessage, isChangingList, isError, isFetching, isNotFound } = this.state;
     const { collectionId } = match.params;
 
     if (isFetching) {
@@ -127,6 +135,15 @@ export default class FeedView extends Component {
           We couldn't find the manga collection at <code>/{collectionId}</code>.
         </div>
       );
+    }
+
+    if (isError) {
+      return (
+        <div>
+          Something went wrong while loading.
+          <pre><code>{errorMessage}</code></pre>
+        </div>
+      )
     }
 
     return (
