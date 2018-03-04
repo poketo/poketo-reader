@@ -98,6 +98,14 @@ button {
   line-height: 32px;
 }
 
+.CodeBlock {
+  background-color: rgba(255, 139, 139, 0.1);
+}
+
+.CodeBlock > code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
 .PageImage {
   display: inline-block;
   position: relative;

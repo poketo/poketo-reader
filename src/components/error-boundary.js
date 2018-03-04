@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CodeBlock from './code-block';
 
 export default class ErrorBoundary extends Component {
   state = {
@@ -17,8 +18,8 @@ export default class ErrorBoundary extends Component {
     if (hasError) {
       return (
         <div>
-          <p>Hmm. Something went wrong. You can reload the page to go back, or help us by <a href="https://github.com/rosszurowski/poketo-site">reporting this issue</a> with the error below.</p>
-          <pre><code>{errorStack}</code></pre>
+          <p>Something went wrong. You can reload the page to go back, or help us by <a href="https://github.com/rosszurowski/poketo-site">reporting this issue</a> with the error below.</p>
+          <CodeBlock>{errorStack}</CodeBlock>
         </div>
       )
     }

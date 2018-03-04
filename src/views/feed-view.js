@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CodeBlock from '../components/code-block';
 import Button from '../components/button';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
@@ -110,7 +111,6 @@ export default class FeedView extends Component {
         this.setState({ series: response.data, isFetching: false });
       })
       .catch(err => {
-        console.log(err);
         this.setState({
           isFetching: false,
           isNotFound: err.status === 404,
@@ -141,7 +141,7 @@ export default class FeedView extends Component {
       return (
         <div>
           Something went wrong while loading.
-          <pre><code>{errorMessage}</code></pre>
+          <CodeBlock>{errorMessage}</CodeBlock>
         </div>
       )
     }
