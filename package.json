@@ -20,7 +20,8 @@
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "s-ago": "^1.1.0",
-    "trae": "^1.4.2"
+    "trae": "^1.4.2",
+    "unstated": "^1.0.3"
   },
   "devDependencies": {
     "flow-bin": "^0.66.0",

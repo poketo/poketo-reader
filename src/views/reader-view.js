@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import utils from '../utils';
 
@@ -29,28 +29,37 @@ export default class ReaderView extends Component {
     const { chapter, isFetching } = this.state;
     const { collectionId } = match.params;
 
-    if (isFetching || chapter === null) {
-      return <div>Loading...</div>;
-    }
+    const isLoading = isFetching || chapter === null;
 
     return (
       <div>
         <nav className="x xj-spaceBetween mv-4">
           <Link to={`/${collectionId}/`}>&larr; Back</Link>
-          <a href={chapter.sourceUrl} target="_blank" rel="noopener noreferrer">
-            Open
-          </a>
+          {chapter && (
+            <a
+              href={chapter.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer">
+              Open
+            </a>
+          )}
         </nav>
-        <div className="ta-center">
-          {chapter.pages.map(page => (
-            <div key={page.id} className="mb-2">
-              <SeriesPageImage page={page} />
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <Fragment>
+            <div className="ta-center">
+              {chapter.pages.map(page => (
+                <div key={page.id} className="mb-2">
+                  <SeriesPageImage page={page} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <nav className="x xj-center">
-          <Link to={`/${collectionId}/`}>Back</Link>
-        </nav>
+            <nav className="x xj-center">
+              <Link to={`/${collectionId}/`}>Back</Link>
+            </nav>
+          </Fragment>
+        )}
       </div>
     );
   }
