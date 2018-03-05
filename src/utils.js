@@ -1,13 +1,26 @@
 import ago from 's-ago';
 import trae from 'trae';
 
+import type { Series, Chapter } from './types';
+
 const api = trae.create({
   baseUrl: process.env.REACT_APP_API_BASE,
 });
 
 export default {
   formatTimestamp: n => ago(new Date(n * 1000)),
-  hasNewChapter: series => series.updatedAt > series.lastReadAt,
+  getRandomItems: (arr: Array<any>, count: number = 1) =>
+    arr
+      .slice()
+      .sort(() => 0.5 - Math.random())
+      .slice(0, count),
+
+  hasNewChapter: (series: Series): boolean =>
+    series.updatedAt > series.lastReadAt,
+  mostRecentChapter: (arr: Array<Chapter>) =>
+    arr.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
+  leastRecentChapter: (arr: Array<Chapter>) =>
+    arr.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
 
   fetchCollection: collectionId => api.get(`/collection/${collectionId}`),
   fetchMarkAsRead: (collectionId, seriesId) =>

@@ -4,14 +4,11 @@ import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 
 import SeriesContainer from '../containers/series-container';
-import CodeBlock from '../components/code-block';
 import Button from '../components/button';
+import CodeBlock from '../components/code-block';
+import Input from '../components/input';
 import SeriesRow from '../components/series-row';
-
-const mostRecent = arr =>
-  arr.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {});
-const leastRecent = arr =>
-  arr.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {});
+import utils from '../utils';
 
 type Props = {
   collectionId: string,
@@ -40,7 +37,7 @@ class FeedView extends Component<Props, State> {
   };
 
   handleAddCancelClick = () => {
-    this.setState({ isSeriesModalOpen: false });
+    this.setState({ isSeriesModalOpen: false, newSeriesUrl: null });
   };
 
   handleAddConfirmClick = () => {
@@ -73,7 +70,8 @@ class FeedView extends Component<Props, State> {
     const { series: seriesList } = store.state;
 
     const series = seriesList.find(s => s.slug === seriesId);
-    this.handleMarkAsReadClick(seriesId)();
+
+    store.markSeriesAsRead(collectionId, seriesId);
 
     if (series.supportsReading !== true || series.chapters === undefined) {
       return;
@@ -86,8 +84,8 @@ class FeedView extends Component<Props, State> {
     );
     const toChapter =
       unreadChapters.length > 0
-        ? leastRecent(unreadChapters)
-        : mostRecent(series.chapters);
+        ? utils.leastRecentChapter(unreadChapters)
+        : utils.mostRecentChapter(series.chapters);
 
     history.push(`/${collectionId}/read/${series.slug}/${toChapter.id}`);
   };
@@ -132,8 +130,7 @@ class FeedView extends Component<Props, State> {
                 </p>
               </div>
               <div className="mb-2">
-                <input
-                  className="Input"
+                <Input
                   type="text"
                   placeholder="Series URL..."
                   onChange={this.handleNewSeriesUrlChange}
