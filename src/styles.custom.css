@@ -16,7 +16,7 @@ input {
   border: none;
   background: none;
   outline: none;
-  font-size: 1rem;
+  font-size: inherit;
 }
 
 button {
@@ -103,7 +103,8 @@ button {
 }
 
 .CodeBlock > code {
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+    monospace;
 }
 
 .PageImage {

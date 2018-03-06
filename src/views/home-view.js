@@ -71,7 +71,7 @@ export default class HomeView extends Component<Props, State> {
             </button>
           </form>
         </p>
-        <p className="mt-1">
+        <p className="mt-1 fs-12">
           For example,{' '}
           {examples.map((example, i) => (
             <Fragment>
