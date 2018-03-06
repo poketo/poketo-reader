@@ -1,7 +1,17 @@
+// @flow
+
 import React from 'react';
 import utils from '../utils';
 
-const SeriesRow = ({ series, onMarkAsReadClick, onSeriesClick }) => (
+import type { Series } from '../types';
+
+type Props = {
+  series: Series,
+  onMarkAsReadClick: (slug: string) => {},
+  onSeriesClick: (slug: string) => {},
+};
+
+const SeriesRow = ({ series, onMarkAsReadClick, onSeriesClick }: Props) => (
   <div className="x xa-center">
     <div className="x xa-center mr-3">
       <button title="Mark as read" onClick={onMarkAsReadClick(series.slug)}>

@@ -6,7 +6,7 @@ import utils from '../utils';
 import type { Series } from '../types';
 
 type SeriesState = {
-  series: Array<Series>,
+  series: { [id: string]: Series },
   errorMessage: ?string,
   isError: boolean,
   isFetching: boolean,
@@ -16,7 +16,7 @@ type SeriesState = {
 
 export default class SeriesContainer extends Container<SeriesState> {
   state = {
-    series: [],
+    series: {},
     isError: false,
     isFetching: false,
     isNotFound: false,
@@ -24,7 +24,7 @@ export default class SeriesContainer extends Container<SeriesState> {
     errorMessage: null,
   };
 
-  fetchCollection = (collectionId: string) => {
+  fetchCollection = (collectionSlug: string) => {
     // Don't fetch twice. Most basic caching mechanism.
     if (this.state.lastFetched > 0) {
       return;
@@ -33,10 +33,12 @@ export default class SeriesContainer extends Container<SeriesState> {
     this.setState({ isFetching: true });
 
     utils
-      .fetchCollection(collectionId)
+      .fetchCollection(collectionSlug)
       .then(response => {
+        const series = utils.keyArrayBy(response.data, obj => obj.id);
+
         this.setState({
-          series: response.data,
+          series,
           isFetching: false,
           lastFetched: Date.now(),
         });
@@ -51,39 +53,42 @@ export default class SeriesContainer extends Container<SeriesState> {
       });
   };
 
-  fetchChapter = (
-    collectionId: string,
-    seriesId: string,
-    chapterId: string,
-  ) => {
-    // TODO
-  };
+  addSeriesToCollection = (collectionSlug: string, seriesUrl: string) => {
+    utils.addSeries(collectionSlug, seriesUrl).then(response => {
+      const newSeries = response.data;
 
-  addSeriesToCollection = (collectionId: string, seriesUrl: string) => {
-    utils.addSeries(collectionId, seriesUrl).then(response => {
-      const series = this.state.series.map(srs => {
-        if (srs.slug === response.data.slug) {
-          return { ...srs, ...response.data };
-        }
-        return srs;
+      this.setState({
+        series: {
+          ...this.state.series,
+          [newSeries.id]: {
+            ...this.state.series[newSeries.id],
+            ...newSeries,
+          },
+        },
       });
-
-      this.setState({ series });
     });
   };
 
-  markSeriesAsRead = (collectionId: string, seriesId: string) => {
+  markSeriesAsRead = (collectionSlug: string, seriesSlug: string) => {
     utils
-      .fetchMarkAsRead(collectionId, seriesId)
+      .fetchMarkAsRead(collectionSlug, seriesSlug)
       .then(response => {
-        const series = this.state.series.map(srs => {
-          if (srs.slug === response.data.slug) {
-            return { ...srs, ...response.data };
-          }
-          return srs;
-        });
+        const newSeries = response.data;
+        // TODO: this is a weird consequence of the half-way between slugs and IDs. We should
+        // just be using IDs here, but we're not sending them back from the server.
+        const oldSeries: Series = Object.values(this.state.series).find(
+          (srs: Series) => srs.slug === newSeries.slug,
+        );
 
-        this.setState({ series, isFetching: false });
+        this.setState({
+          series: {
+            ...this.state.series,
+            [oldSeries.id]: {
+              ...oldSeries,
+              ...newSeries,
+            },
+          },
+        });
       })
       .catch(err => {
         this.setState({ errorMessage: err.stack });

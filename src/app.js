@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Provider } from 'unstated';
 
 import SeriesContainer from './containers/series-container';
+import ChapterContainer from './containers/chapter-container';
 
 import ErrorBoundary from './components/error-boundary';
 import HomeView from './views/home-view';
@@ -14,12 +15,13 @@ import '@rosszurowski/vanilla/lib/vanilla.css';
 import './styles.base.css';
 import './styles.custom.css';
 
-const series = new SeriesContainer();
+const seriesStore = new SeriesContainer();
+const chapterStore = new ChapterContainer();
 
 export default class App extends Component {
   render() {
     return (
-      <Provider inject={[series]}>
+      <Provider inject={[seriesStore, chapterStore]}>
         <div id="app" className="pa-3 pa-5-m">
           <header className="mb-4">
             <span role="img" aria-label="Tag">
@@ -29,10 +31,10 @@ export default class App extends Component {
           <ErrorBoundary>
             <Switch>
               <Route
-                path="/:collectionId/read/:seriesId/:chapterId+"
+                path="/:collectionSlug/read/:seriesSlug/:chapterSlug+"
                 component={ReaderView}
               />
-              <Route path="/:collectionId" component={FeedView} />
+              <Route path="/:collectionSlug" component={FeedView} />
               <Route path="/" component={HomeView} />
               <Route component={NotFoundView} />
             </Switch>

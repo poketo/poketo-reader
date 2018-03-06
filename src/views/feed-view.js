@@ -10,8 +10,10 @@ import Input from '../components/input';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
+import type { Series } from '../types';
+
 type Props = {
-  collectionId: string,
+  collectionSlug: string,
   history: any,
   store: any,
 };
@@ -28,8 +30,8 @@ class FeedView extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { collectionId, store } = this.props;
-    store.fetchCollection(collectionId);
+    const { collectionSlug, store } = this.props;
+    store.fetchCollection(collectionSlug);
   }
 
   handleAddClick = () => {
@@ -41,7 +43,7 @@ class FeedView extends Component<Props, State> {
   };
 
   handleAddConfirmClick = () => {
-    const { collectionId, store } = this.props;
+    const { collectionSlug, store } = this.props;
     const { newSeriesUrl } = this.state;
 
     if (!newSeriesUrl) {
@@ -52,26 +54,30 @@ class FeedView extends Component<Props, State> {
       throw new Error(`Series URL is not a valid URL!`);
     }
 
-    store.addSeriesToCollection(collectionId, newSeriesUrl);
+    store.addSeriesToCollection(collectionSlug, newSeriesUrl);
   };
 
   handleNewSeriesUrlChange = e => {
     this.setState({ newSeriesUrl: e.target.value });
   };
 
-  handleMarkAsReadClick = seriesId => () => {
-    const { collectionId, store } = this.props;
+  handleMarkAsReadClick = seriesSlug => () => {
+    const { collectionSlug, store } = this.props;
 
-    store.markSeriesAsRead(collectionId, seriesId);
+    store.markSeriesAsRead(collectionSlug, seriesSlug);
   };
 
-  handleSeriesClick = seriesId => e => {
-    const { history, collectionId, store } = this.props;
-    const { series: seriesList } = store.state;
+  handleSeriesClick = seriesSlug => e => {
+    const { history, collectionSlug, store } = this.props;
 
-    const series = seriesList.find(s => s.slug === seriesId);
+    const seriesList: Array<Series> = Object.values(store.state.series);
+    const series: ?Series = seriesList.find(srs => srs.slug === seriesSlug);
 
-    store.markSeriesAsRead(collectionId, seriesId);
+    if (series === null || series === undefined) {
+      return;
+    }
+
+    store.markSeriesAsRead(collectionSlug, seriesSlug);
 
     if (series.supportsReading !== true || series.chapters === undefined) {
       return;
@@ -87,21 +93,31 @@ class FeedView extends Component<Props, State> {
         ? utils.leastRecentChapter(unreadChapters)
         : utils.mostRecentChapter(series.chapters);
 
-    history.push(`/${collectionId}/read/${series.slug}/${toChapter.id}`);
+    console.log(series, toChapter);
+
+    history.push(`/${collectionSlug}/read/${series.slug}/${toChapter.slug}`);
   };
 
   render() {
-    const { store, collectionId } = this.props;
+    const { store, collectionSlug } = this.props;
     const { isSeriesModalOpen } = this.state;
-    const { series, errorMessage, isFetching, isNotFound } = store.state;
+    const { errorMessage, isFetching, isNotFound } = store.state;
 
-    if (isFetching) {
+    const series: Array<Series> = Object.values(store.state.series).sort(
+      (a: Series, b: Series) => b.updatedAt - a.updatedAt,
+    );
+
+    console.log(series);
+
+    if (isFetching || series.length === 0) {
       return <div>Loading...</div>;
     }
 
     if (isNotFound) {
       return (
-        <div>Uh oh. Couldn't find the manga collection at {collectionId}.</div>
+        <div>
+          Uh oh. Couldn't find the manga collection at {collectionSlug}.
+        </div>
       );
     }
 
@@ -150,7 +166,7 @@ class FeedView extends Component<Props, State> {
         <div className="mw-500">
           <div>
             {series.map(s => (
-              <div key={s.slug} className="mb-3">
+              <div key={s.id} className="mb-3">
                 <SeriesRow
                   series={s}
                   onMarkAsReadClick={this.handleMarkAsReadClick}
@@ -174,7 +190,7 @@ export default ({ match, history }: any) => (
   <Subscribe to={[SeriesContainer]}>
     {store => (
       <FeedView
-        collectionId={match.params.collectionId}
+        collectionSlug={match.params.collectionSlug}
         store={store}
         history={history}
       />

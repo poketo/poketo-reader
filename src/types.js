@@ -1,4 +1,3 @@
-
 export type Page = {
   id: string,
   url: string,
@@ -6,17 +5,22 @@ export type Page = {
   height?: number,
 };
 
-export type Chapter = {
+export type ChapterPreview = {
   id: string,
   seriesId: string,
-  sourceUrl: string,
   createdAt: number,
+};
+
+export type Chapter = {
+  ...ChapterPreview,
+  sourceUrl: string,
   pages: Array<Page>,
-}
+};
 
 export type Series = {
   slug: string,
   title: string,
-  chapters: Array<Chapter>,
+  chapters: ?Array<Chapter>,
+  linkTo: ?string,
   updatedAt: number,
 };

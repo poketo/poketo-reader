@@ -14,21 +14,23 @@ export default {
       .slice()
       .sort(() => 0.5 - Math.random())
       .slice(0, count),
+  keyArrayBy: (arr: Array<Object>, getKey: (obj: Object) => string) =>
+    arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
 
   hasNewChapter: (series: Series): boolean =>
     series.updatedAt > series.lastReadAt,
-  mostRecentChapter: (arr: Array<Chapter>) =>
-    arr.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
-  leastRecentChapter: (arr: Array<Chapter>) =>
-    arr.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
+  mostRecentChapter: (chapters: Array<Chapter>) =>
+    chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
+  leastRecentChapter: (chapters: Array<Chapter>) =>
+    chapters.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
 
-  fetchCollection: collectionId => api.get(`/collection/${collectionId}`),
-  fetchMarkAsRead: (collectionId, seriesId) =>
-    api.get(`/collection/${collectionId}/markAsRead/${seriesId}`),
-  fetchChapter: (collectionId, seriesId, chapterId) =>
-    api.get(`/collection/${collectionId}/series/${seriesId}/${chapterId}`),
-  addSeries: (collectionId, url) =>
-    api.post(`/collection/${collectionId}/add`, { url }),
-  removeSeries: (collectionId, seriesId) =>
-    api.delete(`/collection/${collectionId}/series/${seriesId}`),
+  fetchCollection: collectionSlug => api.get(`/collection/${collectionSlug}`),
+  fetchMarkAsRead: (collectionSlug, seriesId) =>
+    api.get(`/collection/${collectionSlug}/markAsRead/${seriesId}`),
+  fetchChapter: (collectionSlug, seriesId, chapterId) =>
+    api.get(`/collection/${collectionSlug}/series/${seriesId}/${chapterId}`),
+  addSeries: (collectionSlug, url) =>
+    api.post(`/collection/${collectionSlug}/add`, { url }),
+  removeSeries: (collectionSlug, seriesId) =>
+    api.delete(`/collection/${collectionSlug}/series/${seriesId}`),
 };

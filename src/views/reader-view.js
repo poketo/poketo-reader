@@ -1,40 +1,40 @@
+// @flow
+
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import utils from '../utils';
+import { Subscribe } from 'unstated';
 
+import ChapterContainer from '../containers/chapter-container';
 import SeriesPageImage from '../components/series-page-image';
 
-export default class ReaderView extends Component {
-  state = {
-    chapter: null,
-    isFetching: false,
-  };
+import type { Chapter } from '../types';
 
+type Props = {
+  collectionSlug: string,
+  seriesSlug: string,
+  chapterSlug: string,
+  store: any,
+};
+
+class ReaderView extends Component<Props> {
   componentDidMount() {
-    this.fetchData();
+    const { collectionSlug, seriesSlug, chapterSlug, store } = this.props;
+    store.fetchChapter(collectionSlug, seriesSlug, chapterSlug);
   }
 
-  fetchData = () => {
-    const { match } = this.props;
-    const { collectionId, seriesId, chapterId } = match.params;
-
-    this.setState({ isFetching: true });
-    utils.fetchChapter(collectionId, seriesId, chapterId).then(response => {
-      this.setState({ chapter: response.data, isFetching: false });
-    });
-  };
-
   render() {
-    const { match } = this.props;
-    const { chapter, isFetching } = this.state;
-    const { collectionId } = match.params;
+    const { chapterSlug, collectionSlug, store } = this.props;
+    const { chapters, isFetching } = store.state;
 
-    const isLoading = isFetching || chapter === null;
+    const chapter: Chapter = Object.values(chapters).find(
+      (chapter: Chapter) => chapter.slug === chapterSlug,
+    );
+    const isLoading = isFetching || chapter === null || chapter === undefined;
 
     return (
       <div>
         <nav className="x xj-spaceBetween mv-4">
-          <Link to={`/${collectionId}/`}>&larr; Back</Link>
+          <Link to={`/${collectionSlug}/`}>&larr; Back</Link>
           {chapter && (
             <a
               href={chapter.sourceUrl}
@@ -56,7 +56,7 @@ export default class ReaderView extends Component {
               ))}
             </div>
             <nav className="x xj-center">
-              <Link to={`/${collectionId}/`}>Back</Link>
+              <Link to={`/${collectionSlug}/`}>Back</Link>
             </nav>
           </Fragment>
         )}
@@ -64,3 +64,16 @@ export default class ReaderView extends Component {
     );
   }
 }
+
+export default ({ match }: any) => (
+  <Subscribe to={[ChapterContainer]}>
+    {store => (
+      <ReaderView
+        collectionSlug={match.params.collectionSlug}
+        seriesSlug={match.params.seriesSlug}
+        chapterSlug={match.params.chapterSlug}
+        store={store}
+      />
+    )}
+  </Subscribe>
+);
