@@ -3,14 +3,14 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 
-import CollectionContainer from '../containers/collection-container';
+import EntityContainer from '../containers/entity-container';
 import Button from '../components/button';
 import CodeBlock from '../components/code-block';
 import Input from '../components/input';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
-import type { Collection, Series } from '../types';
+import type { Chapter, Collection, Series } from '../types';
 
 type Props = {
   collectionSlug: string,
@@ -88,9 +88,10 @@ class FeedView extends Component<Props, State> {
 
     e.preventDefault();
 
-    const unreadChapters = series.chapters.filter(
+    const unreadChapters: Array<Chapter> = series.chapters.filter(
       chapter => chapter.createdAt > collection.series[series.id].lastReadAt,
     );
+
     const toChapter =
       unreadChapters.length > 0
         ? utils.leastRecentChapter(unreadChapters)
@@ -189,7 +190,7 @@ class FeedView extends Component<Props, State> {
 }
 
 export default ({ match, history }: any) => (
-  <Subscribe to={[CollectionContainer]}>
+  <Subscribe to={[EntityContainer]}>
     {store => (
       <FeedView
         collectionSlug={match.params.collectionSlug}

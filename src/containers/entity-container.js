@@ -3,10 +3,11 @@
 import { Container } from 'unstated';
 import utils from '../utils';
 
-import type { Collection, Series } from '../types';
+import type { Chapter, ChapterPreview, Collection, Series } from '../types';
 
 type State = {
-  collections: { [slug: string]: Collection },
+  chapters: { [id: string]: Chapter | ChapterPreview },
+  collections: { [id: string]: Collection },
   errorMessage: ?string,
   isError: boolean,
   isFetching: boolean,
@@ -25,6 +26,7 @@ const getCollectionProps = ({ id, lastReadAt, linkTo }) => ({
 
 export default class CollectionContainer extends Container<State> {
   state = {
+    chapters: {},
     collections: {},
     isError: false,
     isFetching: false,
@@ -34,6 +36,10 @@ export default class CollectionContainer extends Container<State> {
     series: {},
   };
 
+  /**
+   * Fetch a collection from the poketo api, only if it isn't already locally
+   * saved first.
+   */
   fetchCollectionIfNeeded = (collectionSlug: string) => {
     const existingCollection = this.state.collections[collectionSlug];
 
@@ -45,6 +51,9 @@ export default class CollectionContainer extends Container<State> {
     this.fetchCollection(collectionSlug);
   };
 
+  /**
+   * Fetch a collection from the poketo api.
+   */
   fetchCollection = (collectionSlug: string) => {
     this.setState({ isFetching: true });
 
@@ -86,6 +95,58 @@ export default class CollectionContainer extends Container<State> {
       });
   };
 
+  /**
+   * Fetch chapter from poketo api, only if needed.
+   */
+  fetchChapterIfNeeded = (
+    collectionSlug: string,
+    seriesSlug: string,
+    chapterSlug: string,
+  ): Chapter => {
+    // Don't fetch twice. Most basic caching mechanism.
+    const existingChapter = Object.values(this.state.chapters).find(
+      (chapter: Chapter) => chapter.slug === chapterSlug,
+    );
+
+    if (existingChapter) {
+      return;
+    }
+
+    this.fetchChapter(collectionSlug, seriesSlug, chapterSlug);
+  };
+
+  /**
+   * Fetch chapter from poketo api.
+   */
+  fetchChapter = (
+    collectionSlug: string,
+    seriesSlug: string,
+    chapterSlug: string,
+  ): Chapter => {
+    this.setState({ isFetching: true });
+
+    utils
+      .fetchChapter(collectionSlug, seriesSlug, chapterSlug)
+      .then(response => {
+        this.setState({
+          chapters: {
+            ...this.state.chapters,
+            [response.data.id]: response.data,
+          },
+          isFetching: false,
+        });
+      })
+      .catch(err => {
+        this.setState({
+          isFetching: false,
+          errorMessage: err.stack,
+        });
+      });
+  };
+
+  /**
+   * Add a series to a collection
+   */
   addSeriesToCollection = (collectionSlug: string, seriesUrl: string) => {
     utils.addSeries(collectionSlug, seriesUrl).then(response => {
       const newSeries = response.data;
@@ -102,6 +163,9 @@ export default class CollectionContainer extends Container<State> {
     });
   };
 
+  /**
+   * Update the "lastReadAt" timestamp for a series in a collection.
+   */
   markSeriesAsRead = (collectionSlug: string, seriesSlug: string) => {
     // TODO: this is a weird consequence of the half-way between slugs and IDs. We should
     // just be using IDs here, but we're not sending them back from the server.

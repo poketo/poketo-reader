@@ -19,9 +19,9 @@ export default {
   keyArrayBy: (arr: Array<Object>, getKey: (obj: Object) => string) =>
     arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
 
-  mostRecentChapter: (chapters: Array<Chapter>) =>
+  mostRecentChapter: (chapters: Array<Chapter>): Chapter =>
     chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
-  leastRecentChapter: (chapters: Array<Chapter>) =>
+  leastRecentChapter: (chapters: Array<Chapter>): Chapter =>
     chapters.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
 
   fetchCollection: (collectionSlug: string) =>

@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Subscribe } from 'unstated';
 
-import ChapterContainer from '../containers/chapter-container';
+import EntityContainer from '../containers/entity-container';
 import SeriesPageImage from '../components/series-page-image';
 
 import type { Chapter } from '../types';
@@ -66,7 +66,7 @@ class ReaderView extends Component<Props> {
 }
 
 export default ({ match }: any) => (
-  <Subscribe to={[ChapterContainer]}>
+  <Subscribe to={[EntityContainer]}>
     {store => (
       <ReaderView
         collectionSlug={match.params.collectionSlug}
