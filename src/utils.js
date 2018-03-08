@@ -1,3 +1,5 @@
+// @flow
+
 import ago from 's-ago';
 import trae from 'trae';
 
@@ -22,13 +24,20 @@ export default {
   leastRecentChapter: (chapters: Array<Chapter>) =>
     chapters.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
 
-  fetchCollection: collectionSlug => api.get(`/collection/${collectionSlug}`),
-  fetchMarkAsRead: (collectionSlug, seriesId) =>
-    api.get(`/collection/${collectionSlug}/markAsRead/${seriesId}`),
-  fetchChapter: (collectionSlug, seriesId, chapterId) =>
-    api.get(`/collection/${collectionSlug}/series/${seriesId}/${chapterId}`),
-  addSeries: (collectionSlug, url) =>
+  fetchCollection: (collectionSlug: string) =>
+    api.get(`/collection/${collectionSlug}`),
+  fetchMarkAsRead: (collectionSlug: string, seriesSlug: string) =>
+    api.get(`/collection/${collectionSlug}/markAsRead/${seriesSlug}`),
+  fetchChapter: (
+    collectionSlug: string,
+    seriesSlug: string,
+    chapterSlug: string,
+  ) =>
+    api.get(
+      `/collection/${collectionSlug}/series/${seriesSlug}/${chapterSlug}`,
+    ),
+  addSeries: (collectionSlug: string, url: string) =>
     api.post(`/collection/${collectionSlug}/add`, { url }),
-  removeSeries: (collectionSlug, seriesId) =>
-    api.delete(`/collection/${collectionSlug}/series/${seriesId}`),
+  removeSeries: (collectionSlug: string, seriesSlug: string) =>
+    api.delete(`/collection/${collectionSlug}/series/${seriesSlug}`),
 };
