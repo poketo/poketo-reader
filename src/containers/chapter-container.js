@@ -6,20 +6,20 @@ import utils from '../utils';
 
 import type { Chapter, ChapterPreview } from '../types';
 
-export type ChapterState = {
+type State = {
   chapters: { [id: string]: Chapter | ChapterPreview },
   errorMessage: ?string,
   isFetching: boolean,
 };
 
-export default class ChapterContainer extends Container<ChapterState> {
+export default class ChapterContainer extends Container<State> {
   state = {
     chapters: {},
     errorMessage: null,
     isFetching: false,
   };
 
-  fetchChapter = (
+  fetchChapterIfNeeded = (
     collectionSlug: string,
     seriesSlug: string,
     chapterSlug: string,
@@ -33,6 +33,14 @@ export default class ChapterContainer extends Container<ChapterState> {
       return;
     }
 
+    this.fetchChapter(collectionSlug, seriesSlug, chapterSlug);
+  };
+
+  fetchChapter = (
+    collectionSlug: string,
+    seriesSlug: string,
+    chapterSlug: string,
+  ): Chapter => {
     this.setState({ isFetching: true });
 
     utils

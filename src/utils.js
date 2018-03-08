@@ -1,14 +1,14 @@
 import ago from 's-ago';
 import trae from 'trae';
 
-import type { Series, Chapter } from './types';
+import type { Chapter } from './types';
 
 const api = trae.create({
   baseUrl: process.env.REACT_APP_API_BASE,
 });
 
 export default {
-  formatTimestamp: n => ago(new Date(n * 1000)),
+  formatTimestamp: (n: number) => ago(new Date(n * 1000)),
   getRandomItems: (arr: Array<any>, count: number = 1) =>
     arr
       .slice()
@@ -17,8 +17,6 @@ export default {
   keyArrayBy: (arr: Array<Object>, getKey: (obj: Object) => string) =>
     arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
 
-  hasNewChapter: (series: Series): boolean =>
-    series.updatedAt > series.lastReadAt,
   mostRecentChapter: (chapters: Array<Chapter>) =>
     chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
   leastRecentChapter: (chapters: Array<Chapter>) =>

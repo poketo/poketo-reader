@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Provider } from 'unstated';
 
-import SeriesContainer from './containers/series-container';
+import CollectionContainer from './containers/collection-container';
 import ChapterContainer from './containers/chapter-container';
 
 import ErrorBoundary from './components/error-boundary';
@@ -15,13 +15,13 @@ import '@rosszurowski/vanilla/lib/vanilla.css';
 import './styles.base.css';
 import './styles.custom.css';
 
-const seriesStore = new SeriesContainer();
+const collectionStore = new CollectionContainer();
 const chapterStore = new ChapterContainer();
 
 export default class App extends Component {
   render() {
     return (
-      <Provider inject={[seriesStore, chapterStore]}>
+      <Provider inject={[collectionStore, chapterStore]}>
         <div id="app" className="pa-3 pa-5-m">
           <header className="mb-4">
             <span role="img" aria-label="Tag">

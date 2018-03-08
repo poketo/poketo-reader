@@ -18,9 +18,22 @@ export type Chapter = {
 };
 
 export type Series = {
+  id: string,
   slug: string,
   title: string,
+  sourceUrl: string,
+  siteName: string,
   chapters: ?Array<Chapter>,
   linkTo: ?string,
   updatedAt: number,
+};
+
+export type Collection = {
+  slug: string,
+  series: {
+    [seriesId: string]: {
+      lastReadAt: number,
+      linkTo: ?string,
+    },
+  },
 };

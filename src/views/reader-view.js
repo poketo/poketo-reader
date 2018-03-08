@@ -19,7 +19,7 @@ type Props = {
 class ReaderView extends Component<Props> {
   componentDidMount() {
     const { collectionSlug, seriesSlug, chapterSlug, store } = this.props;
-    store.fetchChapter(collectionSlug, seriesSlug, chapterSlug);
+    store.fetchChapterIfNeeded(collectionSlug, seriesSlug, chapterSlug);
   }
 
   render() {

@@ -7,24 +7,32 @@ import type { Series } from '../types';
 
 type Props = {
   series: Series,
+  isUnread: boolean,
+  linkTo: ?string,
   onMarkAsReadClick: (slug: string) => {},
   onSeriesClick: (slug: string) => {},
 };
 
-const SeriesRow = ({ series, onMarkAsReadClick, onSeriesClick }: Props) => (
+const SeriesRow = ({
+  series,
+  isUnread,
+  linkTo,
+  onMarkAsReadClick,
+  onSeriesClick,
+}: Props) => (
   <div className="x xa-center">
     <div className="x xa-center mr-3">
-      <button title="Mark as read" onClick={onMarkAsReadClick(series.slug)}>
+      <button title="Mark as read" onClick={onMarkAsReadClick(series.id)}>
         <div
           className={`w-16 h-16 br-round ${
-            utils.hasNewChapter(series) ? 'bgc-pink' : 'ba-2 bc-extraFadedBlack'
+            isUnread ? 'bgc-pink' : 'ba-2 bc-extraFadedBlack'
           }`}
         />
       </button>
     </div>
     <a
-      href={series.linkTo ? series.linkTo : series.url}
-      onClick={onSeriesClick(series.slug)}
+      href={linkTo ? linkTo : series.url}
+      onClick={onSeriesClick(series.id)}
       target="_blank"
       className="x-m xa-baseline-m">
       <div className="Link">{series.title}</div>

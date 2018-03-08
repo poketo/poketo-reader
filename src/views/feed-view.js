@@ -3,14 +3,14 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 
-import SeriesContainer from '../containers/series-container';
+import CollectionContainer from '../containers/collection-container';
 import Button from '../components/button';
 import CodeBlock from '../components/code-block';
 import Input from '../components/input';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
-import type { Series } from '../types';
+import type { Collection, Series } from '../types';
 
 type Props = {
   collectionSlug: string,
@@ -31,7 +31,7 @@ class FeedView extends Component<Props, State> {
 
   componentDidMount() {
     const { collectionSlug, store } = this.props;
-    store.fetchCollection(collectionSlug);
+    store.fetchCollectionIfNeeded(collectionSlug);
   }
 
   handleAddClick = () => {
@@ -61,23 +61,26 @@ class FeedView extends Component<Props, State> {
     this.setState({ newSeriesUrl: e.target.value });
   };
 
-  handleMarkAsReadClick = seriesSlug => () => {
+  handleMarkAsReadClick = seriesId => () => {
     const { collectionSlug, store } = this.props;
+    const { series } = store.state;
+
+    const seriesSlug = series[seriesId].slug;
 
     store.markSeriesAsRead(collectionSlug, seriesSlug);
   };
 
-  handleSeriesClick = seriesSlug => e => {
+  handleSeriesClick = seriesId => e => {
     const { history, collectionSlug, store } = this.props;
 
-    const seriesList: Array<Series> = Object.values(store.state.series);
-    const series: ?Series = seriesList.find(srs => srs.slug === seriesSlug);
+    const collection: Collection = store.state.collections[collectionSlug];
+    const series: ?Series = store.state.series[seriesId];
 
     if (series === null || series === undefined) {
       return;
     }
 
-    store.markSeriesAsRead(collectionSlug, seriesSlug);
+    store.markSeriesAsRead(collectionSlug, series.slug);
 
     if (series.supportsReading !== true || series.chapters === undefined) {
       return;
@@ -86,14 +89,12 @@ class FeedView extends Component<Props, State> {
     e.preventDefault();
 
     const unreadChapters = series.chapters.filter(
-      chapter => chapter.createdAt > series.lastReadAt,
+      chapter => chapter.createdAt > collection.series[series.id].lastReadAt,
     );
     const toChapter =
       unreadChapters.length > 0
         ? utils.leastRecentChapter(unreadChapters)
         : utils.mostRecentChapter(series.chapters);
-
-    console.log(series, toChapter);
 
     history.push(`/${collectionSlug}/read/${series.slug}/${toChapter.slug}`);
   };
@@ -101,8 +102,9 @@ class FeedView extends Component<Props, State> {
   render() {
     const { store, collectionSlug } = this.props;
     const { isSeriesModalOpen } = this.state;
-    const { errorMessage, isFetching, isNotFound } = store.state;
+    const { collections, errorMessage, isFetching, isNotFound } = store.state;
 
+    const collection = collections[collectionSlug];
     const series: Array<Series> = Object.values(store.state.series).sort(
       (a: Series, b: Series) => b.updatedAt - a.updatedAt,
     );
@@ -167,6 +169,8 @@ class FeedView extends Component<Props, State> {
               <div key={s.id} className="mb-3">
                 <SeriesRow
                   series={s}
+                  isUnread={s.updatedAt > collection.series[s.id].lastReadAt}
+                  linkTo={collection.series[s.id].linkTo}
                   onMarkAsReadClick={this.handleMarkAsReadClick}
                   onSeriesClick={this.handleSeriesClick}
                 />
@@ -185,7 +189,7 @@ class FeedView extends Component<Props, State> {
 }
 
 export default ({ match, history }: any) => (
-  <Subscribe to={[SeriesContainer]}>
+  <Subscribe to={[CollectionContainer]}>
     {store => (
       <FeedView
         collectionSlug={match.params.collectionSlug}
