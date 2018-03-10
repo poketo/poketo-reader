@@ -18,6 +18,8 @@ type State = {
 
 const getSeriesProps = ({ lastReadAt, linkTo, ...rest }) => rest;
 
+const getChapterProps = ({ chapters }) => chapters;
+
 const getCollectionProps = ({ id, lastReadAt, linkTo }) => ({
   id,
   lastReadAt,
@@ -44,7 +46,7 @@ export default class CollectionContainer extends Container<State> {
     const existingCollection = this.state.collections[collectionSlug];
 
     // Don't fetch twice. Most basic caching mechanism.
-    if (existingCollection !== null && existingCollection !== undefined) {
+    if (existingCollection) {
       return;
     }
 
@@ -61,6 +63,13 @@ export default class CollectionContainer extends Container<State> {
       .fetchCollection(collectionSlug)
       .then(response => {
         const unnormalized = response.data;
+        const chapters = utils.keyArrayBy(
+          // TODO: the api is returning a chapter as `undefined`, not sure why.
+          // Filtering it out for now, but we should fix this.
+          utils.flatten(unnormalized.map(getChapterProps)).filter(Boolean),
+          obj => obj.id,
+        );
+
         const series = utils.keyArrayBy(
           unnormalized.map(getSeriesProps),
           obj => obj.id,
@@ -81,6 +90,7 @@ export default class CollectionContainer extends Container<State> {
         this.setState({
           collections,
           series,
+          chapters,
           isFetching: false,
           lastFetched: Date.now(),
         });
@@ -95,38 +105,45 @@ export default class CollectionContainer extends Container<State> {
       });
   };
 
+  findChapterBySlug = (chapterSlug: string): ?Chapter => {
+    return Object.values(this.state.chapters).find(
+      (chapter: Chapter) => chapter.slug === chapterSlug,
+    );
+  };
+
   /**
    * Fetch chapter from poketo api, only if needed.
    */
   fetchChapterIfNeeded = (
-    collectionSlug: string,
+    siteId: string,
     seriesSlug: string,
     chapterSlug: string,
   ): Chapter => {
-    // Don't fetch twice. Most basic caching mechanism.
     const existingChapter = Object.values(this.state.chapters).find(
-      (chapter: Chapter) => chapter.slug === chapterSlug,
+      (chapter: Chapter) => chapter.slug === seriesSlug,
     );
 
-    if (existingChapter) {
+    // Don't fetch twice. Most basic caching mechanism. We do a check on
+    // `chapter.pages` to see if it's a Chapter or just a ChapterPreview.
+    if (existingChapter && existingChapter.pages) {
       return;
     }
 
-    this.fetchChapter(collectionSlug, seriesSlug, chapterSlug);
+    this.fetchChapter(siteId, seriesSlug, chapterSlug);
   };
 
   /**
    * Fetch chapter from poketo api.
    */
   fetchChapter = (
-    collectionSlug: string,
+    siteId: string,
     seriesSlug: string,
     chapterSlug: string,
   ): Chapter => {
     this.setState({ isFetching: true });
 
     utils
-      .fetchChapter(collectionSlug, seriesSlug, chapterSlug)
+      .fetchChapter(siteId, seriesSlug, chapterSlug)
       .then(response => {
         this.setState({
           chapters: {

@@ -10,7 +10,8 @@ import SeriesPageImage from '../components/series-page-image';
 import type { Chapter } from '../types';
 
 type Props = {
-  collectionSlug: string,
+  collectionSlug: ?string,
+  siteId: string,
   seriesSlug: string,
   chapterSlug: string,
   store: any,
@@ -18,34 +19,41 @@ type Props = {
 
 class ReaderView extends Component<Props> {
   componentDidMount() {
-    const { collectionSlug, seriesSlug, chapterSlug, store } = this.props;
-    store.fetchChapterIfNeeded(collectionSlug, seriesSlug, chapterSlug);
+    const { siteId, seriesSlug, chapterSlug, store } = this.props;
+    store.fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug);
   }
 
   render() {
     const { chapterSlug, collectionSlug, store } = this.props;
-    const { chapters, isFetching } = store.state;
+    const { isFetching } = store.state;
 
-    const chapter: Chapter = Object.values(chapters).find(
-      (chapter: Chapter) => chapter.slug === chapterSlug,
-    );
-    const isLoading = isFetching || chapter === null || chapter === undefined;
+    const chapter: ?Chapter = store.findChapterBySlug(chapterSlug);
+
+    const isLoading =
+      isFetching ||
+      chapter === null ||
+      chapter === undefined ||
+      chapter.pages === undefined;
 
     return (
       <div>
         <nav className="x xj-spaceBetween mv-4">
-          <Link to={`/${collectionSlug}/`}>&larr; Back</Link>
+          {collectionSlug ? (
+            <Link to={`/${collectionSlug}/`}>&larr; Back</Link>
+          ) : (
+            <div />
+          )}
           {chapter && (
-            <a
-              href={chapter.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer">
-              Open
-            </a>
+            <Fragment>
+              <div>Chapter {chapter.slug}</div>
+              <a href={chapter.url} target="_blank" rel="noopener noreferrer">
+                Open
+              </a>
+            </Fragment>
           )}
         </nav>
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="ta-center pv-4">Loading from the site...</div>
         ) : (
           <Fragment>
             <div className="ta-center">
@@ -55,9 +63,11 @@ class ReaderView extends Component<Props> {
                 </div>
               ))}
             </div>
-            <nav className="x xj-center">
-              <Link to={`/${collectionSlug}/`}>Back</Link>
-            </nav>
+            {collectionSlug && (
+              <nav className="x xj-center">
+                <Link to={`/${collectionSlug}/`}>Back</Link>
+              </nav>
+            )}
           </Fragment>
         )}
       </div>
@@ -70,6 +80,7 @@ export default ({ match }: any) => (
     {store => (
       <ReaderView
         collectionSlug={match.params.collectionSlug}
+        siteId={match.params.siteId}
         seriesSlug={match.params.seriesSlug}
         chapterSlug={match.params.chapterSlug}
         store={store}

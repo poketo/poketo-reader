@@ -97,7 +97,11 @@ class FeedView extends Component<Props, State> {
         ? utils.leastRecentChapter(unreadChapters)
         : utils.mostRecentChapter(series.chapters);
 
-    history.push(`/${collectionSlug}/read/${series.slug}/${toChapter.slug}`);
+    history.push(
+      `/${collectionSlug}/read/${series.site.id}/${series.slug}/${
+        toChapter.slug
+      }`,
+    );
   };
 
   render() {

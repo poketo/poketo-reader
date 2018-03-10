@@ -29,7 +29,11 @@ export default class App extends Component {
           <ErrorBoundary>
             <Switch>
               <Route
-                path="/:collectionSlug/read/:seriesSlug/:chapterSlug+"
+                path="/read/:siteId/:seriesSlug/:chapterSlug+"
+                component={ReaderView}
+              />
+              <Route
+                path="/:collectionSlug/read/:siteId/:seriesSlug/:chapterSlug+"
                 component={ReaderView}
               />
               <Route path="/:collectionSlug" component={FeedView} />
