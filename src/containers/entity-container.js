@@ -16,15 +16,7 @@ type State = {
   series: { [id: string]: Series },
 };
 
-const getSeriesProps = ({ lastReadAt, linkTo, ...rest }) => rest;
-
 const getChapterProps = ({ chapters }) => chapters;
-
-const getCollectionProps = ({ id, lastReadAt, linkTo }) => ({
-  id,
-  lastReadAt,
-  linkTo,
-});
 
 export default class CollectionContainer extends Container<State> {
   state = {
@@ -66,16 +58,15 @@ export default class CollectionContainer extends Container<State> {
         const chapters = utils.keyArrayBy(
           // TODO: the api is returning a chapter as `undefined`, not sure why.
           // Filtering it out for now, but we should fix this.
-          utils.flatten(unnormalized.map(getChapterProps)).filter(Boolean),
+          utils
+            .flatten(unnormalized.series.map(getChapterProps))
+            .filter(Boolean),
           obj => obj.id,
         );
 
-        const series = utils.keyArrayBy(
-          unnormalized.map(getSeriesProps),
-          obj => obj.id,
-        );
-        const collectionSeries = utils.keyArrayBy(
-          unnormalized.map(getCollectionProps),
+        const series = utils.keyArrayBy(unnormalized.series, obj => obj.id);
+        const bookmarks = utils.keyArrayBy(
+          unnormalized.collection.bookmarks,
           obj => obj.id,
         );
 
@@ -83,7 +74,7 @@ export default class CollectionContainer extends Container<State> {
           ...this.state.collections,
           [collectionSlug]: {
             slug: collectionSlug,
-            series: collectionSeries,
+            bookmarks,
           },
         };
 
@@ -162,25 +153,6 @@ export default class CollectionContainer extends Container<State> {
   };
 
   /**
-   * Add a series to a collection
-   */
-  addSeriesToCollection = (collectionSlug: string, seriesUrl: string) => {
-    utils.addSeries(collectionSlug, seriesUrl).then(response => {
-      const newSeries = response.data;
-
-      this.setState({
-        series: {
-          ...this.state.series,
-          [newSeries.id]: {
-            ...this.state.series[newSeries.id],
-            ...newSeries,
-          },
-        },
-      });
-    });
-  };
-
-  /**
    * Update the "lastReadAt" timestamp for a series in a collection.
    */
   markSeriesAsRead = (collectionSlug: string, seriesSlug: string) => {
@@ -191,7 +163,7 @@ export default class CollectionContainer extends Container<State> {
     );
 
     const collection = this.state.collections[collectionSlug];
-    const collectionSeries = collection.series[series.id];
+    const collectionBookmarks = collection.bookmarks[series.id];
 
     this.setState({
       collections: {
@@ -199,9 +171,9 @@ export default class CollectionContainer extends Container<State> {
         [collectionSlug]: {
           ...collection,
           series: {
-            ...collection.series,
+            ...collection.bookmarks,
             [series.id]: {
-              ...collectionSeries,
+              ...collectionBookmarks,
               lastReadAt: Math.round(Date.now() / 1000),
             },
           },

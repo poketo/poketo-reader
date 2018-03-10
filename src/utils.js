@@ -34,8 +34,4 @@ export default {
     api.get(`/collection/${collectionSlug}/markAsRead/${e(seriesSlug)}`),
   fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
     api.get(`/chapter/${siteId}/${e(seriesSlug)}/${e(chapterSlug)}`),
-  addSeries: (collectionSlug: string, url: string) =>
-    api.post(`/collection/${collectionSlug}/add`, { url }),
-  removeSeries: (collectionSlug: string, seriesSlug: string) =>
-    api.delete(`/collection/${collectionSlug}/series/${e(seriesSlug)}`),
 };

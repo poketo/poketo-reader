@@ -89,7 +89,7 @@ class FeedView extends Component<Props, State> {
     e.preventDefault();
 
     const unreadChapters: Array<Chapter> = series.chapters.filter(
-      chapter => chapter.createdAt > collection.series[series.id].lastReadAt,
+      chapter => chapter.createdAt > collection.bookmarks[series.id].lastReadAt,
     );
 
     const toChapter =
@@ -174,8 +174,8 @@ class FeedView extends Component<Props, State> {
               <div key={s.id} className="mb-3">
                 <SeriesRow
                   series={s}
-                  isUnread={s.updatedAt > collection.series[s.id].lastReadAt}
-                  linkTo={collection.series[s.id].linkTo}
+                  isUnread={s.updatedAt > collection.bookmarks[s.id].lastReadAt}
+                  linkTo={collection.bookmarks[s.id].linkTo}
                   onMarkAsReadClick={this.handleMarkAsReadClick}
                   onSeriesClick={this.handleSeriesClick}
                 />
