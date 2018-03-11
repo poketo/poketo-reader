@@ -1,7 +1,13 @@
+// @flow
+
 import React from 'react';
 
-const Input = ({ className, ...props }) => (
-  <input className={`Input ${className}`} {...props} />
+type Props = {
+  className: ?string,
+};
+
+const Input = ({ className, ...props }: Props) => (
+  <input className={`Input ${className ? className : ''}`} {...props} />
 );
 
 export default Input;

@@ -4,6 +4,8 @@ import React, { Component, Fragment } from 'react';
 import Input from '../components/input';
 import utils from '../utils';
 
+import type { RouterHistory } from 'react-router-dom';
+
 const examplesList = [
   {
     label: 'Senryu Girl from Meraki',
@@ -23,7 +25,9 @@ const examplesList = [
   },
 ];
 
-type Props = {};
+type Props = {
+  history: RouterHistory,
+};
 
 type State = {
   seriesUrl: string,

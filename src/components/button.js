@@ -1,5 +1,11 @@
+// @flow
+
 import React from 'react';
 
-export default ({ className, ...props }) => (
-  <button className={`Button ${className}`} {...props} />
+type Props = {
+  className: ?string,
+};
+
+export default ({ className, ...props }: Props) => (
+  <button className={`Button ${className ? className : ''}`} {...props} />
 );

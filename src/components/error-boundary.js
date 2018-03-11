@@ -1,13 +1,24 @@
-import React, { Component } from 'react';
+// @flow
+
+import React, { Component, type Node } from 'react';
 import CodeBlock from './code-block';
 
-export default class ErrorBoundary extends Component {
+type Props = {
+  children: Node,
+};
+
+type State = {
+  hasError: boolean,
+  errorStack: ?string,
+};
+
+export default class ErrorBoundary extends Component<Props, State> {
   state = {
     hasError: false,
     errorStack: null,
   };
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error: Error, info: { componentStack: string }) {
     this.setState({ hasError: true, errorStack: info.componentStack });
   }
 
