@@ -20,6 +20,10 @@ type Props = {
   store: any,
 };
 
+function getCollectionUrl(collectionSlug) {
+  return `/c/${collectionSlug}`;
+}
+
 function getReaderUrl(collectionSlug, siteId, seriesSlug, chapterSlug) {
   return (
     '/' +
@@ -112,16 +116,12 @@ class ReaderView extends Component<Props> {
     const chapter: Chapter = store.findChapterBySlug(chapterSlug);
     const series: Series = store.findSeriesBySlug(seriesSlug);
     const isFetching = store.state.chaptersStatus.isFetching;
-    const isFetchingSeries = store.state.seriesStatus.isFetching;
 
     const isLoading =
       isFetching ||
       chapter === null ||
       chapter === undefined ||
       chapter.pages === undefined;
-
-    const isLoadingSeries =
-      isFetchingSeries || series === null || series === undefined;
 
     let chapterIndex;
     let previousChapter: ?Chapter = null;
@@ -137,7 +137,7 @@ class ReaderView extends Component<Props> {
       <div>
         <nav className="x xj-spaceBetween mv-4">
           {collectionSlug ? (
-            <Link to={`/${collectionSlug}/`}>&larr; Back</Link>
+            <Link to={getCollectionUrl(collectionSlug)}>&larr; Back</Link>
           ) : (
             <div />
           )}
@@ -198,7 +198,7 @@ class ReaderView extends Component<Props> {
               )}
               {collectionSlug && (
                 <div className="mt-4">
-                  <Link to={`/c/${collectionSlug}/`}>Back</Link>
+                  <Link to={getCollectionUrl(collectionSlug)}>Back</Link>
                 </div>
               )}
             </nav>
