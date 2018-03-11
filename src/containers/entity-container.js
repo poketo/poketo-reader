@@ -5,29 +5,39 @@ import utils from '../utils';
 
 import type { Chapter, ChapterPreview, Collection, Series } from '../types';
 
-type State = {
-  chapters: { [id: string]: Chapter | ChapterPreview },
-  collections: { [id: string]: Collection },
-  errorMessage: ?string,
-  isError: boolean,
+type FetchStatusState = {
   isFetching: boolean,
-  isNotFound: boolean,
-  lastFetched: number,
-  series: { [id: string]: Series },
+  errorMessage: ?string,
 };
 
-const getChapterProps = ({ chapters }) => chapters;
+type State = {
+  chapters: { [id: string]: Chapter | ChapterPreview },
+  chaptersStatus: FetchStatusState,
+  collections: { [id: string]: Collection },
+  collectionsStatus: FetchStatusState,
+  series: { [id: string]: Series },
+  seriesStatus: FetchStatusState,
+};
+
+const getChapterProps: ChapterPreview = ({ chapters }) => chapters;
 
 export default class CollectionContainer extends Container<State> {
   state = {
     chapters: {},
+    chaptersStatus: {
+      isFetching: false,
+      errorMessage: null,
+    },
     collections: {},
-    isError: false,
-    isFetching: false,
-    isNotFound: false,
-    lastFetched: 0,
-    errorMessage: null,
+    collectionsStatus: {
+      isFetching: false,
+      errorMessage: null,
+    },
     series: {},
+    seriesStatus: {
+      isFetching: false,
+      errorMessage: null,
+    },
   };
 
   /**
@@ -49,22 +59,23 @@ export default class CollectionContainer extends Container<State> {
    * Fetch a collection from the poketo api.
    */
   fetchCollection = (collectionSlug: string) => {
-    this.setState({ isFetching: true });
+    this.setState({
+      collectionsStatus: {
+        isFetching: true,
+        errorMessage: null,
+      },
+    });
 
     utils
       .fetchCollection(collectionSlug)
       .then(response => {
         const unnormalized = response.data;
-        const chapters = utils.keyArrayBy(
-          // TODO: the api is returning a chapter as `undefined`, not sure why.
-          // Filtering it out for now, but we should fix this.
-          utils
-            .flatten(unnormalized.series.map(getChapterProps))
-            .filter(Boolean),
-          obj => obj.id,
-        );
+        // TODO: the api is returning a chapter as `undefined`, not sure why.
+        // Filtering it out for now, but we should fix this.
+        const chapterData = utils
+          .flatten(unnormalized.series.map(getChapterProps))
+          .filter(Boolean);
 
-        const series = utils.keyArrayBy(unnormalized.series, obj => obj.id);
         const bookmarks = utils.keyArrayBy(
           unnormalized.collection.bookmarks,
           obj => obj.id,
@@ -78,20 +89,38 @@ export default class CollectionContainer extends Container<State> {
           },
         };
 
+        const series = { ...this.state.series };
+        unnormalized.series.forEach(s => {
+          series[s.id] = {
+            ...this.state.series[s.id],
+            ...s,
+          };
+        });
+
+        const chapters = { ...this.state.chapters };
+        chapterData.forEach(chapter => {
+          chapters[chapter.id] = {
+            ...this.state.chapters[chapter.id],
+            ...chapter,
+          };
+        });
+
         this.setState({
           collections,
+          collectionsStatus: {
+            isFetching: false,
+            errorMessage: null,
+          },
           series,
           chapters,
-          isFetching: false,
-          lastFetched: Date.now(),
         });
       })
       .catch(err => {
         this.setState({
-          isFetching: false,
-          isNotFound: err.status === 404,
-          isError: err.status !== 404,
-          errorMessage: err.stack,
+          collectionsStatus: {
+            isFetching: false,
+            errorMessage: err.stack,
+          },
         });
       });
   };
@@ -100,6 +129,57 @@ export default class CollectionContainer extends Container<State> {
     return Object.values(this.state.chapters).find(
       (chapter: Chapter) => chapter.slug === chapterSlug,
     );
+  };
+
+  findSeriesBySlug = (seriesSlug: string): ?Series => {
+    return Object.values(this.state.series).find(
+      (series: Series) => series.slug === seriesSlug,
+    );
+  };
+
+  fetchSeriesIfNeeded = (siteId: string, seriesSlug: string): Series => {
+    const existingSeries = Object.values(this.state.series).find(
+      (series: Chapter) => series.slug === seriesSlug,
+    );
+
+    // Don't fetch twice. Most basic caching mechanism.
+    if (existingSeries) {
+      return;
+    }
+
+    this.fetchSeries(siteId, seriesSlug);
+  };
+
+  fetchSeries = (siteId: string, seriesSlug: string): Series => {
+    this.setState({
+      seriesStatus: {
+        isFetching: true,
+        errorMessage: null,
+      },
+    });
+
+    utils
+      .fetchSeries(siteId, seriesSlug)
+      .then(response => {
+        this.setState({
+          series: {
+            ...this.state.series,
+            [response.data.id]: response.data,
+          },
+          seriesStatus: {
+            isFetching: false,
+            errorMessage: null,
+          },
+        });
+      })
+      .catch(err => {
+        this.setState({
+          seriesStatus: {
+            isFetching: false,
+            errorMessage: err.stack,
+          },
+        });
+      });
   };
 
   /**
@@ -111,7 +191,7 @@ export default class CollectionContainer extends Container<State> {
     chapterSlug: string,
   ): Chapter => {
     const existingChapter = Object.values(this.state.chapters).find(
-      (chapter: Chapter) => chapter.slug === seriesSlug,
+      (chapter: Chapter) => chapter.slug === chapterSlug,
     );
 
     // Don't fetch twice. Most basic caching mechanism. We do a check on
@@ -131,7 +211,12 @@ export default class CollectionContainer extends Container<State> {
     seriesSlug: string,
     chapterSlug: string,
   ): Chapter => {
-    this.setState({ isFetching: true });
+    this.setState({
+      chaptersStatus: {
+        isFetching: true,
+        errorMessage: null,
+      },
+    });
 
     utils
       .fetchChapter(siteId, seriesSlug, chapterSlug)
@@ -141,13 +226,18 @@ export default class CollectionContainer extends Container<State> {
             ...this.state.chapters,
             [response.data.id]: response.data,
           },
-          isFetching: false,
+          chaptersStatus: {
+            isFetching: false,
+            errorMessage: null,
+          },
         });
       })
       .catch(err => {
         this.setState({
-          isFetching: false,
-          errorMessage: err.stack,
+          chaptersStatus: {
+            isFetching: false,
+            errorMessage: err.stack,
+          },
         });
       });
   };
@@ -183,7 +273,7 @@ export default class CollectionContainer extends Container<State> {
 
     // We don't handle the response since we pass this info optimistically.
     utils.fetchMarkAsRead(collectionSlug, seriesSlug).catch(err => {
-      this.setState({ errorMessage: err.stack });
+      // swallow errors
     });
   };
 }

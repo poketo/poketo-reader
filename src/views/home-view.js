@@ -33,11 +33,13 @@ type State = {
 export default class HomeView extends Component<Props, State> {
   state = {
     seriesUrl: '',
+    isFetching: false,
     examples: utils.getRandomItems(examplesList, 3),
   };
 
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // TODO: fetch chapter or series to server
   };
 
   handleSeriesUrlChange = (e: SyntheticInputEvent<HTMLInputElement>) => {

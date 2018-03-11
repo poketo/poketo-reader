@@ -13,7 +13,7 @@ export type ChapterPreview = {
 
 export type Chapter = {
   ...ChapterPreview,
-  sourceUrl: string,
+  url: string,
   pages: Array<Page>,
 };
 
@@ -21,9 +21,9 @@ export type Series = {
   id: string,
   slug: string,
   title: string,
-  sourceUrl: string,
+  url: string,
   siteName: string,
-  chapters: ?Array<Chapter>,
+  chapters: ?Array<Chapter | ChapterPreview>,
   linkTo: ?string,
   updatedAt: number,
 };

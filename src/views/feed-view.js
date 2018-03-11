@@ -98,7 +98,7 @@ class FeedView extends Component<Props, State> {
         : utils.mostRecentChapter(series.chapters);
 
     history.push(
-      `/${collectionSlug}/read/${series.site.id}/${series.slug}/${
+      `/c/${collectionSlug}/read/${series.site.id}/${series.slug}/${
         toChapter.slug
       }`,
     );

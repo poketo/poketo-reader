@@ -21,6 +21,7 @@ export default {
   keyArrayBy: (arr: Array<Object>, getKey: (obj: Object) => string) =>
     arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
 
+  constructUrl: (...args: Array<?string>) => args.filter(Boolean).join('/'),
   flatten: (arr: Array<any>) => [].concat(...arr),
 
   mostRecentChapter: (chapters: Array<Chapter>): Chapter =>
@@ -34,4 +35,6 @@ export default {
     api.get(`/collection/${collectionSlug}/markAsRead/${e(seriesSlug)}`),
   fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
     api.get(`/chapter/${siteId}/${e(seriesSlug)}/${e(chapterSlug)}`),
+  fetchSeries: (siteId: string, seriesSlug: string) =>
+    api.get(`/series/${siteId}/${e(seriesSlug)}`),
 };

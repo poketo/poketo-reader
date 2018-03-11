@@ -56,6 +56,10 @@ button {
   align-self: flex-end;
 }
 
+.w-100p {
+  width: 100%;
+}
+
 .bc-extraFadedBlack {
   border-color: rgba(0, 0, 0, 0.15);
 }
@@ -140,4 +144,42 @@ button {
 
 .PageImage-background {
   background: #f2f2f2;
+}
+
+.Spinner {
+  display: inline-block;
+  text-align: center;
+}
+
+.Spinner > .Spinner-dot {
+  background-color: #666;
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  animation: pulse 1000ms infinite ease-out both;
+}
+
+.Spinner > .Spinner-dot + .Spinner-dot {
+  margin-left: 6px;
+}
+
+.Spinner > .Spinner-dotA {
+  animation-delay: -320ms;
+}
+.Spinner > .Spinner-dotB {
+  animation-delay: -160ms;
+}
+
+@keyframes pulse {
+  0%,
+  80%,
+  100% {
+    background-color: #ccc;
+    transform: translateY(-4px);
+  }
+  40% {
+    background-color: #666;
+    transform: translateY(0);
+  }
 }

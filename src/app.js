@@ -33,11 +33,11 @@ export default class App extends Component {
                 component={ReaderView}
               />
               <Route
-                path="/:collectionSlug/read/:siteId/:seriesSlug/:chapterSlug+"
+                path="/c/:collectionSlug/read/:siteId/:seriesSlug/:chapterSlug+"
                 component={ReaderView}
               />
-              <Route path="/:collectionSlug" component={FeedView} />
-              <Route path="/" component={HomeView} />
+              <Route path="/c/:collectionSlug" component={FeedView} />
+              <Route path="/" exact component={HomeView} />
               <Route component={NotFoundView} />
             </Switch>
           </ErrorBoundary>
