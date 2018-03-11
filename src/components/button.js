@@ -3,7 +3,7 @@
 import React from 'react';
 
 type Props = {
-  className: ?string,
+  className?: string,
 };
 
 export default ({ className, ...props }: Props) => (

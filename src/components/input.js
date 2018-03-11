@@ -3,7 +3,7 @@
 import React from 'react';
 
 type Props = {
-  className: ?string,
+  className?: string,
 };
 
 const Input = ({ className, ...props }: Props) => (
