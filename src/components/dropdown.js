@@ -14,7 +14,10 @@ type Props = {
 
 const Dropdown = ({ options, onChange, value, ...props }: Props) => (
   <div className="Dropdown x" {...props}>
-    <select className="Dropdown-select" onChange={onChange} value={value}>
+    <select
+      className="Dropdown-select ff-sans"
+      onChange={onChange}
+      value={value}>
       {options.map(o => (
         <option key={o.value} value={o.value}>
           {o.label}
