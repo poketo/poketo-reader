@@ -114,7 +114,12 @@ class FeedView extends Component<Props, State> {
       (a: Series, b: Series) => b.updatedAt - a.updatedAt,
     );
 
-    if (isFetching || series.length === 0) {
+    if (
+      isFetching ||
+      collection === null ||
+      collection === undefined ||
+      series.length === 0
+    ) {
       return <div>Loading...</div>;
     }
 
