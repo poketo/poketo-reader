@@ -8,7 +8,7 @@
     "build": "react-scripts build",
     "build:css": "bin/build-css",
     "build:icons": "bin/build-icons",
-    "prebuild": "yarn run build:css",
+    "prebuild": "yarn run build:css && yarn run build:icons",
     "test": "react-scripts test --env=jsdom",
     "deploy": "netlify deploy",
     "predeploy": "yarn run build"

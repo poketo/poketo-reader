@@ -15,4 +15,5 @@ yarn-error.log
 
 # Ignore built files
 /build
+src/components/icon-*.js
 src/styles.base.css
