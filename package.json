@@ -6,7 +6,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:css": "node src/styles.js > src/styles.base.css",
+    "build:css": "bin/build-css",
+    "build:icons": "bin/build-icons",
     "prebuild": "yarn run build:css",
     "test": "react-scripts test --env=jsdom",
     "deploy": "netlify deploy",
@@ -26,7 +27,9 @@
   "devDependencies": {
     "flow-bin": "^0.66.0",
     "hibiscss": "0.0.9",
+    "mz": "^2.7.0",
     "prettier": "^1.8.2",
-    "react-scripts": "^1.1.0"
+    "react-scripts": "^1.1.0",
+    "svgr": "^1.9.0"
   }
 }

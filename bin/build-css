@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+const fs = require('mz/fs');
 const hibiscss = require('hibiscss').default;
 const kit = require('hibiscss/default');
 
@@ -28,4 +31,15 @@ const styles = hibiscss(
   },
 );
 
-console.log(styles);
+const outputPath = './src/styles.base.css';
+
+async function writeStyles() {
+  await fs.writeFile(outputPath, styles);
+  console.log(`Wrote styles to ${outputPath}`);
+}
+
+writeStyles().catch(err => {
+  console.error(err.message);
+  console.error(err.stack);
+  process.exit(1);
+});

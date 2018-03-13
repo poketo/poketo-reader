@@ -5,8 +5,11 @@ import { Link } from 'react-router-dom';
 import { Subscribe } from 'unstated';
 
 import Spinner from '../components/spinner';
+import Dropdown from '../components/dropdown';
 import EntityContainer from '../containers/entity-container';
 import SeriesPageImage from '../components/series-page-image';
+import IconArrowLeft from '../components/icon-arrow-left';
+import IconNewTab from '../components/icon-new-tab';
 import utils from '../utils';
 
 import type { Chapter, Series } from '../types';
@@ -89,7 +92,7 @@ class ReaderView extends Component<Props> {
     }
   };
 
-  handleChapterSelectorChange = e => {
+  handleChapterSelectorChange = (e: SyntheticInputEvent<HTMLSelectElement>) => {
     const {
       collectionSlug,
       siteId,
@@ -135,26 +138,36 @@ class ReaderView extends Component<Props> {
 
     return (
       <div>
-        <nav className="x xj-spaceBetween mv-4">
+        <nav className="x xa-center xj-spaceBetween mv-4">
           {collectionSlug ? (
-            <Link to={getCollectionUrl(collectionSlug)}>&larr; Back</Link>
+            <Link className="x xa-center" to={getCollectionUrl(collectionSlug)}>
+              <IconArrowLeft
+                style={{ marginRight: 4 }}
+                width="1.2em"
+                height="1.2em"
+              />{' '}
+              Back
+            </Link>
           ) : (
             <div />
           )}
           {series && (
-            <select
+            <Dropdown
               value={chapterSlug}
-              onChange={this.handleChapterSelectorChange}>
-              {series.chapters.map(c => (
-                <option key={c.id} value={c.slug}>
-                  Chapter {c.slug}
-                </option>
-              ))}
-            </select>
+              onChange={this.handleChapterSelectorChange}
+              options={series.chapters.map(c => ({
+                value: c.slug,
+                label: `Chapter ${c.slug}`,
+              }))}
+            />
           )}
           {chapter && (
-            <a href={chapter.url} target="_blank" rel="noopener noreferrer">
-              Open
+            <a
+              className="x xa-center"
+              href={chapter.url}
+              target="_blank"
+              rel="noopener noreferrer">
+              Open <IconNewTab className="ml-2" width="1.2em" height="1.2em" />
             </a>
           )}
         </nav>
@@ -176,7 +189,7 @@ class ReaderView extends Component<Props> {
             </div>
             <nav className="ta-center pv-4">
               {series ? (
-                <div className="x xj-spaceBetween w-100p">
+                <div className="x xa-center xj-spaceBetween w-100p">
                   <ChapterLink
                     collectionSlug={collectionSlug}
                     siteId={siteId}
@@ -184,7 +197,16 @@ class ReaderView extends Component<Props> {
                     chapter={previousChapter}>
                     Previous
                   </ChapterLink>
-                  <div>Chapter {chapter.slug}</div>
+                  {series && (
+                    <Dropdown
+                      value={chapterSlug}
+                      onChange={this.handleChapterSelectorChange}
+                      options={series.chapters.map(c => ({
+                        value: c.slug,
+                        label: `Chapter ${c.slug}`,
+                      }))}
+                    />
+                  )}
                   <ChapterLink
                     collectionSlug={collectionSlug}
                     siteId={siteId}
@@ -194,7 +216,16 @@ class ReaderView extends Component<Props> {
                   </ChapterLink>
                 </div>
               ) : (
-                <div>Chapter {chapter.slug}</div>
+                series && (
+                  <Dropdown
+                    value={chapterSlug}
+                    onChange={this.handleChapterSelectorChange}
+                    options={series.chapters.map(c => ({
+                      value: c.slug,
+                      label: `Chapter ${c.slug}`,
+                    }))}
+                  />
+                )
               )}
               {collectionSlug && (
                 <div className="mt-4">

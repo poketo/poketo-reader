@@ -146,6 +146,37 @@ button {
   background: #f2f2f2;
 }
 
+.Dropdown {
+  position: relative;
+  cursor: pointer;
+  border-radius: 3px;
+  height: 34px;
+  /* min-width: 120px; */
+}
+
+.Dropdown:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.Dropdown-select {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding-left: 12px;
+  padding-right: 32px;
+  appearance: none;
+}
+
+.Dropdown-arrow {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  right: 12px;
+  bottom: 0;
+}
+
 .Spinner {
   display: inline-block;
   text-align: center;

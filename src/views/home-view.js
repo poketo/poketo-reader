@@ -42,8 +42,10 @@ export default class HomeView extends Component<Props, State> {
   };
 
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+    const { history } = this.props;
     e.preventDefault();
     // TODO: fetch chapter or series to server
+    history.push('/c/a4vhAoFG');
   };
 
   handleSeriesUrlChange = (e: SyntheticInputEvent<HTMLInputElement>) => {

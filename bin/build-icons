@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+const fs = require('mz/fs');
+const path = require('path');
+const svgr = require('svgr').default;
+
+const ICON_PATH = './src/assets/icons/';
+const BUILD_PATH = './src/components/';
+
+const REVERSE_REGEX = /-[a-z\u00E0-\u00F6\u00F8-\u00FE]/g;
+
+function toPascalCase(input) {
+  return input.replace(
+    /\w+/g,
+    w => w[0].toUpperCase() + w.slice(1).toLowerCase(),
+  );
+}
+
+function getComponentName(filename) {
+  return `Icon${toPascalCase(filename)}`;
+}
+
+async function buildIcons() {
+  const files = await fs.readdir(ICON_PATH);
+  const svgs = files.filter(filename => filename.endsWith('.svg'));
+
+  for (let svg of svgs) {
+    const filename = svg.replace(/\.svg$/, '');
+    const pathname = path.join(ICON_PATH, svg);
+    const svgCode = await fs.readFile(pathname, 'utf8');
+    const componentCode = await svgr(svgCode, {
+      componentName: getComponentName(filename),
+      title: false,
+      singleQuote: true,
+      trailingCommas: 'all',
+      replaceAttrValues: [['#212529', 'currentColor']],
+    });
+    const buildPath = path.join(BUILD_PATH, `icon-${filename}.js`);
+    await fs.writeFile(buildPath, componentCode);
+    console.log(`${pathname} → ${buildPath}`);
+  }
+}
+
+buildIcons().catch(err => {
+  console.error(err.message);
+  console.error(err.stack);
+  process.exit(1);
+});
