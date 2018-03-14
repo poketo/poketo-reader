@@ -7,9 +7,9 @@ import { Subscribe } from 'unstated';
 import Spinner from '../components/spinner';
 import Dropdown from '../components/dropdown';
 import EntityContainer from '../containers/entity-container';
-import SeriesPageImage from '../components/series-page-image';
-import IconArrowLeft from '../components/icon-arrow-left';
-import IconNewTab from '../components/icon-new-tab';
+import ReaderChapterLink from '../components/reader-chapter-link';
+import ReaderPageImage from '../components/reader-page-image';
+import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
 
 import type { Chapter, Series } from '../types';
@@ -21,45 +21,6 @@ type Props = {
   seriesSlug: string,
   chapterSlug: string,
   store: any,
-};
-
-function getCollectionUrl(collectionSlug) {
-  return `/c/${collectionSlug}`;
-}
-
-function getReaderUrl(collectionSlug, siteId, seriesSlug, chapterSlug) {
-  return (
-    '/' +
-    utils.constructUrl(
-      collectionSlug ? `c/${collectionSlug}` : null,
-      'read',
-      siteId,
-      seriesSlug,
-      chapterSlug,
-    )
-  );
-}
-
-const ChapterLink = ({
-  collectionSlug,
-  siteId,
-  seriesSlug,
-  chapter,
-  children,
-}) => {
-  const disabled = !chapter;
-  const to = getReaderUrl(
-    collectionSlug,
-    siteId,
-    seriesSlug,
-    chapter && chapter.slug,
-  );
-
-  return (
-    <Link to={to} style={{ pointerEvents: disabled ? 'none' : 'auto' }}>
-      {children}
-    </Link>
-  );
 };
 
 class ReaderView extends Component<Props> {
@@ -103,7 +64,9 @@ class ReaderView extends Component<Props> {
     const value = e.target.value;
 
     if (value !== chapterSlug) {
-      history.push(getReaderUrl(collectionSlug, siteId, seriesSlug, value));
+      history.push(
+        utils.getReaderUrl(collectionSlug, siteId, seriesSlug, value),
+      );
     }
   };
 
@@ -137,66 +100,43 @@ class ReaderView extends Component<Props> {
     }
 
     return (
-      <div>
-        <nav className="x xa-center xj-spaceBetween mv-4">
-          {collectionSlug ? (
-            <Link className="x xa-center" to={getCollectionUrl(collectionSlug)}>
-              <IconArrowLeft
-                style={{ marginRight: 4 }}
-                width="1.2em"
-                height="1.2em"
-              />{' '}
-              Back
-            </Link>
-          ) : (
-            <div />
-          )}
-          {series && (
-            <Dropdown
-              value={chapterSlug}
-              onChange={this.handleChapterSelectorChange}
-              options={series.chapters.map(c => ({
-                value: c.slug,
-                label: `Chapter ${c.slug}`,
-              }))}
-            />
-          )}
-          {chapter && (
-            <a
-              className="x xa-center"
-              href={chapter.url}
-              target="_blank"
-              rel="noopener noreferrer">
-              Open <IconNewTab className="ml-2" width="1.2em" height="1.2em" />
-            </a>
-          )}
-        </nav>
+      <div style={{ backgroundColor: '#faf8f9', minHeight: '100vh' }}>
+        <ReaderNavigation
+          currentCollectionSlug={collectionSlug}
+          currentChapter={chapter}
+          currentSeries={series}
+          onChapterSelectChange={this.handleChapterSelectorChange}
+        />
         {isLoading ? (
-          <div className="ta-center pv-5">
-            <div className="mb-4">
-              <Spinner />
+          <div
+            className="x xa-center xj-center ta-center pv-5"
+            style={{ height: '100vh' }}>
+            <div>
+              <div className="mb-4">
+                <Spinner />
+              </div>
+              <div>Loading{series ? ` from ${series.site.name}` : ''}</div>
             </div>
-            <div>Loading{series ? ` from ${series.site.name}` : ''}</div>
           </div>
         ) : (
           <Fragment>
-            <div className="ta-center">
+            <div className="pt-5 pb-4 mh-auto w-90p-m ta-center mw-900">
               {chapter.pages.map(page => (
-                <div key={page.id} className="mb-2">
-                  <SeriesPageImage page={page} />
+                <div key={page.id} className="mb-3 mb-4-m">
+                  <ReaderPageImage page={page} />
                 </div>
               ))}
             </div>
-            <nav className="ta-center pv-4">
+            <nav className="ta-center pv-4 ph-3">
               {series ? (
                 <div className="x xa-center xj-spaceBetween w-100p">
-                  <ChapterLink
+                  <ReaderChapterLink
                     collectionSlug={collectionSlug}
                     siteId={siteId}
                     seriesSlug={seriesSlug}
                     chapter={previousChapter}>
                     Previous
-                  </ChapterLink>
+                  </ReaderChapterLink>
                   {series && (
                     <Dropdown
                       value={chapterSlug}
@@ -207,13 +147,13 @@ class ReaderView extends Component<Props> {
                       }))}
                     />
                   )}
-                  <ChapterLink
+                  <ReaderChapterLink
                     collectionSlug={collectionSlug}
                     siteId={siteId}
                     seriesSlug={seriesSlug}
                     chapter={nextChapter}>
                     Next
-                  </ChapterLink>
+                  </ReaderChapterLink>
                 </div>
               ) : (
                 series && (
@@ -229,7 +169,9 @@ class ReaderView extends Component<Props> {
               )}
               {collectionSlug && (
                 <div className="mt-4">
-                  <Link to={getCollectionUrl(collectionSlug)}>Back</Link>
+                  <Link to={utils.getCollectionUrl(collectionSlug)}>
+                    Back to collection
+                  </Link>
                 </div>
               )}
             </nav>

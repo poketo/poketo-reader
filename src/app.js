@@ -20,12 +20,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider inject={[entityStore]}>
-        <div id="app" className="pa-3 pa-5-m">
-          <header className="mb-4">
-            <span role="img" aria-label="Tag">
-              🔖
-            </span>
-          </header>
+        <div id="app">
           <ErrorBoundary>
             <Switch>
               <Route

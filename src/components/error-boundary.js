@@ -22,6 +22,10 @@ export default class ErrorBoundary extends Component<Props, State> {
     this.setState({ hasError: true, errorStack: info.componentStack });
   }
 
+  handleReloadClick = (e: SyntheticMouseEvent<HTMLAnchorElement>) => {
+    window.location.reload();
+  };
+
   render() {
     const { children } = this.props;
     const { hasError, errorStack } = this.state;
@@ -31,7 +35,10 @@ export default class ErrorBoundary extends Component<Props, State> {
         <div>
           <h2>Something went wrong.</h2>
           <p>
-            You can reload the page to go back, or help us by{' '}
+            You can{' '}
+            <button className="Link" onClick={this.handleReloadClick}>
+              reload the page
+            </button>, or help us by{' '}
             <a href="https://github.com/rosszurowski/poketo-site/issues/new">
               reporting this issue
             </a>{' '}

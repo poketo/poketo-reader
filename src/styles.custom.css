@@ -29,11 +29,37 @@ button {
   position: fixed;
 }
 
-.bottom-16 {
+.t-0 {
+  top: 0;
+}
+.t-16 {
+  top: 16px;
+}
+.b-0 {
+  bottom: 0;
+}
+.b-16 {
   bottom: 16px;
 }
-.right-16 {
+.l-0 {
+  left: 0;
+}
+.l-16 {
+  left: 16px;
+}
+.r-0 {
+  right: 0;
+}
+.r-16 {
   right: 16px;
+}
+
+.z-1 {
+  z-index: 1;
+}
+
+.z-2 {
+  z-index: 2;
 }
 
 .z-9 {
@@ -56,8 +82,22 @@ button {
   align-self: flex-end;
 }
 
+.w-90p {
+  width: 90%;
+}
+
 .w-100p {
   width: 100%;
+}
+
+@media only screen and (min-width: 767px) {
+  .w-90p-m {
+    width: 90%;
+  }
+
+  .w-100p-m {
+    width: 100%;
+  }
 }
 
 .bc-extraFadedBlack {
@@ -143,7 +183,19 @@ button {
 }
 
 .PageImage-background {
-  background: #f2f2f2;
+  background: #cecece;
+}
+
+.ReaderNavigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: transform 200ms ease;
+}
+
+.ReaderNavigation--hidden {
+  transform: translateY(-100%);
 }
 
 .Dropdown {
@@ -151,7 +203,6 @@ button {
   cursor: pointer;
   border-radius: 3px;
   height: 34px;
-  /* min-width: 120px; */
 }
 
 .Dropdown:hover {
@@ -163,7 +214,8 @@ button {
   background: none;
   border: none;
   outline: none;
-  font-size: 1rem;
+  color: inherit;
+  font-size: 1em;
   padding-left: 12px;
   padding-right: 32px;
   appearance: none;

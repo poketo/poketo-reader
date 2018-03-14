@@ -98,32 +98,34 @@ class FeedView extends Component<Props, State> {
         : utils.mostRecentChapter(series.chapters);
 
     history.push(
-      `/c/${collectionSlug}/read/${series.site.id}/${series.slug}/${
-        toChapter.slug
-      }`,
+      utils.getReaderUrl(
+        collectionSlug,
+        series.site.id,
+        series.slug,
+        toChapter.slug,
+      ),
     );
   };
 
   render() {
     const { store, collectionSlug } = this.props;
     const { isSeriesModalOpen } = this.state;
-    const { collections, errorMessage, isFetching, isNotFound } = store.state;
+    const { collections, collectionsStatus } = store.state;
+    const { isFetching, errorMessage } = collectionsStatus;
 
     const collection = collections[collectionSlug];
     const series: Array<Series> = Object.values(store.state.series).sort(
       (a: Series, b: Series) => b.updatedAt - a.updatedAt,
     );
 
-    if (
-      isFetching ||
-      collection === null ||
-      collection === undefined ||
-      series.length === 0
-    ) {
-      return <div>Loading...</div>;
+    if (isFetching || series.length === 0) {
+      return <div className="pa-4 ta-center">Loading collection</div>;
     }
 
-    if (isNotFound) {
+    if (
+      isFetching === false &&
+      (collection === null || collection === undefined)
+    ) {
       return (
         <div>
           Uh oh. Couldn't find the manga collection at {collectionSlug}.
@@ -141,7 +143,7 @@ class FeedView extends Component<Props, State> {
     }
 
     return (
-      <div>
+      <div className="pt-4">
         {isSeriesModalOpen && (
           <div className="p-fixed top-0 left-0 right-0 bottom-0 z-9 x xj-center xa-center bgc-fadedBlack">
             <div
@@ -174,6 +176,11 @@ class FeedView extends Component<Props, State> {
           </div>
         )}
         <div className="mw-500">
+          <div className="mb-3 ph-3">
+            <Button className="pa-3" onClick={this.handleAddClick}>
+              Add
+            </Button>
+          </div>
           <div>
             {series.map(s => (
               <div key={s.id} className="mb-3">
@@ -186,11 +193,6 @@ class FeedView extends Component<Props, State> {
                 />
               </div>
             ))}
-            <div className="p-fixed bottom-16 right-16">
-              <Button className="pa-3" onClick={this.handleAddClick}>
-                Add
-              </Button>
-            </div>
           </div>
         </div>
       </div>
