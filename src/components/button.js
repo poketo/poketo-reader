@@ -7,5 +7,8 @@ type Props = {
 };
 
 export default ({ className, ...props }: Props) => (
-  <button className={`Button ${className ? className : ''}`} {...props} />
+  <button
+    className={`Button ff-sans ${className ? className : ''}`}
+    {...props}
+  />
 );
