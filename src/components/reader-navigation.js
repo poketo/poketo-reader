@@ -85,7 +85,7 @@ export default class ReaderNavigation extends Component<Props, State> {
                   onChange={onChapterSelectChange}
                   options={currentSeries.chapters.map(c => ({
                     value: c.slug,
-                    label: `Chapter ${c.slug}`,
+                    label: `Chapter ${c.number}`,
                   }))}
                 />
               </div>
