@@ -3,10 +3,12 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 
-import EntityContainer from '../containers/entity-container';
-import Button from '../components/button';
+import poketoMarkUrl from '../assets/poketo-mark.svg';
+
+import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
-import Input from '../components/input';
+import EntityContainer from '../containers/entity-container';
+import IconAdd from '../components/icon-add';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
@@ -18,48 +20,11 @@ type Props = {
   store: any,
 };
 
-type State = {
-  isSeriesModalOpen: boolean,
-  newSeriesUrl: ?string,
-};
-
-class FeedView extends Component<Props, State> {
-  state = {
-    isSeriesModalOpen: false,
-    newSeriesUrl: null,
-  };
-
+class FeedView extends Component<Props> {
   componentDidMount() {
     const { collectionSlug, store } = this.props;
     store.fetchCollectionIfNeeded(collectionSlug);
   }
-
-  handleAddClick = () => {
-    this.setState({ isSeriesModalOpen: true });
-  };
-
-  handleAddCancelClick = () => {
-    this.setState({ isSeriesModalOpen: false, newSeriesUrl: null });
-  };
-
-  handleAddConfirmClick = () => {
-    const { collectionSlug, store } = this.props;
-    const { newSeriesUrl } = this.state;
-
-    if (!newSeriesUrl) {
-      throw new Error('Missing new series URL');
-    }
-
-    if (!/^http(s)?:\/\//.test(newSeriesUrl)) {
-      throw new Error(`Series URL is not a valid URL!`);
-    }
-
-    store.addSeriesToCollection(collectionSlug, newSeriesUrl);
-  };
-
-  handleNewSeriesUrlChange = e => {
-    this.setState({ newSeriesUrl: e.target.value });
-  };
 
   handleMarkAsReadClick = seriesId => () => {
     const { collectionSlug, store } = this.props;
@@ -109,7 +74,6 @@ class FeedView extends Component<Props, State> {
 
   render() {
     const { store, collectionSlug } = this.props;
-    const { isSeriesModalOpen } = this.state;
     const { collections, collectionsStatus } = store.state;
     const { isFetching, errorMessage } = collectionsStatus;
 
@@ -118,13 +82,26 @@ class FeedView extends Component<Props, State> {
       (a: Series, b: Series) => b.updatedAt - a.updatedAt,
     );
 
-    if (isFetching || series.length === 0) {
-      return <div className="pa-4 ta-center">Loading collection</div>;
+    if (isFetching) {
+      return (
+        <div>
+          <div className="pv-3 ph-3 ta-center">
+            <img src={poketoMarkUrl} alt="Poketo" />
+          </div>
+          <div className="x xd-column xa-center xj-center pa-4 ta-center h-100vh">
+            <div className="mb-3">
+              <CircleLoader />
+            </div>
+            <span className="fs-12 o-50p">Loading bookmarks</span>
+          </div>
+        </div>
+      );
     }
 
     if (
-      isFetching === false &&
-      (collection === null || collection === undefined)
+      (isFetching === false &&
+        (collection === null || collection === undefined)) ||
+      series.length === 0
     ) {
       return (
         <div>
@@ -143,57 +120,27 @@ class FeedView extends Component<Props, State> {
     }
 
     return (
-      <div className="pt-4">
-        {isSeriesModalOpen && (
-          <div className="p-fixed top-0 left-0 right-0 bottom-0 z-9 x xj-center xa-center bgc-fadedBlack">
-            <div
-              className="pa-4 bgc-white br-4"
-              style={{ width: '100%', maxWidth: 400 }}>
-              <div className="mb-3">
-                <h2 className="fs-20 fw-normal mb-1">Add a new series</h2>
-                <p className="fs-14">
-                  Paste the series URL from{' '}
-                  <a href="https://www.mangaupdates.com/">MangaUpdates</a>, and
-                  the link you'd like to read it at.
-                </p>
-              </div>
-              <div className="mb-2">
-                <Input
-                  type="text"
-                  placeholder="Series URL..."
-                  onChange={this.handleNewSeriesUrlChange}
-                />
-              </div>
-              <div className="x xj-end mt-3">
-                <div>
-                  <Button onClick={this.handleAddCancelClick}>Cancel</Button>
-                </div>
-                <div className="ml-1">
-                  <Button onClick={this.handleAddConfirmClick}>Add</Button>
-                </div>
-              </div>
+      <div className="pt-5">
+        <header className="Navigation p-fixed t-0 l-0 r-0 z-9 x xa-center xj-spaceBetween fs-14 fs-16-m">
+          <div className="pv-3 ph-3">
+            <img src={poketoMarkUrl} alt="Poketo" />
+          </div>
+          <button className="pv-3 ph-3">
+            <IconAdd />
+          </button>
+        </header>
+        <div className="pt-3 mw-500">
+          {series.map(s => (
+            <div key={s.id} className="mb-3">
+              <SeriesRow
+                series={s}
+                isUnread={s.updatedAt > collection.bookmarks[s.id].lastReadAt}
+                linkTo={collection.bookmarks[s.id].linkTo}
+                onMarkAsReadClick={this.handleMarkAsReadClick}
+                onSeriesClick={this.handleSeriesClick}
+              />
             </div>
-          </div>
-        )}
-        <div className="mw-500">
-          <div className="mb-3 ph-3">
-            <Button className="pa-3" onClick={this.handleAddClick}>
-              Add
-            </Button>
-          </div>
-          <div>
-            {series.map(s => (
-              <div key={s.id} className="mb-3">
-                <SeriesRow
-                  series={s}
-                  isUnread={s.updatedAt > collection.bookmarks[s.id].lastReadAt}
-                  linkTo={collection.bookmarks[s.id].linkTo}
-                  onMarkAsReadClick={this.handleMarkAsReadClick}
-                  onSeriesClick={this.handleSeriesClick}
-                />
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     );

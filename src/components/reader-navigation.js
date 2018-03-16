@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Dropdown from '../components/dropdown';
+import IconArrowLeft from '../components/icon-arrow-left';
 import IconNewTab from '../components/icon-new-tab';
 import utils from '../utils';
 import type { Chapter, Series } from '../types';
@@ -69,9 +70,9 @@ export default class ReaderNavigation extends Component<Props, State> {
         } bgc-black c-white x xa-center xj-spaceBetween pv-3 ph-3 fs-14 fs-16-m`}>
         {currentCollectionSlug ? (
           <Link
-            className="o-50p p-relative z-2"
+            className="x xa-center o-50p p-relative z-2"
             to={utils.getCollectionUrl(currentCollectionSlug)}>
-            Collection
+            <IconArrowLeft width={20} height={20} />
           </Link>
         ) : (
           <div />

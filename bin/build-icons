@@ -33,7 +33,7 @@ async function buildIcons() {
       title: false,
       singleQuote: true,
       trailingCommas: 'all',
-      replaceAttrValues: [['#212529', 'currentColor']],
+      replaceAttrValues: [['#000', 'currentColor']],
     });
     const buildPath = path.join(BUILD_PATH, `icon-${filename}.js`);
     await fs.writeFile(buildPath, componentCode);

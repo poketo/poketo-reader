@@ -29,6 +29,10 @@ const utils = {
   /**
    * URL Helpers
    */
+  getDomainName: (url: string) => {
+    const u = new URL(url);
+    return u.hostname.replace(/^www\./i, '');
+  },
   constructUrl: (...args: Array<?string>) => args.filter(Boolean).join('/'),
   getReaderUrl: (
     collectionSlug: ?string,

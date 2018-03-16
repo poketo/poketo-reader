@@ -29,6 +29,9 @@ button {
   position: fixed;
 }
 
+.t--1 {
+  top: -1px;
+}
 .t-0 {
   top: 0;
 }
@@ -66,6 +69,14 @@ button {
   z-index: 9;
 }
 
+.va-top {
+  vertical-align: top;
+}
+
+.va-middle {
+  vertical-align: middle;
+}
+
 .xs-center {
   align-self: center;
 }
@@ -88,6 +99,10 @@ button {
 
 .w-100p {
   width: 100%;
+}
+
+.h-100vh {
+  height: 100vh;
 }
 
 @media only screen and (min-width: 767px) {
@@ -186,6 +201,11 @@ button {
   background: #cecece;
 }
 
+.Navigation {
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px #ccc solid;
+}
+
 .ReaderNavigation {
   position: fixed;
   top: 0;
@@ -229,12 +249,29 @@ button {
   bottom: 0;
 }
 
-.Spinner {
+.CircleLoader {
+  display: inline-block;
+  border: 4px transparent solid;
+  border-top-color: black;
+  border-left-color: black;
+  animation: spinner 400ms linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.DotLoader {
   display: inline-block;
   text-align: center;
 }
 
-.Spinner > .Spinner-dot {
+.DotLoader > .DotLoader-dot {
   background-color: #666;
   display: inline-block;
   width: 9px;
@@ -243,14 +280,14 @@ button {
   animation: pulse 1000ms infinite ease-out both;
 }
 
-.Spinner > .Spinner-dot + .Spinner-dot {
+.DotLoader > .DotLoader-dot + .DotLoader-dot {
   margin-left: 6px;
 }
 
-.Spinner > .Spinner-dotA {
+.DotLoader > .DotLoader-dotA {
   animation-delay: -320ms;
 }
-.Spinner > .Spinner-dotB {
+.DotLoader > .DotLoader-dotB {
   animation-delay: -160ms;
 }
 

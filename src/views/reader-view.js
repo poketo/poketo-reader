@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Subscribe } from 'unstated';
 
-import Spinner from '../components/spinner';
+import DotLoader from '../components/loader-dots';
 import Dropdown from '../components/dropdown';
 import EntityContainer from '../containers/entity-container';
 import ReaderChapterLink from '../components/reader-chapter-link';
@@ -113,7 +113,7 @@ class ReaderView extends Component<Props> {
             style={{ height: '100vh' }}>
             <div>
               <div className="mb-4">
-                <Spinner />
+                <DotLoader />
               </div>
               <div>Loading{series ? ` from ${series.site.name}` : ''}</div>
             </div>
