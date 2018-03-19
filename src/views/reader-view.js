@@ -23,7 +23,17 @@ type Props = {
   store: any,
 };
 
-class ReaderView extends Component<Props> {
+type State = {
+  markAsReadTimer: ?TimeoutID,
+};
+
+const MARK_AS_READ_TIMEOUT = 2000;
+
+class ReaderView extends Component<Props, State> {
+  state = {
+    markAsReadTimer: null,
+  };
+
   componentDidMount() {
     this.loadData(this.props);
   }
@@ -42,15 +52,57 @@ class ReaderView extends Component<Props> {
     return;
   }
 
+  componentWillUnmount() {
+    if (this.state.markAsReadTimer) {
+      clearTimeout(this.state.markAsReadTimer);
+    }
+  }
+
   loadData = props => {
     const { collectionSlug, siteId, seriesSlug, chapterSlug, store } = props;
 
     store.fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug);
     store.fetchSeriesIfNeeded(siteId, seriesSlug);
 
+    if (this.state.markAsReadTimer) {
+      clearTimeout(this.state.markAsReadTimer);
+    }
+
     if (collectionSlug) {
       store.fetchCollectionIfNeeded(collectionSlug);
+      this.setState({
+        markAsReadTimer: setTimeout(
+          this.handleMarkChapterAsRead,
+          MARK_AS_READ_TIMEOUT,
+        ),
+      });
     }
+  };
+
+  handleMarkChapterAsRead = () => {
+    const { collectionSlug, seriesSlug, chapterSlug, store } = this.props;
+
+    if (collectionSlug === null || collectionSlug === undefined) {
+      return;
+    }
+
+    const collection = store.findCollectionBySlug(collectionSlug);
+    const series: Series = store.findSeriesBySlug(seriesSlug);
+    const currentChapter: Chapter = series.chapters.find(
+      c => c.slug === chapterSlug,
+    );
+    const currentChapterReadAt = currentChapter.createdAt;
+    const latestReadAt = collection.bookmarks[series.id].lastReadAt;
+
+    if (latestReadAt > currentChapterReadAt) {
+      return;
+    }
+
+    store.markSeriesAsRead(
+      collectionSlug,
+      series.slug,
+      currentChapter.createdAt,
+    );
   };
 
   handleChapterSelectorChange = (e: SyntheticInputEvent<HTMLSelectElement>) => {

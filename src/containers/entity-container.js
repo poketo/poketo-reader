@@ -125,6 +125,10 @@ export default class CollectionContainer extends Container<State> {
       });
   };
 
+  findCollectionBySlug = (collectionSlug: string): ?Collection => {
+    return this.state.collections[collectionSlug] || null;
+  };
+
   findChapterBySlug = (chapterSlug: string): ?Chapter => {
     return Object.values(this.state.chapters).find(
       (chapter: Chapter) => chapter.slug === chapterSlug,
@@ -245,7 +249,11 @@ export default class CollectionContainer extends Container<State> {
   /**
    * Update the "lastReadAt" timestamp for a series in a collection.
    */
-  markSeriesAsRead = (collectionSlug: string, seriesSlug: string) => {
+  markSeriesAsRead = (
+    collectionSlug: string,
+    seriesSlug: string,
+    lastReadAt: number,
+  ) => {
     // TODO: this is a weird consequence of the half-way between slugs and IDs. We should
     // just be using IDs here, but we're not sending them back from the server.
     const series: Series = Object.values(this.state.series).find(
@@ -260,11 +268,11 @@ export default class CollectionContainer extends Container<State> {
         ...this.state.collections,
         [collectionSlug]: {
           ...collection,
-          series: {
+          bookmarks: {
             ...collection.bookmarks,
             [series.id]: {
               ...collectionBookmarks,
-              lastReadAt: Math.round(Date.now() / 1000),
+              lastReadAt,
             },
           },
         },
@@ -272,7 +280,7 @@ export default class CollectionContainer extends Container<State> {
     });
 
     // We don't handle the response since we pass this info optimistically.
-    utils.fetchMarkAsRead(collectionSlug, seriesSlug).catch(err => {
+    utils.fetchMarkAsRead(collectionSlug, seriesSlug, lastReadAt).catch(err => {
       // swallow errors
     });
   };

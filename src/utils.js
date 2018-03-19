@@ -13,6 +13,7 @@ const e = encodeURIComponent;
 
 const utils = {
   formatTimestamp: (n: number) => ago(new Date(n * 1000)),
+  getTimestamp: (): number => Math.floor(Date.now() / 1000),
 
   /**
    * Array Helpers
@@ -63,8 +64,14 @@ const utils = {
    */
   fetchCollection: (collectionSlug: string) =>
     api.get(`/collection/${collectionSlug}`),
-  fetchMarkAsRead: (collectionSlug: string, seriesSlug: string) =>
-    api.get(`/collection/${collectionSlug}/markAsRead/${e(seriesSlug)}`),
+  fetchMarkAsRead: (
+    collectionSlug: string,
+    seriesSlug: string,
+    lastReadAt: number,
+  ) =>
+    api.post(`/collection/${collectionSlug}/bookmark/${e(seriesSlug)}/read`, {
+      lastReadAt,
+    }),
   fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
     api.get(`/chapter/${siteId}/${e(seriesSlug)}/${e(chapterSlug)}`),
   fetchSeries: (siteId: string, seriesSlug: string) =>
