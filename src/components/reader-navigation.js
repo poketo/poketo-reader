@@ -1,28 +1,22 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment } from 'react';
 import Dropdown from '../components/dropdown';
-import IconArrowLeft from '../components/icon-arrow-left';
 import IconNewTab from '../components/icon-new-tab';
-import utils from '../utils';
+
 import type { Chapter, Series } from '../types';
 
 type Props = {
-  currentCollectionSlug: ?string,
   currentChapter: ?Chapter,
   currentSeries: ?Series,
   onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
 };
 
-const ReaderNavigation = (props: Props) => {
-  const {
-    currentCollectionSlug,
-    currentSeries,
-    currentChapter,
-    onChapterSelectChange,
-  } = props;
-
+const ReaderNavigation = ({
+  currentSeries,
+  currentChapter,
+  onChapterSelectChange,
+}: Props) => {
   const chapterSelectorOptions = currentSeries
     ? currentSeries.chapters.map(c => ({
         value: c.slug,
