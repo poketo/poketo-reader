@@ -13,14 +13,6 @@ import utils from '../utils';
 
 import type { Chapter, Collection, Series } from '../types';
 
-import data from './data.json';
-
-const store = {
-  state: data,
-  fetchCollectionIfNeeded: () => {},
-  markSeriesAsRead: () => {},
-};
-
 type Props = {
   collectionSlug: string,
   history: any,
@@ -153,13 +145,13 @@ class FeedView extends Component<Props> {
 }
 
 export default ({ match, history }: any) => (
-  // <Subscribe to={[EntityContainer]}>
-  //   {store => (
-  <FeedView
-    collectionSlug={match.params.collectionSlug}
-    store={store}
-    history={history}
-  />
-  //   )}
-  // </Subscribe>
+  <Subscribe to={[EntityContainer]}>
+    {store => (
+      <FeedView
+        collectionSlug={match.params.collectionSlug}
+        store={store}
+        history={history}
+      />
+    )}
+  </Subscribe>
 );
