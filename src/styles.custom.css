@@ -101,18 +101,6 @@ button {
   background: rgba(255, 255, 255, 0.98);
 }
 
-.ReaderNavigation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  transition: transform 200ms ease;
-}
-
-.ReaderNavigation--hidden {
-  transform: translateY(-100%);
-}
-
 .Dropdown {
   position: relative;
   cursor: pointer;
