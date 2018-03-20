@@ -181,7 +181,7 @@ class ReaderView extends Component<Props, State> {
         />
         {isLoading ? (
           <div
-            className="x xa-center xj-center ta-center pv-5"
+            className="x xa-center xj-center ta-center pv-4"
             style={{ height: '100vh' }}>
             <div>
               <div className="mb-4">
