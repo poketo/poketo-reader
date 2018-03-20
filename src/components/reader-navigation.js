@@ -62,37 +62,28 @@ export default class ReaderNavigation extends Component<Props, State> {
 
     const { isActive } = this.state;
 
+    const chapterSelectorOptions = currentSeries
+      ? currentSeries.chapters.map(c => ({
+          value: c.slug,
+          label: `Chapter ${c.number}`,
+        }))
+      : [{ value: '', label: '' }];
+
     return (
       <nav
         style={{ position: 'sticky', top: 0, left: 0, right: 0, zIndex: 9 }}
         className={`ReaderNavigation ${
           isActive ? '' : 'ReaderNavigation--hidden'
-        } bgc-black c-white x xa-center xj-spaceBetween pv-3 ph-3 fs-14 fs-16-m`}>
-        {currentCollectionSlug ? (
-          <Link
-            className="x xa-center o-50p p-relative z-2"
-            to={utils.getCollectionUrl(currentCollectionSlug)}>
-            <IconArrowLeft width={20} height={20} />
-          </Link>
-        ) : (
-          <div />
-        )}
+        } bgc-black c-white x xa-center xj-end pv-3 ph-3 fs-14 fs-16-m`}>
         {currentChapter && (
           <Fragment>
-            {currentSeries ? (
-              <div className="p-absolute x xj-center xa-center l-0 r-0 t-0 b-0 ta-center z-1">
-                <Dropdown
-                  value={currentChapter.slug}
-                  onChange={onChapterSelectChange}
-                  options={currentSeries.chapters.map(c => ({
-                    value: c.slug,
-                    label: `Chapter ${c.number}`,
-                  }))}
-                />
-              </div>
-            ) : (
-              <div />
-            )}
+            <div className="p-absolute t-0 b-0 l-0 x xj-center xa-center">
+              <Dropdown
+                value={currentChapter.slug}
+                onChange={onChapterSelectChange}
+                options={chapterSelectorOptions}
+              />
+            </div>
             <a
               className="x xa-center o-50p p-relative z-2"
               href={currentChapter.url}

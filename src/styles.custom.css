@@ -25,110 +25,6 @@ button {
   padding-bottom: 1px;
 }
 
-.p-fixed {
-  position: fixed;
-}
-
-.t--1 {
-  top: -1px;
-}
-.t-0 {
-  top: 0;
-}
-.t-16 {
-  top: 16px;
-}
-.b-0 {
-  bottom: 0;
-}
-.b-16 {
-  bottom: 16px;
-}
-.l-0 {
-  left: 0;
-}
-.l-16 {
-  left: 16px;
-}
-.r-0 {
-  right: 0;
-}
-.r-16 {
-  right: 16px;
-}
-
-.z-1 {
-  z-index: 1;
-}
-
-.z-2 {
-  z-index: 2;
-}
-
-.z-9 {
-  z-index: 9;
-}
-
-.va-top {
-  vertical-align: top;
-}
-
-.va-middle {
-  vertical-align: middle;
-}
-
-.xs-center {
-  align-self: center;
-}
-.xs-baseline {
-  align-self: baseline;
-}
-.xs-stretch {
-  align-self: stretch;
-}
-.xs-start {
-  align-self: flex-start;
-}
-.xs-end {
-  align-self: flex-end;
-}
-
-.w-90p {
-  width: 90%;
-}
-
-.w-100p {
-  width: 100%;
-}
-
-.h-100vh {
-  height: 100vh;
-}
-
-@media only screen and (min-width: 767px) {
-  .w-90p-m {
-    width: 90%;
-  }
-
-  .w-100p-m {
-    width: 100%;
-  }
-}
-
-.bc-extraFadedBlack {
-  border-color: rgba(0, 0, 0, 0.15);
-}
-
-.ba-1 {
-  border-width: 1px;
-  border-style: solid;
-}
-
-.ba-2 {
-  border-width: 2px;
-  border-style: solid;
-}
-
 .Link {
   opacity: 1;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
@@ -203,7 +99,6 @@ button {
 
 .Navigation {
   background: rgba(255, 255, 255, 0.98);
-  border-bottom: 1px #ccc solid;
 }
 
 .ReaderNavigation {

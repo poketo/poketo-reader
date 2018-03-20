@@ -3,16 +3,23 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 
-import poketoMarkUrl from '../assets/poketo-mark.svg';
-
 import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
 import EntityContainer from '../containers/entity-container';
 import IconAdd from '../components/icon-add';
+import IconPoketo from '../components/icon-poketo';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
 import type { Chapter, Collection, Series } from '../types';
+
+import data from './data.json';
+
+const store = {
+  state: data,
+  fetchCollectionIfNeeded: () => {},
+  markSeriesAsRead: () => {},
+};
 
 type Props = {
   collectionSlug: string,
@@ -85,9 +92,9 @@ class FeedView extends Component<Props> {
       return (
         <div>
           <div className="pv-3 ph-3 ta-center">
-            <img src={poketoMarkUrl} alt="Poketo" />
+            <IconPoketo />
           </div>
-          <div className="x xd-column xa-center xj-center pa-4 ta-center h-100vh">
+          <div className="x xd-column xa-center xj-center p-fixed p-center ta-center">
             <div className="mb-3">
               <CircleLoader />
             </div>
@@ -122,23 +129,22 @@ class FeedView extends Component<Props> {
       <div className="pt-5">
         <header className="Navigation p-fixed t-0 l-0 r-0 z-9 x xa-center xj-spaceBetween fs-14 fs-16-m">
           <div className="pv-3 ph-3">
-            <img src={poketoMarkUrl} alt="Poketo" />
+            <IconPoketo />
           </div>
           <button className="pv-3 ph-3">
             <IconAdd />
           </button>
         </header>
-        <div className="pt-3 mw-500">
+        <div className="pt-3 ta-center-m">
           {series.map(s => (
-            <div key={s.id} className="mb-3">
-              <SeriesRow
-                series={s}
-                isUnread={s.updatedAt > collection.bookmarks[s.id].lastReadAt}
-                linkTo={collection.bookmarks[s.id].linkTo}
-                onMarkAsReadClick={this.handleMarkAsReadClick}
-                onSeriesClick={this.handleSeriesClick}
-              />
-            </div>
+            <SeriesRow
+              key={s.id}
+              series={s}
+              isUnread={s.updatedAt > collection.bookmarks[s.id].lastReadAt}
+              linkTo={collection.bookmarks[s.id].linkTo}
+              onMarkAsReadClick={this.handleMarkAsReadClick}
+              onSeriesClick={this.handleSeriesClick}
+            />
           ))}
         </div>
       </div>
@@ -147,13 +153,13 @@ class FeedView extends Component<Props> {
 }
 
 export default ({ match, history }: any) => (
-  <Subscribe to={[EntityContainer]}>
-    {store => (
-      <FeedView
-        collectionSlug={match.params.collectionSlug}
-        store={store}
-        history={history}
-      />
-    )}
-  </Subscribe>
+  // <Subscribe to={[EntityContainer]}>
+  //   {store => (
+  <FeedView
+    collectionSlug={match.params.collectionSlug}
+    store={store}
+    history={history}
+  />
+  //   )}
+  // </Subscribe>
 );

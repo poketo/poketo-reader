@@ -6,6 +6,7 @@ import { Subscribe } from 'unstated';
 
 import DotLoader from '../components/loader-dots';
 import Dropdown from '../components/dropdown';
+import IconArrowLeft from '../components/icon-arrow-left';
 import EntityContainer from '../containers/entity-container';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import ReaderPageImage from '../components/reader-page-image';
@@ -27,7 +28,7 @@ type State = {
   markAsReadTimer: ?TimeoutID,
 };
 
-const MARK_AS_READ_TIMEOUT = 2000;
+const MARK_AS_READ_TIMEOUT = 5000;
 
 class ReaderView extends Component<Props, State> {
   state = {
@@ -152,7 +153,25 @@ class ReaderView extends Component<Props, State> {
     }
 
     return (
-      <div style={{ backgroundColor: '#faf8f9', minHeight: '100vh' }}>
+      <div style={{ backgroundColor: '#000', minHeight: '100vh' }}>
+        <div className="p-relative x xj-spaceBetween bgc-black c-white pv-4 ph-3">
+          {collectionSlug && (
+            <Link
+              className="x xa-center o-50p p-relative z-2"
+              to={utils.getCollectionUrl(collectionSlug)}>
+              <IconArrowLeft width={20} height={20} />
+            </Link>
+          )}
+          {series && (
+            <div className="p-fill x xa-center xj-center ta-center">
+              <div>
+                <div>{series.title}</div>
+                <div className="fs-12 o-50p">{series.site.name}</div>
+              </div>
+            </div>
+          )}
+          <div />
+        </div>
         <ReaderNavigation
           currentCollectionSlug={collectionSlug}
           currentChapter={chapter}
@@ -179,7 +198,7 @@ class ReaderView extends Component<Props, State> {
                 </div>
               ))}
             </div>
-            <nav className="ta-center pv-4 ph-3">
+            <nav className="bgc-black c-white ta-center pv-4 ph-3 fs-14 fs-16-m">
               {series ? (
                 <div className="x xa-center xj-spaceBetween w-100p">
                   <ReaderChapterLink
@@ -195,7 +214,7 @@ class ReaderView extends Component<Props, State> {
                       onChange={this.handleChapterSelectorChange}
                       options={series.chapters.map(c => ({
                         value: c.slug,
-                        label: `Chapter ${c.slug}`,
+                        label: `Chapter ${c.number}`,
                       }))}
                     />
                   )}

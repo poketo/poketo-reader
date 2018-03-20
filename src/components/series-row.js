@@ -20,14 +20,25 @@ const SeriesRow = ({
   onMarkAsReadClick,
   onSeriesClick,
 }: Props) => (
-  <div className="x xa-stretch xj-spaceBetween xj-start-m">
+  <div className="SeriesRow bb-1 bc-lightGray bc-transparent-m">
     <a
       href={linkTo ? linkTo : series.url}
       onClick={onSeriesClick(series.id)}
       target="_blank"
-      className="ph-3 pv-2 x-1 x-m xa-baseline-m xo-1-m">
-      <div>{series.title}</div>
-      <div className="ml-2-m fs-12 o-50p">
+      className="hover x xd-column ph-3 pv-3">
+      <span className="fs-20-m">
+        {isUnread && (
+          <span className="p-relative t--2 mr-2">
+            <button title="Mark as read" onClick={onMarkAsReadClick(series.id)}>
+              <span className="d-inlineBlock w-8 h-8 br-round bgc-pink" />
+            </button>
+          </span>
+        )}
+        <span className={isUnread ? 'fw-medium' : undefined}>
+          {series.title}
+        </span>
+      </span>
+      <span className="fs-12 o-50p">
         {linkTo && (
           <Fragment>
             {utils.getDomainName(linkTo)}
@@ -35,15 +46,8 @@ const SeriesRow = ({
           </Fragment>
         )}
         {utils.formatTimestamp(series.updatedAt)}
-      </div>
+      </span>
     </a>
-    {isUnread && (
-      <div className="ph-3 pv-2 x xa-center ml-2 ml-0-m xo-0-m">
-        <button title="Mark as read" onClick={onMarkAsReadClick(series.id)}>
-          <div className="w-16 h-16 br-round bgc-pink" />
-        </button>
-      </div>
-    )}
   </div>
 );
 
