@@ -77,7 +77,7 @@ export default class ReaderNavigation extends Component<Props, State> {
         } bgc-black c-white x xa-center xj-end pv-3 ph-3 fs-14 fs-16-m`}>
         {currentChapter && (
           <Fragment>
-            <div className="p-absolute t-0 b-0 l-0 x xj-center xa-center">
+            <div className="p-absolute t-0 l-8 b-0 x xj-center xa-center">
               <Dropdown
                 value={currentChapter.slug}
                 onChange={onChapterSelectChange}

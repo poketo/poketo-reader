@@ -48,6 +48,7 @@ class ReaderView extends Component<Props, State> {
       nextProps.chapterSlug !== chapterSlug
     ) {
       this.loadData(nextProps);
+      window.scrollTo(0, 0);
     }
 
     return;
@@ -239,9 +240,11 @@ class ReaderView extends Component<Props, State> {
                 )
               )}
               {collectionSlug && (
-                <div className="mt-4">
-                  <Link to={utils.getCollectionUrl(collectionSlug)}>
-                    Back to collection
+                <div className="mt-5">
+                  <Link
+                    className="o-50p"
+                    to={utils.getCollectionUrl(collectionSlug)}>
+                    <IconArrowLeft width={20} height={20} />
                   </Link>
                 </div>
               )}
