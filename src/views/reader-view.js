@@ -100,11 +100,7 @@ class ReaderView extends Component<Props, State> {
       return;
     }
 
-    store.markSeriesAsRead(
-      collectionSlug,
-      series.slug,
-      currentChapter.createdAt,
-    );
+    store.markSeriesAsRead(collectionSlug, series.id, currentChapter.createdAt);
   };
 
   handleChapterSelectorChange = (e: SyntheticInputEvent<HTMLSelectElement>) => {

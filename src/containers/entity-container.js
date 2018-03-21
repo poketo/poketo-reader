@@ -133,9 +133,6 @@ export default class CollectionContainer extends Container<State> {
     seriesId: string,
     lastReadAt: number,
   ) => {
-    // TODO: this is a weird consequence of the half-way between slugs and IDs. We should
-    // just be using IDs here, but we're not sending them back from the server.
-    const series: Series = this.state.series[seriesId];
     const collection = this.state.collections[collectionSlug];
     const bookmark = collection.bookmarks[seriesId];
 

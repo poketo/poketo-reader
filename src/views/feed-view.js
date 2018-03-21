@@ -27,8 +27,6 @@ class FeedView extends Component<Props> {
 
   handleMarkAsReadClick = seriesId => () => {
     const { collectionSlug, store } = this.props;
-    const { series } = store.state;
-
     const now = utils.getTimestamp();
 
     store.markSeriesAsRead(collectionSlug, seriesId, now);
