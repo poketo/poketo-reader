@@ -66,10 +66,10 @@ const utils = {
     api.get(`/collection/${collectionSlug}`),
   fetchMarkAsRead: (
     collectionSlug: string,
-    seriesSlug: string,
+    seriesId: string,
     lastReadAt: number,
   ) =>
-    api.post(`/collection/${collectionSlug}/bookmark/${e(seriesSlug)}/read`, {
+    api.post(`/collection/${collectionSlug}/bookmark/${e(seriesId)}/read`, {
       lastReadAt,
     }),
   fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>

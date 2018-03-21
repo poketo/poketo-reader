@@ -125,6 +125,42 @@ export default class CollectionContainer extends Container<State> {
       });
   };
 
+  /**
+   * Update the "lastReadAt" timestamp for a bookmark in a collection.
+   */
+  markSeriesAsRead = (
+    collectionSlug: string,
+    seriesId: string,
+    lastReadAt: number,
+  ) => {
+    // TODO: this is a weird consequence of the half-way between slugs and IDs. We should
+    // just be using IDs here, but we're not sending them back from the server.
+    const series: Series = this.state.series[seriesId];
+    const collection = this.state.collections[collectionSlug];
+    const bookmark = collection.bookmarks[seriesId];
+
+    this.setState({
+      collections: {
+        ...this.state.collections,
+        [collectionSlug]: {
+          ...collection,
+          bookmarks: {
+            ...collection.bookmarks,
+            [seriesId]: {
+              ...bookmark,
+              lastReadAt,
+            },
+          },
+        },
+      },
+    });
+
+    // We don't handle the response since we pass this info optimistically.
+    utils.fetchMarkAsRead(collectionSlug, seriesId, lastReadAt).catch(err => {
+      // swallow errors
+    });
+  };
+
   findCollectionBySlug = (collectionSlug: string): ?Collection => {
     return this.state.collections[collectionSlug] || null;
   };
@@ -244,44 +280,5 @@ export default class CollectionContainer extends Container<State> {
           },
         });
       });
-  };
-
-  /**
-   * Update the "lastReadAt" timestamp for a series in a collection.
-   */
-  markSeriesAsRead = (
-    collectionSlug: string,
-    seriesSlug: string,
-    lastReadAt: number,
-  ) => {
-    // TODO: this is a weird consequence of the half-way between slugs and IDs. We should
-    // just be using IDs here, but we're not sending them back from the server.
-    const series: Series = Object.values(this.state.series).find(
-      (srs: Series) => srs.slug === seriesSlug,
-    );
-
-    const collection = this.state.collections[collectionSlug];
-    const collectionBookmarks = collection.bookmarks[series.id];
-
-    this.setState({
-      collections: {
-        ...this.state.collections,
-        [collectionSlug]: {
-          ...collection,
-          bookmarks: {
-            ...collection.bookmarks,
-            [series.id]: {
-              ...collectionBookmarks,
-              lastReadAt,
-            },
-          },
-        },
-      },
-    });
-
-    // We don't handle the response since we pass this info optimistically.
-    utils.fetchMarkAsRead(collectionSlug, seriesSlug, lastReadAt).catch(err => {
-      // swallow errors
-    });
   };
 }

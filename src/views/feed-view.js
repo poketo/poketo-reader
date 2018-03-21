@@ -29,10 +29,9 @@ class FeedView extends Component<Props> {
     const { collectionSlug, store } = this.props;
     const { series } = store.state;
 
-    const seriesSlug = series[seriesId].slug;
     const now = utils.getTimestamp();
 
-    store.markSeriesAsRead(collectionSlug, seriesSlug, now);
+    store.markSeriesAsRead(collectionSlug, seriesId, now);
   };
 
   handleSeriesClick = seriesId => e => {

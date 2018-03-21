@@ -22,7 +22,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     this.setState({ hasError: true, errorStack: info.componentStack });
   }
 
-  handleReloadClick = (e: SyntheticMouseEvent<HTMLAnchorElement>) => {
+  handleReloadClick = () => {
     window.location.reload();
   };
 
