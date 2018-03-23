@@ -21,7 +21,7 @@ type State = {
 
 const getChapterProps: ChapterPreview = ({ chapters }) => chapters;
 
-export default class CollectionContainer extends Container<State> {
+export default class EntityContainer extends Container<State> {
   state = {
     chapters: {},
     chaptersStatus: {
@@ -31,6 +31,7 @@ export default class CollectionContainer extends Container<State> {
     collections: {},
     collectionsStatus: {
       isFetching: false,
+      isAddingBookmark: false,
       errorMessage: null,
     },
     series: {},
@@ -126,6 +127,48 @@ export default class CollectionContainer extends Container<State> {
   };
 
   /**
+   * Add a series to a collection.
+   */
+  addBookmarkToCollection = (
+    collectionSlug: string,
+    collectionData: Collection,
+    seriesData: Series,
+  ) => {
+    const collections = {
+      ...this.state.collections,
+      [collectionData.slug]: {
+        ...this.state.collections[collectionData.slug],
+        ...collectionData,
+      },
+    };
+
+    const series = {
+      ...this.state.series,
+      [seriesData.id]: {
+        ...this.state.series[seriesData.id],
+        ...seriesData,
+      },
+    };
+
+    this.setState({ collections, series });
+  };
+
+  /**
+   * Delete a bookmark from a collection.
+   */
+  removeBookmarkFromCollection = (collectionSlug: string, seriesId: string) => {
+    const collections = { ...this.state.collections };
+    delete collections[collectionSlug].bookmarks[seriesId];
+    this.setState({ collections });
+
+    utils
+      .fetchRemoveBookmarkFromCollection(collectionSlug, seriesId)
+      .catch(err => {
+        // swallow errors
+      });
+  };
+
+  /**
    * Update the "lastReadAt" timestamp for a bookmark in a collection.
    */
   markSeriesAsRead = (
@@ -174,7 +217,7 @@ export default class CollectionContainer extends Container<State> {
     );
   };
 
-  fetchSeriesIfNeeded = (siteId: string, seriesSlug: string): Series => {
+  fetchSeriesIfNeeded = (siteId: string, seriesSlug: string) => {
     const existingSeries = Object.values(this.state.series).find(
       (series: Chapter) => series.slug === seriesSlug,
     );
@@ -187,7 +230,7 @@ export default class CollectionContainer extends Container<State> {
     this.fetchSeries(siteId, seriesSlug);
   };
 
-  fetchSeries = (siteId: string, seriesSlug: string): Series => {
+  fetchSeries = (siteId: string, seriesSlug: string) => {
     this.setState({
       seriesStatus: {
         isFetching: true,
@@ -197,6 +240,38 @@ export default class CollectionContainer extends Container<State> {
 
     utils
       .fetchSeries(siteId, seriesSlug)
+      .then(response => {
+        this.setState({
+          series: {
+            ...this.state.series,
+            [response.data.id]: response.data,
+          },
+          seriesStatus: {
+            isFetching: false,
+            errorMessage: null,
+          },
+        });
+      })
+      .catch(err => {
+        this.setState({
+          seriesStatus: {
+            isFetching: false,
+            errorMessage: err.stack,
+          },
+        });
+      });
+  };
+
+  fetchSeriesByUrl = (url: string) => {
+    this.setState({
+      seriesStatus: {
+        isFetching: true,
+        errorMessage: null,
+      },
+    });
+
+    utils
+      .fetchSeriesByUrl(url)
       .then(response => {
         this.setState({
           series: {

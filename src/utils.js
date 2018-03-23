@@ -30,11 +30,17 @@ const utils = {
   /**
    * URL Helpers
    */
-  getDomainName: (url: string) => {
+  getDomainName: (url: string): string => {
     const u = new URL(url);
     return u.hostname.replace(/^www\./i, '');
   },
   constructUrl: (...args: Array<?string>) => args.filter(Boolean).join('/'),
+  isUrl: (url: ?string): boolean => {
+    if (url === null || url === undefined) {
+      return false;
+    }
+    return /^https?:\/\/[^ "]+$/.test(url);
+  },
   getReaderUrl: (
     collectionSlug: ?string,
     siteId: string,
@@ -72,10 +78,26 @@ const utils = {
     api.post(`/collection/${collectionSlug}/bookmark/${e(seriesId)}/read`, {
       lastReadAt,
     }),
+  fetchAddBookmarkToCollection: (
+    collectionSlug: string,
+    seriesUrl: string,
+    linkToUrl: ?string,
+    lastReadAt: ?number,
+  ) =>
+    api.post(`/collection/${collectionSlug}/bookmark/new`, {
+      seriesUrl,
+      linkToUrl,
+      lastReadAt,
+    }),
+  fetchRemoveBookmarkFromCollection: (
+    collectionSlug: string,
+    seriesId: string,
+  ) => api.delete(`/collection/${collectionSlug}/bookmark/${e(seriesId)}`),
   fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
     api.get(`/chapter/${siteId}/${e(seriesSlug)}/${e(chapterSlug)}`),
   fetchSeries: (siteId: string, seriesSlug: string) =>
     api.get(`/series/${siteId}/${e(seriesSlug)}`),
+  fetchSeriesByUrl: (url: string) => api.get(`/series/${e(url)}`),
 };
 
 export default utils;

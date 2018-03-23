@@ -51,6 +51,29 @@ button {
   padding: 0 12px;
   height: 32px;
   line-height: 32px;
+  text-align: center;
+  width: 100%;
+}
+
+.Button--primary {
+  background-color: #ff7462;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  height: 44px;
+  line-height: 44px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.Button--primary[disabled] {
+  background-color: #776d6c;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.Button--primary:not([disabled]):hover {
+  background-color: #de6c5d;
 }
 
 .CodeBlock {
@@ -130,6 +153,33 @@ button {
   top: 0;
   right: 12px;
   bottom: 0;
+}
+
+.Panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+.Panel-background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.Panel-menu {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: 200;
 }
 
 .CircleLoader {

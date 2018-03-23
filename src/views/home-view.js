@@ -60,13 +60,13 @@ export default class HomeView extends Component<Props, State> {
     const { examples, seriesUrl } = this.state;
 
     return (
-      <div className="mw-500">
-        <p>Hi!</p>
-        <p className="mt-2">
+      <div className="mw-500 pa-3">
+        <span className="fs-12 tt-uppercase">Beta</span>
+        <p className="mt-2 fs-20">
           <strong>Poketo</strong> is a friendly manga tracker for following
           series you like.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <form onSubmit={this.handleSubmit}>
             <Input
               type="url"
@@ -78,7 +78,7 @@ export default class HomeView extends Component<Props, State> {
               Read
             </button>
           </form>
-        </p>
+        </div>
         <p className="mt-1 fs-12">
           For example,{' '}
           {examples.map((example, i) => (

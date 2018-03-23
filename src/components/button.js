@@ -4,11 +4,14 @@ import React from 'react';
 
 type Props = {
   className?: string,
+  primary: boolean,
 };
 
-export default ({ className, ...props }: Props) => (
+export default ({ className, primary = false, ...props }: Props) => (
   <button
-    className={`Button ff-sans ${className ? className : ''}`}
+    className={`Button ${primary ? 'Button--primary' : ''} ff-sans ${
+      className ? className : ''
+    }`}
     {...props}
   />
 );

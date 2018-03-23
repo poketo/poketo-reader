@@ -183,7 +183,9 @@ class ReaderView extends Component<Props, State> {
               <div className="mb-4">
                 <DotLoader />
               </div>
-              <div>Loading{series ? ` from ${series.site.name}` : ''}</div>
+              <div className="fs-12 c-white o-50p">
+                Loading{series ? ` from ${series.site.name}` : ''}
+              </div>
             </div>
           </div>
         ) : (

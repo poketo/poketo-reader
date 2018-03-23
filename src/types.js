@@ -26,6 +26,7 @@ export type Series = {
   chapters: ?Array<Chapter | ChapterPreview>,
   linkTo: ?string,
   updatedAt: number,
+  supportsReading: boolean,
 };
 
 export type Collection = {
