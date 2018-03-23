@@ -7,8 +7,11 @@ import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
 import EntityContainer from '../containers/entity-container';
 import IconAdd from '../components/icon-add';
+import IconBook from '../components/icon-book';
 import IconPoketo from '../components/icon-poketo';
+import IconTrash from '../components/icon-trash';
 import NewBookmarkPanel from '../components/new-bookmark-panel';
+import Panel from '../components/panel';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
@@ -21,12 +24,14 @@ type Props = {
 };
 
 type State = {
-  showingPanel: boolean,
+  showNewBookmarkPanel: boolean,
+  seriesOptionsPanelId: ?string,
 };
 
 class FeedView extends Component<Props, State> {
   state = {
-    showingPanel: false,
+    showNewBookmarkPanel: false,
+    seriesOptionsPanelId: null,
   };
 
   componentDidMount() {
@@ -34,28 +39,49 @@ class FeedView extends Component<Props, State> {
     store.fetchCollectionIfNeeded(collectionSlug);
   }
 
-  handleMarkAsReadClick = seriesId => () => {
-    const { collectionSlug, store } = this.props;
-    const now = utils.getTimestamp();
-
-    store.markSeriesAsRead(collectionSlug, seriesId, now);
+  handleSeriesOptionsClick = seriesId => () => {
+    this.setState({ seriesOptionsPanelId: seriesId });
   };
 
-  handleSeriesOptionsClick = seriesId => () => {
+  handleSeriesOptionsTrashClick = () => {
     const { collectionSlug, store } = this.props;
+    const { seriesOptionsPanelId } = this.state;
 
-    console.log('hi');
+    if (!seriesOptionsPanelId) {
+      return;
+    }
+
     if (window.confirm('Do you want to delete this series?')) {
-      store.removeBookmarkFromCollection(collectionSlug, seriesId);
+      store.removeBookmarkFromCollection(collectionSlug, seriesOptionsPanelId);
+      this.handleSeriesOptionsPanelClose();
     }
   };
 
-  handlePanelRequestClose = () => {
-    this.setState({ showingPanel: false });
+  handleSeriesOptionsMarkAsReadClick = () => {
+    const { collectionSlug, store } = this.props;
+    const { seriesOptionsPanelId } = this.state;
+
+    if (!seriesOptionsPanelId) {
+      return;
+    }
+
+    const now = utils.getTimestamp();
+
+    store.markSeriesAsRead(collectionSlug, seriesOptionsPanelId, now);
+
+    this.handleSeriesOptionsPanelClose();
+  };
+
+  handleNewBookmarkPanelClose = () => {
+    this.setState({ showNewBookmarkPanel: false });
+  };
+
+  handleSeriesOptionsPanelClose = () => {
+    this.setState({ seriesOptionsPanelId: null });
   };
 
   handleAddButtonClick = () => {
-    this.setState({ showingPanel: true });
+    this.setState({ showNewBookmarkPanel: true });
   };
 
   handleSeriesClick = seriesId => e => {
@@ -95,7 +121,7 @@ class FeedView extends Component<Props, State> {
 
   render() {
     const { store, collectionSlug } = this.props;
-    const { showingPanel } = this.state;
+    const { showNewBookmarkPanel, seriesOptionsPanelId } = this.state;
     const { collections, collectionsStatus } = store.state;
     const { isFetching, errorMessage } = collectionsStatus;
 
@@ -148,10 +174,30 @@ class FeedView extends Component<Props, State> {
             <IconAdd />
           </button>
         </header>
-        {showingPanel && (
+        {seriesOptionsPanelId && (
+          <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
+            <button onClick={this.handleSeriesOptionsTrashClick}>
+              <div className="x">
+                <div className="pa-3">
+                  <IconTrash />
+                </div>
+                <div className="pa-3">Remove bookmark</div>
+              </div>
+            </button>
+            <button onClick={this.handleSeriesOptionsMarkAsReadClick}>
+              <div className="x">
+                <div className="pa-3">
+                  <IconBook />
+                </div>
+                <div className="pa-3">Mark N chapters as read</div>
+              </div>
+            </button>
+          </Panel>
+        )}
+        {showNewBookmarkPanel && (
           <NewBookmarkPanel
             collectionSlug={collectionSlug}
-            onRequestClose={this.handlePanelRequestClose}
+            onRequestClose={this.handleNewBookmarkPanelClose}
             store={store}
           />
         )}
@@ -165,7 +211,6 @@ class FeedView extends Component<Props, State> {
                 series={s}
                 isUnread={s.updatedAt > bookmark.lastReadAt}
                 linkToUrl={bookmark.linkToUrl}
-                onMarkAsReadClick={this.handleMarkAsReadClick}
                 onOptionsClick={this.handleSeriesOptionsClick}
                 onSeriesClick={this.handleSeriesClick}
               />

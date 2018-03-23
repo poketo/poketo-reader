@@ -187,7 +187,7 @@ button {
   border: 4px transparent solid;
   border-top-color: black;
   border-left-color: black;
-  animation: spinner 400ms linear infinite;
+  animation: spinner 500ms linear infinite;
 }
 
 @keyframes spinner {

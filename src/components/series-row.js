@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Fragment } from 'react';
+import IconMoreHorizontal from './icon-more-horizontal';
 import utils from '../utils';
 
 import type { Series } from '../types';
@@ -9,22 +10,14 @@ type Props = {
   series: Series,
   isUnread: boolean,
   linkToUrl: ?string,
-  onMarkAsReadClick: (
-    seriesId: string,
-  ) => (e: SyntheticEvent<HTMLButtonElement>) => void,
-  onOptionsClick: (
-    seriesId: string,
-  ) => (e: SyntheticEvent<HTMLAnchorElement>) => void,
-  onSeriesClick: (
-    seriesId: string,
-  ) => (e: SyntheticEvent<HTMLButtonElement>) => void,
+  onOptionsClick: (i: string) => (e: SyntheticEvent<HTMLAnchorElement>) => void,
+  onSeriesClick: (i: string) => (e: SyntheticEvent<HTMLButtonElement>) => void,
 };
 
 const SeriesRow = ({
   series,
   isUnread,
   linkToUrl,
-  onMarkAsReadClick,
   onOptionsClick,
   onSeriesClick,
 }: Props) => (
@@ -37,9 +30,7 @@ const SeriesRow = ({
       <span className="fs-20-m">
         {isUnread && (
           <span className="p-relative t--2 mr-2">
-            <button title="Mark as read" onClick={onMarkAsReadClick(series.id)}>
-              <span className="d-inlineBlock w-8 h-8 br-round bgc-pink" />
-            </button>
+            <span className="d-inlineBlock w-8 h-8 br-round bgc-pink" />
           </span>
         )}
         <span className={isUnread ? 'fw-medium' : undefined}>
@@ -57,7 +48,7 @@ const SeriesRow = ({
       </span>
     </a>
     <button className="pa-3" onClick={onOptionsClick(series.id)}>
-      &hellip;
+      <IconMoreHorizontal />
     </button>
   </div>
 );
