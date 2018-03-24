@@ -8,7 +8,7 @@ import Input from './input';
 import Panel from './panel';
 import utils from '../utils';
 
-import type { Series } from '../types';
+import type { Series, TraeError } from '../types';
 
 type NewSeriesErrorCode =
   | 'INVALID_URL'
@@ -93,7 +93,7 @@ class NewBookmarkPanel extends Component<Props, State> {
       .catch(this.handleSubmitError);
   };
 
-  handleSubmitError = (err: { status: number, data: string }) => {
+  handleSubmitError = (err: TraeError) => {
     let errorCode;
 
     switch (err.status) {

@@ -38,33 +38,45 @@ button {
 .Input {
   border: 1px solid #eee;
   border-radius: 2px;
-  padding: 0 8px;
+  padding: 0 12px;
   width: 100%;
-  height: 40px;
-  line-height: 40px;
+  height: 44px;
+  line-height: 44px;
+  transition: border-color 200ms ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.Input:focus {
+  border-color: #4494ff;
 }
 
 .Button {
-  border: 1px solid #eee;
+  background-color: #242424;
   border-radius: 3px;
-  background: white;
-  padding: 0 12px;
-  height: 32px;
-  line-height: 32px;
+  padding: 0 16px;
+  min-width: 120px;
+  height: 44px;
+  line-height: 44px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
   text-align: center;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.Button:not(.Button--inline) {
   width: 100%;
+}
+
+.Button--loading {
 }
 
 .Button--primary {
   background-color: #ff7462;
   border: none;
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  height: 44px;
-  line-height: 44px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .Button--primary[disabled] {
@@ -184,9 +196,9 @@ button {
 
 .CircleLoader {
   display: inline-block;
-  border: 4px transparent solid;
-  border-top-color: black;
-  border-left-color: black;
+  border-color: transparent;
+  border-top-color: currentColor;
+  border-left-color: currentColor;
   animation: spinner 500ms linear infinite;
 }
 

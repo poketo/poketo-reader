@@ -1,17 +1,32 @@
 // @flow
 
-import React from 'react';
+import React, { type Node } from 'react';
+import classNames from 'classnames';
+import CircleLoader from './loader-circle';
 
 type Props = {
+  children?: Node,
   className?: string,
-  primary: boolean,
+  primary?: boolean,
+  inline?: boolean,
+  loading?: boolean,
 };
 
-export default ({ className, primary = false, ...props }: Props) => (
+export default ({
+  className,
+  children,
+  primary = false,
+  inline = false,
+  loading = false,
+  ...props
+}: Props) => (
   <button
-    className={`Button ${primary ? 'Button--primary' : ''} ff-sans ${
-      className ? className : ''
-    }`}
-    {...props}
-  />
+    className={classNames('Button', 'ff-sans', className, {
+      'Button--primary': primary,
+      'Button--loading': loading,
+      'Button--inline': inline,
+    })}
+    {...props}>
+    {loading ? <CircleLoader color="white" small /> : children}
+  </button>
 );

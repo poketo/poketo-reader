@@ -68,6 +68,10 @@
   z-index: 9;
 }
 
+.ls-loose {
+  letter-spacing: 0.5px;
+}
+
 .va-top {
   vertical-align: top;
 }
@@ -123,6 +127,11 @@
 
 .ba-2 {
   border-width: 2px;
+  border-style: solid;
+}
+
+.ba-4 {
+  border-width: 4px;
   border-style: solid;
 }
 

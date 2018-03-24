@@ -1,3 +1,20 @@
+export type TraeResponse = {
+  config: {
+    headers: Object,
+    method: string,
+    url: string,
+  },
+  data: any,
+  headers: Headers,
+  status: number,
+  statusText: string,
+};
+
+export type TraeError = {
+  ...TraeResponse,
+  message: string,
+};
+
 export type Page = {
   id: string,
   url: string,
