@@ -2,13 +2,27 @@
 
 import React, { Component, type Node } from 'react';
 import ReactDOM from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
 
-type Props = {
+type PanelProps = {
   children?: Node,
   onRequestClose?: () => void,
 };
 
-export default class Panel extends Component<Props> {
+type PanelButtonProps = {
+  icon: Node,
+  label: Node,
+  onClick: (e: SyntheticEvent<HTMLButtonElement>) => void,
+};
+
+type PanelTransitionProps = {
+  children: Node,
+};
+
+class Panel extends Component<PanelProps> {
+  static Button: (props: PanelButtonProps) => Node;
+  static Transition: (props: PanelTransitionProps) => Node;
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -54,3 +68,16 @@ export default class Panel extends Component<Props> {
     );
   }
 }
+
+Panel.Button = (props: PanelButtonProps) => (
+  <button className="x w-100p xa-stretch" onClick={props.onClick}>
+    <div className="pa-3 x xa-center">{props.icon}</div>
+    <div className="pa-3">{props.label}</div>
+  </button>
+);
+
+Panel.Transition = (props: PanelTransitionProps) => (
+  <CSSTransition {...props} timeout={400} classNames="panel" />
+);
+
+export default Panel;

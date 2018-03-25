@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { TransitionGroup } from 'react-transition-group';
 import { Subscribe } from 'unstated';
 
 import CircleLoader from '../components/loader-circle';
@@ -119,9 +120,43 @@ class FeedView extends Component<Props, State> {
     );
   };
 
-  render() {
+  renderPanels() {
     const { store, collectionSlug } = this.props;
     const { showNewBookmarkPanel, seriesOptionsPanelId } = this.state;
+
+    return (
+      <TransitionGroup>
+        {seriesOptionsPanelId && (
+          <Panel.Transition>
+            <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
+              <Panel.Button
+                icon={<IconTrash />}
+                label="Remove bookmark"
+                onClick={this.handleSeriesOptionsTrashClick}
+              />
+              <Panel.Button
+                icon={<IconBook />}
+                label="Mark N chapters as read"
+                onClick={this.handleSeriesOptionsMarkAsReadClick}
+              />
+            </Panel>
+          </Panel.Transition>
+        )}
+        {showNewBookmarkPanel && (
+          <Panel.Transition>
+            <NewBookmarkPanel
+              collectionSlug={collectionSlug}
+              onRequestClose={this.handleNewBookmarkPanelClose}
+              store={store}
+            />
+          </Panel.Transition>
+        )}
+      </TransitionGroup>
+    );
+  }
+
+  render() {
+    const { store, collectionSlug } = this.props;
     const { collections, collectionsStatus } = store.state;
     const { isFetching, errorMessage } = collectionsStatus;
 
@@ -142,7 +177,7 @@ class FeedView extends Component<Props, State> {
 
     if (errorMessage) {
       return (
-        <div>
+        <div className="pa-3">
           Something went wrong while loading.
           <CodeBlock>{errorMessage}</CodeBlock>
         </div>
@@ -153,7 +188,7 @@ class FeedView extends Component<Props, State> {
 
     if (collection === null || collection === undefined) {
       return (
-        <div>
+        <div className="pa-3">
           Uh oh. Couldn't find the manga collection at {collectionSlug}.
         </div>
       );
@@ -174,33 +209,7 @@ class FeedView extends Component<Props, State> {
             <IconAdd />
           </button>
         </header>
-        {seriesOptionsPanelId && (
-          <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
-            <button onClick={this.handleSeriesOptionsTrashClick}>
-              <div className="x">
-                <div className="pa-3">
-                  <IconTrash />
-                </div>
-                <div className="pa-3">Remove bookmark</div>
-              </div>
-            </button>
-            <button onClick={this.handleSeriesOptionsMarkAsReadClick}>
-              <div className="x">
-                <div className="pa-3">
-                  <IconBook />
-                </div>
-                <div className="pa-3">Mark N chapters as read</div>
-              </div>
-            </button>
-          </Panel>
-        )}
-        {showNewBookmarkPanel && (
-          <NewBookmarkPanel
-            collectionSlug={collectionSlug}
-            onRequestClose={this.handleNewBookmarkPanelClose}
-            store={store}
-          />
-        )}
+        {this.renderPanels()}
         <div className="pt-3 ta-center-m">
           {series.map(s => {
             const bookmark = collection.bookmarks[s.id];

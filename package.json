@@ -21,6 +21,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
+    "react-transition-group": "^2.2.1",
     "s-ago": "^1.1.0",
     "throttle-debounce": "^1.0.1",
     "trae": "^1.4.2",
