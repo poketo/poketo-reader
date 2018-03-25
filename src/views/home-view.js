@@ -87,8 +87,14 @@ export default class HomeView extends Component<Props, State> {
     let errorCode;
 
     switch (err.status) {
-      case 500:
-        errorCode = 'SERVER_UNSUPPORTED_SITE';
+      case 400:
+        errorCode =
+          err.data.indexOf('not supported') === -1
+            ? 'INVALID_URL'
+            : 'SERVER_UNSUPPORTED_SITE';
+        break;
+      case 404:
+        errorCode = 'INVALID_SERIES';
         break;
       default:
         errorCode = 'SERVER_UNKNOWN_ERROR';
@@ -107,7 +113,7 @@ export default class HomeView extends Component<Props, State> {
   };
 
   render() {
-    const { examples, isFetching, url } = this.state;
+    const { errorCode, examples, isFetching, url } = this.state;
 
     return (
       <div className="mw-900 mh-auto ta-center-m pv-5 ph-3">
@@ -134,6 +140,7 @@ export default class HomeView extends Component<Props, State> {
                 Read
               </Button>
             </div>
+            {errorCode && <p className="mt-2 c-red">{errorCode}</p>}
           </form>
         </div>
         <p className="mt-3 fs-12">
