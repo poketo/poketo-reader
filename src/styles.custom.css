@@ -259,7 +259,7 @@ button {
 
 .panel-enter.panel-enter-active > .Panel-background {
   opacity: 1;
-  transition: opacity 200ms linear;
+  transition: opacity 150ms ease;
 }
 
 .panel-enter.panel-enter-active > .Panel-menu {
@@ -277,7 +277,7 @@ button {
 
 .panel-exit.panel-exit-active > .Panel-background {
   opacity: 0.01;
-  transition: opacity 200ms linear;
+  transition: opacity 200ms ease;
 }
 
 .panel-exit.panel-exit-active > .Panel-menu {

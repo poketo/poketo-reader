@@ -2,6 +2,7 @@
 
 import React, { Component, type Node } from 'react';
 import ReactDOM from 'react-dom';
+import ScrollLock from 'react-scrolllock';
 import { CSSTransition } from 'react-transition-group';
 
 type PanelProps = {
@@ -61,6 +62,7 @@ class Panel extends Component<PanelProps> {
 
     return ReactDOM.createPortal(
       <div className="Panel">
+        <ScrollLock />
         <div className="Panel-background" onClick={this.handleOverlayClick} />
         <div className="Panel-menu">{children}</div>
       </div>,

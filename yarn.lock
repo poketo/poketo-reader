@@ -2979,6 +2979,10 @@ execa@^0.7.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
+exenv@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+
 expand-brackets@^0.1.4:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/expand-brackets/-/expand-brackets-0.1.5.tgz#df07284e342a807cd733ac5af72411e581d1177b"
@@ -6038,6 +6042,12 @@ react-scripts@^1.1.0:
     whatwg-fetch "2.0.3"
   optionalDependencies:
     fsevents "1.1.2"
+
+react-scrolllock@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-scrolllock/-/react-scrolllock-2.0.1.tgz#dd323f5da9de75f0bb64b997ee5967dd47f0a3ff"
+  dependencies:
+    exenv "^1.2.2"
 
 react-transition-group@^2.2.1:
   version "2.2.1"
