@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, type Node } from 'react';
 import Button from '../components/button';
 import IconPoketo from '../components/icon-poketo';
 import Input from '../components/input';
@@ -41,6 +41,13 @@ type State = {
   examples: Array<{ label: string, url: string }>,
 };
 
+const errorMessages: { [code: FetchErrorCode]: Node } = {
+  INVALID_URL: 'Please enter a valid URL.',
+  INVALID_SERIES: `We couldn't find a series at that URL. Is it working?`,
+  SERVER_UNSUPPORTED_SITE: `Sorry, but that site isn't supported`,
+  SERVER_UNKNOWN_ERROR: `Sorry, something went wrong.`,
+};
+
 export default class HomeView extends Component<Props, State> {
   state = {
     url: '',
@@ -49,9 +56,11 @@ export default class HomeView extends Component<Props, State> {
     examples: utils.getRandomItems(examplesList, 3),
   };
 
-  handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  handleSubmit = (e: ?SyntheticEvent<HTMLFormElement>) => {
     const { url } = this.state;
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
     if (!utils.isUrl(url)) {
       this.setState({ errorCode: 'INVALID_URL' });
@@ -109,7 +118,9 @@ export default class HomeView extends Component<Props, State> {
   };
 
   handleExampleClick = (url: string) => () => {
-    this.setState({ url });
+    this.setState({ url }, () => {
+      this.handleSubmit();
+    });
   };
 
   render() {
@@ -140,7 +151,9 @@ export default class HomeView extends Component<Props, State> {
                 Read
               </Button>
             </div>
-            {errorCode && <p className="mt-2 c-red">{errorCode}</p>}
+            {errorCode && (
+              <p className="mt-2 c-red">{errorMessages[errorCode]}</p>
+            )}
           </form>
         </div>
         <p className="mt-3 fs-12">
