@@ -60,6 +60,11 @@ const utils = {
   /**
    * Chapter Helpers
    */
+  getUnreadChapters: (
+    chapters: Array<Chapter>,
+    seriesLastReadAt: number,
+  ): Array<Chapter> =>
+    chapters.filter(chapter => chapter.createdAt > seriesLastReadAt),
   mostRecentChapter: (chapters: Array<Chapter>): Chapter =>
     chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
   leastRecentChapter: (chapters: Array<Chapter>): Chapter =>

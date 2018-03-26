@@ -87,7 +87,7 @@ export default class HomeView extends Component<Props, State> {
         null,
         series.site.id,
         series.slug,
-        series.chapters[0].slug,
+        utils.leastRecentChapter(series.chapters).slug,
       ),
     );
   };

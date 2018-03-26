@@ -113,11 +113,11 @@ class ReaderView extends Component<Props, State> {
     } = this.props;
     const value = e.target.value;
 
-    if (value !== chapterSlug) {
-      history.push(
-        utils.getReaderUrl(collectionSlug, siteId, seriesSlug, value),
-      );
+    if (value === chapterSlug) {
+      return;
     }
+
+    history.push(utils.getReaderUrl(collectionSlug, siteId, seriesSlug, value));
   };
 
   render() {

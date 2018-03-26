@@ -9,6 +9,7 @@ import CodeBlock from '../components/code-block';
 import EntityContainer from '../containers/entity-container';
 import IconAdd from '../components/icon-add';
 import IconBook from '../components/icon-book';
+import IconFeed from '../components/icon-feed';
 import IconPoketo from '../components/icon-poketo';
 import IconTrash from '../components/icon-trash';
 import NewBookmarkPanel from '../components/new-bookmark-panel';
@@ -16,7 +17,7 @@ import Panel from '../components/panel';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
-import type { Chapter, Collection, Series } from '../types';
+import type { Collection, Series } from '../types';
 
 type Props = {
   collectionSlug: string,
@@ -101,8 +102,10 @@ class FeedView extends Component<Props, State> {
 
     e.preventDefault();
 
-    const unreadChapters: Array<Chapter> = series.chapters.filter(
-      chapter => chapter.createdAt > collection.bookmarks[series.id].lastReadAt,
+    const bookmark = collection.bookmarks[series.id];
+    const unreadChapters = utils.getUnreadChapters(
+      series.chapters,
+      bookmark.lastReadAt,
     );
 
     const toChapter =
@@ -124,20 +127,43 @@ class FeedView extends Component<Props, State> {
     const { store, collectionSlug } = this.props;
     const { showNewBookmarkPanel, seriesOptionsPanelId } = this.state;
 
+    const collection: Collection = store.state.collections[collectionSlug];
+    const series = store.state.series[seriesOptionsPanelId];
+    const bookmark = collection.bookmarks[seriesOptionsPanelId];
+
+    let unreadChaptersCount = null;
+
+    if (seriesOptionsPanelId) {
+      unreadChaptersCount = utils.getUnreadChapters(
+        series.chapters,
+        bookmark.lastReadAt,
+      );
+    }
+
     return (
       <TransitionGroup>
         {seriesOptionsPanelId && (
           <Panel.Transition>
             <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
+              {unreadChaptersCount &&
+                unreadChaptersCount.length > 0 && (
+                  <Panel.Button
+                    icon={<IconBook />}
+                    label={`Mark ${
+                      unreadChaptersCount.length
+                    } chapters as read`}
+                    onClick={() => {}}
+                  />
+                )}
               <Panel.Button
-                icon={<IconTrash />}
-                label="Remove bookmark"
-                onClick={this.handleSeriesOptionsTrashClick}
+                icon={<IconFeed color="#ff992f" />}
+                label="Get RSS feed"
+                onClick={this.handleSeriesOptionsMarkAsReadClick}
               />
               <Panel.Button
-                icon={<IconBook />}
-                label="Mark N chapters as read"
-                onClick={this.handleSeriesOptionsMarkAsReadClick}
+                icon={<IconTrash color="red" />}
+                label="Remove bookmark"
+                onClick={this.handleSeriesOptionsTrashClick}
               />
             </Panel>
           </Panel.Transition>
