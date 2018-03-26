@@ -7,6 +7,7 @@ if (typeof global.window !== 'undefined') {
   global.window.lazySizesConfig.lazyClass = 'js-lazysizes';
   global.window.lazySizesConfig.preloadClass = 'js-lazysizes-preload';
   global.window.lazySizesConfig.loadedClass = 'js-lazysizes-loaded';
+  global.window.lazySizesConfig.expFactor = 1200;
   global.window.lazySizesConfig.expFactor = 2.0;
 
   require('lazysizes/plugins/attrchange/ls.attrchange.js');
