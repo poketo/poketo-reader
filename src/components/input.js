@@ -8,7 +8,10 @@ type Props = {
 };
 
 const Input = ({ className, ...props }: Props) => (
-  <input className={classNames('Input', 'ff-sans', className)} {...props} />
+  <input
+    className={classNames('Input', 'br-3 ff-sans', className)}
+    {...props}
+  />
 );
 
 export default Input;

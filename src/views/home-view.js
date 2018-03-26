@@ -137,14 +137,14 @@ export default class HomeView extends Component<Props, State> {
           <form onSubmit={this.handleSubmit} noValidate>
             <div className="x-m">
               <Input
-                className="fs-20-m"
+                className="fs-20-m br-flushRight-m br-0-m"
                 type="url"
                 placeholder="Paste link to series…"
                 onChange={this.handleSeriesUrlChange}
                 value={url}
               />
               <Button
-                className="mt-2 mt-0-m"
+                className="mt-2 mt-0-m br-flushLeft-m"
                 inline
                 loading={isFetching}
                 type="submit">

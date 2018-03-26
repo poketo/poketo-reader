@@ -21,7 +21,7 @@ export default ({
   ...props
 }: Props) => (
   <button
-    className={classNames('Button', 'ff-sans', className, {
+    className={classNames('Button', 'br-3 ff-sans', className, {
       'Button--primary': primary,
       'Button--loading': loading,
       'Button--inline': inline,

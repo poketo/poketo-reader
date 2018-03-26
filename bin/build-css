@@ -7,6 +7,7 @@ const kit = require('hibiscss/default');
 const styles = hibiscss(
   kit({
     borderRadius: {
+      '3': '3px',
       '4': '4px',
       round: '50%',
       pill: '9999px',
