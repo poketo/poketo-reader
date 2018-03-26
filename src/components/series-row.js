@@ -9,7 +9,7 @@ import type { Series } from '../types';
 type Props = {
   series: Series,
   isUnread: boolean,
-  linkToUrl: ?string,
+  linkTo: ?string,
   onOptionsClick: (i: string) => (e: SyntheticEvent<HTMLAnchorElement>) => void,
   onSeriesClick: (i: string) => (e: SyntheticEvent<HTMLButtonElement>) => void,
 };
@@ -17,12 +17,12 @@ type Props = {
 const SeriesRow = ({
   series,
   isUnread,
-  linkToUrl,
+  linkTo,
   onOptionsClick,
   onSeriesClick,
 }: Props) => {
-  const readingUrl = linkToUrl ? linkToUrl : series.url;
-  const usesExternalReader = linkToUrl || series.supportsReading === false;
+  const readingUrl = linkTo ? linkTo : series.url;
+  const usesExternalReader = linkTo || series.supportsReading === false;
 
   return (
     <div className="SeriesRow x bb-1 bc-lightGray bc-transparent-m">

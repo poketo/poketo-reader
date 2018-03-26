@@ -219,7 +219,7 @@ class FeedView extends Component<Props, State> {
                 key={s.id}
                 series={s}
                 isUnread={s.updatedAt > bookmark.lastReadAt}
-                linkToUrl={bookmark.linkToUrl}
+                linkTo={bookmark.linkTo}
                 onOptionsClick={this.handleSeriesOptionsClick}
                 onSeriesClick={this.handleSeriesClick}
               />
