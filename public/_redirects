@@ -1,2 +1,4 @@
 # serve index.html for all pages
-/*    /index.html   200
+/*       /index.html                       200
+# proxy poketo api server to remove need for OPTIONS requests
+/api/*   https://poketo-api.now.sh/:splat  200
