@@ -99,10 +99,10 @@ const utils = {
     seriesId: string,
   ) => api.delete(`/collection/${collectionSlug}/bookmark/${e(seriesId)}`),
   fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
-    api.get(`/chapter/${siteId}/${e(seriesSlug)}/${e(chapterSlug)}`),
+    api.get(`/chapter`, { params: { siteId, seriesSlug, chapterSlug } }),
   fetchSeries: (siteId: string, seriesSlug: string) =>
-    api.get(`/series/${siteId}/${e(seriesSlug)}`),
-  fetchSeriesByUrl: (url: string) => api.get(`/series/${e(url)}`),
+    api.get(`/series`, { params: { siteId, seriesSlug } }),
+  fetchSeriesByUrl: (url: string) => api.get(`/series`, { params: { url } }),
 };
 
 export default utils;
