@@ -20,13 +20,15 @@
     "lazysizes": "^4.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scrolllock": "^2.0.1",
     "react-transition-group": "^2.2.1",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "s-ago": "^1.1.0",
     "throttle-debounce": "^1.0.1",
-    "trae": "^1.4.2",
-    "unstated": "^1.0.3"
+    "trae": "^1.4.2"
   },
   "devDependencies": {
     "flow-bin": "^0.66.0",
@@ -34,6 +36,7 @@
     "mz": "^2.7.0",
     "prettier": "^1.8.2",
     "react-scripts": "^1.1.0",
+    "redux-logger": "^3.0.6",
     "svgr": "^1.9.0"
   }
 }

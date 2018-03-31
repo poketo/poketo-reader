@@ -1,27 +1,41 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { Subscribe } from 'unstated';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import DotLoader from '../components/loader-dots';
 import Dropdown from '../components/dropdown';
 import IconArrowLeft from '../components/icon-arrow-left';
-import EntityContainer from '../containers/entity-container';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
 
-import type { Chapter, Series } from '../types';
+import { fetchSeriesIfNeeded } from '../store/reducers/series';
+import { fetchChapterIfNeeded } from '../store/reducers/chapters';
+import {
+  fetchCollectionIfNeeded,
+  markSeriesAsRead,
+} from '../store/reducers/collections';
+
+import type { Collection, Chapter, ChapterPreview, Series } from '../types';
+import type { Dispatch } from '../store/types';
 
 type Props = {
+  collection: ?Collection,
+  seriesById: { [id: string]: Series },
+  chaptersById: { [id: string]: Chapter | ChapterPreview },
+  dispatch: Dispatch,
   history: any,
-  collectionSlug: ?string,
-  siteId: string,
-  seriesSlug: string,
-  chapterSlug: string,
-  store: any,
+  match: {
+    params: {
+      collectionSlug: ?string,
+      siteId: string,
+      seriesSlug: string,
+      chapterSlug: string,
+    },
+  },
 };
 
 type State = {
@@ -35,23 +49,29 @@ class ReaderView extends Component<Props, State> {
     markAsReadTimer: null,
   };
 
+  static mapStateToProps = (state, ownProps) => ({
+    collection: state.collections[ownProps.match.params.collectionSlug],
+    seriesById: state.series,
+    chaptersById: state.chapters,
+  });
+
   componentDidMount() {
     this.loadData(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { siteId, seriesSlug, chapterSlug } = this.props;
+    const { match } = this.props;
+    const { siteId, seriesSlug, chapterSlug } = match.params;
+    const { params: nextParams } = nextProps.match;
 
     if (
-      nextProps.siteId !== siteId ||
-      nextProps.seriesSlug !== seriesSlug ||
-      nextProps.chapterSlug !== chapterSlug
+      nextParams.siteId !== siteId ||
+      nextParams.seriesSlug !== seriesSlug ||
+      nextParams.chapterSlug !== chapterSlug
     ) {
       this.loadData(nextProps);
       window.scrollTo(0, 0);
     }
-
-    return;
   }
 
   componentWillUnmount() {
@@ -61,17 +81,18 @@ class ReaderView extends Component<Props, State> {
   }
 
   loadData = props => {
-    const { collectionSlug, siteId, seriesSlug, chapterSlug, store } = props;
+    const { match, dispatch } = props;
+    const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
 
-    store.fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug);
-    store.fetchSeriesIfNeeded(siteId, seriesSlug);
+    dispatch(fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug));
+    dispatch(fetchSeriesIfNeeded(siteId, seriesSlug));
 
     if (this.state.markAsReadTimer) {
       clearTimeout(this.state.markAsReadTimer);
     }
 
     if (collectionSlug) {
-      store.fetchCollectionIfNeeded(collectionSlug);
+      dispatch(fetchCollectionIfNeeded(collectionSlug));
       this.setState({
         markAsReadTimer: setTimeout(
           this.handleMarkChapterAsRead,
@@ -82,17 +103,31 @@ class ReaderView extends Component<Props, State> {
   };
 
   handleMarkChapterAsRead = () => {
-    const { collectionSlug, seriesSlug, chapterSlug, store } = this.props;
+    const { collection, seriesById, match, dispatch } = this.props;
+    const { seriesSlug, chapterSlug } = match.params;
 
-    if (collectionSlug === null || collectionSlug === undefined) {
+    if (!collection) {
       return;
     }
 
-    const collection = store.findCollectionBySlug(collectionSlug);
-    const series: Series = store.findSeriesBySlug(seriesSlug);
-    const currentChapter: Chapter = series.chapters.find(
-      c => c.slug === chapterSlug,
+    const series: ?Series = utils.findBySlugInDictionary(
+      seriesById,
+      seriesSlug,
     );
+
+    if (!series) {
+      return;
+    }
+
+    const currentChapter: ?Chapter = utils.findBySlug(
+      series.chapters,
+      chapterSlug,
+    );
+
+    if (!currentChapter) {
+      return;
+    }
+
     const currentChapterReadAt = currentChapter.createdAt;
     const latestReadAt = collection.bookmarks[series.id].lastReadAt;
 
@@ -100,18 +135,16 @@ class ReaderView extends Component<Props, State> {
       return;
     }
 
-    store.markSeriesAsRead(collectionSlug, series.id, currentChapter.createdAt);
+    dispatch(
+      markSeriesAsRead(collection.slug, series.id, currentChapter.createdAt),
+    );
   };
 
   handleChapterSelectorChange = (e: SyntheticInputEvent<HTMLSelectElement>) => {
-    const {
-      collectionSlug,
-      siteId,
-      seriesSlug,
-      chapterSlug,
-      history,
-    } = this.props;
-    const value = e.target.value;
+    const { match, history } = this.props;
+    const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
+
+    const value = e.currentTarget.value;
 
     if (value === chapterSlug) {
       return;
@@ -121,29 +154,26 @@ class ReaderView extends Component<Props, State> {
   };
 
   render() {
-    const {
+    const { match, collection, chaptersById, seriesById } = this.props;
+    const { chapterSlug, seriesSlug, siteId, collectionSlug } = match.params;
+    const { isFetching } = chaptersById._status;
+
+    const chapter: ?Chapter = utils.findBySlugInDictionary(
+      chaptersById,
       chapterSlug,
+    );
+    const series: ?Series = utils.findBySlugInDictionary(
+      seriesById,
       seriesSlug,
-      siteId,
-      collectionSlug,
-      store,
-    } = this.props;
+    );
 
-    const chapter: Chapter = store.findChapterBySlug(chapterSlug);
-    const series: Series = store.findSeriesBySlug(seriesSlug);
-    const isFetching = store.state.chaptersStatus.isFetching;
-
-    const isLoading =
-      isFetching ||
-      chapter === null ||
-      chapter === undefined ||
-      chapter.pages === undefined;
+    const isLoading = isFetching || !series || !chapter || !chapter.pages;
 
     let chapterIndex;
-    let previousChapter: ?Chapter = null;
-    let nextChapter: ?Chapter = null;
+    let previousChapter: ?Chapter;
+    let nextChapter: ?Chapter;
 
-    if (chapter && series) {
+    if (!isLoading && chapter && series && series.chapters) {
       chapterIndex = series.chapters.findIndex(c => c.id === chapter.id);
       previousChapter = series.chapters[chapterIndex + 1] || null;
       nextChapter = series.chapters[chapterIndex - 1] || null;
@@ -191,7 +221,7 @@ class ReaderView extends Component<Props, State> {
         ) : (
           <Fragment>
             <div className="pt-5 pb-4 mh-auto w-90p-m ta-center mw-900">
-              {chapter.pages.map(page => (
+              {(chapter: Chapter).pages.map(page => (
                 <div key={page.id} className="mb-3 mb-4-m">
                   <ReaderPageImage page={page} />
                 </div>
@@ -237,11 +267,11 @@ class ReaderView extends Component<Props, State> {
                   />
                 )
               )}
-              {collectionSlug && (
+              {collection && (
                 <div className="mt-5">
                   <Link
                     className="o-50p"
-                    to={utils.getCollectionUrl(collectionSlug)}>
+                    to={utils.getCollectionUrl(collection.slug)}>
                     <IconArrowLeft width={20} height={20} />
                   </Link>
                 </div>
@@ -254,17 +284,4 @@ class ReaderView extends Component<Props, State> {
   }
 }
 
-export default ({ match, history }: any) => (
-  <Subscribe to={[EntityContainer]}>
-    {store => (
-      <ReaderView
-        history={history}
-        collectionSlug={match.params.collectionSlug}
-        siteId={match.params.siteId}
-        seriesSlug={match.params.seriesSlug}
-        chapterSlug={match.params.chapterSlug}
-        store={store}
-      />
-    )}
-  </Subscribe>
-);
+export default withRouter(connect(ReaderView.mapStateToProps)(ReaderView));

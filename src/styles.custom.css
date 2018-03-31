@@ -98,6 +98,7 @@ button {
 .PageImage {
   display: inline-block;
   position: relative;
+  min-height: 50px;
 }
 
 .PageImage-image {

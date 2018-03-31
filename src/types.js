@@ -1,3 +1,5 @@
+export type Slug = string;
+
 export type TraeResponse = {
   config: {
     headers: Object,

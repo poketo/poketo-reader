@@ -1,15 +1,18 @@
 // @flow
 
 import React, { Component, Fragment, type Node } from 'react';
+import { connect } from 'react-redux';
 import debounce from 'throttle-debounce/debounce';
-import EntityContainer from '../containers/entity-container';
-import Button from './button';
-import Input from './input';
-import Panel from './panel';
+import Button from '../components/button';
+import Input from '../components/input';
+import Panel from '../components/panel';
 import api from '../api';
 import utils from '../utils';
 
+import { addBookmark } from '../store/reducers/collections';
+
 import type { Series, TraeError } from '../types';
+import type { Dispatch } from '../store/types';
 
 type NewSeriesErrorCode =
   | 'INVALID_URL'
@@ -23,8 +26,8 @@ type BookmarkFetchState = 'ADDED' | 'READY' | 'SUBMITTING' | 'UNREADY';
 
 type Props = {
   collectionSlug: string,
+  dispatch: Dispatch,
   onRequestClose: () => void,
-  store: EntityContainer,
 };
 
 type State = {
@@ -53,10 +56,12 @@ class NewBookmarkPanel extends Component<Props, State> {
     seriesPreview: null,
   };
 
+  static mapStateToProps = state => ({});
+
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { collectionSlug, store, onRequestClose } = this.props;
+    const { collectionSlug, dispatch, onRequestClose } = this.props;
     const { bookmarkFetchState, errorCode, seriesUrl, linkToUrl } = this.state;
 
     if (bookmarkFetchState === 'SUBMITTING') {
@@ -81,11 +86,7 @@ class NewBookmarkPanel extends Component<Props, State> {
             obj => obj.id,
           ),
         };
-        store.addBookmarkToCollection(
-          collectionSlug,
-          collection,
-          response.data.series,
-        );
+        dispatch(addBookmark(collectionSlug, collection, response.data.series));
         this.setState({ bookmarkFetchState: 'ADDED' });
         setTimeout(() => {
           onRequestClose();
@@ -296,4 +297,4 @@ class NewBookmarkPanel extends Component<Props, State> {
   }
 }
 
-export default NewBookmarkPanel;
+export default connect(NewBookmarkPanel.mapStateToProps)(NewBookmarkPanel);

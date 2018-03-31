@@ -1,13 +1,13 @@
 // @flow
 
 import React, { Component, Fragment, type Node } from 'react';
+import { type RouterHistory } from 'react-router-dom';
 import Button from '../components/button';
 import IconPoketo from '../components/icon-poketo';
 import Input from '../components/input';
 import api from '../api';
 import utils from '../utils';
 
-import type { RouterHistory } from 'react-router-dom';
 import type { TraeError, TraeResponse } from '../types';
 
 const examplesList = [

@@ -2,28 +2,37 @@
 
 import React, { Component } from 'react';
 import { TransitionGroup } from 'react-transition-group';
-import { type RouterHistory } from 'react-router-dom';
-import { Subscribe } from 'unstated';
+import { withRouter, type RouterHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
-import EntityContainer from '../containers/entity-container';
 import IconAdd from '../components/icon-add';
 import IconBook from '../components/icon-book';
 import IconFeed from '../components/icon-feed';
 import IconPoketo from '../components/icon-poketo';
 import IconTrash from '../components/icon-trash';
-import NewBookmarkPanel from '../components/new-bookmark-panel';
+import NewBookmarkPanel from '../containers/new-bookmark-panel';
 import Panel from '../components/panel';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
+import {
+  fetchCollectionIfNeeded,
+  removeBookmark,
+  markSeriesAsRead,
+} from '../store/reducers/collections';
+
+import type { Dispatch } from '../store/types';
 import type { Bookmark, Collection, Series } from '../types';
 
 type Props = {
-  collectionSlug: string,
+  dispatch: Dispatch,
+  collection: ?Collection,
+  collectionsBySlug: { [slug: string]: Collection },
+  seriesById: { [id: string]: Series },
+  match: { params: { collectionSlug: string } },
   history: RouterHistory,
-  store: EntityContainer,
 };
 
 type State = {
@@ -37,9 +46,17 @@ class FeedView extends Component<Props, State> {
     seriesOptionsPanelId: null,
   };
 
+  static mapStateToProps = (state, ownProps) => ({
+    collectionsBySlug: state.collections,
+    collection: state.collections[ownProps.match.params.collectionSlug],
+    seriesById: state.series,
+  });
+
   componentDidMount() {
-    const { collectionSlug, store } = this.props;
-    store.fetchCollectionIfNeeded(collectionSlug);
+    const { dispatch, match } = this.props;
+    const { collectionSlug } = match.params;
+
+    dispatch(fetchCollectionIfNeeded(collectionSlug));
   }
 
   handleSeriesOptionsClick = seriesId => () => {
@@ -47,21 +64,22 @@ class FeedView extends Component<Props, State> {
   };
 
   handleSeriesOptionsTrashClick = () => {
-    const { collectionSlug, store } = this.props;
+    const { collection, dispatch } = this.props;
     const { seriesOptionsPanelId } = this.state;
 
-    if (!seriesOptionsPanelId) {
+    if (!collection || !seriesOptionsPanelId) {
       return;
     }
 
     if (window.confirm('Do you want to delete this series?')) {
-      store.removeBookmarkFromCollection(collectionSlug, seriesOptionsPanelId);
+      dispatch(removeBookmark(collection.slug, seriesOptionsPanelId));
       this.handleSeriesOptionsPanelClose();
     }
   };
 
   handleSeriesOptionsMarkAsReadClick = () => {
-    const { collectionSlug, store } = this.props;
+    const { match, dispatch } = this.props;
+    const { collectionSlug } = match.params;
     const { seriesOptionsPanelId } = this.state;
 
     if (!seriesOptionsPanelId) {
@@ -70,7 +88,7 @@ class FeedView extends Component<Props, State> {
 
     const now = utils.getTimestamp();
 
-    store.markSeriesAsRead(collectionSlug, seriesOptionsPanelId, now);
+    dispatch(markSeriesAsRead(collectionSlug, seriesOptionsPanelId, now));
 
     this.handleSeriesOptionsPanelClose();
   };
@@ -88,10 +106,9 @@ class FeedView extends Component<Props, State> {
   };
 
   handleSeriesClick = seriesId => e => {
-    const { history, collectionSlug, store } = this.props;
+    const { history, collection, seriesById } = this.props;
 
-    const collection: ?Collection = store.state.collections[collectionSlug];
-    const series: ?Series = store.state.series[seriesId];
+    const series: ?Series = seriesById[seriesId];
 
     if (
       !collection ||
@@ -117,7 +134,7 @@ class FeedView extends Component<Props, State> {
 
     history.push(
       utils.getReaderUrl(
-        collectionSlug,
+        collection.slug,
         series.site.id,
         series.slug,
         toChapter.slug,
@@ -126,15 +143,14 @@ class FeedView extends Component<Props, State> {
   };
 
   renderSeriesPanel() {
-    const { store, collectionSlug } = this.props;
+    const { collection, seriesById } = this.props;
     const { seriesOptionsPanelId } = this.state;
 
-    if (!seriesOptionsPanelId) {
+    if (!seriesOptionsPanelId || !collection) {
       return null;
     }
 
-    const collection: Collection = store.state.collections[collectionSlug];
-    const series: ?Series = store.state.series[seriesOptionsPanelId];
+    const series: ?Series = seriesById[seriesOptionsPanelId];
     const bookmark: ?Bookmark = collection.bookmarks[seriesOptionsPanelId];
 
     if (!series || !bookmark) {
@@ -183,7 +199,8 @@ class FeedView extends Component<Props, State> {
   }
 
   renderNewBookmarkPanel() {
-    const { store, collectionSlug } = this.props;
+    const { match } = this.props;
+    const { collectionSlug } = match.params;
     const { showNewBookmarkPanel } = this.state;
 
     if (!showNewBookmarkPanel) {
@@ -195,16 +212,15 @@ class FeedView extends Component<Props, State> {
         <NewBookmarkPanel
           collectionSlug={collectionSlug}
           onRequestClose={this.handleNewBookmarkPanelClose}
-          store={store}
         />
       </Panel.Transition>
     );
   }
 
   render() {
-    const { store, collectionSlug } = this.props;
-    const { collections, collectionsStatus } = store.state;
-    const { isFetching, errorMessage } = collectionsStatus;
+    const { match, collection, seriesById, collectionsBySlug } = this.props;
+    const { collectionSlug } = match.params;
+    const { isFetching, errorMessage } = collectionsBySlug._status;
 
     if (isFetching) {
       return (
@@ -227,8 +243,6 @@ class FeedView extends Component<Props, State> {
       );
     }
 
-    const collection = collections[collectionSlug];
-
     if (!collection) {
       return (
         <div className="pa-3">
@@ -239,7 +253,7 @@ class FeedView extends Component<Props, State> {
 
     const collectionSeriesIds = Object.keys(collection.bookmarks);
     const series: Array<Series> = collectionSeriesIds
-      .map(id => store.state.series[id])
+      .map(id => seriesById[id])
       .sort((a: Series, b: Series) => b.updatedAt - a.updatedAt);
 
     return (
@@ -277,14 +291,4 @@ class FeedView extends Component<Props, State> {
   }
 }
 
-export default ({ match, history }: any) => (
-  <Subscribe to={[EntityContainer]}>
-    {store => (
-      <FeedView
-        collectionSlug={match.params.collectionSlug}
-        store={store}
-        history={history}
-      />
-    )}
-  </Subscribe>
-);
+export default withRouter(connect(FeedView.mapStateToProps)(FeedView));

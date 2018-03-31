@@ -4,6 +4,8 @@ import ago from 's-ago';
 
 import type { Chapter } from './types';
 
+type ObjectWithSlug = { slug: string };
+
 const utils = {
   formatTimestamp: (n: number) => ago(new Date(n * 1000)),
   getTimestamp: (): number => Math.floor(Date.now() / 1000),
@@ -17,8 +19,21 @@ const utils = {
       .sort(() => 0.5 - Math.random())
       .slice(0, count),
   flatten: (arr: Array<any>) => [].concat(...arr),
-  keyArrayBy: (arr: Array<Object>, getKey: (obj: Object) => string) =>
+
+  /**
+   * Store helpers
+   */
+  keyArrayBy: (arr: Object[], getKey: (obj: Object) => string) =>
     arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
+  findBySlug: (arr: ObjectWithSlug[], slug: string): ?ObjectWithSlug =>
+    arr.find(item => item.slug === slug),
+  findBySlugInDictionary: (
+    dict: { [id: string]: ObjectWithSlug },
+    slug: string,
+  ): ?ObjectWithSlug => {
+    const values: ObjectWithSlug[] = Object.keys(dict).map(key => dict[key]);
+    return utils.findBySlug(values, slug);
+  },
 
   /**
    * URL Helpers
