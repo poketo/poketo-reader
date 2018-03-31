@@ -4,6 +4,7 @@ import React, { Component, Fragment, type Node } from 'react';
 import Button from '../components/button';
 import IconPoketo from '../components/icon-poketo';
 import Input from '../components/input';
+import api from '../api';
 import utils from '../utils';
 
 import type { RouterHistory } from 'react-router-dom';
@@ -72,7 +73,7 @@ export default class HomeView extends Component<Props, State> {
     // NOTE: if we switch to having a client-side poketo library, we could just
     // parse the URL and send them directly to the reader view. Instead, we send
     // it to the server first.
-    utils
+    api
       .fetchSeriesByUrl(url)
       .then(this.handleSubmitSuccess)
       .catch(this.handleSubmitError);

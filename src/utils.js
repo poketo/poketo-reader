@@ -1,15 +1,8 @@
 // @flow
 
 import ago from 's-ago';
-import trae from 'trae';
 
 import type { Chapter } from './types';
-
-const api = trae.create({
-  baseUrl: process.env.REACT_APP_API_BASE,
-});
-
-const e = encodeURIComponent;
 
 const utils = {
   formatTimestamp: (n: number) => ago(new Date(n * 1000)),
@@ -69,40 +62,6 @@ const utils = {
     chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
   leastRecentChapter: (chapters: Array<Chapter>): Chapter =>
     chapters.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
-
-  /**
-   * API Helpers
-   */
-  fetchCollection: (collectionSlug: string) =>
-    api.get(`/collection/${collectionSlug}`),
-  fetchMarkAsRead: (
-    collectionSlug: string,
-    seriesId: string,
-    lastReadAt: number,
-  ) =>
-    api.post(`/collection/${collectionSlug}/bookmark/${e(seriesId)}/read`, {
-      lastReadAt,
-    }),
-  fetchAddBookmarkToCollection: (
-    collectionSlug: string,
-    seriesUrl: string,
-    linkToUrl: ?string,
-    lastReadAt: ?number,
-  ) =>
-    api.post(`/collection/${collectionSlug}/bookmark/new`, {
-      seriesUrl,
-      linkToUrl,
-      lastReadAt,
-    }),
-  fetchRemoveBookmarkFromCollection: (
-    collectionSlug: string,
-    seriesId: string,
-  ) => api.delete(`/collection/${collectionSlug}/bookmark/${e(seriesId)}`),
-  fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
-    api.get(`/chapter`, { params: { siteId, seriesSlug, chapterSlug } }),
-  fetchSeries: (siteId: string, seriesSlug: string) =>
-    api.get(`/series`, { params: { siteId, seriesSlug } }),
-  fetchSeriesByUrl: (url: string) => api.get(`/series`, { params: { url } }),
 };
 
 export default utils;

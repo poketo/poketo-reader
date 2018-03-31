@@ -6,6 +6,7 @@ import EntityContainer from '../containers/entity-container';
 import Button from './button';
 import Input from './input';
 import Panel from './panel';
+import api from '../api';
 import utils from '../utils';
 
 import type { Series, TraeError } from '../types';
@@ -70,7 +71,7 @@ class NewBookmarkPanel extends Component<Props, State> {
 
     this.setState({ bookmarkFetchState: 'SUBMITTING' });
 
-    utils
+    api
       .fetchAddBookmarkToCollection(collectionSlug, seriesUrl, linkToUrl)
       .then(response => {
         const collection = {

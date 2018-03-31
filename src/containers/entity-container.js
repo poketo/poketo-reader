@@ -1,6 +1,7 @@
 // @flow
 
 import { Container } from 'unstated';
+import api from '../api';
 import utils from '../utils';
 
 import type { Chapter, ChapterPreview, Collection, Series } from '../types';
@@ -67,7 +68,7 @@ export default class EntityContainer extends Container<State> {
       },
     });
 
-    utils
+    api
       .fetchCollection(collectionSlug)
       .then(response => {
         const unnormalized = response.data;
@@ -161,7 +162,7 @@ export default class EntityContainer extends Container<State> {
     delete collections[collectionSlug].bookmarks[seriesId];
     this.setState({ collections });
 
-    utils
+    api
       .fetchRemoveBookmarkFromCollection(collectionSlug, seriesId)
       .catch(err => {
         // swallow errors
@@ -196,7 +197,7 @@ export default class EntityContainer extends Container<State> {
     });
 
     // We don't handle the response since we pass this info optimistically.
-    utils.fetchMarkAsRead(collectionSlug, seriesId, lastReadAt).catch(err => {
+    api.fetchMarkAsRead(collectionSlug, seriesId, lastReadAt).catch(err => {
       // swallow errors
     });
   };
@@ -238,7 +239,7 @@ export default class EntityContainer extends Container<State> {
       },
     });
 
-    utils
+    api
       .fetchSeries(siteId, seriesSlug)
       .then(response => {
         this.setState({
@@ -270,7 +271,7 @@ export default class EntityContainer extends Container<State> {
       },
     });
 
-    utils
+    api
       .fetchSeriesByUrl(url)
       .then(response => {
         this.setState({
@@ -330,7 +331,7 @@ export default class EntityContainer extends Container<State> {
       },
     });
 
-    utils
+    api
       .fetchChapter(siteId, seriesSlug, chapterSlug)
       .then(response => {
         this.setState({

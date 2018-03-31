@@ -53,7 +53,5 @@ export type Bookmark = {
 
 export type Collection = {
   slug: string,
-  bookmarks: {
-    [seriesId: string]: Bookmark,
-  },
+  bookmarks: { [seriesId: string]: Bookmark },
 };
