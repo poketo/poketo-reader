@@ -40,18 +40,20 @@ export type Series = {
   title: string,
   url: string,
   siteName: string,
-  chapters: ?Array<Chapter | ChapterPreview>,
-  linkTo: ?string,
+  chapters?: Array<Chapter | ChapterPreview>,
+  linkTo?: string,
   updatedAt: number,
   supportsReading: boolean,
 };
 
+export type Bookmark = {
+  lastReadAt: number,
+  linkTo: ?string,
+};
+
 export type Collection = {
   slug: string,
-  series: {
-    [seriesId: string]: {
-      lastReadAt: number,
-      linkTo: ?string,
-    },
+  bookmarks: {
+    [seriesId: string]: Bookmark,
   },
 };

@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { TransitionGroup } from 'react-transition-group';
+import { type RouterHistory } from 'react-router-dom';
 import { Subscribe } from 'unstated';
 
 import CircleLoader from '../components/loader-circle';
@@ -17,12 +18,12 @@ import Panel from '../components/panel';
 import SeriesRow from '../components/series-row';
 import utils from '../utils';
 
-import type { Collection, Series } from '../types';
+import type { Bookmark, Collection, Series } from '../types';
 
 type Props = {
   collectionSlug: string,
-  history: any,
-  store: any,
+  history: RouterHistory,
+  store: EntityContainer,
 };
 
 type State = {
@@ -89,14 +90,15 @@ class FeedView extends Component<Props, State> {
   handleSeriesClick = seriesId => e => {
     const { history, collectionSlug, store } = this.props;
 
-    const collection: Collection = store.state.collections[collectionSlug];
+    const collection: ?Collection = store.state.collections[collectionSlug];
     const series: ?Series = store.state.series[seriesId];
 
-    if (series === null || series === undefined) {
-      return;
-    }
-
-    if (series.supportsReading !== true || series.chapters === undefined) {
+    if (
+      !collection ||
+      !series ||
+      !series.chapters ||
+      series.supportsReading === false
+    ) {
       return;
     }
 
@@ -123,61 +125,79 @@ class FeedView extends Component<Props, State> {
     );
   };
 
-  renderPanels() {
+  renderSeriesPanel() {
     const { store, collectionSlug } = this.props;
-    const { showNewBookmarkPanel, seriesOptionsPanelId } = this.state;
+    const { seriesOptionsPanelId } = this.state;
+
+    if (!seriesOptionsPanelId) {
+      return null;
+    }
 
     const collection: Collection = store.state.collections[collectionSlug];
-    const series = store.state.series[seriesOptionsPanelId];
-    const bookmark = collection.bookmarks[seriesOptionsPanelId];
+    const series: ?Series = store.state.series[seriesOptionsPanelId];
+    const bookmark: ?Bookmark = collection.bookmarks[seriesOptionsPanelId];
 
-    let unreadChaptersCount = null;
+    if (!series || !bookmark) {
+      return null;
+    }
 
-    if (seriesOptionsPanelId) {
-      unreadChaptersCount = utils.getUnreadChapters(
+    const showMarkAsRead =
+      seriesOptionsPanelId && series.updatedAt > bookmark.lastReadAt;
+
+    let unreadChapters = [];
+
+    if (showMarkAsRead && series && series.chapters && bookmark) {
+      unreadChapters = utils.getUnreadChapters(
         series.chapters,
         bookmark.lastReadAt,
       );
     }
 
     return (
-      <TransitionGroup>
-        {seriesOptionsPanelId && (
-          <Panel.Transition>
-            <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
-              {unreadChaptersCount &&
-                unreadChaptersCount.length > 0 && (
-                  <Panel.Button
-                    icon={<IconBook />}
-                    label={`Mark ${
-                      unreadChaptersCount.length
-                    } chapters as read`}
-                    onClick={() => {}}
-                  />
-                )}
-              <Panel.Button
-                icon={<IconFeed color="#ff992f" />}
-                label="Get RSS feed"
-                onClick={this.handleSeriesOptionsMarkAsReadClick}
-              />
-              <Panel.Button
-                icon={<IconTrash color="red" />}
-                label="Remove bookmark"
-                onClick={this.handleSeriesOptionsTrashClick}
-              />
-            </Panel>
-          </Panel.Transition>
-        )}
-        {showNewBookmarkPanel && (
-          <Panel.Transition>
-            <NewBookmarkPanel
-              collectionSlug={collectionSlug}
-              onRequestClose={this.handleNewBookmarkPanelClose}
-              store={store}
+      <Panel.Transition>
+        <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
+          {showMarkAsRead && (
+            <Panel.Button
+              icon={<IconBook />}
+              label={
+                series.supportsReading === true
+                  ? `Mark ${unreadChapters.length} chapters as read`
+                  : `Mark series as read`
+              }
+              onClick={() => {}}
             />
-          </Panel.Transition>
-        )}
-      </TransitionGroup>
+          )}
+          <Panel.Button
+            icon={<IconFeed color="#ff992f" />}
+            label="Get RSS feed"
+            onClick={this.handleSeriesOptionsMarkAsReadClick}
+          />
+          <Panel.Button
+            icon={<IconTrash color="red" />}
+            label="Remove bookmark"
+            onClick={this.handleSeriesOptionsTrashClick}
+          />
+        </Panel>
+      </Panel.Transition>
+    );
+  }
+
+  renderNewBookmarkPanel() {
+    const { store, collectionSlug } = this.props;
+    const { showNewBookmarkPanel } = this.state;
+
+    if (!showNewBookmarkPanel) {
+      return null;
+    }
+
+    return (
+      <Panel.Transition>
+        <NewBookmarkPanel
+          collectionSlug={collectionSlug}
+          onRequestClose={this.handleNewBookmarkPanelClose}
+          store={store}
+        />
+      </Panel.Transition>
     );
   }
 
@@ -189,9 +209,6 @@ class FeedView extends Component<Props, State> {
     if (isFetching) {
       return (
         <div>
-          <div className="pv-3 ph-3 ta-center">
-            <IconPoketo />
-          </div>
           <div className="x xd-column xa-center xj-center p-fixed p-center ta-center">
             <div className="mb-3">
               <CircleLoader />
@@ -212,7 +229,7 @@ class FeedView extends Component<Props, State> {
 
     const collection = collections[collectionSlug];
 
-    if (collection === null || collection === undefined) {
+    if (!collection) {
       return (
         <div className="pa-3">
           Uh oh. Couldn't find the manga collection at {collectionSlug}.
@@ -235,7 +252,10 @@ class FeedView extends Component<Props, State> {
             <IconAdd />
           </button>
         </header>
-        {this.renderPanels()}
+        <TransitionGroup>
+          {this.renderSeriesPanel()}
+          {this.renderNewBookmarkPanel()}
+        </TransitionGroup>
         <div className="pt-3 ta-center-m">
           {series.map(s => {
             const bookmark = collection.bookmarks[s.id];
