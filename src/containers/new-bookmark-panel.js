@@ -42,7 +42,7 @@ type State = {
 
 // TODO: Have these values loaded directly from the poketo library or returned
 // series requests
-const SUPPORTED_SITES = /mangahere|mangakakalot|mangaupdates|helveticascans|merakiscans/i;
+const SUPPORTED_SITES = /mangadex|mangahere|mangakakalot|mangaupdates|helveticascans|merakiscans/i;
 const LINK_TO_SITES = /mangaupdates/i;
 
 class NewBookmarkPanel extends Component<Props, State> {
