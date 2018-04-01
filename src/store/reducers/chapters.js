@@ -19,6 +19,21 @@ type State = {
   [id: string]: Chapter | ChapterPreview,
 };
 
+// NOTE: the tough thing here is that many slugs can overlap, so to find the
+// correct chapter, we need to check both chapter slug and series slug.
+// Even this won't work across multiple sites, you need all three to select
+// the correct chapter.
+export function findChapter(
+  chapters: Array<Chapter | ChapterPreview>,
+  siteId: string,
+  seriesSlug: string,
+  chapterSlug: string,
+): ?Chapter {
+  return chapters.find(c => {
+    return c.slug === chapterSlug && c.url.includes(seriesSlug);
+  });
+}
+
 export function fetchChapterIfNeeded(
   siteId: string,
   series: Slug,
@@ -75,10 +90,15 @@ export default function reducer(
 ): State {
   switch (action.type) {
     case 'SET_MULTIPLE_CHAPTERS':
-      return {
-        ...state,
-        ...action.payload,
-      };
+      const nextState = { ...state };
+      const chaptersById = action.payload;
+      Object.keys(chaptersById).forEach(id => {
+        nextState[id] = {
+          ...nextState[id],
+          ...chaptersById[id],
+        };
+      });
+      return nextState;
     case 'SET_CHAPTER':
       return {
         ...state,

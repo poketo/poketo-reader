@@ -12,6 +12,11 @@ import type {
 
 type ActionType<A, B> = { type: A, payload: B };
 
+type StatusActionFetchPayload = {
+  isFetching?: boolean,
+  errorMessage?: ?string,
+};
+
 export type SetCollectionAction = ActionType<'SET_COLLECTION', Collection>;
 export type SetCollectionStatusAction = ActionType<
   'SET_COLLECTION_STATUS',
@@ -52,11 +57,6 @@ export type FetchStatusState = {
   +errorMessage: ?string,
 };
 
-type StatusActionFetchPayload = {
-  isFetching?: boolean,
-  errorMessage?: ?string,
-};
-
 export type Action =
   // Collection
   | SetCollectionAction
@@ -72,12 +72,10 @@ export type Action =
   | SetMultipleChaptersAction
   | SetChapterStatusAction;
 
-type Api = typeof api;
-
 export type Dispatch = (action: Action | ThunkAction) => void;
 export type GetState = () => Object;
 export type ThunkAction = (
   dispatch: Dispatch,
   getState: GetState,
-  api: Api,
+  api: typeof api,
 ) => void;

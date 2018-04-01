@@ -1,5 +1,6 @@
 // @flow
 
+import utils from '../../utils';
 import type { Series } from '../../types';
 import type {
   FetchStatusState,
@@ -15,6 +16,14 @@ type State = {
 };
 
 type Action = SetMultipleSeriesAction | SetSeriesAction | SetSeriesStatusAction;
+
+export function findSeries(
+  series: Array<Series>,
+  siteId: string,
+  slug: string,
+) {
+  return series.find(s => s.slug === slug);
+}
 
 export function fetchSeriesIfNeeded(siteId: string, slug: string): ThunkAction {
   return (dispatch, getState) => {

@@ -25,14 +25,15 @@ const utils = {
    */
   keyArrayBy: (arr: Object[], getKey: (obj: Object) => string) =>
     arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
+  getDictionaryValues: <T>(dict: { [id: string]: T }): Array<T> =>
+    Object.keys(dict).map(key => dict[key]),
   findBySlug: (arr: ObjectWithSlug[], slug: string): ?ObjectWithSlug =>
     arr.find(item => item.slug === slug),
   findBySlugInDictionary: (
     dict: { [id: string]: ObjectWithSlug },
     slug: string,
   ): ?ObjectWithSlug => {
-    const values: ObjectWithSlug[] = Object.keys(dict).map(key => dict[key]);
-    return utils.findBySlug(values, slug);
+    return utils.findBySlug(utils.getDictionaryValues(dict), slug);
   },
 
   /**

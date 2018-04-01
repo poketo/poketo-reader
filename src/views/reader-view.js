@@ -12,8 +12,8 @@ import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
 
-import { fetchSeriesIfNeeded } from '../store/reducers/series';
-import { fetchChapterIfNeeded } from '../store/reducers/chapters';
+import { findSeries, fetchSeriesIfNeeded } from '../store/reducers/series';
+import { findChapter, fetchChapterIfNeeded } from '../store/reducers/chapters';
 import {
   fetchCollectionIfNeeded,
   markSeriesAsRead,
@@ -103,7 +103,13 @@ class ReaderView extends Component<Props, State> {
   };
 
   handleMarkChapterAsRead = () => {
-    const { collection, seriesById, match, dispatch } = this.props;
+    const {
+      collection,
+      seriesById,
+      chaptersById,
+      match,
+      dispatch,
+    } = this.props;
     const { seriesSlug, chapterSlug } = match.params;
 
     if (!collection) {
@@ -119,24 +125,24 @@ class ReaderView extends Component<Props, State> {
       return;
     }
 
-    const currentChapter: ?Chapter = utils.findBySlug(
-      series.chapters,
-      chapterSlug,
-    );
+    const bookmark = collection.bookmarks[series.id];
+    const currentChapter: ?Chapter = utils
+      .getDictionaryValues(chaptersById)
+      .find(c => c.slug === chapterSlug && c.url === bookmark.url);
 
     if (!currentChapter) {
       return;
     }
 
     const currentChapterReadAt = currentChapter.createdAt;
-    const latestReadAt = collection.bookmarks[series.id].lastReadAt;
+    const latestReadAt = bookmark.lastReadAt;
 
     if (latestReadAt > currentChapterReadAt) {
       return;
     }
 
     dispatch(
-      markSeriesAsRead(collection.slug, series.id, currentChapter.createdAt),
+      markSeriesAsRead(collection.slug, series.id, currentChapterReadAt),
     );
   };
 
@@ -158,14 +164,22 @@ class ReaderView extends Component<Props, State> {
     const { chapterSlug, seriesSlug, siteId, collectionSlug } = match.params;
     const { isFetching } = chaptersById._status;
 
-    const chapter: ?Chapter = utils.findBySlugInDictionary(
-      chaptersById,
+    const chapter = findChapter(
+      utils.getDictionaryValues(chaptersById),
+      siteId,
+      seriesSlug,
       chapterSlug,
     );
-    const series: ?Series = utils.findBySlugInDictionary(
-      seriesById,
+    const series: ?Series = findSeries(
+      utils.getDictionaryValues(seriesById),
+      siteId,
       seriesSlug,
     );
+    const seriesChapters = series
+      ? utils
+          .getDictionaryValues(chaptersById)
+          .filter(c => c.seriesId === series.id)
+      : null;
 
     const isLoading = isFetching || !series || !chapter || !chapter.pages;
 
@@ -173,10 +187,10 @@ class ReaderView extends Component<Props, State> {
     let previousChapter: ?Chapter;
     let nextChapter: ?Chapter;
 
-    if (!isLoading && chapter && series && series.chapters) {
-      chapterIndex = series.chapters.findIndex(c => c.id === chapter.id);
-      previousChapter = series.chapters[chapterIndex + 1] || null;
-      nextChapter = series.chapters[chapterIndex - 1] || null;
+    if (!isLoading && chapter && series && seriesChapters) {
+      chapterIndex = seriesChapters.findIndex(c => c.id === chapter.id);
+      previousChapter = seriesChapters[chapterIndex + 1] || null;
+      nextChapter = seriesChapters[chapterIndex - 1] || null;
     }
 
     return (
@@ -237,11 +251,11 @@ class ReaderView extends Component<Props, State> {
                     chapter={previousChapter}>
                     Previous
                   </ReaderChapterLink>
-                  {series && (
+                  {seriesChapters && (
                     <Dropdown
                       value={chapterSlug}
                       onChange={this.handleChapterSelectorChange}
-                      options={series.chapters.map(c => ({
+                      options={seriesChapters.map(c => ({
                         value: c.slug,
                         label: `Chapter ${c.number}`,
                       }))}
@@ -256,11 +270,11 @@ class ReaderView extends Component<Props, State> {
                   </ReaderChapterLink>
                 </div>
               ) : (
-                series && (
+                seriesChapters && (
                   <Dropdown
                     value={chapterSlug}
                     onChange={this.handleChapterSelectorChange}
-                    options={series.chapters.map(c => ({
+                    options={seriesChapters.map(c => ({
                       value: c.slug,
                       label: `Chapter ${c.slug}`,
                     }))}
