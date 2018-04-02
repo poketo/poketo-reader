@@ -1,9 +1,12 @@
 // @flow
 
+import { normalize } from 'normalizr';
+import schema from '../schema';
 import type { Series } from '../../types';
 import type {
   FetchStatusState,
   ThunkAction,
+  AddEntitiesAction,
   SetMultipleSeriesAction,
   SetSeriesAction,
   SetSeriesStatusAction,
@@ -14,7 +17,11 @@ type State = {
   [id: string]: Series,
 };
 
-type Action = SetMultipleSeriesAction | SetSeriesAction | SetSeriesStatusAction;
+type Action =
+  | AddEntitiesAction
+  | SetMultipleSeriesAction
+  | SetSeriesAction
+  | SetSeriesStatusAction;
 
 export function fetchSeriesIfNeeded(siteId: string, slug: string): ThunkAction {
   return (dispatch, getState) => {
@@ -25,16 +32,14 @@ export function fetchSeriesIfNeeded(siteId: string, slug: string): ThunkAction {
 }
 
 function shouldFetchSeries(state, siteId, slug): boolean {
-  const series = state.series;
-  const seriesList: Series[] = Object.values(series);
+  const seriesById = state.series;
 
-  if (series._status.isFetching) {
+  if (seriesById._status.isFetching) {
     return false;
   }
 
-  const existingSeries = seriesList.find(
-    s => s.slug === slug && s.site.id === siteId,
-  );
+  const seriesId = [siteId, slug].join(':');
+  const existingSeries = seriesById[seriesId];
 
   if (existingSeries) {
     return false;
@@ -53,7 +58,8 @@ export function fetchSeries(siteId: string, slug: string): ThunkAction {
     api
       .fetchSeries(siteId, slug)
       .then(response => {
-        dispatch({ type: 'SET_SERIES', payload: response.data });
+        const normalized = normalize(response.data, schema.series);
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
         dispatch({
           type: 'SET_SERIES_STATUS',
           payload: { isFetching: false, errorMessage: null },
@@ -80,19 +86,31 @@ export default function reducer(
   action: Action,
 ): State {
   switch (action.type) {
-    case 'SET_SERIES':
+    case 'ADD_ENTITIES': {
+      const seriesById = action.payload.series;
+      if (!seriesById) {
+        return state;
+      }
+      const nextState = { ...state };
+      Object.keys(seriesById).forEach(id => {
+        nextState[id] = {
+          ...nextState[id],
+          ...seriesById[id],
+        };
+      });
+      return nextState;
+    }
+    case 'SET_SERIES': {
       return {
         ...state,
         [action.payload.id]: { ...state[action.payload.id], ...action.payload },
       };
-    case 'SET_MULTIPLE_SERIES':
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case 'SET_SERIES_STATUS':
+    }
+    case 'SET_SERIES_STATUS': {
       return { ...state, _status: { ...state._status, ...action.payload } };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }

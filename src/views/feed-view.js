@@ -24,12 +24,19 @@ import {
 } from '../store/reducers/collections';
 
 import type { Dispatch } from '../store/types';
-import type { Bookmark, Collection, Series } from '../types';
+import type {
+  Bookmark,
+  Chapter,
+  ChapterMetadata,
+  Collection,
+  Series,
+} from '../types';
 
 type Props = {
   dispatch: Dispatch,
   collection: ?Collection,
   collectionsBySlug: { [slug: string]: Collection },
+  chaptersById: { [id: string]: Chapter | ChapterMetadata },
   seriesById: { [id: string]: Series },
   match: { params: { collectionSlug: string } },
   history: RouterHistory,
@@ -50,6 +57,7 @@ class FeedView extends Component<Props, State> {
     collectionsBySlug: state.collections,
     collection: state.collections[ownProps.match.params.collectionSlug],
     seriesById: state.series,
+    chaptersById: state.chapters,
   });
 
   componentDidMount() {
@@ -106,7 +114,7 @@ class FeedView extends Component<Props, State> {
   };
 
   handleSeriesClick = seriesId => e => {
-    const { history, collection, seriesById } = this.props;
+    const { history, collection, seriesById, chaptersById } = this.props;
 
     const series: ?Series = seriesById[seriesId];
 
@@ -121,16 +129,17 @@ class FeedView extends Component<Props, State> {
 
     e.preventDefault();
 
-    const bookmark = collection.bookmarks[series.id];
+    const bookmark = collection.bookmarks.find(b => b.id === series.id);
+    const allChapters = series.chapters.map(id => chaptersById[id]);
     const unreadChapters = utils.getUnreadChapters(
-      series.chapters,
+      allChapters,
       bookmark.lastReadAt,
     );
 
     const toChapter =
       unreadChapters.length > 0
         ? utils.leastRecentChapter(unreadChapters)
-        : utils.mostRecentChapter(series.chapters);
+        : utils.mostRecentChapter(allChapters);
 
     history.push(
       utils.getReaderUrl(
@@ -143,7 +152,7 @@ class FeedView extends Component<Props, State> {
   };
 
   renderSeriesPanel() {
-    const { collection, seriesById } = this.props;
+    const { collection, chaptersById, seriesById } = this.props;
     const { seriesOptionsPanelId } = this.state;
 
     if (!seriesOptionsPanelId || !collection) {
@@ -151,7 +160,9 @@ class FeedView extends Component<Props, State> {
     }
 
     const series: ?Series = seriesById[seriesOptionsPanelId];
-    const bookmark: ?Bookmark = collection.bookmarks[seriesOptionsPanelId];
+    const bookmark: ?Bookmark = collection.bookmarks.find(
+      b => b.id === seriesOptionsPanelId,
+    );
 
     if (!series || !bookmark) {
       return null;
@@ -164,7 +175,7 @@ class FeedView extends Component<Props, State> {
 
     if (showMarkAsRead && series && series.chapters && bookmark) {
       unreadChapters = utils.getUnreadChapters(
-        series.chapters,
+        series.chapters.map(id => chaptersById[id]),
         bookmark.lastReadAt,
       );
     }
@@ -251,9 +262,8 @@ class FeedView extends Component<Props, State> {
       );
     }
 
-    const collectionSeriesIds = Object.keys(collection.bookmarks);
-    const series: Array<Series> = collectionSeriesIds
-      .map(id => seriesById[id])
+    const series: Array<Series> = collection.bookmarks
+      .map(bookmark => seriesById[bookmark.id])
       .sort((a: Series, b: Series) => b.updatedAt - a.updatedAt);
 
     return (
@@ -272,7 +282,7 @@ class FeedView extends Component<Props, State> {
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
           {series.map(s => {
-            const bookmark = collection.bookmarks[s.id];
+            const bookmark = collection.bookmarks.find(b => b.id === s.id);
 
             return (
               <SeriesRow

@@ -18,6 +18,7 @@
     "cheerio": "^1.0.0-rc.2",
     "classnames": "^2.2.5",
     "lazysizes": "^4.0.1",
+    "normalizr": "^3.2.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",

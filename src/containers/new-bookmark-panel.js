@@ -2,6 +2,7 @@
 
 import React, { Component, Fragment, type Node } from 'react';
 import { connect } from 'react-redux';
+import { normalize } from 'normalizr';
 import debounce from 'throttle-debounce/debounce';
 import Button from '../components/button';
 import Input from '../components/input';
@@ -9,7 +10,7 @@ import Panel from '../components/panel';
 import api from '../api';
 import utils from '../utils';
 
-import { addBookmark } from '../store/reducers/collections';
+import schema from '../store/schema';
 
 import type { Series, TraeError } from '../types';
 import type { Dispatch } from '../store/types';
@@ -79,14 +80,12 @@ class NewBookmarkPanel extends Component<Props, State> {
     api
       .fetchAddBookmarkToCollection(collectionSlug, seriesUrl, linkToUrl)
       .then(response => {
-        const collection = {
-          slug: response.data.collection.slug,
-          bookmarks: utils.keyArrayBy(
-            response.data.collection.bookmarks,
-            obj => obj.id,
-          ),
-        };
-        dispatch(addBookmark(collectionSlug, collection, response.data.series));
+        const normalized = normalize(response.data, {
+          collection: schema.collection,
+          series: schema.series,
+        });
+
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
         this.setState({ bookmarkFetchState: 'ADDED' });
         setTimeout(() => {
           onRequestClose();

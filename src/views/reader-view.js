@@ -110,25 +110,23 @@ class ReaderView extends Component<Props, State> {
       match,
       dispatch,
     } = this.props;
-    const { seriesSlug, chapterSlug } = match.params;
+    const { siteId, seriesSlug, chapterSlug } = match.params;
 
     if (!collection) {
       return;
     }
 
-    const series: ?Series = utils.findBySlugInDictionary(
-      seriesById,
-      seriesSlug,
-    );
+    const seriesId = [siteId, seriesSlug].join(':');
+    const chapterId = [siteId, seriesSlug, chapterSlug].join(':');
+
+    const series: ?Series = seriesById[seriesId];
 
     if (!series) {
       return;
     }
 
-    const bookmark = collection.bookmarks[series.id];
-    const currentChapter: ?Chapter = utils
-      .getDictionaryValues(chaptersById)
-      .find(c => c.slug === chapterSlug && c.url === bookmark.url);
+    const bookmark = collection.bookmarks.find(b => b.id === series.id);
+    const currentChapter: ?Chapter = chaptersById[chapterId];
 
     if (!currentChapter) {
       return;
@@ -171,9 +169,7 @@ class ReaderView extends Component<Props, State> {
     const series: ?Series = seriesById[seriesId];
 
     const seriesChapters = series
-      ? utils
-          .getDictionaryValues(chaptersById)
-          .filter(c => c.seriesId === series.id)
+      ? series.chapters.map(id => chaptersById[id])
       : null;
 
     const isLoading = isFetching || !series || !chapter || !chapter.pages;
@@ -209,9 +205,8 @@ class ReaderView extends Component<Props, State> {
           <div />
         </div>
         <ReaderNavigation
-          currentCollectionSlug={collectionSlug}
-          currentChapter={chapter}
-          currentSeries={series}
+          chapter={chapter}
+          seriesChapters={seriesChapters}
           onChapterSelectChange={this.handleChapterSelectorChange}
         />
         {isLoading ? (

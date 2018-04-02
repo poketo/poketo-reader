@@ -11,6 +11,15 @@ type StatusActionFetchPayload = {
   errorMessage?: ?string,
 };
 
+export type AddEntitiesAction = ActionType<
+  'ADD_ENTITIES',
+  {
+    collections?: { [slug: string]: Collection },
+    chapters?: { [id: string]: Chapter | ChapterMetadata },
+    series?: { [id: string]: Series },
+  },
+>;
+
 export type SetCollectionAction = ActionType<'SET_COLLECTION', Collection>;
 export type SetCollectionStatusAction = ActionType<
   'SET_COLLECTION_STATUS',
@@ -52,6 +61,7 @@ export type FetchStatusState = {
 };
 
 export type Action =
+  | AddEntitiesAction
   // Collection
   | SetCollectionAction
   | SetCollectionStatusAction

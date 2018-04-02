@@ -1,17 +1,20 @@
 // @flow
 
-import utils from '../../utils';
+import { normalize } from 'normalizr';
+import schema from '../schema';
 
-import type { Collection, Series } from '../../types';
+import type { Collection } from '../../types';
 import type {
   FetchStatusState,
   ThunkAction,
+  AddEntitiesAction,
   SetCollectionAction,
   MarkBookmarkAsReadAction,
   RemoveBookmarkAction,
 } from '../types';
 
 type Action =
+  | AddEntitiesAction
   | SetCollectionAction
   | MarkBookmarkAsReadAction
   | RemoveBookmarkAction;
@@ -50,34 +53,14 @@ export function fetchCollection(slug: string): ThunkAction {
 
     api.fetchCollection(slug).then(response => {
       const unnormalized = response.data;
-      const chapterData = utils
-        .flatten(unnormalized.series.map(series => series.chapters))
-        .filter(Boolean);
-      const chapters = utils.keyArrayBy(chapterData, obj => obj.id);
-
-      dispatch({
-        type: 'SET_MULTIPLE_CHAPTERS',
-        payload: chapters,
+      const normalized = normalize(unnormalized, {
+        collection: schema.collection,
+        series: [schema.series],
       });
 
-      const series = utils.keyArrayBy(unnormalized.series, obj => obj.id);
-
       dispatch({
-        type: 'SET_MULTIPLE_SERIES',
-        payload: series,
-      });
-
-      const bookmarks = utils.keyArrayBy(
-        unnormalized.collection.bookmarks,
-        obj => obj.id,
-      );
-
-      dispatch({
-        type: 'SET_COLLECTION',
-        payload: {
-          slug,
-          bookmarks,
-        },
+        type: 'ADD_ENTITIES',
+        payload: normalized.entities,
       });
 
       dispatch({
@@ -85,22 +68,6 @@ export function fetchCollection(slug: string): ThunkAction {
         payload: { isFetching: false, errorMessage: null },
       });
     });
-  };
-}
-
-/**
- * Add a series to a collection.
- */
-export function addBookmark(
-  collectionSlug: string,
-  collection: Collection,
-  series: Series,
-): ThunkAction {
-  return dispatch => {
-    // NOTE: it's important that series comes first here so that the series data
-    // is in the store by the time we re-render the collection to look for it.
-    dispatch({ type: 'SET_SERIES', payload: series });
-    dispatch({ type: 'SET_COLLECTION', payload: collection });
   };
 }
 
@@ -156,7 +123,21 @@ export default function collectionReducer(
   action: Action,
 ): State {
   switch (action.type) {
-    case 'SET_COLLECTION':
+    case 'ADD_ENTITIES': {
+      const collectionsBySlug = action.payload.collections;
+      if (!collectionsBySlug) {
+        return state;
+      }
+      const nextState = { ...state };
+      Object.keys(collectionsBySlug).forEach(slug => {
+        nextState[slug] = {
+          ...nextState[slug],
+          ...collectionsBySlug[slug],
+        };
+      });
+      return nextState;
+    }
+    case 'SET_COLLECTION': {
       return {
         ...state,
         [action.payload.slug]: {
@@ -164,29 +145,33 @@ export default function collectionReducer(
           ...action.payload,
         },
       };
-    case 'MARK_BOOKMARK_AS_READ':
+    }
+    case 'MARK_BOOKMARK_AS_READ': {
       const { collectionSlug, seriesId, lastReadAt } = action.payload;
-      const bookmarks = state[collectionSlug].bookmarks;
-      const bookmark = bookmarks[seriesId];
+      const collection = state[collectionSlug];
+      const bookmarks = collection.bookmarks.map((b, i) => {
+        if (b.id !== seriesId) {
+          return b;
+        }
+
+        return { ...b, lastReadAt };
+      });
+
       return {
         ...state,
         [collectionSlug]: {
           ...state[collectionSlug],
-          bookmarks: {
-            ...bookmarks,
-            [seriesId]: {
-              ...bookmark,
-              lastReadAt,
-            },
-          },
+          bookmarks,
         },
       };
-    case 'REMOVE_BOOKMARK':
+    }
+    case 'REMOVE_BOOKMARK': {
       const nextState = { ...state };
       const collection = nextState[action.payload.collectionSlug];
       delete collection.bookmarks[action.payload.seriesId];
       return nextState;
-    case 'SET_COLLECTION_STATUS':
+    }
+    case 'SET_COLLECTION_STATUS': {
       return {
         ...state,
         _status: {
@@ -194,7 +179,9 @@ export default function collectionReducer(
           ...action.payload,
         },
       };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }

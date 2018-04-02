@@ -1,15 +1,20 @@
 // @flow
 
+import { normalize } from 'normalizr';
+import schema from '../schema';
+
 import type { Slug, Chapter, ChapterMetadata } from '../../types';
 import type {
   FetchStatusState,
   ThunkAction,
+  AddEntitiesAction,
   SetMultipleChaptersAction,
   SetChapterAction,
   SetChapterStatusAction,
 } from '../types';
 
 type Action =
+  | AddEntitiesAction
   | SetMultipleChaptersAction
   | SetChapterAction
   | SetChapterStatusAction;
@@ -42,10 +47,9 @@ export function fetchChapter(
 
     api.fetchChapter(siteId, series, chapter).then(
       response => {
-        dispatch({
-          type: 'SET_CHAPTER',
-          payload: response.data,
-        });
+        const normalized = normalize(response.data, schema.chapter);
+
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
 
         dispatch({
           type: 'SET_CHAPTER_STATUS',
@@ -74,9 +78,12 @@ export default function reducer(
   action: Action,
 ): State {
   switch (action.type) {
-    case 'SET_MULTIPLE_CHAPTERS':
+    case 'ADD_ENTITIES': {
+      const chaptersById = action.payload.chapters;
+      if (!chaptersById) {
+        return state;
+      }
       const nextState = { ...state };
-      const chaptersById = action.payload;
       Object.keys(chaptersById).forEach(id => {
         nextState[id] = {
           ...nextState[id],
@@ -84,14 +91,18 @@ export default function reducer(
         };
       });
       return nextState;
-    case 'SET_CHAPTER':
+    }
+    case 'SET_CHAPTER': {
       return {
         ...state,
         [action.payload.id]: { ...state[action.payload.id], ...action.payload },
       };
-    case 'SET_CHAPTER_STATUS':
+    }
+    case 'SET_CHAPTER_STATUS': {
       return { ...state, _status: { ...state._status, ...action.payload } };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }
