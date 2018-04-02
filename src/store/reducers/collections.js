@@ -94,8 +94,10 @@ export function addBookmark(
   series: Series,
 ): ThunkAction {
   return dispatch => {
-    dispatch({ type: 'SET_COLLECTION', payload: collection });
+    // NOTE: it's important that series comes first here so that the series data
+    // is in the store by the time we re-render the collection to look for it.
     dispatch({ type: 'SET_SERIES', payload: series });
+    dispatch({ type: 'SET_COLLECTION', payload: collection });
   };
 }
 

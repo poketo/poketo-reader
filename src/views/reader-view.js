@@ -12,20 +12,20 @@ import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
 
-import { findSeries, fetchSeriesIfNeeded } from '../store/reducers/series';
-import { findChapter, fetchChapterIfNeeded } from '../store/reducers/chapters';
+import { fetchSeriesIfNeeded } from '../store/reducers/series';
+import { fetchChapterIfNeeded } from '../store/reducers/chapters';
 import {
   fetchCollectionIfNeeded,
   markSeriesAsRead,
 } from '../store/reducers/collections';
 
-import type { Collection, Chapter, ChapterPreview, Series } from '../types';
+import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
 import type { Dispatch } from '../store/types';
 
 type Props = {
   collection: ?Collection,
   seriesById: { [id: string]: Series },
-  chaptersById: { [id: string]: Chapter | ChapterPreview },
+  chaptersById: { [id: string]: Chapter | ChapterMetadata },
   dispatch: Dispatch,
   history: any,
   match: {
@@ -164,17 +164,12 @@ class ReaderView extends Component<Props, State> {
     const { chapterSlug, seriesSlug, siteId, collectionSlug } = match.params;
     const { isFetching } = chaptersById._status;
 
-    const chapter = findChapter(
-      utils.getDictionaryValues(chaptersById),
-      siteId,
-      seriesSlug,
-      chapterSlug,
-    );
-    const series: ?Series = findSeries(
-      utils.getDictionaryValues(seriesById),
-      siteId,
-      seriesSlug,
-    );
+    const chapterId = [siteId, seriesSlug, chapterSlug].join(':');
+    const seriesId = [siteId, seriesSlug].join(':');
+
+    const chapter: ?Chapter = chaptersById[chapterId];
+    const series: ?Series = seriesById[seriesId];
+
     const seriesChapters = series
       ? utils
           .getDictionaryValues(chaptersById)

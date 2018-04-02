@@ -24,14 +24,14 @@ export type Page = {
   height?: number,
 };
 
-export type ChapterPreview = {
+export type ChapterMetadata = {
   id: string,
   seriesId: string,
   createdAt: number,
 };
 
 export type Chapter = {
-  ...ChapterPreview,
+  ...ChapterMetadata,
   url: string,
   pages: Array<Page>,
 };
@@ -42,7 +42,7 @@ export type Series = {
   title: string,
   url: string,
   siteName: string,
-  chapters?: Array<Chapter | ChapterPreview>,
+  chapters?: Array<Chapter | ChapterMetadata>,
   linkTo?: string,
   updatedAt: number,
   supportsReading: boolean,

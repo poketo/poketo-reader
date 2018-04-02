@@ -1,6 +1,6 @@
 // @flow
 
-import type { Slug, Chapter, ChapterPreview } from '../../types';
+import type { Slug, Chapter, ChapterMetadata } from '../../types';
 import type {
   FetchStatusState,
   ThunkAction,
@@ -16,23 +16,8 @@ type Action =
 
 type State = {
   _status: FetchStatusState,
-  [id: string]: Chapter | ChapterPreview,
+  [id: string]: Chapter | ChapterMetadata,
 };
-
-// NOTE: the tough thing here is that many slugs can overlap, so to find the
-// correct chapter, we need to check both chapter slug and series slug.
-// Even this won't work across multiple sites, you need all three to select
-// the correct chapter.
-export function findChapter(
-  chapters: Array<Chapter | ChapterPreview>,
-  siteId: string,
-  seriesSlug: string,
-  chapterSlug: string,
-): ?Chapter {
-  return chapters.find(c => {
-    return c.slug === chapterSlug && c.url.includes(seriesSlug);
-  });
-}
 
 export function fetchChapterIfNeeded(
   siteId: string,

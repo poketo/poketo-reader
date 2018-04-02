@@ -6,7 +6,7 @@ import type {
   Bookmark,
   Collection,
   Chapter,
-  ChapterPreview,
+  ChapterMetadata,
   Series,
 } from '../types';
 
@@ -41,11 +41,11 @@ export type SetSeriesStatusAction = ActionType<
 >;
 export type SetMultipleChaptersAction = ActionType<
   'SET_MULTIPLE_CHAPTERS',
-  { [id: string]: Chapter | ChapterPreview },
+  { [id: string]: Chapter | ChapterMetadata },
 >;
 export type SetChapterAction = ActionType<
   'SET_CHAPTER',
-  Chapter | ChapterPreview,
+  Chapter | ChapterMetadata,
 >;
 export type SetChapterStatusAction = ActionType<
   'SET_CHAPTER_STATUS',
