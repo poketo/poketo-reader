@@ -16,6 +16,7 @@ input {
   border: none;
   background: none;
   outline: none;
+  font-family: inherit;
   font-size: inherit;
 }
 
