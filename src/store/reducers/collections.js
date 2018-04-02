@@ -7,11 +7,14 @@ import type {
   FetchStatusState,
   ThunkAction,
   SetCollectionAction,
-  SetBookmarkAction,
+  MarkBookmarkAsReadAction,
   RemoveBookmarkAction,
 } from '../types';
 
-type Action = SetCollectionAction | SetBookmarkAction | RemoveBookmarkAction;
+type Action =
+  | SetCollectionAction
+  | MarkBookmarkAsReadAction
+  | RemoveBookmarkAction;
 
 type State = {
   +_status: FetchStatusState,
@@ -128,14 +131,9 @@ export function markSeriesAsRead(
   lastReadAt: number,
 ): ThunkAction {
   return (dispatch, getState, api) => {
-    const collection = getState().collections[collectionSlug];
-    const bookmark = collection.bookmarks[seriesId];
     dispatch({
-      type: 'SET_BOOKMARK',
-      payload: {
-        ...bookmark,
-        lastReadAt,
-      },
+      type: 'MARK_BOOKMARK_AS_READ',
+      payload: { collectionSlug, seriesId, lastReadAt },
     });
 
     // We don't handle the response since we pass this info optimistically.
@@ -166,9 +164,10 @@ export default function collectionReducer(
           ...action.payload,
         },
       };
-    case 'SET_BOOKMARK':
-      const { collectionSlug, seriesId, bookmark } = action.payload;
+    case 'MARK_BOOKMARK_AS_READ':
+      const { collectionSlug, seriesId, lastReadAt } = action.payload;
       const bookmarks = state[collectionSlug].bookmarks;
+      const bookmark = bookmarks[seriesId];
       return {
         ...state,
         [collectionSlug]: {
@@ -176,8 +175,8 @@ export default function collectionReducer(
           bookmarks: {
             ...bookmarks,
             [seriesId]: {
-              ...bookmarks[seriesId],
               ...bookmark,
+              lastReadAt,
             },
           },
         },

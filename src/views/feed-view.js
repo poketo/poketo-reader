@@ -180,13 +180,13 @@ class FeedView extends Component<Props, State> {
                   ? `Mark ${unreadChapters.length} chapters as read`
                   : `Mark series as read`
               }
-              onClick={() => {}}
+              onClick={this.handleSeriesOptionsMarkAsReadClick}
             />
           )}
           <Panel.Button
             icon={<IconFeed color="#ff992f" />}
             label="Get RSS feed"
-            onClick={this.handleSeriesOptionsMarkAsReadClick}
+            onClick={() => {}}
           />
           <Panel.Button
             icon={<IconTrash color="red" />}

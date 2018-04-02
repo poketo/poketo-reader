@@ -2,13 +2,7 @@
 
 import api from '../api';
 
-import type {
-  Bookmark,
-  Collection,
-  Chapter,
-  ChapterMetadata,
-  Series,
-} from '../types';
+import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
 
 type ActionType<A, B> = { type: A, payload: B };
 
@@ -26,9 +20,9 @@ export type RemoveBookmarkAction = ActionType<
   'REMOVE_BOOKMARK',
   { collectionSlug: string, seriesId: string },
 >;
-export type SetBookmarkAction = ActionType<
-  'SET_BOOKMARK',
-  { collectionSlug: string, seriesId: string, bookmark: Bookmark },
+export type MarkBookmarkAsReadAction = ActionType<
+  'MARK_BOOKMARK_AS_READ',
+  { collectionSlug: string, seriesId: string, lastReadAt: number },
 >;
 export type SetMultipleSeriesAction = ActionType<
   'SET_MULTIPLE_SERIES',
@@ -61,7 +55,7 @@ export type Action =
   // Collection
   | SetCollectionAction
   | SetCollectionStatusAction
-  | SetBookmarkAction
+  | MarkBookmarkAsReadAction
   | RemoveBookmarkAction
   // Series
   | SetSeriesAction
