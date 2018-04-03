@@ -125,7 +125,7 @@ class ReaderView extends Component<Props, State> {
       return;
     }
 
-    const bookmark = collection.bookmarks.find(b => b.id === series.id);
+    const bookmark = collection.bookmarks[series.id];
     const currentChapter: ?Chapter = chaptersById[chapterId];
 
     if (!currentChapter) {

@@ -110,7 +110,7 @@ export function markSeriesAsRead(
   };
 }
 
-const initialCollectionState = {
+const initialState = {
   _status: {
     isFetching: false,
     isAddingBookmark: false,
@@ -118,8 +118,8 @@ const initialCollectionState = {
   },
 };
 
-export default function collectionReducer(
-  state: State = initialCollectionState,
+export default function reducer(
+  state: State = initialState,
   action: Action,
 ): State {
   switch (action.type) {
@@ -149,13 +149,13 @@ export default function collectionReducer(
     case 'MARK_BOOKMARK_AS_READ': {
       const { collectionSlug, seriesId, lastReadAt } = action.payload;
       const collection = state[collectionSlug];
-      const bookmarks = collection.bookmarks.map((b, i) => {
-        if (b.id !== seriesId) {
-          return b;
-        }
-
-        return { ...b, lastReadAt };
-      });
+      const bookmarks = {
+        ...collection.bookmarks,
+        [seriesId]: {
+          ...collection.bookmarks[seriesId],
+          lastReadAt,
+        },
+      };
 
       return {
         ...state,

@@ -44,13 +44,13 @@ type Props = {
 
 type State = {
   showNewBookmarkPanel: boolean,
-  seriesOptionsPanelId: ?string,
+  optionsPanelSeriesId: ?string,
 };
 
 class FeedView extends Component<Props, State> {
   state = {
     showNewBookmarkPanel: false,
-    seriesOptionsPanelId: null,
+    optionsPanelSeriesId: null,
   };
 
   static mapStateToProps = (state, ownProps) => ({
@@ -68,19 +68,19 @@ class FeedView extends Component<Props, State> {
   }
 
   handleSeriesOptionsClick = seriesId => () => {
-    this.setState({ seriesOptionsPanelId: seriesId });
+    this.setState({ optionsPanelSeriesId: seriesId });
   };
 
   handleSeriesOptionsTrashClick = () => {
     const { collection, dispatch } = this.props;
-    const { seriesOptionsPanelId } = this.state;
+    const { optionsPanelSeriesId } = this.state;
 
-    if (!collection || !seriesOptionsPanelId) {
+    if (!collection || !optionsPanelSeriesId) {
       return;
     }
 
     if (window.confirm('Do you want to delete this series?')) {
-      dispatch(removeBookmark(collection.slug, seriesOptionsPanelId));
+      dispatch(removeBookmark(collection.slug, optionsPanelSeriesId));
       this.handleSeriesOptionsPanelClose();
     }
   };
@@ -88,15 +88,15 @@ class FeedView extends Component<Props, State> {
   handleSeriesOptionsMarkAsReadClick = () => {
     const { match, dispatch } = this.props;
     const { collectionSlug } = match.params;
-    const { seriesOptionsPanelId } = this.state;
+    const { optionsPanelSeriesId } = this.state;
 
-    if (!seriesOptionsPanelId) {
+    if (!optionsPanelSeriesId) {
       return;
     }
 
     const now = utils.getTimestamp();
 
-    dispatch(markSeriesAsRead(collectionSlug, seriesOptionsPanelId, now));
+    dispatch(markSeriesAsRead(collectionSlug, optionsPanelSeriesId, now));
 
     this.handleSeriesOptionsPanelClose();
   };
@@ -106,7 +106,7 @@ class FeedView extends Component<Props, State> {
   };
 
   handleSeriesOptionsPanelClose = () => {
-    this.setState({ seriesOptionsPanelId: null });
+    this.setState({ optionsPanelSeriesId: null });
   };
 
   handleAddButtonClick = () => {
@@ -129,7 +129,7 @@ class FeedView extends Component<Props, State> {
 
     e.preventDefault();
 
-    const bookmark = collection.bookmarks.find(b => b.id === series.id);
+    const bookmark = collection.bookmarks[series.id];
     const allChapters = series.chapters.map(id => chaptersById[id]);
     const unreadChapters = utils.getUnreadChapters(
       allChapters,
@@ -153,23 +153,21 @@ class FeedView extends Component<Props, State> {
 
   renderSeriesPanel() {
     const { collection, chaptersById, seriesById } = this.props;
-    const { seriesOptionsPanelId } = this.state;
+    const { optionsPanelSeriesId } = this.state;
 
-    if (!seriesOptionsPanelId || !collection) {
+    if (!optionsPanelSeriesId || !collection) {
       return null;
     }
 
-    const series: ?Series = seriesById[seriesOptionsPanelId];
-    const bookmark: ?Bookmark = collection.bookmarks.find(
-      b => b.id === seriesOptionsPanelId,
-    );
+    const series: ?Series = seriesById[optionsPanelSeriesId];
+    const bookmark: ?Bookmark = collection.bookmarks[optionsPanelSeriesId];
 
     if (!series || !bookmark) {
       return null;
     }
 
     const showMarkAsRead =
-      seriesOptionsPanelId && series.updatedAt > bookmark.lastReadAt;
+      optionsPanelSeriesId && series.updatedAt > bookmark.lastReadAt;
 
     let unreadChapters = [];
 
@@ -262,9 +260,9 @@ class FeedView extends Component<Props, State> {
       );
     }
 
-    const series: Array<Series> = collection.bookmarks
-      .map(bookmark => seriesById[bookmark.id])
-      .sort((a: Series, b: Series) => b.updatedAt - a.updatedAt);
+    const series: Array<Series> = Object.keys(collection.bookmarks)
+      .map(seriesId => seriesById[seriesId])
+      .sort((a, b) => b.updatedAt - a.updatedAt);
 
     return (
       <div className="pt-5">
@@ -282,7 +280,7 @@ class FeedView extends Component<Props, State> {
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
           {series.map(s => {
-            const bookmark = collection.bookmarks.find(b => b.id === s.id);
+            const bookmark = collection.bookmarks[s.id];
 
             return (
               <SeriesRow
