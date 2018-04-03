@@ -51,23 +51,33 @@ export function fetchCollection(slug: string): ThunkAction {
       payload: { isFetching: true },
     });
 
-    api.fetchCollection(slug).then(response => {
-      const unnormalized = response.data;
-      const normalized = normalize(unnormalized, {
-        collection: schema.collection,
-        series: [schema.series],
-      });
+    api
+      .fetchCollection(slug)
+      .then(response => {
+        const unnormalized = response.data;
+        const normalized = normalize(unnormalized, {
+          collection: schema.collection,
+          series: [schema.series],
+        });
 
-      dispatch({
-        type: 'ADD_ENTITIES',
-        payload: normalized.entities,
-      });
+        dispatch({
+          type: 'ADD_ENTITIES',
+          payload: normalized.entities,
+        });
 
-      dispatch({
-        type: 'SET_COLLECTION_STATUS',
-        payload: { isFetching: false, errorMessage: null },
+        dispatch({
+          type: 'SET_COLLECTION_STATUS',
+          payload: { isFetching: false, errorCode: null },
+        });
+      })
+      .catch(err => {
+        const errorCode = err.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
+
+        dispatch({
+          type: 'SET_COLLECTION_STATUS',
+          payload: { isFetching: false, errorCode },
+        });
       });
-    });
   };
 }
 
@@ -114,7 +124,7 @@ const initialState = {
   _status: {
     isFetching: false,
     isAddingBookmark: false,
-    errorMessage: null,
+    errorCode: null,
   },
 };
 

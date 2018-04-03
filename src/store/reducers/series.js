@@ -52,7 +52,7 @@ export function fetchSeries(siteId: string, slug: string): ThunkAction {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'SET_SERIES_STATUS',
-      payload: { isFetching: true, errorMessage: null },
+      payload: { isFetching: true, errorCode: null },
     });
 
     api
@@ -62,13 +62,13 @@ export function fetchSeries(siteId: string, slug: string): ThunkAction {
         dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
         dispatch({
           type: 'SET_SERIES_STATUS',
-          payload: { isFetching: false, errorMessage: null },
+          payload: { isFetching: false, errorCode: null },
         });
       })
       .catch(err => {
         dispatch({
           type: 'SET_SERIES_STATUS',
-          payload: { isFetching: false, errorMessage: err.stack },
+          payload: { isFetching: false, errorCode: 'UNKNOWN_ERROR' },
         });
       });
   };
@@ -77,7 +77,7 @@ export function fetchSeries(siteId: string, slug: string): ThunkAction {
 const initialState = {
   _status: {
     isFetching: false,
-    errorMessage: null,
+    errorCode: null,
   },
 };
 

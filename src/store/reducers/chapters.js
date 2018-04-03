@@ -53,13 +53,13 @@ export function fetchChapter(
 
         dispatch({
           type: 'SET_CHAPTER_STATUS',
-          payload: { isFetching: false, errorMessage: null },
+          payload: { isFetching: false, errorCode: null },
         });
       },
       err => {
         dispatch({
           type: 'SET_CHAPTER_STATUS',
-          payload: { isFetching: false, errorMessage: err.stack },
+          payload: { isFetching: false, errorCode: 'UNKNOWN_ERROR' },
         });
       },
     );
@@ -69,7 +69,7 @@ export function fetchChapter(
 const initialState = {
   _status: {
     isFetching: false,
-    errorMessage: null,
+    errorCode: null,
   },
 };
 

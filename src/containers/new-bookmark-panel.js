@@ -78,7 +78,11 @@ class NewBookmarkPanel extends Component<Props, State> {
     this.setState({ bookmarkFetchState: 'SUBMITTING' });
 
     api
-      .fetchAddBookmarkToCollection(collectionSlug, seriesUrl, linkToUrl)
+      .fetchAddBookmarkToCollection(
+        collectionSlug,
+        utils.normalizeUrl(seriesUrl),
+        linkToUrl ? utils.normalizeUrl(linkToUrl) : null,
+      )
       .then(response => {
         const normalized = normalize(response.data, {
           collection: schema.collection,
@@ -126,12 +130,14 @@ class NewBookmarkPanel extends Component<Props, State> {
       return;
     }
 
-    if (!utils.isUrl(seriesUrl)) {
+    const normalizedUrl = utils.normalizeUrl(seriesUrl);
+
+    if (!utils.isUrl(normalizedUrl)) {
       this.setState({ errorCode: 'INVALID_URL' });
       return;
     }
 
-    const domain = utils.getDomainName(seriesUrl);
+    const domain = utils.getDomainName(normalizedUrl);
     const supportedSite = SUPPORTED_SITES.test(domain);
 
     if (!supportedSite) {
@@ -250,16 +256,18 @@ class NewBookmarkPanel extends Component<Props, State> {
       <Panel onRequestClose={onRequestClose}>
         <div className="ph-3 pt-3 pb-5">
           <h3 className="fw-medium">New series</h3>
-          <p>Paste the URL of a series you want to follow.</p>
+          <p className="mb-3">Paste the URL of a series you want to follow.</p>
           <form type="post" onSubmit={this.handleSubmit} noValidate>
-            <Input
-              type="url"
-              name="seriesUrl"
-              readOnly={disableFormFields}
-              onChange={this.handleSeriesUrlChange}
-              placeholder="Paste series URL"
-              value={seriesUrl || ''}
-            />
+            <div className="mb-2">
+              <Input
+                type="url"
+                name="seriesUrl"
+                readOnly={disableFormFields}
+                onChange={this.handleSeriesUrlChange}
+                placeholder="Paste series URL"
+                value={seriesUrl || ''}
+              />
+            </div>
             {errorCode && (
               <p className="c-red fs-12 mb-2">
                 {this.getErrorMessage(errorCode, seriesUrl)}

@@ -23,18 +23,8 @@ const utils = {
   /**
    * Store helpers
    */
-  keyArrayBy: (arr: Object[], getKey: (obj: Object) => string) =>
-    arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
-  getDictionaryValues: <T>(dict: { [id: string]: T }): Array<T> =>
-    Object.keys(dict).map(key => dict[key]),
-  findBySlug: (arr: ObjectWithSlug[], slug: string): ?ObjectWithSlug =>
-    arr.find(item => item.slug === slug),
-  findBySlugInDictionary: (
-    dict: { [id: string]: ObjectWithSlug },
-    slug: string,
-  ): ?ObjectWithSlug => {
-    return utils.findBySlug(utils.getDictionaryValues(dict), slug);
-  },
+  getId: (siteId: string, seriesSlug: string, chapterSlug: ?string) =>
+    [siteId, seriesSlug, chapterSlug].filter(Boolean).join(':'),
 
   /**
    * URL Helpers
@@ -42,6 +32,9 @@ const utils = {
   getDomainName: (url: string): string => {
     const u = new URL(url);
     return u.hostname.replace(/^www\./i, '');
+  },
+  normalizeUrl: (url: string): string => {
+    return /^https?:\/\//.test(url) ? url : `http://${url}`;
   },
   constructUrl: (...args: Array<?string>) => args.filter(Boolean).join('/'),
   isUrl: (url: ?string): boolean => {

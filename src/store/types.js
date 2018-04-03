@@ -8,7 +8,7 @@ type ActionType<A, B> = { type: A, payload: B };
 
 type StatusActionFetchPayload = {
   isFetching?: boolean,
-  errorMessage?: ?string,
+  errorCode?: ?string,
 };
 
 export type AddEntitiesAction = ActionType<
@@ -57,7 +57,7 @@ export type SetChapterStatusAction = ActionType<
 
 export type FetchStatusState = {
   +isFetching: boolean,
-  +errorMessage: ?string,
+  +errorCode: ?string,
 };
 
 export type Action =
