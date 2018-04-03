@@ -4,8 +4,6 @@ import ago from 's-ago';
 
 import type { Chapter } from './types';
 
-type ObjectWithSlug = { slug: string };
-
 const utils = {
   formatTimestamp: (n: number) => ago(new Date(n * 1000)),
   getTimestamp: (): number => Math.floor(Date.now() / 1000),

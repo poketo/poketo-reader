@@ -116,8 +116,8 @@ class ReaderView extends Component<Props, State> {
       return;
     }
 
-    const seriesId = [siteId, seriesSlug].join(':');
-    const chapterId = [siteId, seriesSlug, chapterSlug].join(':');
+    const seriesId = utils.getId(siteId, seriesSlug);
+    const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
 
     const series: ?Series = seriesById[seriesId];
 
@@ -162,8 +162,8 @@ class ReaderView extends Component<Props, State> {
     const { chapterSlug, seriesSlug, siteId, collectionSlug } = match.params;
     const { isFetching } = chaptersById._status;
 
-    const chapterId = [siteId, seriesSlug, chapterSlug].join(':');
-    const seriesId = [siteId, seriesSlug].join(':');
+    const seriesId = utils.getId(siteId, seriesSlug);
+    const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
 
     const chapter: ?Chapter = chaptersById[chapterId];
     const series: ?Series = seriesById[seriesId];
