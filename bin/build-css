@@ -25,6 +25,7 @@ const styles = hibiscss(
       14: '14px',
       16: '16px',
       20: '20px',
+      24: '24px',
       36: '36px',
       48: '48px',
     },

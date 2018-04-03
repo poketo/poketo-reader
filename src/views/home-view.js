@@ -1,8 +1,10 @@
 // @flow
 
 import React, { Component, Fragment, type Node } from 'react';
-import { type RouterHistory } from 'react-router-dom';
+import { Link, type RouterHistory } from 'react-router-dom';
+
 import Button from '../components/button';
+import Footer from '../components/footer';
 import IconPoketo from '../components/icon-poketo';
 import Input from '../components/input';
 import api from '../api';
@@ -128,48 +130,71 @@ export default class HomeView extends Component<Props, State> {
     const { errorCode, examples, isFetching, url } = this.state;
 
     return (
-      <div className="mw-900 mh-auto ta-center-m pv-5 ph-3">
-        <span className="fs-12 ls-loose tt-uppercase">Beta</span>
-        <p className="mt-2 fs-20">
-          <IconPoketo /> is a friendly manga tracker for following series you
-          like.
-        </p>
-        <div className="mv-4">
-          <form onSubmit={this.handleSubmit} noValidate>
-            <div className="x-m">
-              <Input
-                className="fs-20-m br-flushRight-m br-0-m"
-                type="url"
-                placeholder="Paste link to series…"
-                onChange={this.handleSeriesUrlChange}
-                value={url}
-              />
-              <Button
-                className="mt-2 mt-0-m br-flushLeft-m"
-                inline
-                loading={isFetching}
-                type="submit">
-                Read
+      <div>
+        <div className="mw-900 mh-auto pv-5 ph-3 ph-0-m">
+          <span className="fs-12 ls-loose tt-uppercase">Beta</span>
+          <p className="mt-2 fs-24">
+            <IconPoketo aria-label="Poketo" /> is a friendly manga tracker for
+            following series you like.
+          </p>
+          <div className="mv-4">
+            <Link to="/new">
+              <Button primary inline>
+                Get started
               </Button>
-            </div>
-            {errorCode && (
-              <p className="mt-2 c-red">{errorMessages[errorCode]}</p>
-            )}
-          </form>
+            </Link>
+          </div>
+          <div className="mv-4">
+            <form onSubmit={this.handleSubmit} noValidate>
+              <div className="x-m">
+                <Input
+                  className="fs-20-m br-flushRight-m br-0-m"
+                  type="url"
+                  placeholder="Paste link to series…"
+                  onChange={this.handleSeriesUrlChange}
+                  value={url}
+                />
+                <Button
+                  className="mt-2 mt-0-m br-flushLeft-m"
+                  inline
+                  loading={isFetching}
+                  type="submit">
+                  Read
+                </Button>
+              </div>
+              {errorCode && (
+                <p className="mt-2 c-red">{errorMessages[errorCode]}</p>
+              )}
+            </form>
+          </div>
+          <p className="mt-3 fs-12">
+            For example,{' '}
+            {examples.map((example, i) => (
+              <Fragment key={example.url}>
+                <button
+                  className="Link"
+                  onClick={this.handleExampleClick(example.url)}>
+                  {example.label}
+                </button>
+                {i !== examples.length - 1 ? ', ' : ''}
+              </Fragment>
+            ))}.
+          </p>
         </div>
-        <p className="mt-3 fs-12">
-          For example,{' '}
-          {examples.map((example, i) => (
-            <Fragment key={example.url}>
-              <button
-                className="Link"
-                onClick={this.handleExampleClick(example.url)}>
-                {example.label}
-              </button>
-              {i !== examples.length - 1 ? ', ' : ''}
-            </Fragment>
-          ))}.
-        </p>
+        <div className="mw-900 mh-auto ph-3 ph-0-m">
+          <div>
+            <h3>Light and fun</h3>
+            <p>No ads, no downloads, no accounts.</p>
+          </div>
+          <div>
+            <h3>Open source</h3>
+            <p>
+              Built with open source; released as an{' '}
+              <a href="https://github.com/poketo/site">open source</a> project.
+            </p>
+          </div>
+        </div>
+        <Footer />
       </div>
     );
   }

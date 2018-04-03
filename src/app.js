@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import ErrorBoundary from './components/error-boundary';
+import AboutView from './views/about-view';
 import HomeView from './views/home-view';
 import FeedView from './views/feed-view';
 import ReaderView from './views/reader-view';
@@ -31,6 +32,7 @@ export default class App extends Component {
                 component={ReaderView}
               />
               <Route path="/c/:collectionSlug" component={FeedView} />
+              <Route path="/about" component={AboutView} />
               <Route path="/" exact component={HomeView} />
               <Route component={NotFoundView} />
             </Switch>
