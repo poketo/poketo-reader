@@ -39,7 +39,7 @@ export default class ErrorBoundary extends Component<Props, State> {
             <button className="Link" onClick={this.handleReloadClick}>
               reload the page
             </button>, or help us by{' '}
-            <a href="https://github.com/rosszurowski/poketo-site/issues/new">
+            <a href="https://github.com/poketo/site/issues/new">
               reporting this issue
             </a>{' '}
             with the error below.
