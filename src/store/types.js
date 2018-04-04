@@ -60,21 +60,26 @@ export type FetchStatusState = {
   +errorCode: ?string,
 };
 
-export type Action =
+export type CollectionAction =
   | AddEntitiesAction
-  // Collection
   | SetCollectionAction
   | SetCollectionStatusAction
   | MarkBookmarkAsReadAction
-  | RemoveBookmarkAction
-  // Series
+  | RemoveBookmarkAction;
+
+export type SeriesAction =
+  | AddEntitiesAction
   | SetSeriesAction
   | SetMultipleSeriesAction
-  | SetSeriesStatusAction
-  // Chapter
+  | SetSeriesStatusAction;
+
+export type ChapterAction =
+  | AddEntitiesAction
   | SetChapterAction
   | SetMultipleChaptersAction
   | SetChapterStatusAction;
+
+export type Action = CollectionAction | SeriesAction | ChapterAction;
 
 export type Dispatch = (action: Action | ThunkAction) => void;
 export type GetState = () => Object;

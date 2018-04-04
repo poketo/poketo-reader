@@ -5,9 +5,9 @@ import { TransitionGroup } from 'react-transition-group';
 import { type RouterHistory } from 'react-router';
 import { connect } from 'react-redux';
 
+import DotLoader from '../components/loader-dots';
 import IconAdd from '../components/icon-add';
 import IconBook from '../components/icon-book';
-import IconFeed from '../components/icon-feed';
 import IconPoketo from '../components/icon-poketo';
 import IconTrash from '../components/icon-trash';
 import NewBookmarkPanel from '../containers/new-bookmark-panel';
@@ -18,6 +18,7 @@ import utils from '../utils';
 import {
   removeBookmark,
   markSeriesAsRead,
+  fetchSeriesForCollection,
 } from '../store/reducers/collections';
 
 import type {
@@ -52,6 +53,17 @@ class Feed extends Component<Props, State> {
     chaptersById: state.chapters,
     seriesById: state.series,
   });
+
+  componentDidMount() {
+    const { dispatch, collection } = this.props;
+    dispatch(fetchSeriesForCollection(collection.slug));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.collection.slug !== this.props.collection.slug) {
+      nextProps.dispatch(fetchSeriesForCollection(nextProps.collection.slug));
+    }
+  }
 
   handleSeriesOptionsClick = seriesId => () => {
     this.setState({ optionsPanelSeriesId: seriesId });
@@ -177,13 +189,8 @@ class Feed extends Component<Props, State> {
             />
           )}
           <Panel.Button
-            icon={<IconFeed color="#ff992f" />}
-            label="Get RSS feed"
-            onClick={() => {}}
-          />
-          <Panel.Button
             icon={<IconTrash color="red" />}
-            label="Remove bookmark"
+            label="Remove series"
             onClick={this.handleSeriesOptionsTrashClick}
           />
         </Panel>
@@ -213,12 +220,18 @@ class Feed extends Component<Props, State> {
     const { collection, seriesById } = this.props;
     const { bookmarks } = collection;
 
-    const feedItems = Object.keys(bookmarks)
+    const seriesIds = Object.keys(bookmarks);
+    const missingSeries = seriesIds.filter(
+      id => Boolean(seriesById[id]) !== true,
+    );
+
+    const feedItems = seriesIds
       .map(seriesId => ({
         series: seriesById[seriesId],
         lastReadAt: bookmarks[seriesId].lastReadAt,
         linkTo: bookmarks[seriesId].linkTo,
       }))
+      .filter(item => item.series)
       .sort((a, b) => b.series.updatedAt - a.series.updatedAt);
 
     return (
@@ -236,16 +249,26 @@ class Feed extends Component<Props, State> {
           {this.renderNewBookmarkPanel()}
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
-          {feedItems.map(item => (
-            <SeriesRow
-              key={item.series.id}
-              series={item.series}
-              isUnread={item.series.updatedAt > item.lastReadAt}
-              linkTo={item.linkTo}
-              onOptionsClick={this.handleSeriesOptionsClick}
-              onSeriesClick={this.handleSeriesClick}
-            />
-          ))}
+          {missingSeries.length > 0 ? (
+            <div className="pv-5 x xd-column xa-center">
+              <DotLoader />
+              <div className="mt-3 fs-12 o-50p">
+                Syncing series ({seriesIds.length - missingSeries.length} /{' '}
+                {seriesIds.length})
+              </div>
+            </div>
+          ) : (
+            feedItems.map(item => (
+              <SeriesRow
+                key={item.series.id}
+                series={item.series}
+                isUnread={item.series.updatedAt > item.lastReadAt}
+                linkTo={item.linkTo}
+                onOptionsClick={this.handleSeriesOptionsClick}
+                onSeriesClick={this.handleSeriesClick}
+              />
+            ))
+          )}
         </div>
       </div>
     );
