@@ -2,22 +2,13 @@
 
 import { normalize } from 'normalizr';
 import schema from '../schema';
+import { isSeriesUpToDate } from './series';
+import utils from '../../utils';
 
 import type { Collection } from '../../types';
-import type {
-  FetchStatusState,
-  ThunkAction,
-  AddEntitiesAction,
-  SetCollectionAction,
-  MarkBookmarkAsReadAction,
-  RemoveBookmarkAction,
-} from '../types';
+import type { FetchStatusState, ThunkAction, CollectionAction } from '../types';
 
-type Action =
-  | AddEntitiesAction
-  | SetCollectionAction
-  | MarkBookmarkAsReadAction
-  | RemoveBookmarkAction;
+type Action = CollectionAction;
 
 type State = {
   +_status: FetchStatusState,
@@ -44,6 +35,16 @@ function shouldFetchCollection(state, slug): boolean {
   return true;
 }
 
+function getSeriesIdForCollection(state, slug): ?(string[]) {
+  const collection = state.collections[slug];
+
+  if (!collection) {
+    return null;
+  }
+
+  return Object.keys(collection.bookmarks);
+}
+
 export function fetchCollection(slug: string): ThunkAction {
   return (dispatch, getState, api) => {
     dispatch({
@@ -55,10 +56,7 @@ export function fetchCollection(slug: string): ThunkAction {
       .fetchCollection(slug)
       .then(response => {
         const unnormalized = response.data;
-        const normalized = normalize(unnormalized, {
-          collection: schema.collection,
-          series: [schema.series],
-        });
+        const normalized = normalize(unnormalized, schema.collection);
 
         dispatch({
           type: 'ADD_ENTITIES',
@@ -78,6 +76,33 @@ export function fetchCollection(slug: string): ThunkAction {
           payload: { isFetching: false, errorCode },
         });
       });
+  };
+}
+
+export function fetchSeriesForCollection(collectionSlug: string): ThunkAction {
+  return (dispatch, getState, api) => {
+    const state = getState();
+    const seriesIds = getSeriesIdForCollection(state, collectionSlug);
+
+    if (!seriesIds) {
+      return;
+    }
+
+    const missingSeries = seriesIds.filter(id => !isSeriesUpToDate(state, id));
+    const requests = missingSeries.map(id => {
+      const { siteId, seriesSlug } = utils.getIdComponents(id);
+      return api.fetchSeries(siteId, seriesSlug);
+    });
+
+    Promise.all(requests).then(responses => {
+      const unnormalized = responses.map(response => response.data);
+      const normalized = normalize(unnormalized, [schema.series]);
+
+      dispatch({
+        type: 'ADD_ENTITIES',
+        payload: normalized.entities,
+      });
+    });
   };
 }
 

@@ -2,6 +2,7 @@
 
 import { normalize } from 'normalizr';
 import schema from '../schema';
+import utils from '../../utils';
 import type { Series } from '../../types';
 import type {
   FetchStatusState,
@@ -38,14 +39,19 @@ function shouldFetchSeries(state, siteId, slug): boolean {
     return false;
   }
 
-  const seriesId = [siteId, slug].join(':');
+  const seriesId = utils.getId(siteId, slug);
+  const upToDate = isSeriesUpToDate(state, seriesId);
+
+  return !upToDate;
+}
+
+export function isSeriesUpToDate(state: Object, seriesId: string): boolean {
+  const seriesById = state.series;
   const existingSeries = seriesById[seriesId];
 
-  if (existingSeries) {
-    return false;
-  }
-
-  return true;
+  // NOTE: we're assuming right now that if we have the data on the client,
+  // it's up-to-date.
+  return Boolean(existingSeries);
 }
 
 export function fetchSeries(siteId: string, slug: string): ThunkAction {

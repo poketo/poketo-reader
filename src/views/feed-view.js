@@ -49,6 +49,7 @@ class FeedView extends Component<Props> {
             <div className="mb-3">
               <CircleLoader />
             </div>
+            <div className="fs-12 o-50p">Spinning up a server, one sec...</div>
           </div>
         </div>
       );

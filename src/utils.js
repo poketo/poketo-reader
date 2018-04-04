@@ -23,6 +23,21 @@ const utils = {
    */
   getId: (siteId: string, seriesSlug: string, chapterSlug: ?string) =>
     [siteId, seriesSlug, chapterSlug].filter(Boolean).join(':'),
+  getIdComponents: (
+    id: string,
+  ): { siteId: string, seriesSlug: string, chapterSlug: ?string } => {
+    const parts = id.split(':');
+    const components: any = {
+      siteId: parts[0],
+      seriesSlug: parts[1],
+    };
+
+    if (parts[2]) {
+      components.chapterSlug = parts[2];
+    }
+
+    return components;
+  },
 
   /**
    * URL Helpers
