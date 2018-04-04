@@ -207,19 +207,19 @@ class NewBookmarkPanel extends Component<Props, State> {
             isn't a supported site. Here's{' '}
             <a
               className="Link"
-              href="https://github.com/rosszurowski/poketo-lib#readme"
+              href="https://github.com/poketo/service/tree/master/lib/api#supported-sites"
               rel="noopener noreferrer"
               target="_blank">
               a full list of supported sites
             </a>. Make an issue{' '}
             <a
               className="Link"
-              href="https://github.com/rosszurowski/poketo-lib/issues"
+              href="https://github.com/poketo/service/issues/new"
               rel="noopener noreferrer"
               target="_blank">
-              here
+              on the Github repo
             </a>{' '}
-            if you'd like to request another.
+            to request a new one.
           </span>
         );
       case 'INVALID_SERIES':
