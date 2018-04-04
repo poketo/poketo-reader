@@ -91,17 +91,19 @@ export function fetchSeriesForCollection(collectionSlug: string): ThunkAction {
     const missingSeries = seriesIds.filter(id => !isSeriesUpToDate(state, id));
     const requests = missingSeries.map(id => {
       const { siteId, seriesSlug } = utils.getIdComponents(id);
-      return api.fetchSeries(siteId, seriesSlug);
+      return api.fetchSeries(siteId, seriesSlug).then(response => {
+        const unnormalized = response.data;
+        const normalized = normalize(unnormalized, schema.series);
+
+        dispatch({
+          type: 'ADD_ENTITIES',
+          payload: normalized.entities,
+        });
+      });
     });
 
-    Promise.all(requests).then(responses => {
-      const unnormalized = responses.map(response => response.data);
-      const normalized = normalize(unnormalized, [schema.series]);
-
-      dispatch({
-        type: 'ADD_ENTITIES',
-        payload: normalized.entities,
-      });
+    Promise.all(requests).catch(err => {
+      console.log(err);
     });
   };
 }
