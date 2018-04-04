@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import DotLoader from '../components/loader-dots';
 import IconAdd from '../components/icon-add';
 import IconBook from '../components/icon-book';
-import IconFeed from '../components/icon-feed';
 import IconPoketo from '../components/icon-poketo';
 import IconTrash from '../components/icon-trash';
 import NewBookmarkPanel from '../containers/new-bookmark-panel';
@@ -190,13 +189,8 @@ class Feed extends Component<Props, State> {
             />
           )}
           <Panel.Button
-            icon={<IconFeed color="#ff992f" />}
-            label="Get RSS feed"
-            onClick={() => {}}
-          />
-          <Panel.Button
             icon={<IconTrash color="red" />}
-            label="Remove bookmark"
+            label="Remove series"
             onClick={this.handleSeriesOptionsTrashClick}
           />
         </Panel>
