@@ -18,6 +18,18 @@ export default () => (
         </p>
       </div>
       <div className="mb-3">
+        <h2 id="scanlators">How does reading on Poketo affect scanlators?</h2>
+        <p className="mb-2">
+          Honestly, I'm not sure. I know a lot of work goes into translating
+          series, and I don't want Poketo to take away from traffic or ad
+          revenue or other things scanlators use to motivate their work.
+        </p>
+        <p>
+          I'm open to figuring something out though. If you're a scanlator and
+          have opinions about how Poketo can help, let me know!
+        </p>
+      </div>
+      <div className="mb-3">
         <h2 id="accounts">How do I sign up? Where are the accounts?</h2>
         <p className="mb-2">
           There are no accounts! Over the past few years, the web has become a
