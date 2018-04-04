@@ -8,3 +8,7 @@ A lightweight tool for reading and keeping track of manga series. Sorta like a m
 :construction: Poketo is still early in development. While it's usable at this point, there's a lot more work to be done to make it the nicest experience. So, watch your step!
 
 If you'd like an invite, hit up @rosszurowski.
+
+## Colophon
+
+Deployed on [Netlify](https://netlify.com). Built with React, Redux, and Flow.
