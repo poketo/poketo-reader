@@ -24,7 +24,7 @@ const Dropdown = ({ options, onChange, value, ...props }: Props) => (
         </option>
       ))}
     </select>
-    <div className="Dropdown-arrow x ml-2">
+    <div className="Dropdown-arrow x">
       <IconDirectDown width={16} height={16} />
     </div>
   </div>

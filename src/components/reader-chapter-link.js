@@ -7,26 +7,24 @@ import type { Chapter } from '../types';
 
 type Props = {
   collectionSlug: ?string,
-  siteId: string,
-  seriesSlug: string,
-  chapter: Chapter,
+  chapter: ?Chapter,
   children: Node,
 };
 
-const ReaderChapterLink = ({
-  collectionSlug,
-  siteId,
-  seriesSlug,
-  chapter,
-  children,
-}: Props) => {
+const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   const disabled = !chapter;
-  const to = utils.getReaderUrl(
-    collectionSlug,
-    siteId,
-    seriesSlug,
-    chapter && chapter.slug,
-  );
+
+  let to = '/';
+
+  if (chapter) {
+    const { siteId, seriesSlug } = utils.getIdComponents(chapter.id);
+    to = utils.getReaderUrl(
+      collectionSlug,
+      siteId,
+      seriesSlug,
+      chapter && chapter.slug,
+    );
+  }
 
   return (
     <Link
