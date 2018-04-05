@@ -14,7 +14,7 @@ const styles = hibiscss(
     },
     colors: {
       white: 'white',
-      pink: '#ff8b8b',
+      pink: '#ff7462',
       black: '#141414',
       lightGray: '#f0f0f0',
       fadedBlack: 'rgba(12, 12, 12, 0.35)',

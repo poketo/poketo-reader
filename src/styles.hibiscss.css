@@ -68,8 +68,16 @@
   z-index: 9;
 }
 
+.us-none {
+  user-select: none;
+}
+
+.ud-none {
+  -webkit-user-drag: none;
+}
+
 .ls-loose {
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
 }
 
 .va-top {
@@ -106,6 +114,10 @@
 
 .h-100vh {
   height: 100vh;
+}
+
+.mh-100vh {
+  min-height: 100vh;
 }
 
 .bc-transparent {

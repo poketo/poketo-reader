@@ -10,6 +10,7 @@ type Props = {
   primary?: boolean,
   inline?: boolean,
   loading?: boolean,
+  white?: boolean,
 };
 
 export default ({
@@ -18,11 +19,13 @@ export default ({
   primary = false,
   inline = false,
   loading = false,
+  white = false,
   ...props
 }: Props) => (
   <button
     className={classNames('Button', 'br-3 ff-sans', className, {
       'Button--primary': primary,
+      'Button--white': white,
       'Button--loading': loading,
       'Button--inline': inline,
     })}

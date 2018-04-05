@@ -1,196 +1,57 @@
 // @flow
 
-import React, { Component, Fragment, type Node } from 'react';
-import { Link, type RouterHistory } from 'react-router-dom';
+import React, { Component } from 'react';
 
 import Button from '../components/button';
 import Footer from '../components/footer';
-import IconPoketo from '../components/icon-poketo';
-import Input from '../components/input';
-import api from '../api';
-import utils from '../utils';
+import poketoIntroUrl from '../assets/poketo-intro.svg';
 
-import type { TraeError, TraeResponse } from '../types';
+type Props = {};
 
-const examplesList = [
-  {
-    label: 'Senryu Girl from Meraki',
-    url: 'http://merakiscans.com/senryu-girl/',
-  },
-  {
-    label: 'Urami Koi on Mangakakalot',
-    url: 'http://mangakakalot.com/manga/urami_koi_koi_urami_koi',
-  },
-  {
-    label: 'Oyasumi Punpun',
-    url: 'http://manganelo.com/manga/oyasumi_punpun',
-  },
-];
-
-type FetchErrorCode =
-  | 'INVALID_URL'
-  | 'INVALID_SERIES'
-  | 'SERVER_UNSUPPORTED_SITE'
-  | 'SERVER_UNKNOWN_ERROR';
-
-type Props = {
-  history: RouterHistory,
-};
-
-type State = {
-  url: string,
-  errorCode: ?FetchErrorCode,
-  isFetching: boolean,
-  examples: Array<{ label: string, url: string }>,
-};
-
-const errorMessages: { [code: FetchErrorCode]: Node } = {
-  INVALID_URL: 'Please enter a valid URL.',
-  INVALID_SERIES: `We couldn't find a series at that URL. Is it working?`,
-  SERVER_UNSUPPORTED_SITE: `Sorry, but that site isn't supported`,
-  SERVER_UNKNOWN_ERROR: `Sorry, something went wrong.`,
-};
-
-export default class HomeView extends Component<Props, State> {
-  state = {
-    url: '',
-    errorCode: null,
-    isFetching: false,
-    examples: utils.getRandomItems(examplesList, 3),
-  };
-
-  handleSubmit = (e: ?SyntheticEvent<HTMLFormElement>) => {
-    const { url } = this.state;
-    if (e) {
-      e.preventDefault();
-    }
-
-    if (!utils.isUrl(url)) {
-      this.setState({ errorCode: 'INVALID_URL' });
-      return;
-    }
-
-    this.setState({ errorCode: null, isFetching: true });
-
-    // NOTE: if we switch to having a client-side poketo library, we could just
-    // parse the URL and send them directly to the reader view. Instead, we send
-    // it to the server first.
-    api
-      .fetchSeriesByUrl(url)
-      .then(this.handleSubmitSuccess)
-      .catch(this.handleSubmitError);
-  };
-
-  handleSubmitSuccess = (response: TraeResponse) => {
-    const { history } = this.props;
-    const { data: series } = response;
-
-    history.push(
-      utils.getReaderUrl(
-        null,
-        series.site.id,
-        series.slug,
-        utils.leastRecentChapter(series.chapters).slug,
-      ),
-    );
-  };
-
-  handleSubmitError = (err: TraeError) => {
-    let errorCode;
-
-    switch (err.status) {
-      case 400:
-        errorCode =
-          err.data.indexOf('not supported') === -1
-            ? 'INVALID_URL'
-            : 'SERVER_UNSUPPORTED_SITE';
-        break;
-      case 404:
-        errorCode = 'INVALID_SERIES';
-        break;
-      default:
-        errorCode = 'SERVER_UNKNOWN_ERROR';
-        break;
-    }
-
-    this.setState({ errorCode, isFetching: false });
-  };
-
-  handleSeriesUrlChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
-    this.setState({ url: e.target.value });
-  };
-
-  handleExampleClick = (url: string) => () => {
-    this.setState({ url }, () => {
-      this.handleSubmit();
-    });
-  };
-
+export default class HomeView extends Component<Props> {
   render() {
-    const { errorCode, examples, isFetching, url } = this.state;
-
     return (
-      <div>
-        <div className="mw-900 mh-auto pv-5 ph-3 ph-0-m">
-          <span className="fs-12 ls-loose tt-uppercase">Beta</span>
-          <p className="mt-2 fs-24">
-            <IconPoketo aria-label="Poketo" /> is a friendly manga tracker for
-            following series you like.
-          </p>
-          <div className="mv-4">
-            <Link to="/new">
-              <Button primary inline>
-                Get started
+      <div className="x xd-column xj-spaceBetween mh-100vh">
+        <div style={{ backgroundColor: '#fc9377' }}>
+          <div className="mw-900 mh-auto c-white pv-5 ph-3 ph-0-m">
+            <div className="mb-3">
+              <span className="br-4 ba-1 bc-lightGray ph-2 pv-1 ff-mono fs-12 ls-loose tt-uppercase">
+                Beta
+              </span>
+            </div>
+            <p className="fs-24">
+              <img
+                src={poketoIntroUrl}
+                className="us-none ud-none pr-2 va-middle"
+                alt="Poketo"
+                width="160"
+              />{' '}
+              is a friendly manga tracker for following series you like.
+            </p>
+            <div className="mv-4">
+              <Button white inline>
+                Request an invite
               </Button>
-            </Link>
+            </div>
           </div>
-          <div className="mv-4">
-            <form onSubmit={this.handleSubmit} noValidate>
-              <div className="x-m">
-                <Input
-                  className="fs-20-m br-flushRight-m br-0-m"
-                  type="url"
-                  placeholder="Paste link to series…"
-                  onChange={this.handleSeriesUrlChange}
-                  value={url}
-                />
-                <Button
-                  className="mt-2 mt-0-m br-flushLeft-m"
-                  inline
-                  loading={isFetching}
-                  type="submit">
-                  Read
-                </Button>
-              </div>
-              {errorCode && (
-                <p className="mt-2 c-red">{errorMessages[errorCode]}</p>
-              )}
-            </form>
-          </div>
-          <p className="mt-3 fs-12">
-            For example,{' '}
-            {examples.map((example, i) => (
-              <Fragment key={example.url}>
-                <button
-                  className="Link"
-                  onClick={this.handleExampleClick(example.url)}>
-                  {example.label}
-                </button>
-                {i !== examples.length - 1 ? ', ' : ''}
-              </Fragment>
-            ))}.
-          </p>
         </div>
-        <div className="mw-900 mh-auto ph-3 ph-0-m">
+        <div className="mw-900 mh-auto pv-5 ph-3 ph-0-m">
           <div>
             <h3>Light and fun</h3>
-            <p>No ads, no downloads, no accounts.</p>
+            <p>No ads, no downloads, no accounts. Simple.</p>
+          </div>
+          <div>
+            <h3>Easy reading</h3>
+            <p>Supports thousands of series from 8 sites (and counting).</p>
           </div>
           <div>
             <h3>Open source</h3>
             <p>
               Built with open source; released as an{' '}
-              <a href="https://github.com/poketo/site">open source</a> project.
+              <a className="Link" href="https://github.com/poketo/site">
+                open source
+              </a>{' '}
+              project.
             </p>
           </div>
         </div>

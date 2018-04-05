@@ -1,5 +1,6 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
+    helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -71,6 +72,20 @@ button {
 }
 
 .Button--loading {
+}
+
+.Button--white {
+  background-color: #fff;
+  color: hsl(6, 90%, 50%);
+  box-shadow: 0 1px 4px hsla(6, 50%, 5%, 0.15);
+  transition: background-color 200ms ease, color 200ms ease,
+    transform 200ms ease, box-shadow 200ms ease;
+}
+
+.Button--white:active {
+  background-color: rgba(255, 255, 255, 0.95);
+  transform: translateY(0.5px);
+  box-shadow: 0 1px 1px hsla(6, 50%, 10%, 0.05);
 }
 
 .Button--primary {
