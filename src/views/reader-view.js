@@ -69,7 +69,6 @@ class ReaderView extends Component<Props, State> {
       nextParams.chapterSlug !== chapterSlug
     ) {
       this.loadData(nextProps);
-      window.scrollTo(0, 0);
     }
   }
 
@@ -82,6 +81,8 @@ class ReaderView extends Component<Props, State> {
   loadData = props => {
     const { match, dispatch } = props;
     const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
+
+    window.scrollTo(0, 0);
 
     dispatch(fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug));
     dispatch(fetchSeriesIfNeeded(siteId, seriesSlug));
@@ -193,7 +194,7 @@ class ReaderView extends Component<Props, State> {
           )}
         </div>
         {series && (
-          <div className="c-white pv-3 mh-auto w-90p-m ta-center mw-900">
+          <div className="c-white pv-4 mh-auto w-90p-m ta-center mw-900">
             <div>
               <div>{series.title}</div>
               <div className="fs-12 o-50p">{series.site.name}</div>
