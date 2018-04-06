@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Head from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
@@ -21,6 +22,9 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <div id="app">
+          <Head defaultTitle="Poketo" titleTemplate="%s – Poketo">
+            <meta name="description" content="Light and fun manga reader." />
+          </Head>
           <ErrorBoundary>
             <Switch>
               <Route

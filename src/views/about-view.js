@@ -1,11 +1,15 @@
 // @flow
 
 import React from 'react';
+import Head from 'react-helmet';
 
 import Footer from '../components/footer';
 
 export default () => (
   <div>
+    <Head>
+      <title>About</title>
+    </Head>
     <div className="mw-900 mh-auto pv-4 ph-3 ph-0-m">
       <div className="mb-3">
         <h2 id="sites">A site I like isn't supported. How can I request it?</h2>

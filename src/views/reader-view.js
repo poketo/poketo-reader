@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
+import Head from 'react-helmet';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -176,6 +177,12 @@ class ReaderView extends Component<Props, State> {
 
     return (
       <div className="mh-100vh" style={{ backgroundColor: '#404040' }}>
+        {series &&
+          chapter && (
+            <Head>
+              <title>{`${series.title} – Chapter ${chapter.number}`}</title>
+            </Head>
+          )}
         <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
           <Link
             className="x xa-center o-50p p-relative z-2"
