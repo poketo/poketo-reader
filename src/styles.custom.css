@@ -127,7 +127,9 @@ button {
   opacity: 1;
 }
 
-.PageImage-image.js-lazysizes-loaded + .PageImage-background {
+.PageImage:not(.PageImage--hasSize)
+  .PageImage-image.js-lazysizes-loaded
+  + .PageImage-background {
   display: none;
 }
 
