@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import DotLoader from '../components/loader-dots';
 import IconArrowLeft from '../components/icon-arrow-left';
-import IconNewTab from '../components/icon-new-tab';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
