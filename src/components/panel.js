@@ -16,6 +16,12 @@ type PanelButtonProps = {
   onClick: (e: SyntheticEvent<HTMLButtonElement>) => void,
 };
 
+type PanelLinkProps = {
+  href: string,
+  icon: Node,
+  label: Node,
+};
+
 type PanelTransitionProps = {
   children: Node,
 };
@@ -23,6 +29,7 @@ type PanelTransitionProps = {
 class Panel extends Component<PanelProps> {
   static Button: (props: PanelButtonProps) => Node;
   static Transition: (props: PanelTransitionProps) => Node;
+  static Link: (props: PanelLinkProps) => Node;
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
@@ -76,6 +83,13 @@ Panel.Button = (props: PanelButtonProps) => (
     <div className="pa-3 x xa-center">{props.icon}</div>
     <div className="pa-3">{props.label}</div>
   </button>
+);
+
+Panel.Link = ({ icon, label, ...props }: PanelLinkProps) => (
+  <a className="x w-100p xa-stretch" {...props}>
+    <div className="pa-3 x xa-center">{icon}</div>
+    <div className="pa-3">{label}</div>
+  </a>
 );
 
 Panel.Transition = (props: PanelTransitionProps) => (

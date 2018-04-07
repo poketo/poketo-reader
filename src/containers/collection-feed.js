@@ -9,6 +9,7 @@ import DotLoader from '../components/loader-dots';
 import IconAdd from '../components/icon-add';
 import IconBook from '../components/icon-book';
 import IconPoketo from '../components/icon-poketo';
+import IconNewTab from '../components/icon-new-tab';
 import IconTrash from '../components/icon-trash';
 import NewBookmarkPanel from '../containers/new-bookmark-panel';
 import Panel from '../components/panel';
@@ -177,6 +178,11 @@ class Feed extends Component<Props, State> {
     return (
       <Panel.Transition>
         <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
+          <Panel.Link
+            icon={<IconNewTab />}
+            label={`Open on ${series.site.name}`}
+            href={series.url}
+          />
           {showMarkAsRead && (
             <Panel.Button
               icon={<IconBook />}
