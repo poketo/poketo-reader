@@ -189,16 +189,6 @@ class ReaderView extends Component<Props, State> {
             to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
             <IconArrowLeft width={20} height={20} />
           </Link>
-          {chapter && (
-            <a
-              className="x xa-center o-50p p-relative z-2"
-              href={chapter.url}
-              title="Open chapter on original site"
-              target="_blank"
-              rel="noopener noreferrer">
-              <IconNewTab width={20} height={20} />
-            </a>
-          )}
         </div>
         {series && (
           <div className="c-white pv-4 mh-auto w-90p-m ta-center mw-900">
@@ -217,9 +207,7 @@ class ReaderView extends Component<Props, State> {
           />
         )}
         {isLoading ? (
-          <div
-            className="x xa-center xj-center ta-center pv-4"
-            style={{ height: '100vh' }}>
+          <div className="x xa-center xj-center ta-center pv-6">
             <div>
               <div className="mb-4">
                 <DotLoader />
