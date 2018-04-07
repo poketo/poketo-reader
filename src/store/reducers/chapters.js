@@ -2,6 +2,7 @@
 
 import { normalize } from 'normalizr';
 import schema from '../schema';
+import utils from '../../utils';
 
 import type { Slug, Chapter, ChapterMetadata } from '../../types';
 import type {
@@ -30,8 +31,23 @@ export function fetchChapterIfNeeded(
   chapter: Slug,
 ): ThunkAction {
   return (dispatch, getState) => {
-    dispatch(fetchChapter(siteId, series, chapter));
+    if (shouldFetchChapter(getState(), siteId, series, chapter)) {
+      dispatch(fetchChapter(siteId, series, chapter));
+    }
   };
+}
+
+function shouldFetchChapter(state, siteId, seriesSlug, chapterSlug): boolean {
+  const chaptersById = state.chapters;
+  const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
+
+  if (chaptersById._status.isFetching) {
+    return false;
+  } else if (chaptersById[chapterId]) {
+    return false;
+  }
+
+  return true;
 }
 
 export function fetchChapter(
