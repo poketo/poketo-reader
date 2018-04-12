@@ -31,7 +31,7 @@ const ReaderNavigation = ({
   const nextChapter = seriesChapters[chapterIndex - 1] || null;
 
   return (
-    <nav className="p-relative c-white x xa-center xj-spaceBetween pv-2 ph-3 fs-14 fs-16-m">
+    <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-3 fs-14 fs-16-m">
       <div className="z-2">
         <ReaderChapterLink
           collectionSlug={collectionSlug}

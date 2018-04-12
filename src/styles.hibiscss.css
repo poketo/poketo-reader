@@ -116,6 +116,10 @@
   height: 100vh;
 }
 
+.mh-50vh {
+  min-height: 50vh;
+}
+
 .mh-100vh {
   min-height: 100vh;
 }
@@ -157,14 +161,17 @@
 .bc-coral {
   border-color: #ff7462;
 }
-.bc-azure {
+.bc-blue {
   border-color: #73d2ff;
 }
-.bc-mint {
+.bc-green {
   border-color: #b2f2bb;
 }
-.bc-hay {
+.bc-yellow {
   border-color: #ffe479;
+}
+.bc-purple {
+  border-color: #81a0fc;
 }
 
 .ba-1 {
@@ -218,6 +225,14 @@
 
 .hover:hover {
   opacity: 0.5;
+}
+
+.t-shrinkOnActive {
+  transition: transform 200ms ease;
+}
+
+.t-shrinkOnActive:active {
+  transform: scale(0.95);
 }
 
 .br-flushLeft {

@@ -13,21 +13,21 @@ const styles = hibiscss(
       pill: '9999px',
     },
     colors: {
-      white: 'white',
-      pink: '#ff7462',
-      black: '#141414',
-      lightGray: '#f0f0f0',
       fadedBlack: 'rgba(12, 12, 12, 0.35)',
-
-      gray0: '#f8f9fa',
-      gray1: '#e9ecef',
-      gray2: '#ced4da',
-      gray3: '#868e96',
-      gray4: '#212529',
+      white: 'white',
+      offwhite: '#fffefc',
+      lightGray: '#f0f0f0',
+      gray0: '#f2f2f2',
+      gray1: '#EBEAE8',
+      gray2: '#CFCCC8',
+      gray3: '#8F8B83',
+      gray4: '#292723',
+      black: '#292723',
       coral: '#ff7462',
-      azure: '#73d2ff',
-      mint: '#b2f2bb',
-      hay: '#ffe479',
+      blue: '#73d2ff',
+      green: '#b2f2bb',
+      yellow: '#ffe479',
+      purple: '#81a0fc',
     },
     fontSize: {
       9: '9px',
@@ -41,9 +41,9 @@ const styles = hibiscss(
     },
     fontFamily: {
       sans:
-        '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+        '"National", Source Sans Pro, -apple-system, BlinkMacSystemFont, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;',
       mono:
-        '"SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace',
+        '"SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace',
     },
     fontWeight: {
       normal: 400,

@@ -34,7 +34,7 @@ const SeriesRow = ({
         <span className="fs-20-m">
           {isUnread && (
             <span className="p-relative t--2 mr-2">
-              <span className="d-inlineBlock w-8 h-8 br-round bgc-pink" />
+              <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
             </span>
           )}
           <span className={isUnread ? 'fw-medium' : undefined}>

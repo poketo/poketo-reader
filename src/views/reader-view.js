@@ -225,7 +225,7 @@ class ReaderView extends Component<Props, State> {
                 </div>
               ))}
             </div>
-            <nav className="bgc-black c-white ta-center pv-4 ph-3 fs-14 fs-16-m">
+            <nav className="bgc-black c-white ta-center pv-4 fs-14 fs-16-m">
               {seriesChapters && (
                 <ReaderNavigation
                   chapter={chapter}

@@ -71,7 +71,12 @@ class Panel extends Component<PanelProps> {
       <div className="Panel">
         <ScrollLock />
         <div className="Panel-background" onClick={this.handleOverlayClick} />
-        <div className="Panel-menu">{children}</div>
+        <div className="Panel-menu">
+          {children}
+          <button className="x w-100p bt-1 bc-gray1 xa-stretch" onClick={this.handleOverlayClick}>
+             <div className="w-100p pa-3 ta-center o-50p">Cancel</div>
+          </button>
+        </div>
       </div>,
       root,
     );

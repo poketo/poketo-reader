@@ -24,6 +24,7 @@ export default class App extends Component {
         <div id="app">
           <Head defaultTitle="Poketo" titleTemplate="%s – Poketo">
             <meta name="description" content="Light and fun manga reader." />
+            <body className="ff-sans" />
           </Head>
           <ErrorBoundary>
             <Switch>
