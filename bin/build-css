@@ -13,11 +13,23 @@ const styles = hibiscss(
       pill: '9999px',
     },
     colors: {
-      white: 'white',
-      pink: '#ff8b8b',
-      black: '#141414',
-      lightGray: '#f0f0f0',
       fadedBlack: 'rgba(12, 12, 12, 0.35)',
+      fadedOffWhite: 'rgba(255, 254, 252, 0.98)',
+      white: 'white',
+      offwhite: '#fffefc',
+      lightGray: '#f0f0f0',
+      gray0: '#f2f2f2',
+      gray1: '#ebeae8',
+      gray2: '#cfccc8',
+      gray3: '#8f8b83',
+      gray4: '#444443',
+      gray5: '#292723',
+      black: '#292723',
+      coral: '#ff7462',
+      blue: '#73d2ff',
+      green: '#b2f2bb',
+      yellow: '#ffe479',
+      purple: '#81a0fc',
     },
     fontSize: {
       9: '9px',
@@ -29,6 +41,11 @@ const styles = hibiscss(
       36: '36px',
       48: '48px',
     },
+    fontFamily: {
+      sans:
+        'National, -apple-system, BlinkMacSystemFont, helvetica neue, helvetica, roboto, segoe ui, arial, sans-serif;',
+      mono: '"SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace',
+    },
     fontWeight: {
       normal: 400,
       medium: 500,
@@ -38,6 +55,8 @@ const styles = hibiscss(
       '12': '12px',
       '16': '16px',
       '36': '36px',
+      '33%': 'calc(100% / 3)',
+      '50%': '50%',
     },
     maxWidths: {
       500: '500px',

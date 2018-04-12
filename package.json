@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "REACT_APP_COMMIT_REF=$COMMIT_REF react-scripts build",
     "build:css": "bin/build-css",
     "build:icons": "bin/build-icons",
     "prebuild": "yarn run build:css && yarn run build:icons",
@@ -21,6 +21,7 @@
     "normalizr": "^3.2.4",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
+    "react-helmet": "^5.2.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scrolllock": "^2.0.1",
@@ -35,7 +36,7 @@
     "flow-bin": "^0.66.0",
     "hibiscss": "0.0.9",
     "mz": "^2.7.0",
-    "prettier": "^1.8.2",
+    "prettier": "^1.12.0",
     "react-scripts": "^1.1.2",
     "redux-logger": "^3.0.6",
     "svgr": "^1.9.0"

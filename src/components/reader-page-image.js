@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import classNames from 'classnames';
 
 if (typeof global.window !== 'undefined') {
   global.window.lazySizesConfig = window.lazySizesConfig || {};
@@ -30,9 +31,9 @@ const SeriesPageImage = ({ page, preload, fitHeight }: Props) => {
 
   return (
     <span
-      className={`PageImage ${fitHeight ? 'PageImage--fitHeight' : ''} ${
-        hasSize ? 'PageImage--hasSize' : ''
-      }`}>
+      className={classNames('PageImage', {
+        'PageImage--hasSize': hasSize,
+      })}>
       <img
         src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
         data-src={page.url}
@@ -41,13 +42,11 @@ const SeriesPageImage = ({ page, preload, fitHeight }: Props) => {
           preload ? 'js-lazysizes-preload' : ''
         }`}
       />
-      {hasSize && (
-        <canvas
-          className="PageImage-background"
-          width={page.width}
-          height={page.height}
-        />
-      )}
+      <canvas
+        className="PageImage-background"
+        width={page.width || 800}
+        height={page.height || 800}
+      />
     </span>
   );
 };

@@ -1,19 +1,21 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import Dropdown from '../components/dropdown';
-import IconNewTab from '../components/icon-new-tab';
+import ReaderChapterLink from '../components/reader-chapter-link';
 
 import type { Chapter, Series } from '../types';
 
 type Props = {
-  chapter: ?Chapter,
+  chapter: Chapter,
+  collectionSlug: ?string,
   onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
-  seriesChapters: ?Series,
+  seriesChapters: Series,
 };
 
 const ReaderNavigation = ({
   chapter,
+  collectionSlug,
   onChapterSelectChange,
   seriesChapters,
 }: Props) => {
@@ -24,27 +26,33 @@ const ReaderNavigation = ({
       }))
     : [{ value: '', label: '' }];
 
+  const chapterIndex = seriesChapters.findIndex(c => c.id === chapter.id);
+  const previousChapter = seriesChapters[chapterIndex + 1] || null;
+  const nextChapter = seriesChapters[chapterIndex - 1] || null;
+
   return (
-    <nav className="p-relative bgc-black c-white x xa-center xj-end pv-3 ph-3 fs-14 fs-16-m">
-      {chapter && (
-        <Fragment>
-          <div className="p-absolute t-0 l-8 b-0 x xj-center xa-center">
-            <Dropdown
-              value={chapter.slug}
-              onChange={onChapterSelectChange}
-              options={chapterSelectorOptions}
-            />
-          </div>
-          <a
-            className="x xa-center o-50p p-relative z-2"
-            href={chapter.url}
-            title="Open chapter on original site"
-            target="_blank"
-            rel="noopener noreferrer">
-            <IconNewTab width={20} height={20} />
-          </a>
-        </Fragment>
-      )}
+    <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-3 fs-14 fs-16-m">
+      <div className="z-2">
+        <ReaderChapterLink
+          collectionSlug={collectionSlug}
+          chapter={previousChapter}>
+          Previous
+        </ReaderChapterLink>
+      </div>
+      <div className="p-fill b-0 z-1 x xj-center xa-center">
+        <Dropdown
+          value={chapter.slug}
+          onChange={onChapterSelectChange}
+          options={chapterSelectorOptions}
+        />
+      </div>
+      <div className="z-2">
+        <ReaderChapterLink
+          collectionSlug={collectionSlug}
+          chapter={nextChapter}>
+          Next
+        </ReaderChapterLink>
+      </div>
     </nav>
   );
 };

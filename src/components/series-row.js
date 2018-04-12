@@ -34,7 +34,7 @@ const SeriesRow = ({
         <span className="fs-20-m">
           {isUnread && (
             <span className="p-relative t--2 mr-2">
-              <span className="d-inlineBlock w-8 h-8 br-round bgc-pink" />
+              <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
             </span>
           )}
           <span className={isUnread ? 'fw-medium' : undefined}>
@@ -51,8 +51,8 @@ const SeriesRow = ({
           {utils.formatTimestamp(series.updatedAt)}
         </span>
       </a>
-      <button className="pa-3" onClick={onOptionsClick(series.id)}>
-        <IconMoreHorizontal />
+      <button className="c-gray3 pa-3" onClick={onOptionsClick(series.id)}>
+        <IconMoreHorizontal width={18} height={18} />
       </button>
     </div>
   );

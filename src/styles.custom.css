@@ -1,6 +1,39 @@
+@font-face {
+  font-family: 'National';
+  font-style: normal;
+  font-weight: normal;
+  font-display: fallback;
+  src: url('./assets/fonts/NationalWeb-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'National';
+  font-style: italic;
+  font-weight: normal;
+  font-display: fallback;
+  src: url('./assets/fonts/NationalWeb-RegularItalic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'National';
+  font-style: normal;
+  font-weight: 500;
+  font-display: fallback;
+  src: url('./assets/fonts/NationalWeb-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'National';
+  font-style: normal;
+  font-weight: 600;
+  font-display: fallback;
+  src: url('./assets/fonts/NationalWeb-Bold.woff2') format('woff2');
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
+  font-weight: normal;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'ss01' 1;
   line-height: 1.5;
 }
 
@@ -16,6 +49,7 @@ input {
   border: none;
   background: none;
   outline: none;
+  color: inherit;
   font-family: inherit;
   font-size: inherit;
 }
@@ -58,12 +92,12 @@ button {
   height: 44px;
   line-height: 44px;
   color: white;
+  font-weight: normal;
   font-size: 16px;
-  font-weight: 500;
   text-align: center;
   vertical-align: middle;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
 }
 
 .Button:not(.Button--inline) {
@@ -71,6 +105,20 @@ button {
 }
 
 .Button--loading {
+}
+
+.Button--white {
+  background-color: #fff;
+  color: hsl(6, 70%, 60%);
+  box-shadow: 0 2px 2px hsla(6, 50%, 5%, 0.15);
+  transition: background-color 200ms ease, color 200ms ease,
+    transform 200ms ease, box-shadow 200ms ease;
+}
+
+.Button--white:active {
+  background-color: rgba(255, 255, 255, 0.95);
+  transform: translateY(0.5px);
+  box-shadow: 0 1px 1px hsla(6, 50%, 10%, 0.05);
 }
 
 .Button--primary {
@@ -112,6 +160,12 @@ button {
   opacity: 1;
 }
 
+.PageImage:not(.PageImage--hasSize)
+  .PageImage-image.js-lazysizes-loaded
+  + .PageImage-background {
+  display: none;
+}
+
 .PageImage--hasSize .PageImage-image {
   position: absolute;
   top: 0;
@@ -120,20 +174,12 @@ button {
   height: 100%;
 }
 
-.PageImage--fitHeight .PageImage-background {
-  height: auto;
-  width: auto;
-  max-height: 92vh;
-  max-width: 100%;
-  vertical-align: top;
-}
-
 .PageImage-background {
   background: #cecece;
 }
 
 .Navigation {
-  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
 }
 
 .Dropdown {
@@ -144,7 +190,7 @@ button {
 }
 
 .Dropdown:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .Dropdown-select {
@@ -154,8 +200,8 @@ button {
   outline: none;
   color: inherit;
   font-size: 1em;
-  padding-left: 12px;
-  padding-right: 32px;
+  padding-left: 16px;
+  padding-right: 24px; /* 16px + 8px */
   appearance: none;
 }
 

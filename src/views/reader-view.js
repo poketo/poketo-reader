@@ -1,13 +1,12 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
+import Head from 'react-helmet';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import DotLoader from '../components/loader-dots';
-import Dropdown from '../components/dropdown';
 import IconArrowLeft from '../components/icon-arrow-left';
-import ReaderChapterLink from '../components/reader-chapter-link';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
@@ -70,7 +69,6 @@ class ReaderView extends Component<Props, State> {
       nextParams.chapterSlug !== chapterSlug
     ) {
       this.loadData(nextProps);
-      window.scrollTo(0, 0);
     }
   }
 
@@ -83,6 +81,8 @@ class ReaderView extends Component<Props, State> {
   loadData = props => {
     const { match, dispatch } = props;
     const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
+
+    window.scrollTo(0, 0);
 
     dispatch(fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug));
     dispatch(fetchSeriesIfNeeded(siteId, seriesSlug));
@@ -174,45 +174,40 @@ class ReaderView extends Component<Props, State> {
 
     const isLoading = isFetching || !series || !chapter || !chapter.pages;
 
-    let chapterIndex;
-    let previousChapter: ?Chapter;
-    let nextChapter: ?Chapter;
-
-    if (!isLoading && chapter && series && seriesChapters) {
-      chapterIndex = seriesChapters.findIndex(c => c.id === chapter.id);
-      previousChapter = seriesChapters[chapterIndex + 1] || null;
-      nextChapter = seriesChapters[chapterIndex - 1] || null;
-    }
-
     return (
-      <div style={{ backgroundColor: '#000', minHeight: '100vh' }}>
-        <div className="p-relative x xj-spaceBetween bgc-black c-white pv-4 ph-3">
-          {collectionSlug && (
-            <Link
-              className="x xa-center o-50p p-relative z-2"
-              to={utils.getCollectionUrl(collectionSlug)}>
-              <IconArrowLeft width={20} height={20} />
-            </Link>
+      <div className="mh-100vh bgc-gray4">
+        {series &&
+          chapter && (
+            <Head>
+              <title>{`${series.title} – Chapter ${chapter.number}`}</title>
+              <body className="ff-sans bgc-black" />
+            </Head>
           )}
-          {series && (
-            <div className="p-fill x xa-center xj-center ta-center">
-              <div>
-                <div>{series.title}</div>
-                <div className="fs-12 o-50p">{series.site.name}</div>
-              </div>
-            </div>
-          )}
-          <div />
+        <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
+          <Link
+            className="x xa-center o-50p p-relative z-2"
+            to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
+            <IconArrowLeft width={20} height={20} />
+          </Link>
         </div>
-        <ReaderNavigation
-          chapter={chapter}
-          seriesChapters={seriesChapters}
-          onChapterSelectChange={this.handleChapterSelectorChange}
-        />
+        {series && (
+          <div className="c-white pv-4 mh-auto w-90p-m ta-center mw-900">
+            <div>
+              <div>{series.title}</div>
+              <div className="fs-12 o-50p">{series.site.name}</div>
+            </div>
+          </div>
+        )}
+        {seriesChapters && (
+          <ReaderNavigation
+            chapter={chapter}
+            collectionSlug={collectionSlug}
+            seriesChapters={seriesChapters}
+            onChapterSelectChange={this.handleChapterSelectorChange}
+          />
+        )}
         {isLoading ? (
-          <div
-            className="x xa-center xj-center ta-center pv-4"
-            style={{ height: '100vh' }}>
+          <div className="x xa-center xj-center ta-center pv-6">
             <div>
               <div className="mb-4">
                 <DotLoader />
@@ -224,52 +219,21 @@ class ReaderView extends Component<Props, State> {
           </div>
         ) : (
           <Fragment>
-            <div className="pt-5 pb-4 mh-auto w-90p-m ta-center mw-900">
+            <div className="pv-4 mh-auto w-90p-m ta-center mw-900">
               {(chapter: Chapter).pages.map(page => (
                 <div key={page.id} className="mb-3 mb-4-m">
                   <ReaderPageImage page={page} />
                 </div>
               ))}
             </div>
-            <nav className="bgc-black c-white ta-center pv-4 ph-3 fs-14 fs-16-m">
-              {series ? (
-                <div className="x xa-center xj-spaceBetween w-100p">
-                  <ReaderChapterLink
-                    collectionSlug={collectionSlug}
-                    siteId={siteId}
-                    seriesSlug={seriesSlug}
-                    chapter={previousChapter}>
-                    Previous
-                  </ReaderChapterLink>
-                  {seriesChapters && (
-                    <Dropdown
-                      value={chapterSlug}
-                      onChange={this.handleChapterSelectorChange}
-                      options={seriesChapters.map(c => ({
-                        value: c.slug,
-                        label: `Chapter ${c.number}`,
-                      }))}
-                    />
-                  )}
-                  <ReaderChapterLink
-                    collectionSlug={collectionSlug}
-                    siteId={siteId}
-                    seriesSlug={seriesSlug}
-                    chapter={nextChapter}>
-                    Next
-                  </ReaderChapterLink>
-                </div>
-              ) : (
-                seriesChapters && (
-                  <Dropdown
-                    value={chapterSlug}
-                    onChange={this.handleChapterSelectorChange}
-                    options={seriesChapters.map(c => ({
-                      value: c.slug,
-                      label: `Chapter ${c.slug}`,
-                    }))}
-                  />
-                )
+            <nav className="bgc-black c-white ta-center pv-4 fs-14 fs-16-m">
+              {seriesChapters && (
+                <ReaderNavigation
+                  chapter={chapter}
+                  collectionSlug={collectionSlug}
+                  seriesChapters={seriesChapters}
+                  onChapterSelectChange={this.handleChapterSelectorChange}
+                />
               )}
               {collection && (
                 <div className="mt-5">

@@ -20,6 +20,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: { componentStack: string }) {
     this.setState({ hasError: true, errorStack: info.componentStack });
+    window.Rollbar.error(error);
   }
 
   handleReloadClick = () => {

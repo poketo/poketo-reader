@@ -2,6 +2,7 @@
 
 import { normalize } from 'normalizr';
 import schema from '../schema';
+import utils from '../../utils';
 
 import type { Slug, Chapter, ChapterMetadata } from '../../types';
 import type {
@@ -24,14 +25,31 @@ type State = {
   [id: string]: Chapter | ChapterMetadata,
 };
 
+export function isFullChapter(chapter: ?Chapter | ?ChapterMetadata): boolean {
+  return Boolean(chapter && Array.isArray(chapter.pages));
+}
+
 export function fetchChapterIfNeeded(
   siteId: string,
   series: Slug,
   chapter: Slug,
 ): ThunkAction {
   return (dispatch, getState) => {
-    dispatch(fetchChapter(siteId, series, chapter));
+    if (shouldFetchChapter(getState(), siteId, series, chapter)) {
+      dispatch(fetchChapter(siteId, series, chapter));
+    }
   };
+}
+
+function shouldFetchChapter(state, siteId, seriesSlug, chapterSlug): boolean {
+  const chaptersById = state.chapters;
+  const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
+
+  if (isFullChapter(chaptersById[chapterId])) {
+    return false;
+  }
+
+  return true;
 }
 
 export function fetchChapter(
