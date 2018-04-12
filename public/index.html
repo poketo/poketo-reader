@@ -11,14 +11,14 @@
 
   <script>
     var _rollbarConfig = {
-      accessToken: 'e740fbf2fc254150bda759c3811bffcf',
+      accessToken: '%REACT_APP_ROLLBAR_KEY%',
       enabled: ('%NODE_ENV%' === 'production'),
       captureUncaught: true,
       captureUnhandledRejections: true,
       payload: {
         client: {
           javascript: {
-            code_version: ('%COMMIT_REF%'),
+            code_version: ('%REACT_APP_COMMIT_REF%'),
           },
         },
         environment: 'production',
