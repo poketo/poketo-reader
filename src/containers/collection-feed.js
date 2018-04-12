@@ -6,9 +6,8 @@ import { type RouterHistory } from 'react-router';
 import { connect } from 'react-redux';
 
 import DotLoader from '../components/loader-dots';
-import IconAdd from '../components/icon-add';
+import FeedHeader from '../components/feed-header';
 import IconBook from '../components/icon-book';
-import IconPoketo from '../components/icon-poketo';
 import IconNewTab from '../components/icon-new-tab';
 import IconTrash from '../components/icon-trash';
 import NewBookmarkPanel from '../containers/new-bookmark-panel';
@@ -241,15 +240,8 @@ class Feed extends Component<Props, State> {
       .sort((a, b) => b.series.updatedAt - a.series.updatedAt);
 
     return (
-      <div className="pt-5 pb-5">
-        <header className="Navigation p-fixed t-0 l-0 r-0 z-9 x xa-center xj-spaceBetween fs-14 fs-16-m">
-          <div className="pv-3 ph-3">
-            <IconPoketo className="c-coral" />
-          </div>
-          <button className="pv-3 ph-3" onClick={this.handleAddButtonClick}>
-            <IconAdd />
-          </button>
-        </header>
+      <div className="pt-5 pb-6">
+        <FeedHeader onAddButtonClick={this.handleAddButtonClick} />
         <TransitionGroup>
           {this.renderSeriesPanel()}
           {this.renderNewBookmarkPanel()}

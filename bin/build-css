@@ -14,6 +14,7 @@ const styles = hibiscss(
     },
     colors: {
       fadedBlack: 'rgba(12, 12, 12, 0.35)',
+      fadedOffWhite: 'rgba(255, 254, 252, 0.98)',
       white: 'white',
       offwhite: '#fffefc',
       lightGray: '#f0f0f0',
@@ -21,7 +22,8 @@ const styles = hibiscss(
       gray1: '#EBEAE8',
       gray2: '#CFCCC8',
       gray3: '#8F8B83',
-      gray4: '#292723',
+      gray4: '#444443',
+      gray5: '#292723',
       black: '#292723',
       coral: '#ff7462',
       blue: '#73d2ff',
@@ -41,9 +43,8 @@ const styles = hibiscss(
     },
     fontFamily: {
       sans:
-        '"National", Source Sans Pro, -apple-system, BlinkMacSystemFont, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;',
-      mono:
-        '"SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace',
+        'National, -apple-system, BlinkMacSystemFont, helvetica neue, helvetica, roboto, segoe ui, arial, sans-serif;',
+      mono: '"SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace',
     },
     fontWeight: {
       normal: 400,

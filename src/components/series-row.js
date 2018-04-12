@@ -51,8 +51,8 @@ const SeriesRow = ({
           {utils.formatTimestamp(series.updatedAt)}
         </span>
       </a>
-      <button className="pa-3" onClick={onOptionsClick(series.id)}>
-        <IconMoreHorizontal />
+      <button className="c-gray3 pa-3" onClick={onOptionsClick(series.id)}>
+        <IconMoreHorizontal width={18} height={18} />
       </button>
     </div>
   );

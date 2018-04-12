@@ -175,11 +175,12 @@ class ReaderView extends Component<Props, State> {
     const isLoading = isFetching || !series || !chapter || !chapter.pages;
 
     return (
-      <div className="mh-100vh" style={{ backgroundColor: '#404040' }}>
+      <div className="mh-100vh bgc-gray4">
         {series &&
           chapter && (
             <Head>
               <title>{`${series.title} – Chapter ${chapter.number}`}</title>
+              <body className="ff-sans bgc-black" />
             </Head>
           )}
         <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">

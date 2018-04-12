@@ -2,6 +2,7 @@
   font-family: 'National';
   font-style: normal;
   font-weight: normal;
+  font-display: fallback;
   src: url('./assets/fonts/NationalWeb-Regular.woff2') format('woff2');
 }
 
@@ -9,6 +10,7 @@
   font-family: 'National';
   font-style: italic;
   font-weight: normal;
+  font-display: fallback;
   src: url('./assets/fonts/NationalWeb-RegularItalic.woff2') format('woff2');
 }
 
@@ -16,15 +18,17 @@
   font-family: 'National';
   font-style: normal;
   font-weight: 500;
+  font-display: fallback;
   src: url('./assets/fonts/NationalWeb-Medium.woff2') format('woff2');
 }
 
-/* @font-face {
+@font-face {
   font-family: 'National';
   font-style: normal;
   font-weight: 600;
+  font-display: fallback;
   src: url('./assets/fonts/NationalWeb-Bold.woff2') format('woff2');
-} */
+}
 
 body {
   font-size: 16px;
@@ -45,6 +49,7 @@ input {
   border: none;
   background: none;
   outline: none;
+  color: inherit;
   font-family: inherit;
   font-size: inherit;
 }
@@ -174,7 +179,7 @@ button {
 }
 
 .Navigation {
-  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
 }
 
 .Dropdown {

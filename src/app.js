@@ -5,6 +5,11 @@ import Head from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
+import NationalRegular from './assets/fonts/NationalWeb-Regular.woff2';
+import NationalRegularItalic from './assets/fonts/NationalWeb-RegularItalic.woff2';
+import NationalMedium from './assets/fonts/NationalWeb-Medium.woff2';
+import NationalMediumItalic from './assets/fonts/NationalWeb-MediumItalic.woff2';
+
 import ErrorBoundary from './components/error-boundary';
 import AboutView from './views/about-view';
 import HomeView from './views/home-view';
@@ -19,6 +24,13 @@ import './styles.base.css';
 import './styles.hibiscss.css';
 import './styles.custom.css';
 
+const fonts = [
+  NationalRegular,
+  NationalRegularItalic,
+  NationalMedium,
+  NationalMediumItalic,
+];
+
 export default class App extends Component<{}> {
   render() {
     return (
@@ -26,7 +38,16 @@ export default class App extends Component<{}> {
         <div id="app">
           <Head defaultTitle="Poketo" titleTemplate="%s – Poketo">
             <meta name="description" content="Light and fun manga reader." />
-            <body className="ff-sans" />
+            <body className="ff-sans c-gray5 bgc-offwhite" />
+            {fonts.map(href => (
+              <link
+                rel="preload"
+                href={href}
+                as="font"
+                type="font/woff2"
+                crossorigin
+              />
+            ))}
           </Head>
           <ErrorBoundary>
             <Switch>
