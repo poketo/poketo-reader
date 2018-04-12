@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "REACT_APP_COMMIT_REF=$COMMIT_REF react-scripts build",
     "build:css": "bin/build-css",
     "build:icons": "bin/build-icons",
     "prebuild": "yarn run build:css && yarn run build:icons",
