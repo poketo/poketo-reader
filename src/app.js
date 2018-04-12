@@ -41,6 +41,7 @@ export default class App extends Component<{}> {
             <body className="ff-sans c-gray5 bgc-offwhite" />
             {fonts.map(href => (
               <link
+                key={href}
                 rel="preload"
                 href={href}
                 as="font"
