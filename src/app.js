@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import NationalRegular from './assets/fonts/NationalWeb-Regular.woff2';
 import NationalRegularItalic from './assets/fonts/NationalWeb-RegularItalic.woff2';
 import NationalMedium from './assets/fonts/NationalWeb-Medium.woff2';
-import NationalMediumItalic from './assets/fonts/NationalWeb-MediumItalic.woff2';
 
 import ErrorBoundary from './components/error-boundary';
 import AboutView from './views/about-view';
@@ -24,12 +23,7 @@ import './styles.base.css';
 import './styles.hibiscss.css';
 import './styles.custom.css';
 
-const fonts = [
-  NationalRegular,
-  NationalRegularItalic,
-  NationalMedium,
-  NationalMediumItalic,
-];
+const preloadFonts = [NationalRegular, NationalRegularItalic, NationalMedium];
 
 export default class App extends Component<{}> {
   render() {
@@ -39,7 +33,7 @@ export default class App extends Component<{}> {
           <Head defaultTitle="Poketo" titleTemplate="%s – Poketo">
             <meta name="description" content="Light and fun manga reader." />
             <body className="ff-sans c-gray5 bgc-offwhite" />
-            {fonts.map(href => (
+            {preloadFonts.map(href => (
               <link
                 key={href}
                 rel="preload"
