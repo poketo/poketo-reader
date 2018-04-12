@@ -17,6 +17,10 @@ import './styles.base.css';
 import './styles.hibiscss.css';
 import './styles.custom.css';
 
+Raven.config(
+  'https://619b7bd7891f4ecf8ded60b0da497379@sentry.io/647039',
+).install();
+
 export default class App extends Component {
   render() {
     return (
