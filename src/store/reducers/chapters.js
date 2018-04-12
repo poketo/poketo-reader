@@ -25,6 +25,10 @@ type State = {
   [id: string]: Chapter | ChapterMetadata,
 };
 
+export function isFullChapter(chapter: ?Chapter | ?ChapterMetadata): boolean {
+  return Boolean(chapter && Array.isArray(chapter.pages));
+}
+
 export function fetchChapterIfNeeded(
   siteId: string,
   series: Slug,
@@ -41,9 +45,7 @@ function shouldFetchChapter(state, siteId, seriesSlug, chapterSlug): boolean {
   const chaptersById = state.chapters;
   const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
 
-  if (chaptersById._status.isFetching) {
-    return false;
-  } else if (chaptersById[chapterId]) {
+  if (isFullChapter(chaptersById[chapterId])) {
     return false;
   }
 
