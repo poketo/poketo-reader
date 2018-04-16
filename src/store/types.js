@@ -13,9 +13,31 @@ import type {
 
 type ActionType<A, B> = { type: A, payload: B };
 
+export type FetchStatus = 'fetching' | 'fetched' | 'error';
+export type ErrorCode = 'NOT_FOUND' | 'UNKNOWN_ERROR';
+
+export type EntityStatus = {
+  +didInvalidate: boolean,
+  +fetchStatus: FetchStatus,
+  +errorCode?: ?ErrorCode,
+  +lastFetchedAt: number,
+};
+
+type EntityStatusActionPayload = {
+  +didInvalidate?: boolean,
+  +fetchStatus?: FetchStatus,
+  +errorCode?: ?ErrorCode,
+  +lastFetchedAt?: number,
+};
+
+export type FetchStatusState = {
+  +isFetching: boolean,
+  +errorCode?: ?ErrorCode,
+};
+
 type StatusActionPayload = {
   isFetching?: boolean,
-  errorCode?: ?string,
+  errorCode?: ?ErrorCode,
 };
 
 export type AddEntitiesAction = ActionType<
@@ -28,9 +50,9 @@ export type AddEntitiesAction = ActionType<
 >;
 
 export type SetCollectionAction = ActionType<'SET_COLLECTION', Collection>;
-export type SetCollectionStatusAction = ActionType<
-  'SET_COLLECTION_STATUS',
-  StatusActionPayload,
+export type SetCollectionEntityStatusAction = ActionType<
+  'SET_COLLECTION_ENTITY_STATUS',
+  { slug: Slug, status: EntityStatusActionPayload },
 >;
 export type RemoveBookmarkAction = ActionType<
   'REMOVE_BOOKMARK',
@@ -54,15 +76,10 @@ export type SetChapterStatusAction = ActionType<
   StatusActionPayload,
 >;
 
-export type FetchStatusState = {
-  +isFetching: boolean,
-  +errorCode: ?string,
-};
-
 export type CollectionAction =
   | AddEntitiesAction
   | SetCollectionAction
-  | SetCollectionStatusAction
+  | SetCollectionEntityStatusAction
   | MarkBookmarkAsReadAction
   | RemoveBookmarkAction;
 

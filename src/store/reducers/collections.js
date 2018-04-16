@@ -6,12 +6,12 @@ import { isSeriesUpToDate } from './series';
 import utils from '../../utils';
 
 import type { Id, Slug, Collection } from '../../types';
-import type { FetchStatusState, Thunk, CollectionAction } from '../types';
+import type { EntityStatus, Thunk, CollectionAction } from '../types';
 
 type Action = CollectionAction;
 
 type State = {
-  +_status: FetchStatusState,
+  +_status: { [slug: Slug]: EntityStatus },
   +[slug: Slug]: Collection,
 };
 
@@ -25,14 +25,20 @@ export function fetchCollectionIfNeeded(slug: Slug): Thunk {
 
 function shouldFetchCollection(state: Object, slug: Slug): boolean {
   const collections = state.collections;
+  const status = collections._status[slug];
 
-  if (collections._status.isFetching) {
-    return false;
-  } else if (collections[slug]) {
-    return false;
+  if (!status) {
+    return true;
   }
 
-  return true;
+  switch (status.fetchStatus) {
+    case 'fetching':
+      return false;
+    case 'fetched':
+      return status.didInvalidate;
+    default:
+      return true;
+  }
 }
 
 function getSeriesIdForCollection(state: State, slug: Slug): ?(Id[]) {
@@ -48,8 +54,8 @@ function getSeriesIdForCollection(state: State, slug: Slug): ?(Id[]) {
 export function fetchCollection(slug: Slug): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
-      type: 'SET_COLLECTION_STATUS',
-      payload: { isFetching: true },
+      type: 'SET_COLLECTION_ENTITY_STATUS',
+      payload: { slug, status: { fetchStatus: 'fetching' } },
     });
 
     api
@@ -64,16 +70,23 @@ export function fetchCollection(slug: Slug): Thunk {
         });
 
         dispatch({
-          type: 'SET_COLLECTION_STATUS',
-          payload: { isFetching: false, errorCode: null },
+          type: 'SET_COLLECTION_ENTITY_STATUS',
+          payload: {
+            slug,
+            status: {
+              fetchStatus: 'fetched',
+              errorCode: null,
+              lastFetchedAt: utils.getTimestamp(),
+            },
+          },
         });
       })
       .catch(err => {
         const errorCode = err.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
 
         dispatch({
-          type: 'SET_COLLECTION_STATUS',
-          payload: { isFetching: false, errorCode },
+          type: 'SET_COLLECTION_ENTITY_STATUS',
+          payload: { slug, status: { fetchStatus: 'error', errorCode } },
         });
       });
   };
@@ -145,11 +158,7 @@ export function markSeriesAsRead(
 }
 
 const initialState = {
-  _status: {
-    isFetching: false,
-    isAddingBookmark: false,
-    errorCode: null,
-  },
+  _status: {},
 };
 
 export default function reducer(
@@ -205,12 +214,15 @@ export default function reducer(
       delete collection.bookmarks[action.payload.seriesId];
       return nextState;
     }
-    case 'SET_COLLECTION_STATUS': {
+    case 'SET_COLLECTION_ENTITY_STATUS': {
       return {
         ...state,
         _status: {
           ...state._status,
-          ...action.payload,
+          [action.payload.slug]: {
+            ...state._status[action.payload.slug],
+            ...action.payload.status,
+          },
         },
       };
     }
