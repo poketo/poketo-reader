@@ -6,7 +6,7 @@ import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
 
 type ActionType<A, B> = { type: A, payload: B };
 
-type StatusActionFetchPayload = {
+type StatusActionPayload = {
   isFetching?: boolean,
   errorCode?: ?string,
 };
@@ -23,7 +23,7 @@ export type AddEntitiesAction = ActionType<
 export type SetCollectionAction = ActionType<'SET_COLLECTION', Collection>;
 export type SetCollectionStatusAction = ActionType<
   'SET_COLLECTION_STATUS',
-  StatusActionFetchPayload,
+  StatusActionPayload,
 >;
 export type RemoveBookmarkAction = ActionType<
   'REMOVE_BOOKMARK',
@@ -33,18 +33,10 @@ export type MarkBookmarkAsReadAction = ActionType<
   'MARK_BOOKMARK_AS_READ',
   { collectionSlug: string, seriesId: string, lastReadAt: number },
 >;
-export type SetMultipleSeriesAction = ActionType<
-  'SET_MULTIPLE_SERIES',
-  { [id: string]: Series },
->;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;
 export type SetSeriesStatusAction = ActionType<
   'SET_SERIES_STATUS',
-  StatusActionFetchPayload,
->;
-export type SetMultipleChaptersAction = ActionType<
-  'SET_MULTIPLE_CHAPTERS',
-  { [id: string]: Chapter | ChapterMetadata },
+  StatusActionPayload,
 >;
 export type SetChapterAction = ActionType<
   'SET_CHAPTER',
@@ -52,7 +44,7 @@ export type SetChapterAction = ActionType<
 >;
 export type SetChapterStatusAction = ActionType<
   'SET_CHAPTER_STATUS',
-  StatusActionFetchPayload,
+  StatusActionPayload,
 >;
 
 export type FetchStatusState = {
@@ -70,20 +62,18 @@ export type CollectionAction =
 export type SeriesAction =
   | AddEntitiesAction
   | SetSeriesAction
-  | SetMultipleSeriesAction
   | SetSeriesStatusAction;
 
 export type ChapterAction =
   | AddEntitiesAction
   | SetChapterAction
-  | SetMultipleChaptersAction
   | SetChapterStatusAction;
 
 export type Action = CollectionAction | SeriesAction | ChapterAction;
 
-export type Dispatch = (action: Action | ThunkAction) => void;
+export type Dispatch = (action: Action | Thunk) => void;
 export type GetState = () => Object;
-export type ThunkAction = (
+export type Thunk = (
   dispatch: Dispatch,
   getState: GetState,
   api: typeof api,

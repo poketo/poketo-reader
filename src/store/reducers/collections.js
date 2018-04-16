@@ -6,7 +6,7 @@ import { isSeriesUpToDate } from './series';
 import utils from '../../utils';
 
 import type { Collection } from '../../types';
-import type { FetchStatusState, ThunkAction, CollectionAction } from '../types';
+import type { FetchStatusState, Thunk, CollectionAction } from '../types';
 
 type Action = CollectionAction;
 
@@ -15,7 +15,7 @@ type State = {
   +[slug: string]: Collection,
 };
 
-export function fetchCollectionIfNeeded(slug: string): ThunkAction {
+export function fetchCollectionIfNeeded(slug: string): Thunk {
   return (dispatch, getState) => {
     if (shouldFetchCollection(getState(), slug)) {
       dispatch(fetchCollection(slug));
@@ -45,7 +45,7 @@ function getSeriesIdForCollection(state, slug): ?(string[]) {
   return Object.keys(collection.bookmarks);
 }
 
-export function fetchCollection(slug: string): ThunkAction {
+export function fetchCollection(slug: string): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'SET_COLLECTION_STATUS',
@@ -79,7 +79,7 @@ export function fetchCollection(slug: string): ThunkAction {
   };
 }
 
-export function fetchSeriesForCollection(collectionSlug: string): ThunkAction {
+export function fetchSeriesForCollection(collectionSlug: string): Thunk {
   return (dispatch, getState, api) => {
     const state = getState();
     const seriesIds = getSeriesIdForCollection(state, collectionSlug);
@@ -114,7 +114,7 @@ export function fetchSeriesForCollection(collectionSlug: string): ThunkAction {
 export function removeBookmark(
   collectionSlug: string,
   seriesId: string,
-): ThunkAction {
+): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'REMOVE_BOOKMARK',
@@ -133,7 +133,7 @@ export function markSeriesAsRead(
   collectionSlug: string,
   seriesId: string,
   lastReadAt: number,
-): ThunkAction {
+): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'MARK_BOOKMARK_AS_READ',

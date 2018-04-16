@@ -5,20 +5,9 @@ import schema from '../schema';
 import utils from '../../utils';
 
 import type { Slug, Chapter, ChapterMetadata } from '../../types';
-import type {
-  FetchStatusState,
-  ThunkAction,
-  AddEntitiesAction,
-  SetMultipleChaptersAction,
-  SetChapterAction,
-  SetChapterStatusAction,
-} from '../types';
+import type { FetchStatusState, Thunk, ChapterAction } from '../types';
 
-type Action =
-  | AddEntitiesAction
-  | SetMultipleChaptersAction
-  | SetChapterAction
-  | SetChapterStatusAction;
+type Action = ChapterAction;
 
 type State = {
   _status: FetchStatusState,
@@ -33,7 +22,7 @@ export function fetchChapterIfNeeded(
   siteId: string,
   series: Slug,
   chapter: Slug,
-): ThunkAction {
+): Thunk {
   return (dispatch, getState) => {
     if (shouldFetchChapter(getState(), siteId, series, chapter)) {
       dispatch(fetchChapter(siteId, series, chapter));
@@ -56,7 +45,7 @@ export function fetchChapter(
   siteId: string,
   series: Slug,
   chapter: Slug,
-): ThunkAction {
+): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'SET_CHAPTER_STATUS',
