@@ -27,18 +27,11 @@ function shouldFetchCollection(state: Object, slug: Slug): boolean {
   const collections = state.collections;
   const status = collections._status[slug];
 
-  if (!status) {
-    return true;
+  if (status && status.fetchStatus === 'fetching') {
+    return false;
   }
 
-  switch (status.fetchStatus) {
-    case 'fetching':
-      return false;
-    case 'fetched':
-      return status.didInvalidate;
-    default:
-      return true;
-  }
+  return true;
 }
 
 function getSeriesIdForCollection(state: State, slug: Slug): ?(Id[]) {
