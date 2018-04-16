@@ -3,17 +3,17 @@
 import { normalize } from 'normalizr';
 import schema from '../schema';
 import utils from '../../utils';
-import type { Series } from '../../types';
+import type { SiteId, Id, Slug, Series } from '../../types';
 import type { FetchStatusState, Thunk, SeriesAction } from '../types';
 
 type State = {
   _status: FetchStatusState,
-  [id: string]: Series,
+  [id: Id]: Series,
 };
 
 type Action = SeriesAction;
 
-export function fetchSeriesIfNeeded(siteId: string, slug: string): Thunk {
+export function fetchSeriesIfNeeded(siteId: SiteId, slug: Slug): Thunk {
   return (dispatch, getState) => {
     if (shouldFetchSeries(getState(), siteId, slug)) {
       dispatch(fetchSeries(siteId, slug));
@@ -34,7 +34,7 @@ function shouldFetchSeries(state, siteId, slug): boolean {
   return !upToDate;
 }
 
-export function isSeriesUpToDate(state: Object, seriesId: string): boolean {
+export function isSeriesUpToDate(state: Object, seriesId: Id): boolean {
   const seriesById = state.series;
   const existingSeries = seriesById[seriesId];
 
@@ -43,7 +43,7 @@ export function isSeriesUpToDate(state: Object, seriesId: string): boolean {
   return Boolean(existingSeries);
 }
 
-export function fetchSeries(siteId: string, slug: string): Thunk {
+export function fetchSeries(siteId: SiteId, slug: Slug): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'SET_SERIES_STATUS',

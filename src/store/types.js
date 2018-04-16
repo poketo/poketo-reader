@@ -2,7 +2,14 @@
 
 import api from '../api';
 
-import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
+import type {
+  Slug,
+  Id,
+  Collection,
+  Chapter,
+  ChapterMetadata,
+  Series,
+} from '../types';
 
 type ActionType<A, B> = { type: A, payload: B };
 
@@ -14,9 +21,9 @@ type StatusActionPayload = {
 export type AddEntitiesAction = ActionType<
   'ADD_ENTITIES',
   {
-    collections?: { [slug: string]: Collection },
-    chapters?: { [id: string]: Chapter | ChapterMetadata },
-    series?: { [id: string]: Series },
+    collections?: { [slug: Slug]: Collection },
+    chapters?: { [id: Id]: Chapter | ChapterMetadata },
+    series?: { [id: Id]: Series },
   },
 >;
 
@@ -27,11 +34,11 @@ export type SetCollectionStatusAction = ActionType<
 >;
 export type RemoveBookmarkAction = ActionType<
   'REMOVE_BOOKMARK',
-  { collectionSlug: string, seriesId: string },
+  { collectionSlug: Slug, seriesId: Id },
 >;
 export type MarkBookmarkAsReadAction = ActionType<
   'MARK_BOOKMARK_AS_READ',
-  { collectionSlug: string, seriesId: string, lastReadAt: number },
+  { collectionSlug: Slug, seriesId: Id, lastReadAt: number },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;
 export type SetSeriesStatusAction = ActionType<

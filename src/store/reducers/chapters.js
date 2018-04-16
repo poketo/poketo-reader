@@ -4,14 +4,14 @@ import { normalize } from 'normalizr';
 import schema from '../schema';
 import utils from '../../utils';
 
-import type { Slug, Chapter, ChapterMetadata } from '../../types';
+import type { Id, SiteId, Slug, Chapter, ChapterMetadata } from '../../types';
 import type { FetchStatusState, Thunk, ChapterAction } from '../types';
 
 type Action = ChapterAction;
 
 type State = {
   _status: FetchStatusState,
-  [id: string]: Chapter | ChapterMetadata,
+  [id: Id]: Chapter | ChapterMetadata,
 };
 
 export function isFullChapter(chapter: ?Chapter | ?ChapterMetadata): boolean {
@@ -19,7 +19,7 @@ export function isFullChapter(chapter: ?Chapter | ?ChapterMetadata): boolean {
 }
 
 export function fetchChapterIfNeeded(
-  siteId: string,
+  siteId: SiteId,
   series: Slug,
   chapter: Slug,
 ): Thunk {
@@ -30,7 +30,12 @@ export function fetchChapterIfNeeded(
   };
 }
 
-function shouldFetchChapter(state, siteId, seriesSlug, chapterSlug): boolean {
+function shouldFetchChapter(
+  state: Object,
+  siteId: SiteId,
+  seriesSlug: Slug,
+  chapterSlug: Slug,
+): boolean {
   const chaptersById = state.chapters;
   const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
 
@@ -42,7 +47,7 @@ function shouldFetchChapter(state, siteId, seriesSlug, chapterSlug): boolean {
 }
 
 export function fetchChapter(
-  siteId: string,
+  siteId: SiteId,
   series: Slug,
   chapter: Slug,
 ): Thunk {
