@@ -40,14 +40,13 @@ type StatusActionPayload = {
   errorCode?: ?ErrorCode,
 };
 
-export type AddEntitiesAction = ActionType<
-  'ADD_ENTITIES',
-  {
-    collections?: { [slug: Slug]: Collection },
-    chapters?: { [id: Id]: Chapter | ChapterMetadata },
-    series?: { [id: Id]: Series },
-  },
->;
+export type EntitiesPayload = {
+  collections?: { [slug: Slug]: Collection },
+  chapters?: { [id: Id]: Chapter | ChapterMetadata },
+  series?: { [id: Id]: Series },
+};
+
+export type AddEntitiesAction = ActionType<'ADD_ENTITIES', EntitiesPayload>;
 
 export type SetCollectionAction = ActionType<'SET_COLLECTION', Collection>;
 export type SetCollectionEntityStatusAction = ActionType<
