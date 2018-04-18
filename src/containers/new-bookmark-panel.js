@@ -13,7 +13,7 @@ import utils from '../utils';
 import schema from '../store/schema';
 
 import type { Series, TraeError } from '../types';
-import type { EntitiesPayload } from '../store/types';
+import type { Dispatch, EntitiesPayload } from '../store/types';
 
 type NewSeriesErrorCode =
   | 'INVALID_SERIES'
@@ -59,7 +59,7 @@ class NewBookmarkPanel extends Component<Props, State> {
 
   static mapStateToProps = state => ({});
 
-  static mapDispatchToProps = dispatch => ({
+  static mapDispatchToProps = (dispatch: Dispatch) => ({
     addEntities(payload) {
       dispatch({ type: 'ADD_ENTITIES', payload });
     },
