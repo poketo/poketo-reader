@@ -3,7 +3,7 @@
 import getPersistMiddleware from 'redux-persist-middleware';
 
 const actionMap: { [string]: string[] } = {
-  ADD_ENTITIES: ['series', 'collection'],
+  ADD_ENTITIES: ['series', 'collections', 'chapters'],
 };
 
 type Cache = {

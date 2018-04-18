@@ -23,15 +23,21 @@ export function fetchCollectionIfNeeded(slug: Slug): Thunk {
   };
 }
 
+const STALE_AFTER = 15 * 1000 * 60; // 15 minutes
+
 function shouldFetchCollection(state: Object, slug: Slug): boolean {
   const collections = state.collections;
   const status = collections._status[slug];
 
-  if (status && status.fetchStatus === 'fetching') {
-    return false;
+  switch (status && status.fetchStatus) {
+    case 'fetching':
+      return false;
+    case 'fetched':
+      const isStale = utils.getTimestamp() - status.lastFetchedAt > STALE_AFTER;
+      return status.didInvalidate || isStale;
+    default:
+      return true;
   }
-
-  return true;
 }
 
 function getSeriesIdForCollection(state: State, slug: Slug): ?(Id[]) {

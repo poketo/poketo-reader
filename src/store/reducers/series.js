@@ -26,11 +26,7 @@ function shouldFetchSeries(state: Object, id: Id): boolean {
   const seriesById = state.series;
   const status = seriesById._status[id];
 
-  if (!status) {
-    return true;
-  }
-
-  switch (status.fetchStatus) {
+  switch (status && status.fetchStatus) {
     case 'fetching':
       return false;
     case 'fetched':
