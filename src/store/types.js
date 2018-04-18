@@ -62,9 +62,9 @@ export type MarkBookmarkAsReadAction = ActionType<
   { collectionSlug: Slug, seriesId: Id, lastReadAt: number },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;
-export type SetSeriesStatusAction = ActionType<
-  'SET_SERIES_STATUS',
-  StatusActionPayload,
+export type SetSeriesEntityStatusAction = ActionType<
+  'SET_SERIES_ENTITY_STATUS',
+  { id: Id, status: EntityStatusActionPayload },
 >;
 export type SetChapterAction = ActionType<
   'SET_CHAPTER',
@@ -85,7 +85,7 @@ export type CollectionAction =
 export type SeriesAction =
   | AddEntitiesAction
   | SetSeriesAction
-  | SetSeriesStatusAction;
+  | SetSeriesEntityStatusAction;
 
 export type ChapterAction =
   | AddEntitiesAction
