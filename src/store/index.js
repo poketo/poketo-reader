@@ -8,7 +8,7 @@ import persist from './middleware/persist';
 import reducer from './reducer';
 import api from '../api';
 
-import type { Action, Store } from './types';
+import type { Store } from './types';
 
 const MS_IN_HOURS = 60 * 1000;
 
