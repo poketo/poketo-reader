@@ -25,9 +25,11 @@ export default function getStore(): Promise<Store> {
   }
 
   return cache.getAll().then(initialData => {
-    const store = createStore(reducer, applyMiddleware(...middleware));
-
-    // const initialData
+    const store = createStore(
+      reducer,
+      initialData,
+      applyMiddleware(...middleware),
+    );
 
     return store;
   });
