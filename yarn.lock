@@ -4076,6 +4076,10 @@ icss-utils@^2.1.0:
   dependencies:
     postcss "^6.0.1"
 
+idb-keyval@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/idb-keyval/-/idb-keyval-2.3.0.tgz#4d444b80c3f86fcbcd51321b4dcbc9247c5948c0"
+
 ieee754@^1.1.4:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.11.tgz#c16384ffe00f5b7835824e67b6f2bd44a5229455"
@@ -5326,6 +5330,12 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.1, mkdirp@~0.5.0, mkdi
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+money-clip@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/money-clip/-/money-clip-2.0.1.tgz#bb20e51010a1533a2e5f2164f85369de29f94ec6"
+  dependencies:
+    idb-keyval "2.3.0"
 
 ms@2.0.0:
   version "2.0.0"
@@ -6650,6 +6660,10 @@ redux-logger@^3.0.6:
   resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
   dependencies:
     deep-diff "^0.3.5"
+
+redux-persist-middleware@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/redux-persist-middleware/-/redux-persist-middleware-1.0.1.tgz#3c2b4bdc52d7cebf5685989222268e689689c5e9"
 
 redux-thunk@^2.2.0:
   version "2.2.0"

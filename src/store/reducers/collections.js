@@ -5,17 +5,17 @@ import schema from '../schema';
 import { isSeriesUpToDate } from './series';
 import utils from '../../utils';
 
-import type { Collection } from '../../types';
-import type { FetchStatusState, ThunkAction, CollectionAction } from '../types';
+import type { Id, Slug, Collection } from '../../types';
+import type { EntityStatus, Thunk, CollectionAction } from '../types';
 
 type Action = CollectionAction;
 
 type State = {
-  +_status: FetchStatusState,
-  +[slug: string]: Collection,
+  +_status: { [slug: Slug]: EntityStatus },
+  +[slug: Slug]: Collection,
 };
 
-export function fetchCollectionIfNeeded(slug: string): ThunkAction {
+export function fetchCollectionIfNeeded(slug: Slug): Thunk {
   return (dispatch, getState) => {
     if (shouldFetchCollection(getState(), slug)) {
       dispatch(fetchCollection(slug));
@@ -23,19 +23,24 @@ export function fetchCollectionIfNeeded(slug: string): ThunkAction {
   };
 }
 
-function shouldFetchCollection(state, slug): boolean {
+const STALE_AFTER = 15 * 1000 * 60; // 15 minutes
+
+function shouldFetchCollection(state: Object, slug: Slug): boolean {
   const collections = state.collections;
+  const status = collections._status[slug];
 
-  if (collections._status.isFetching) {
-    return false;
-  } else if (collections[slug]) {
-    return false;
+  switch (status && status.fetchStatus) {
+    case 'fetching':
+      return false;
+    case 'fetched':
+      const isStale = utils.getTimestamp() - status.lastFetchedAt > STALE_AFTER;
+      return status.didInvalidate || isStale;
+    default:
+      return true;
   }
-
-  return true;
 }
 
-function getSeriesIdForCollection(state, slug): ?(string[]) {
+function getSeriesIdForCollection(state: State, slug: Slug): ?(Id[]) {
   const collection = state.collections[slug];
 
   if (!collection) {
@@ -45,11 +50,11 @@ function getSeriesIdForCollection(state, slug): ?(string[]) {
   return Object.keys(collection.bookmarks);
 }
 
-export function fetchCollection(slug: string): ThunkAction {
+export function fetchCollection(slug: Slug): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
-      type: 'SET_COLLECTION_STATUS',
-      payload: { isFetching: true },
+      type: 'SET_COLLECTION_ENTITY_STATUS',
+      payload: { slug, status: { fetchStatus: 'fetching' } },
     });
 
     api
@@ -64,22 +69,29 @@ export function fetchCollection(slug: string): ThunkAction {
         });
 
         dispatch({
-          type: 'SET_COLLECTION_STATUS',
-          payload: { isFetching: false, errorCode: null },
+          type: 'SET_COLLECTION_ENTITY_STATUS',
+          payload: {
+            slug,
+            status: {
+              fetchStatus: 'fetched',
+              errorCode: null,
+              lastFetchedAt: utils.getTimestamp(),
+            },
+          },
         });
       })
       .catch(err => {
         const errorCode = err.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
 
         dispatch({
-          type: 'SET_COLLECTION_STATUS',
-          payload: { isFetching: false, errorCode },
+          type: 'SET_COLLECTION_ENTITY_STATUS',
+          payload: { slug, status: { fetchStatus: 'error', errorCode } },
         });
       });
   };
 }
 
-export function fetchSeriesForCollection(collectionSlug: string): ThunkAction {
+export function fetchSeriesForCollection(collectionSlug: Slug): Thunk {
   return (dispatch, getState, api) => {
     const state = getState();
     const seriesIds = getSeriesIdForCollection(state, collectionSlug);
@@ -111,10 +123,7 @@ export function fetchSeriesForCollection(collectionSlug: string): ThunkAction {
 /**
  * Delete a bookmark from a collection.
  */
-export function removeBookmark(
-  collectionSlug: string,
-  seriesId: string,
-): ThunkAction {
+export function removeBookmark(collectionSlug: Slug, seriesId: Id): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'REMOVE_BOOKMARK',
@@ -130,10 +139,10 @@ export function removeBookmark(
 }
 
 export function markSeriesAsRead(
-  collectionSlug: string,
-  seriesId: string,
+  collectionSlug: Slug,
+  seriesId: Id,
   lastReadAt: number,
-): ThunkAction {
+): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'MARK_BOOKMARK_AS_READ',
@@ -148,11 +157,7 @@ export function markSeriesAsRead(
 }
 
 const initialState = {
-  _status: {
-    isFetching: false,
-    isAddingBookmark: false,
-    errorCode: null,
-  },
+  _status: {},
 };
 
 export default function reducer(
@@ -208,12 +213,15 @@ export default function reducer(
       delete collection.bookmarks[action.payload.seriesId];
       return nextState;
     }
-    case 'SET_COLLECTION_STATUS': {
+    case 'SET_COLLECTION_ENTITY_STATUS': {
       return {
         ...state,
         _status: {
           ...state._status,
-          ...action.payload,
+          [action.payload.slug]: {
+            ...state._status[action.payload.slug],
+            ...action.payload.status,
+          },
         },
       };
     }
