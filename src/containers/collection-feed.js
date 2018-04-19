@@ -91,9 +91,13 @@ class Feed extends Component<Props, State> {
       return;
     }
 
-    const now = utils.getTimestamp();
-
-    dispatch(markSeriesAsRead(collection.slug, optionsPanelSeriesId, now));
+    dispatch(
+      markSeriesAsRead(
+        collection.slug,
+        optionsPanelSeriesId,
+        utils.getTimestamp(),
+      ),
+    );
 
     this.handleSeriesOptionsPanelClose();
   };

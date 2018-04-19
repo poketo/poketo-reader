@@ -13,12 +13,12 @@ import utils from '../utils';
 import schema from '../store/schema';
 
 import type { Series, TraeError } from '../types';
-import type { Dispatch } from '../store/types';
+import type { Dispatch, EntitiesPayload } from '../store/types';
 
 type NewSeriesErrorCode =
+  | 'INVALID_SERIES'
   | 'INVALID_URL'
   | 'UNSUPPORTED_SITE'
-  | 'INVALID_SERIES'
   | 'SERVER_NOT_FOUND'
   | 'SERVER_ALREADY_EXISTS'
   | 'SERVER_UNKNOWN_ERROR';
@@ -26,8 +26,8 @@ type NewSeriesErrorCode =
 type BookmarkFetchState = 'ADDED' | 'READY' | 'SUBMITTING' | 'UNREADY';
 
 type Props = {
+  addEntities: (entities: EntitiesPayload) => void,
   collectionSlug: string,
-  dispatch: Dispatch,
   onRequestClose: () => void,
 };
 
@@ -59,10 +59,16 @@ class NewBookmarkPanel extends Component<Props, State> {
 
   static mapStateToProps = state => ({});
 
+  static mapDispatchToProps = (dispatch: Dispatch) => ({
+    addEntities(payload) {
+      dispatch({ type: 'ADD_ENTITIES', payload });
+    },
+  });
+
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { collectionSlug, dispatch, onRequestClose } = this.props;
+    const { addEntities, collectionSlug, onRequestClose } = this.props;
     const { bookmarkFetchState, errorCode, seriesUrl, linkToUrl } = this.state;
 
     if (bookmarkFetchState === 'SUBMITTING') {
@@ -89,7 +95,7 @@ class NewBookmarkPanel extends Component<Props, State> {
           series: schema.series,
         });
 
-        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
+        addEntities(normalized.entities);
         this.setState({ bookmarkFetchState: 'ADDED' });
         setTimeout(() => {
           onRequestClose();
@@ -304,4 +310,7 @@ class NewBookmarkPanel extends Component<Props, State> {
   }
 }
 
-export default connect(NewBookmarkPanel.mapStateToProps)(NewBookmarkPanel);
+export default connect(
+  NewBookmarkPanel.mapStateToProps,
+  NewBookmarkPanel.mapDispatchToProps,
+)(NewBookmarkPanel);
