@@ -1,6 +1,6 @@
 // @flow
 
-import { createStore, applyMiddleware, type Store } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { getConfiguredCache } from 'money-clip';
 
@@ -8,11 +8,11 @@ import persist from './middleware/persist';
 import reducer from './reducer';
 import api from '../api';
 
-import type { Action } from './types';
+import type { Action, Store } from './types';
 
 const MS_IN_HOURS = 60 * 1000;
 
-export default function getStore(): Promise<Store<any, Action>> {
+export default function getStore(): Promise<Store> {
   const cache = getConfiguredCache({
     version: process.env.REACT_APP_COMMIT_REF || 'development',
     maxAge: 1 * MS_IN_HOURS,
@@ -25,11 +25,9 @@ export default function getStore(): Promise<Store<any, Action>> {
   }
 
   return cache.getAll().then(initialData => {
-    const store = createStore(
-      reducer,
-      initialData,
-      applyMiddleware(...middleware),
-    );
+    const store = createStore(reducer, applyMiddleware(...middleware));
+
+    // const initialData
 
     return store;
   });

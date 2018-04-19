@@ -1,7 +1,7 @@
 // @flow
 
 import api from '../api';
-
+import type { Store as ReduxStore } from 'redux';
 import type {
   Slug,
   Id,
@@ -101,3 +101,5 @@ export type Thunk = (
   getState: GetState,
   api: typeof api,
 ) => void;
+
+export type Store = ReduxStore<any, Action>;
