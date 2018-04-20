@@ -132,14 +132,14 @@ class Feed extends Component<Props, State> {
 
     const bookmark = collection.bookmarks[series.id];
     const allChapters = series.chapters.map(id => chaptersById[id]);
-    const unreadChapters = utils.getUnreadChapters(
+    const readChapters = utils.getReadChapters(
       allChapters,
       bookmark.lastReadAt,
     );
 
     const toChapter =
-      unreadChapters.length > 0
-        ? utils.leastRecentChapter(unreadChapters)
+      readChapters.length > 0
+        ? utils.mostRecentChapter(readChapters)
         : utils.mostRecentChapter(allChapters);
 
     history.push(
