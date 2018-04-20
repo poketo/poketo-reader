@@ -154,6 +154,7 @@ button {
   opacity: 0;
   transition: opacity 200ms ease;
   will-change: opacity;
+  vertical-align: top;
 }
 
 .PageImage-image.js-lazysizes-loaded {
@@ -176,6 +177,7 @@ button {
 
 .PageImage-background {
   background: #cecece;
+  vertical-align: top;
 }
 
 .Navigation {
@@ -201,7 +203,7 @@ button {
   color: inherit;
   font-size: 1em;
   padding-left: 16px;
-  padding-right: 24px; /* 16px + 8px */
+  padding-right: 32px;
   appearance: none;
 }
 

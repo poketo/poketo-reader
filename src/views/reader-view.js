@@ -226,25 +226,25 @@ class ReaderView extends Component<Props, State> {
                 </div>
               ))}
             </div>
-            <nav className="bgc-black c-white ta-center pv-4 fs-14 fs-16-m">
-              {seriesChapters && (
+            {seriesChapters && (
+              <div className="pb-4">
                 <ReaderNavigation
                   chapter={chapter}
                   collectionSlug={collectionSlug}
                   seriesChapters={seriesChapters}
                   onChapterSelectChange={this.handleChapterSelectorChange}
                 />
-              )}
-              {collection && (
-                <div className="mt-5">
-                  <Link
-                    className="o-50p"
-                    to={utils.getCollectionUrl(collection.slug)}>
-                    <IconArrowLeft width={20} height={20} />
-                  </Link>
-                </div>
-              )}
-            </nav>
+              </div>
+            )}
+            {collection && (
+              <nav className="bgc-black c-white ta-center pv-4 fs-14 fs-16-m">
+                <Link
+                  className="o-50p"
+                  to={utils.getCollectionUrl(collection.slug)}>
+                  <IconArrowLeft width={20} height={20} />
+                </Link>
+              </nav>
+            )}
           </Fragment>
         )}
       </div>
