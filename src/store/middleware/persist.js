@@ -11,14 +11,14 @@ type Cache = {
 type Options = {
   cache: Cache,
   actionMap: { [string]: string[] },
-  transformState?: (state: Object) => Object,
+  transformState?: (state: Object, key: string) => Object,
 };
 
 const fallback = (cb, _) => setTimeout(cb, 0);
 const onIdle =
   typeof requestIdleCallback === 'undefined' ? fallback : requestIdleCallback;
 
-const defaultTransform = state => state;
+const defaultTransform = (state, key) => state;
 
 /**
  * Local caching middleware
@@ -41,7 +41,7 @@ export default function(options: Options): Middleware<any, Action, Dispatch> {
         () => {
           Promise.all(
             reducers.map(key => {
-              const value = transformState(state[key]);
+              const value = transformState(state[key], key);
               return options.cache.set(key, value);
             }),
           );

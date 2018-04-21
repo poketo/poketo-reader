@@ -11,26 +11,30 @@ import api from '../api';
 
 import type { Store } from './types';
 
+const persistConfig = {
+  cache,
+  actionMap: {
+    ADD_ENTITIES: ['series', 'collections', 'chapters'],
+  },
+  // NOTE: we want to filter out pieces of state where we're still fetching
+  // so that we don't cache the fetching state and get caught in some
+  // infinite loading.
+  transformState: (state, key) => {
+    if (key === 'chapters') {
+      return state;
+    }
+
+    const status = state._status;
+    const nextStatus = filter(
+      status,
+      (id, status) => status.fetchStatus === 'fetched',
+    );
+    return { ...state, _status: nextStatus };
+  },
+};
+
 export default function getStore(): Promise<Store> {
-  const middleware = [
-    thunk.withExtraArgument(api),
-    persist({
-      cache,
-      actionMap: {
-        ADD_ENTITIES: ['series', 'collections', 'chapters'],
-      },
-      // NOTE: we want to filter out pieces of state where we're still fetching
-      // so that we don't cache the fetching state and get caught in some
-      // infinite loading.
-      transformState: state => {
-        const status = state._status;
-        const nextStatus = filter(status, (id, status) => {
-          return status && status.fetchStatus === 'fetched';
-        });
-        return { ...state, _status: nextStatus };
-      },
-    }),
-  ];
+  const middleware = [thunk.withExtraArgument(api), persist(persistConfig)];
 
   if (process.env.NODE_ENV === 'development') {
     middleware.push(require('redux-logger').logger);
