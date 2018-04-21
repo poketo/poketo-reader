@@ -1,15 +1,24 @@
 // @flow
 
-import getPersistMiddleware from 'redux-persist-middleware';
-
-const actionMap: { [string]: string[] } = {
-  ADD_ENTITIES: ['series', 'collections', 'chapters'],
-};
+import type { Middleware } from 'redux';
+import type { Action, Dispatch } from '../types';
 
 type Cache = {
-  set: (key: string, value: string) => Promise<void>,
-  get: (key: string, value: string) => Promise<void>,
+  set: (key: string, value: mixed) => Promise<void>,
+  get: (key: string, value: mixed) => Promise<void>,
 };
+
+type Options = {
+  cache: Cache,
+  actionMap: { [string]: string[] },
+  transformState?: (state: Object) => Object,
+};
+
+const fallback = (cb, _) => setTimeout(cb, 0);
+const onIdle =
+  typeof requestIdleCallback === 'undefined' ? fallback : requestIdleCallback;
+
+const defaultTransform = state => state;
 
 /**
  * Local caching middleware
@@ -18,8 +27,29 @@ type Cache = {
  * and caches them to LocalStorage or IndexedDB.
  */
 
-export default (cache: Cache) =>
-  getPersistMiddleware({
-    cacheFn: cache.set,
-    actionMap,
-  });
+export default function(options: Options): Middleware<any, Action, Dispatch> {
+  const transformState = options.transformState || defaultTransform;
+
+  return store => next => action => {
+    const reducers = options.actionMap[action.type];
+    const result = next(action);
+
+    if (reducers) {
+      const state = store.getState();
+
+      onIdle(
+        () => {
+          Promise.all(
+            reducers.map(key => {
+              const value = transformState(state[key]);
+              return options.cache.set(key, value);
+            }),
+          );
+        },
+        { timeout: 500 },
+      );
+    }
+
+    return result;
+  };
+}

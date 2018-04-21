@@ -2,23 +2,35 @@
 
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { getConfiguredCache } from 'money-clip';
+import filter from 'filter-obj';
 
 import persist from './middleware/persist';
+import cache from './cache';
 import reducer from './reducer';
 import api from '../api';
 
 import type { Store } from './types';
 
-const MS_IN_HOURS = 60 * 1000;
-
 export default function getStore(): Promise<Store> {
-  const cache = getConfiguredCache({
-    version: process.env.REACT_APP_COMMIT_REF || 'development',
-    maxAge: 1 * MS_IN_HOURS,
-  });
-
-  const middleware = [thunk.withExtraArgument(api), persist(cache)];
+  const middleware = [
+    thunk.withExtraArgument(api),
+    persist({
+      cache,
+      actionMap: {
+        ADD_ENTITIES: ['series', 'collections', 'chapters'],
+      },
+      // NOTE: we want to filter out pieces of state where we're still fetching
+      // so that we don't cache the fetching state and get caught in some
+      // infinite loading.
+      transformState: state => {
+        const status = state._status;
+        const nextStatus = filter(status, (id, status) => {
+          return status && status.fetchStatus === 'fetched';
+        });
+        return { ...state, _status: nextStatus };
+      },
+    }),
+  ];
 
   if (process.env.NODE_ENV === 'development') {
     middleware.push(require('redux-logger').logger);
