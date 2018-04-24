@@ -81,7 +81,8 @@ export function fetchCollection(slug: Slug): Thunk {
         });
       })
       .catch(err => {
-        const errorCode = err.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
+        const errorCode =
+          err.response.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
 
         dispatch({
           type: 'SET_COLLECTION_ENTITY_STATUS',
