@@ -1,20 +1,36 @@
 // @flow
 
-import trae from 'trae';
+import axios from 'axios';
 
-const http = trae.create({
-  baseUrl: process.env.REACT_APP_API_BASE,
+export type AxiosResponse = {
+  config: Object,
+  data: any,
+  headers?: Object,
+  status: number,
+  statusText: string,
+  request: XMLHttpRequest,
+};
+
+export type AxiosError = {
+  response: AxiosResponse,
+  request: XMLHttpRequest,
+  code: string,
+  config: Object,
+};
+
+const instance = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE || '',
 });
 
 const api = {
   fetchCollection: (collectionSlug: string) =>
-    http.get(`/collection/${collectionSlug}`),
+    instance.get(`/collection/${collectionSlug}`),
   fetchMarkAsRead: (
     collectionSlug: string,
     seriesId: string,
     lastReadAt: number,
   ) =>
-    http.post(`/collection/${collectionSlug}/bookmark/${seriesId}/read`, {
+    instance.post(`/collection/${collectionSlug}/bookmark/${seriesId}/read`, {
       lastReadAt,
     }),
   fetchAddBookmarkToCollection: (
@@ -23,7 +39,7 @@ const api = {
     linkToUrl: ?string,
     lastReadAt: ?number,
   ) =>
-    http.post(`/collection/${collectionSlug}/bookmark/new`, {
+    instance.post(`/collection/${collectionSlug}/bookmark/new`, {
       seriesUrl,
       linkToUrl,
       lastReadAt,
@@ -31,12 +47,13 @@ const api = {
   fetchRemoveBookmarkFromCollection: (
     collectionSlug: string,
     seriesId: string,
-  ) => http.delete(`/collection/${collectionSlug}/bookmark/${seriesId}`),
+  ) => instance.delete(`/collection/${collectionSlug}/bookmark/${seriesId}`),
   fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
-    http.get(`/chapter`, { params: { siteId, seriesSlug, chapterSlug } }),
+    instance.get(`/chapter`, { params: { siteId, seriesSlug, chapterSlug } }),
   fetchSeries: (siteId: string, seriesSlug: string) =>
-    http.get(`/series`, { params: { siteId, seriesSlug } }),
-  fetchSeriesByUrl: (url: string) => http.get(`/series`, { params: { url } }),
+    instance.get(`/series`, { params: { siteId, seriesSlug } }),
+  fetchSeriesByUrl: (url: string) =>
+    instance.get(`/series`, { params: { url } }),
 };
 
 export default api;

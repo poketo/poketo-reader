@@ -7,12 +7,12 @@ import debounce from 'throttle-debounce/debounce';
 import Button from '../components/button';
 import Input from '../components/input';
 import Panel from '../components/panel';
-import api from '../api';
+import api, { type AxiosError } from '../api';
 import utils from '../utils';
 
 import schema from '../store/schema';
 
-import type { Series, TraeError } from '../types';
+import type { Series } from '../types';
 import type { Dispatch, EntitiesPayload } from '../store/types';
 
 type NewSeriesErrorCode =
@@ -104,17 +104,17 @@ class NewBookmarkPanel extends Component<Props, State> {
       .catch(this.handleSubmitError);
   };
 
-  handleSubmitError = (err: TraeError) => {
+  handleSubmitError = (err: AxiosError) => {
     let errorCode;
 
-    switch (err.status) {
+    switch (err.response.status) {
       case 404:
         errorCode = 'SERVER_NOT_FOUND';
         break;
       case 400:
-        errorCode = /already exists/i.test(err.data)
+        errorCode = /already exists/i.test(err.response.data)
           ? 'SERVER_ALREADY_EXISTS'
-          : 'SERVER_UNKNOWN_ERROR';
+          : 'INVALID_SERIES';
         break;
       default:
         errorCode = 'SERVER_UNKNOWN_ERROR';
