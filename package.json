@@ -20,6 +20,7 @@
     "classnames": "^2.2.5",
     "filter-obj": "^1.1.0",
     "lazysizes": "^4.0.1",
+    "milliseconds": "^1.0.3",
     "money-clip": "^2.0.1",
     "normalizr": "^3.2.4",
     "react": "^16.3.0",
