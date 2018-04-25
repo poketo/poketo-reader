@@ -20,6 +20,7 @@ export type AxiosError = {
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_BASE || '',
+  timeout: 5000,
 });
 
 const api = {
