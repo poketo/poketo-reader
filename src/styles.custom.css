@@ -234,6 +234,7 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
+  will-change: opacity;
   background-color: rgba(0, 0, 0, 0.9);
 }
 
@@ -243,6 +244,7 @@ button {
   left: 0;
   right: 0;
   background-color: #fff;
+  will-change: transform;
   z-index: 200;
 }
 
