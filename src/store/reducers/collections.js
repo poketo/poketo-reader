@@ -2,7 +2,7 @@
 
 import { normalize } from 'normalizr';
 import schema from '../schema';
-import { isSeriesUpToDate, fetchSeries } from './series';
+import { shouldFetchSeries, fetchSeries } from './series';
 import utils from '../../utils';
 
 import type { Id, Slug, Collection } from '../../types';
@@ -64,11 +64,6 @@ export function fetchCollection(slug: Slug): Thunk {
         const normalized = normalize(unnormalized, schema.collection);
 
         dispatch({
-          type: 'ADD_ENTITIES',
-          payload: normalized.entities,
-        });
-
-        dispatch({
           type: 'SET_COLLECTION_ENTITY_STATUS',
           payload: {
             slug,
@@ -78,6 +73,11 @@ export function fetchCollection(slug: Slug): Thunk {
               lastFetchedAt: utils.getTimestamp(),
             },
           },
+        });
+
+        dispatch({
+          type: 'ADD_ENTITIES',
+          payload: normalized.entities,
         });
       })
       .catch(err => {
@@ -101,7 +101,7 @@ export function fetchSeriesForCollection(collectionSlug: Slug): Thunk {
       return;
     }
 
-    const missingSeries = seriesIds.filter(id => !isSeriesUpToDate(state, id));
+    const missingSeries = seriesIds.filter(id => shouldFetchSeries(state, id));
 
     missingSeries.forEach(id => {
       const { siteId, seriesSlug } = utils.getIdComponents(id);

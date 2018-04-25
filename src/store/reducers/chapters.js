@@ -61,12 +61,11 @@ export function fetchChapter(
       response => {
         const normalized = normalize(response.data, schema.chapter);
 
-        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
-
         dispatch({
           type: 'SET_CHAPTER_STATUS',
           payload: { isFetching: false, errorCode: null },
         });
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
       },
       err => {
         dispatch({

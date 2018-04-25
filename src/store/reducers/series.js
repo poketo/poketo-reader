@@ -1,6 +1,7 @@
 // @flow
 
 import { normalize } from 'normalizr';
+import ms from 'milliseconds';
 import schema from '../schema';
 import utils from '../../utils';
 import type { SiteId, Id, Slug, Series } from '../../types';
@@ -22,7 +23,9 @@ export function fetchSeriesIfNeeded(siteId: SiteId, slug: Slug): Thunk {
   };
 }
 
-function shouldFetchSeries(state: Object, id: Id): boolean {
+const STALE_AFTER = ms.hours(2) / 1000;
+
+export function shouldFetchSeries(state: Object, id: Id): boolean {
   const seriesById = state.series;
   const status = seriesById._status[id];
 
@@ -30,19 +33,11 @@ function shouldFetchSeries(state: Object, id: Id): boolean {
     case 'fetching':
       return false;
     case 'fetched':
-      return !isSeriesUpToDate(state, id);
+      const isStale = utils.getTimestamp() - status.lastFetchedAt > STALE_AFTER;
+      return status.didInvalidate || isStale;
     default:
       return true;
   }
-}
-
-export function isSeriesUpToDate(state: Object, seriesId: Id): boolean {
-  const seriesById = state.series;
-  const existingSeries = seriesById[seriesId];
-
-  // NOTE: we're assuming right now that if we have the data on the client,
-  // it's up-to-date.
-  return Boolean(existingSeries);
 }
 
 export function fetchSeries(siteId: SiteId, slug: Slug): Thunk {
@@ -58,7 +53,6 @@ export function fetchSeries(siteId: SiteId, slug: Slug): Thunk {
       .fetchSeries(siteId, slug)
       .then(response => {
         const normalized = normalize(response.data, schema.series);
-        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
         dispatch({
           type: 'SET_SERIES_ENTITY_STATUS',
           payload: {
@@ -70,6 +64,7 @@ export function fetchSeries(siteId: SiteId, slug: Slug): Thunk {
             },
           },
         });
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
       })
       .catch(err => {
         dispatch({
