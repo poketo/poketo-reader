@@ -5,7 +5,6 @@ import { TransitionGroup } from 'react-transition-group';
 import { type RouterHistory } from 'react-router';
 import { connect } from 'react-redux';
 
-import DotLoader from '../components/loader-dots';
 import FeedHeader from '../components/feed-header';
 import IconBook from '../components/icon-book';
 import IconNewTab from '../components/icon-new-tab';
@@ -13,6 +12,7 @@ import IconTrash from '../components/icon-trash';
 import NewBookmarkPanel from '../containers/new-bookmark-panel';
 import Panel from '../components/panel';
 import SeriesRow from '../components/series-row';
+import Toast from '../components/toast';
 import utils from '../utils';
 
 import {
@@ -230,8 +230,17 @@ class Feed extends Component<Props, State> {
     const { bookmarks } = collection;
 
     const seriesIds = Object.keys(bookmarks);
+    const statuses = seriesIds
+      .map(id => seriesById._status[id])
+      .filter(Boolean);
     const missingSeries = seriesIds.filter(
-      id => Boolean(seriesById[id]) !== true,
+      id =>
+        !seriesById._status[id] ||
+        seriesById._status[id].fetchStatus !== 'fetched',
+    );
+
+    const isFetching = statuses.some(
+      status => status.fetchStatus === 'fetching',
     );
 
     const feedItems = seriesIds
@@ -251,26 +260,24 @@ class Feed extends Component<Props, State> {
           {this.renderNewBookmarkPanel()}
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
-          {missingSeries.length > 0 ? (
-            <div className="pv-5 x xd-column xa-center">
-              <DotLoader />
-              <div className="mt-3 fs-12 o-50p">
-                Syncing series ({seriesIds.length - missingSeries.length} /{' '}
-                {seriesIds.length})
-              </div>
+          {isFetching && (
+            <div className="p-fixed t-16 l-0 r-0 z-9 mt-4 pt-2 ph-3">
+              <Toast>
+                Syncing ({seriesIds.length - missingSeries.length} /{' '}
+                {seriesIds.length})...
+              </Toast>
             </div>
-          ) : (
-            feedItems.map(item => (
-              <SeriesRow
-                key={item.series.id}
-                series={item.series}
-                isUnread={item.series.updatedAt > item.lastReadAt}
-                linkTo={item.linkTo}
-                onOptionsClick={this.handleSeriesOptionsClick}
-                onSeriesClick={this.handleSeriesClick}
-              />
-            ))
           )}
+          {feedItems.map(item => (
+            <SeriesRow
+              key={item.series.id}
+              series={item.series}
+              isUnread={item.series.updatedAt > item.lastReadAt}
+              linkTo={item.linkTo}
+              onOptionsClick={this.handleSeriesOptionsClick}
+              onSeriesClick={this.handleSeriesClick}
+            />
+          ))}
         </div>
       </div>
     );
