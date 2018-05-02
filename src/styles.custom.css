@@ -2,7 +2,6 @@
   font-family: 'National';
   font-style: normal;
   font-weight: normal;
-  font-display: fallback;
   src: url('./assets/fonts/NationalWeb-Regular.woff2') format('woff2');
 }
 
@@ -10,24 +9,14 @@
   font-family: 'National';
   font-style: italic;
   font-weight: normal;
-  font-display: fallback;
   src: url('./assets/fonts/NationalWeb-RegularItalic.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'National';
   font-style: normal;
-  font-weight: 500;
-  font-display: fallback;
+  font-weight: bold;
   src: url('./assets/fonts/NationalWeb-Medium.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'National';
-  font-style: normal;
-  font-weight: 600;
-  font-display: fallback;
-  src: url('./assets/fonts/NationalWeb-Bold.woff2') format('woff2');
 }
 
 html {

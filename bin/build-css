@@ -48,7 +48,7 @@ const styles = hibiscss(
     },
     fontWeight: {
       normal: 400,
-      medium: 500,
+      medium: 600,
     },
     sizes: {
       '8': '8px',
