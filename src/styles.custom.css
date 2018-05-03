@@ -19,6 +19,13 @@
   src: url('./assets/fonts/NationalWeb-Medium.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'National';
+  font-style: italic;
+  font-weight: bold;
+  src: url('./assets/fonts/NationalWeb-MediumItalic.woff2') format('woff2');
+}
+
 html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
