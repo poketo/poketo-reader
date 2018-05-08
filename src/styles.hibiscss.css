@@ -68,6 +68,10 @@
   z-index: 9;
 }
 
+.z-10 {
+  z-index: 10;
+}
+
 .us-none {
   user-select: none;
 }
@@ -245,6 +249,12 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: 0;
+}
+
+@media (display-mode: standalone) {
+  .standalone-status-bar-offset {
+    padding-top: 20px;
+  }
 }
 
 @media only screen and (min-width: 767px) {

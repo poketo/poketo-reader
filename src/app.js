@@ -2,11 +2,14 @@
 
 import React, { Component } from 'react';
 import Head from 'react-helmet';
+import classNames from 'classnames';
 import { Switch, Route } from 'react-router-dom';
 
 import NationalRegular from './assets/fonts/NationalWeb-Regular.woff2';
 import NationalRegularItalic from './assets/fonts/NationalWeb-RegularItalic.woff2';
 import NationalMedium from './assets/fonts/NationalWeb-Medium.woff2';
+
+import utils from './utils';
 
 import ErrorBoundary from './components/error-boundary';
 import AboutView from './views/about-view';
@@ -22,10 +25,45 @@ import './styles.custom.css';
 
 const preloadFonts = [NationalRegular, NationalRegularItalic, NationalMedium];
 
-export default class App extends Component<{}> {
+type Props = {};
+type State = {
+  isStandalone: boolean,
+  orientation: 'portrait' | 'landscape',
+};
+
+export default class App extends Component<Props, State> {
+  state = {
+    isStandalone: utils.isStandalone(),
+    orientation: 'portrait',
+  };
+
+  componentDidMount() {
+    window.addEventListener('orientationchange', this.handleOrientationChange);
+    this.handleOrientationChange();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(
+      'orientationchange',
+      this.handleOrientationChange,
+    );
+  }
+
+  handleOrientationChange = () => {
+    const orientation =
+      Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
+    this.setState({ orientation });
+  };
+
   render() {
+    const { isStandalone, orientation } = this.state;
+
     return (
-      <div id="app">
+      <div
+        id="app"
+        className={classNames({
+          'standalone-status-bar-offset': isStandalone,
+        })}>
         <Head defaultTitle="Poketo" titleTemplate="%s – Poketo">
           <meta name="description" content="Light and fun manga reader." />
           <body className="ff-sans c-gray5 bgc-offwhite" />
@@ -40,6 +78,12 @@ export default class App extends Component<{}> {
             />
           ))}
         </Head>
+        {isStandalone &&
+          (orientation === 'portrait' ? (
+            <div className="StatusBar p-fixed t-0 l-0 r-0 z-10 bgc-black" />
+          ) : (
+            <style>{`.standalone-status-bar-offset { padding-top: 0 !important; }`}</style>
+          ))}
         <ErrorBoundary>
           <Switch>
             <Route
