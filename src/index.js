@@ -5,7 +5,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './app';
 import getStore from './store';
-import serviceWorker from './service-worker';
 
 getStore().then(store => {
   ReactDOM.render(
@@ -16,10 +15,4 @@ getStore().then(store => {
     </Router>,
     document.getElementById('root'),
   );
-});
-
-serviceWorker.register({
-  onUpdate: registration => {
-    // store.dispatch()
-  },
 });
