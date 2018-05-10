@@ -28,12 +28,14 @@ const preloadFonts = [NationalRegular, NationalRegularItalic, NationalMedium];
 type Props = {};
 type State = {
   isStandalone: boolean,
+  isAppleDevice: boolean,
   orientation: 'portrait' | 'landscape',
 };
 
 export default class App extends Component<Props, State> {
   state = {
     isStandalone: utils.isStandalone(),
+    isAppleDevice: utils.isAppleDevice(),
     orientation: 'portrait',
   };
 
@@ -56,7 +58,8 @@ export default class App extends Component<Props, State> {
   };
 
   render() {
-    const { isStandalone, orientation } = this.state;
+    const { isStandalone, isAppleDevice, orientation } = this.state;
+    const showCustomStatusBar = isAppleDevice && orientation === 'portrait';
 
     return (
       <div
@@ -79,7 +82,7 @@ export default class App extends Component<Props, State> {
           ))}
         </Head>
         {isStandalone &&
-          (orientation === 'portrait' ? (
+          (showCustomStatusBar ? (
             <div className="StatusBar p-fixed t-0 l-0 r-0 z-10 bgc-black" />
           ) : (
             <style>{`.standalone-status-bar-offset { padding-top: 0 !important; }`}</style>

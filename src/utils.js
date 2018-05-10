@@ -96,6 +96,17 @@ const utils = {
       .matches;
     return isStandaloneSafari || isStandaloneChrome;
   },
+
+  isAppleDevice: () =>
+    /iPad|iPhone|iPod/i.test(navigator.userAgent) && !window.MSStream,
 };
 
 export default utils;
+
+export function invariant(condition: boolean, error: string | Error): void {
+  if (Boolean(condition) === true) {
+    return;
+  }
+
+  throw new Error(error);
+}
