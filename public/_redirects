@@ -1,2 +1,9 @@
 # serve index.html for all pages
 /*  /index.html  200
+
+# redirect aliases to primary domain
+https://poketo.netlify.com/* https://poketo.app/:splat 301!
+https://poketo.site/* https://poketo.app/:splat 301!
+
+# proxy api requests
+/api/* https://api.poketo.site/:splat 200
