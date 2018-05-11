@@ -2,7 +2,7 @@
   "name": "Poketo",
   "short_name": "Poketo",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "theme_color": "#ff8b8b",
   "background_color": "#fffefc",
   "icons": [
