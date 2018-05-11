@@ -8,6 +8,7 @@ import Button from '../components/button';
 import Input from '../components/input';
 import Panel from '../components/panel';
 import api, { type AxiosError } from '../api';
+import config from '../config';
 import utils from '../utils';
 
 import schema from '../store/schema';
@@ -213,14 +214,14 @@ class NewBookmarkPanel extends Component<Props, State> {
             isn't a supported site. Here's{' '}
             <a
               className="Link"
-              href="https://github.com/poketo/service/tree/master/lib/api#supported-sites"
+              href={`${config.githubLibraryUrl}#supported-sites`}
               rel="noopener noreferrer"
               target="_blank">
               a full list of supported sites
             </a>. Make an issue{' '}
             <a
               className="Link"
-              href="https://github.com/poketo/service/issues/new"
+              href={`${config.githubLibraryUrl}/issues/new`}
               rel="noopener noreferrer"
               target="_blank">
               on the Github repo

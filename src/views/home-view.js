@@ -91,15 +91,15 @@ export default class HomeView extends Component<Props, State> {
           </div>
           <div className="mw-900 mh-auto pv-5 ta-center x xd-column xd-row-m xw-wrap">
             <div className="w-33p-m ph-4 pv-3">
-              <h3 className="fw-semibold">Easy reading</h3>
+              <h3 className="fw-semibold mb-2">Easy reading</h3>
               <p>Supports thousands of series from sites across the web.</p>
             </div>
             <div className="w-33p-m ph-4 pv-3">
-              <h3 className="fw-semibold">˗ˏˋ Light and fun ˎˊ˗</h3>
+              <h3 className="fw-semibold mb-2">˗ˏˋ Light and fun ˎˊ˗</h3>
               <p>No ads, no downloads, no accounts. Niiice and simple.</p>
             </div>
             <div className="w-33p-m ph-4 pv-3">
-              <h3 className="fw-semibold">Open source</h3>
+              <h3 className="fw-semibold mb-2">Open source</h3>
               <p>
                 Built as an{' '}
                 <a className="Link" href="https://github.com/poketo/site">
@@ -110,8 +110,8 @@ export default class HomeView extends Component<Props, State> {
           </div>
           <div className="mw-600 w-90p mh-auto pv-5">
             <p className="mb-4 w-75p mh-auto ta-center">
-              Interested?<br />Enter your email below to get an&nbsp;invite when
-              it’s ready.
+              Interested?<br />Enter your email for an&nbsp;invite to test it
+              out.
             </p>
             <HomeSubscribeForm />
             <p className="fs-12 o-50p ta-center mt-3">No spam, promise.</p>

@@ -64,7 +64,7 @@ button {
   transition: opacity 200ms ease;
 }
 
-.Link:hover {
+.Link:not(.Link--noFade):hover {
   opacity: 0.7;
 }
 
@@ -319,6 +319,19 @@ button {
   background-color: #fff;
   will-change: transform;
   z-index: 200;
+}
+
+.HomeIntro-letter {
+  position: absolute;
+  transition: transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.175);
+}
+
+.HomeIntro-letterInner {
+  transition: transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.175);
+}
+
+.HomeIntro-letter:hover .HomeIntro-letterInner {
+  transform: scale(0.9);
 }
 
 .CircleLoader {
