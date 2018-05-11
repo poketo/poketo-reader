@@ -261,7 +261,7 @@ class NewBookmarkPanel extends Component<Props, State> {
     return (
       <Panel onRequestClose={onRequestClose}>
         <div className="ph-3 pt-3 pb-4">
-          <h3 className="fw-medium">New series</h3>
+          <h3 className="fw-semibold">New series</h3>
           <p className="mb-3">Paste the URL of a series you want to follow.</p>
           <form type="post" onSubmit={this.handleSubmit} noValidate>
             <div className="mb-2">

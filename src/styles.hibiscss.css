@@ -76,6 +76,11 @@
   -webkit-user-drag: none;
 }
 
+.font-smooth {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .ls-loose {
   letter-spacing: 3px;
 }
@@ -114,6 +119,10 @@
 
 .h-100vh {
   height: 100vh;
+}
+
+.mh-40vh {
+  min-height: 40vh;
 }
 
 .mh-50vh {

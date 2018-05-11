@@ -37,7 +37,7 @@ const SeriesRow = ({
               <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
             </span>
           )}
-          <span className={isUnread ? 'fw-medium' : undefined}>
+          <span className={isUnread ? 'fw-semibold' : undefined}>
             {series.title}
           </span>
         </span>

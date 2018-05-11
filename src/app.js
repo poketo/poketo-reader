@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import Head from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 
-import NationalRegular from './assets/fonts/NationalWeb-Regular.woff2';
-import NationalRegularItalic from './assets/fonts/NationalWeb-RegularItalic.woff2';
-import NationalMedium from './assets/fonts/NationalWeb-Medium.woff2';
+import ProximaSoftRegular from './assets/fonts/ProximaSoft-Regular.woff2';
+import ProximaSoftRegularItalic from './assets/fonts/ProximaSoft-RegularItalic.woff2';
+import ProximaSoftSemibold from './assets/fonts/ProximaSoft-Semibold.woff2';
 
 import ErrorBoundary from './components/error-boundary';
 import AboutView from './views/about-view';
@@ -20,7 +20,11 @@ import './styles.base.css';
 import './styles.hibiscss.css';
 import './styles.custom.css';
 
-const preloadFonts = [NationalRegular, NationalRegularItalic, NationalMedium];
+const preloadFonts = [
+  ProximaSoftRegular,
+  ProximaSoftRegularItalic,
+  ProximaSoftSemibold,
+];
 
 export default class App extends Component<{}> {
   render() {

@@ -1,75 +1,123 @@
 // @flow
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
-import Button from '../components/button';
-import poketoIntroUrl from '../assets/poketo-intro.svg';
+import HomeIntro from '../components/home-intro';
+import HomeSubscribeForm from '../components/home-subscribe-form';
+import IconPoketo from '../components/icon-poketo';
+import Phone from '../components/phone';
+import Header from '../components/home-header';
+import Footer from '../components/home-footer';
+import ScrollReset from '../components/scroll-reset';
+
+type FeatureId = 'follow' | 'read';
 
 type Props = {};
+type State = {
+  highlightedFeature: FeatureId,
+};
 
-export default class HomeView extends Component<Props> {
+const FeatureBlock = ({
+  className,
+  highlighted,
+  onClick,
+  title,
+  description,
+}) => (
+  <button
+    className={classNames(
+      className,
+      'mw-600 w-25p',
+      highlighted === false && 'o-50p',
+    )}
+    onClick={onClick}>
+    <h4 className="fw-semibold mb-3">{title}</h4>
+    <p>{description}</p>
+  </button>
+);
+
+export default class HomeView extends Component<Props, State> {
+  state = {
+    highlightedFeature: 'follow',
+  };
+
+  handleRequestButtonClick = () => {
+    const input = document.querySelector('input[type="email"]');
+    if (input) {
+      input.focus();
+    }
+  };
+
+  handleFeatureClick = (featureId: FeatureId) => () => {
+    this.setState({ highlightedFeature: featureId });
+  };
+
   render() {
+    const { highlightedFeature } = this.state;
+
     return (
-      <div className="mh-100vh c-gray4 bgc-offwhite">
+      <div className="mh-100vh c-gray4 bgc-offwhite fs-18">
+        <ScrollReset />
         <div className="x xd-column pb-5">
-          <div className="x xd-column xj-center ta-center pv-5 ph-5 c-white bgc-coral mh-50vh">
-            <div className="mb-4">
-              <div className="mb-3">
-                <span className="br-4 bgc-fadedBlack ph-2 pv-1 fw-medium fs-12 ls-loose tt-uppercase ta-center">
-                  Beta
-                </span>
-              </div>
-              <img
-                src={poketoIntroUrl}
-                className="us-none ud-none pr-2 va-middle t-shrinkOnActive c-white"
-                alt="Poketo"
-                width="200"
-              />
-            </div>
+          <Header overlay />
+          <HomeIntro onRequestButtonClick={this.handleRequestButtonClick} />
+          <div className="mw-900 mh-auto ta-center pt-6 pb-4 ph-3">
+            <p className="fs-32">A friendly web manga reader</p>
           </div>
-          <div className="ta-center pv-5 ph-3 bgc-lightGray">
-            <div className="mw-900 mh-auto">
-              <p className="fs-24">
-                A friendly manga tracker for following series you like.
-              </p>
+          <div className="x xa-center xj-center mw-900 mh-auto pv-5">
+            <FeatureBlock
+              className="ta-right"
+              highlighted={highlightedFeature === 'follow'}
+              onClick={this.handleFeatureClick('follow')}
+              title="Follow"
+              description="Track manga series across the web with a feed of new releases."
+            />
+            <div className="ph-5">
+              <Phone
+                direction={highlightedFeature === 'follow' ? 'left' : 'right'}>
+                <div className="Navigation pa-2 x xa-center">
+                  <IconPoketo className="c-coral" width={18} height={18} />
+                </div>
+              </Phone>
             </div>
+            <FeatureBlock
+              className="ta-left"
+              highlighted={highlightedFeature === 'read'}
+              onClick={this.handleFeatureClick('read')}
+              title="Read"
+              description="Read series without leaving, in a pleasant reader. Neat!"
+            />
           </div>
           <div className="mw-900 mh-auto pv-5 ta-center x xd-column xd-row-m xw-wrap">
             <div className="w-33p-m ph-4 pv-3">
-              <h3 className="fw-medium">Easy reading</h3>
-              <p>Supports thousands of series from 8 sites (and counting).</p>
+              <h3 className="fw-semibold">Easy reading</h3>
+              <p>Supports thousands of series from sites across the web.</p>
             </div>
             <div className="w-33p-m ph-4 pv-3">
-              <h3 className="fw-medium">˗ˏˋ Light and fun ˎˊ˗</h3>
-              <p>No ads, no downloads, no accounts. Simple.</p>
+              <h3 className="fw-semibold">˗ˏˋ Light and fun ˎˊ˗</h3>
+              <p>No ads, no downloads, no accounts. Niiice and simple.</p>
             </div>
             <div className="w-33p-m ph-4 pv-3">
-              <h3 className="fw-medium">Open source</h3>
+              <h3 className="fw-semibold">Open source</h3>
               <p>
-                Built with open source; released as an{' '}
+                Built as an{' '}
                 <a className="Link" href="https://github.com/poketo/site">
-                  open source
-                </a>{' '}
-                project.
+                  open source project
+                </a>. Help out or fork it!
               </p>
             </div>
           </div>
-          <div className="p-fixed b-0 w-100p pv-4 ph-4 ta-center">
-            <Button>Request an invite</Button>
+          <div className="mw-600 w-90p mh-auto pv-5">
+            <p className="mb-4 w-75p mh-auto ta-center">
+              Interested?<br />Enter your email below to get an&nbsp;invite when
+              it’s ready.
+            </p>
+            <HomeSubscribeForm />
+            <p className="fs-12 o-50p ta-center mt-3">No spam, promise.</p>
           </div>
-          <div className="pt-3 pb-5 fs-14 ta-center">
-            <Link to="/about" className="Link mr-3">
-              About
-            </Link>
-            <a
-              className="Link mr-3"
-              href="https://github.com/poketo/site/issues/new">
-              Send feedback
-            </a>
-            <a className="Link mr-3" href="https://github.com/poketo">
-              Github
-            </a>
+          <div className="mw-600 w-90p mh-auto">
+            <Footer />
           </div>
         </div>
       </div>
