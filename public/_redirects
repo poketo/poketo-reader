@@ -7,3 +7,4 @@
 # redirect aliases to primary domain
 https://poketo.netlify.com/* https://poketo.app/:splat 301!
 https://poketo.site/* https://poketo.app/:splat 301!
+https://develop.poketo.site/* https://develop.poketo.app/:splat 301!
