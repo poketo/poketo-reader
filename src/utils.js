@@ -99,6 +99,9 @@ const utils = {
 
   isAppleDevice: () =>
     /iPad|iPhone|iPod/i.test(navigator.userAgent) && !window.MSStream,
+
+  getDeviceOrientation: () =>
+    Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait',
 };
 
 export default utils;

@@ -148,6 +148,12 @@ button {
   height: 20px;
 }
 
+@media (display-mode: standalone) and (orientation: portrait) {
+  .status-bar-ios-offset-enabled .status-bar-ios-offset {
+    padding-top: 20px;
+  }
+}
+
 .PageImage {
   display: inline-block;
   position: relative;

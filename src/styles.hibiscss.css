@@ -251,12 +251,6 @@
   border-right: 0;
 }
 
-@media (display-mode: standalone) {
-  .standalone-status-bar-offset {
-    padding-top: 20px;
-  }
-}
-
 @media only screen and (min-width: 767px) {
   .w-90p-m {
     width: 90%;
