@@ -2,21 +2,24 @@
   font-family: 'Proxima Soft';
   font-style: normal;
   font-weight: normal;
-  src: url('./assets/fonts/ProximaSoft-Regular.woff2') format('woff2');
+  src: url('./assets/fonts/ProximaSoft-Regular.woff') format('woff'),
+    url('./assets/fonts/ProximaSoft-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Proxima Soft';
   font-style: italic;
   font-weight: normal;
-  src: url('./assets/fonts/ProximaSoft-RegularItalic.woff2') format('woff2');
+  src: url('./assets/fonts/ProximaSoft-RegularItalic.woff') format('woff'),
+    url('./assets/fonts/ProximaSoft-RegularItalic.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Proxima Soft';
   font-style: normal;
   font-weight: 500;
-  src: url('./assets/fonts/ProximaSoft-Semibold.woff2') format('woff2');
+  src: url('./assets/fonts/ProximaSoft-Semibold.woff') format('woff'),
+    url('./assets/fonts/ProximaSoft-Semibold.woff2') format('woff2');
 }
 
 html {
