@@ -143,6 +143,16 @@ button {
     monospace;
 }
 
+.StatusBar {
+  height: 20px;
+}
+
+@media (display-mode: standalone) and (orientation: portrait) {
+  .status-bar-ios-offset-enabled .status-bar-ios-offset {
+    padding-top: 20px;
+  }
+}
+
 .PageImage {
   display: inline-block;
   position: relative;
@@ -189,6 +199,10 @@ button {
 }
 
 .Navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
 }
 

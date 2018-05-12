@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import Head from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 
+import DeviceStatus from './containers/device-status';
+import StandaloneStatusBar from './containers/standalone-status-bar';
 import ErrorBoundary from './components/error-boundary';
 
 import AboutView from './views/about-view';
@@ -21,11 +23,13 @@ import './styles.custom.css';
 export default class App extends Component<{}> {
   render() {
     return (
-      <div id="app">
+      <div id="app" className="status-bar-ios-offset">
         <Head defaultTitle="Poketo" titleTemplate="%s – Poketo">
           <meta name="description" content="Light and fun manga reader." />
           <body className="ff-sans c-gray5 bgc-offwhite" />
         </Head>
+        <DeviceStatus />
+        <StandaloneStatusBar />
         <ErrorBoundary>
           <Switch>
             <Route

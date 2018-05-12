@@ -15,6 +15,8 @@ const persistConfig = {
   cache,
   actionMap: {
     ADD_ENTITIES: ['series', 'collections', 'chapters'],
+    REMOVE_BOOKMARK: ['collections'],
+    MARK_BOOKMARK_AS_READ: ['collections'],
   },
   // NOTE: we want to filter out pieces of state where we're still fetching
   // so that we don't cache the fetching state and get caught in some

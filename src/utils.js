@@ -89,6 +89,27 @@ const utils = {
     chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
   leastRecentChapter: (chapters: Array<Chapter>): Chapter =>
     chapters.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
+
+  isStandalone: () => {
+    const isStandaloneSafari = window.navigator.standalone === true;
+    const isStandaloneChrome = window.matchMedia('(display-mode: standalone)')
+      .matches;
+    return isStandaloneSafari || isStandaloneChrome;
+  },
+
+  isAppleDevice: () =>
+    /iPad|iPhone|iPod/i.test(navigator.userAgent) && !window.MSStream,
+
+  getDeviceOrientation: () =>
+    Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait',
 };
 
 export default utils;
+
+export function invariant(condition: boolean, error: string | Error): void {
+  if (Boolean(condition) === true) {
+    return;
+  }
+
+  throw new Error(error);
+}

@@ -75,6 +75,13 @@ export type SetChapterStatusAction = ActionType<
   StatusActionPayload,
 >;
 
+export type SetNetworkStatusAction = ActionType<'SET_NETWORK_STATUS', boolean>;
+
+export type SetOrientationAction = ActionType<
+  'SET_ORIENTATION',
+  'landscape' | 'portrait',
+>;
+
 export type CollectionAction =
   | AddEntitiesAction
   | SetCollectionAction
@@ -92,7 +99,13 @@ export type ChapterAction =
   | SetChapterAction
   | SetChapterStatusAction;
 
-export type Action = CollectionAction | SeriesAction | ChapterAction;
+export type DeviceAction = SetNetworkStatusAction | SetOrientationAction;
+
+export type Action =
+  | CollectionAction
+  | SeriesAction
+  | ChapterAction
+  | DeviceAction;
 
 export type Dispatch = (action: Action | Thunk) => void;
 export type GetState = () => Object;
