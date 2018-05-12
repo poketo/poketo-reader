@@ -39,7 +39,7 @@ class LogInView extends Component<Props, State> {
         </Head>
         <HomeHeader />
         <div className="pt-4 ph-3">
-          Enter your secret code:
+          Enter your secret code
           <form onSubmit={this.handleSubmit}>
             <Input type="text" onChange={this.handleCodeChange} />
           </form>
