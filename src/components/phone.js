@@ -4,12 +4,13 @@ import React, { type Node } from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  direction?: 'left' | 'right',
   children: Node,
+  className?: string,
+  direction?: 'left' | 'right',
 };
 
-const Phone = ({ children, direction }: Props) => (
-  <div className="Phone-container">
+const Phone = ({ children, className, direction, ...props }: Props) => (
+  <div className={classNames('Phone-container', className)} {...props}>
     <div
       className={classNames('Phone', {
         'Phone--facingLeft': direction === 'left',

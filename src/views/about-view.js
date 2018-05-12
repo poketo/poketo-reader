@@ -24,10 +24,12 @@ export default () => (
     </Head>
     <Header />
     <ScrollReset />
-    <div className="mw-500 mh-auto pt-6">
+    <div className="mw-500 mh-auto pt-4 pt-6-m">
       <div className="pv-4 ph-3 ph-0-m">
         <div className="Markdown">
-          <p className="fs-24 mb-3">Poketo is a web manga reader.</p>
+          <p className="fs-24 mb-3 fw-semibold">
+            Poketo is a web manga reader.
+          </p>
           <p>
             It's a tool for following and reading series from across the web in
             one place. Like an{' '}

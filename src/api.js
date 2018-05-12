@@ -1,5 +1,6 @@
 // @flow
 
+import config from './config';
 import axios from 'axios';
 
 export type AxiosResponse = {
@@ -19,7 +20,7 @@ export type AxiosError = {
 };
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE || '',
+  baseURL: config.apiBaseUrl,
   timeout: 5000,
 });
 

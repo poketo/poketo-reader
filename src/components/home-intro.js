@@ -132,14 +132,21 @@ class HomeIntro extends Component<Props, State> {
     }
   };
 
-  getLetterTransform = (index: number) => {
+  getLetterTransform = (index: number, count: number) => {
     if (this.state.hasRendered === false) {
       return { transform: 'rotate(0deg) scale(0)' };
     }
 
+    const padding = 5;
+    const size = (100 - padding * 2) / count;
+    const gutter = 1;
+
     return {
       top: `${random(40, 60)}%`,
-      left: `${random(10 + 16 * index, 14 * (index + 1))}%`,
+      left: `${random(
+        padding + (size + gutter) * index,
+        (size - gutter) * (index + 1) - padding,
+      )}%`,
       transform: `rotate(${random(-30, 30)}deg) scale(${random(1.9, 2.1)})`,
     };
   };
@@ -172,7 +179,7 @@ class HomeIntro extends Component<Props, State> {
               <div
                 key={item.key}
                 className="HomeIntro-letter"
-                style={this.getLetterTransform(index)}>
+                style={this.getLetterTransform(index, POKETO.length)}>
                 <div className="HomeIntro-letterInner">
                   <HomePoketoLetter letter={item.letter} />
                 </div>

@@ -16,10 +16,6 @@ export default class Header extends Component<Props> {
     overlay: false,
   };
 
-  handleLoginClick = () => {
-    //
-  };
-
   render() {
     const { overlay } = this.props;
 
@@ -47,7 +43,7 @@ export default class Header extends Component<Props> {
           <NavLink to="/about" className="mr-3" activeClassName="c-coral">
             About
           </NavLink>
-          <button onClick={this.handleLoginClick}>Log in</button>
+          <Link to="/login">Log In</Link>
         </nav>
       </header>
     );

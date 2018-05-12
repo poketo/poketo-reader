@@ -133,6 +133,10 @@
   min-height: 100vh;
 }
 
+.mxh-40vh {
+  max-height: 40vh;
+}
+
 .bc-transparent {
   border-color: transparent;
 }

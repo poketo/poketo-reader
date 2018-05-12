@@ -2,13 +2,16 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import axios from 'axios';
 
-import HomeIntro from '../components/home-intro';
-import HomeSubscribeForm from '../components/home-subscribe-form';
-import IconPoketo from '../components/icon-poketo';
-import Phone from '../components/phone';
-import Header from '../components/home-header';
+import config from '../config';
+import Button from '../components/button';
 import Footer from '../components/home-footer';
+import Header from '../components/home-header';
+import HomeIntro from '../components/home-intro';
+import IconPoketo from '../components/icon-poketo';
+import Input from '../components/input';
+import Phone from '../components/phone';
 import ScrollReset from '../components/scroll-reset';
 
 type FeatureId = 'follow' | 'read';
@@ -16,6 +19,8 @@ type FeatureId = 'follow' | 'read';
 type Props = {};
 type State = {
   highlightedFeature: FeatureId,
+  status: 'idle' | 'submitting' | 'error' | 'success',
+  email: string,
 };
 
 const FeatureBlock = ({
@@ -40,6 +45,8 @@ const FeatureBlock = ({
 export default class HomeView extends Component<Props, State> {
   state = {
     highlightedFeature: 'follow',
+    status: 'idle',
+    email: '',
   };
 
   handleRequestButtonClick = () => {
@@ -53,8 +60,37 @@ export default class HomeView extends Component<Props, State> {
     this.setState({ highlightedFeature: featureId });
   };
 
+  handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const email = this.state.email.trim();
+
+    if (email.length < 1) {
+      this.setState({ status: 'error' });
+      return;
+    }
+
+    this.setState({ status: 'submitting' });
+
+    axios
+      .post(config.inviteUrl, {
+        fields: { Email: email.trim() },
+      })
+      .then(res => {
+        this.setState({ status: 'success' });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ status: 'error' });
+      });
+  };
+
+  handleEmailChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    this.setState({ email: e.currentTarget.value });
+  };
+
   render() {
-    const { highlightedFeature } = this.state;
+    const { highlightedFeature, email, status } = this.state;
 
     return (
       <div className="mh-100vh c-gray4 bgc-offwhite fs-18">
@@ -62,16 +98,16 @@ export default class HomeView extends Component<Props, State> {
         <div className="x xd-column pb-5">
           <Header overlay />
           <HomeIntro onRequestButtonClick={this.handleRequestButtonClick} />
-          <div className="mw-900 mh-auto ta-center pt-6 pb-4 ph-3">
-            <p className="fs-32">A friendly web manga reader</p>
+          <div className="mw-900 mh-auto ta-center pt-5 pt-6-m pb-3 pb-4-m ph-3">
+            <p className="fs-24 fs-32-m">A friendly web manga&nbsp;reader</p>
           </div>
-          <div className="x xa-center xj-center mw-900 mh-auto pv-5">
+          <div className="d-none x-m xa-center xj-center mw-900 mh-auto pv-5">
             <FeatureBlock
               className="ta-right"
               highlighted={highlightedFeature === 'follow'}
               onClick={this.handleFeatureClick('follow')}
               title="Follow"
-              description="Track manga series across the web with a feed of new releases."
+              description="Track series you follow with a feed of new releases."
             />
             <div className="ph-5">
               <Phone
@@ -109,12 +145,46 @@ export default class HomeView extends Component<Props, State> {
             </div>
           </div>
           <div className="mw-600 w-90p mh-auto pv-5">
-            <p className="mb-4 w-75p mh-auto ta-center">
-              Interested?<br />Enter your email for an&nbsp;invite to test it
-              out.
-            </p>
-            <HomeSubscribeForm />
-            <p className="fs-12 o-50p ta-center mt-3">No spam, promise.</p>
+            {status === 'success' ? (
+              <div className="ta-center">
+                <div className="fw-semibold">Success!</div>
+                <p>We’ll reach out in the coming weeks.</p>
+              </div>
+            ) : (
+              <form onSubmit={this.handleSubmit}>
+                <p className="mb-4 w-75p mh-auto ta-center">
+                  Interested?<br />Enter your email for an&nbsp;invite to test
+                  it out.
+                </p>
+                <div className="x-m">
+                  <Input
+                    className="bgc-white"
+                    placeholder="Enter your email..."
+                    required
+                    type="email"
+                    value={email}
+                    onChange={this.handleEmailChange}
+                  />
+                  <div className="mt-2 mt-0-m ml-2-m w-33p-m">
+                    <Button
+                      className="d-block"
+                      type="submit"
+                      loading={status === 'submitting'}>
+                      Request invite
+                    </Button>
+                  </div>
+                </div>
+                {status === 'error' ? (
+                  <div className="ta-center fs-14 mt-3">
+                    Something went wrong. Try again later.
+                  </div>
+                ) : (
+                  <p className="fs-12 o-50p ta-center mt-3">
+                    No spam, promise.
+                  </p>
+                )}
+              </form>
+            )}
           </div>
           <div className="mw-600 w-90p mh-auto">
             <Footer />

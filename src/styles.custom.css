@@ -206,12 +206,14 @@ button {
   perspective-origin: 100% 50%;
 }
 
-.Phone--facingRight {
-  transform: rotateY(3deg) rotateZ(-0.5deg);
-}
+@media only screen and (min-width: 768px) {
+  .Phone--facingRight {
+    transform: rotateY(3deg) rotateZ(-0.5deg);
+  }
 
-.Phone--facingLeft {
-  transform: rotateY(-3deg) rotateZ(0.5deg);
+  .Phone--facingLeft {
+    transform: rotateY(-3deg) rotateZ(0.5deg);
+  }
 }
 
 .Phone-speaker {
