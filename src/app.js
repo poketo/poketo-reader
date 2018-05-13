@@ -16,8 +16,8 @@ import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
 
 import '@rosszurowski/vanilla/lib/vanilla.css';
-import './styles.base.css';
 import './styles.hibiscss.css';
+import './styles.base.css';
 import './styles.custom.css';
 
 export default class App extends Component<{}> {

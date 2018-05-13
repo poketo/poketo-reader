@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import axios from 'axios';
 
 import config from '../config';
+import featureFeedUrl from '../assets/feature-feed.png';
+import featureReaderUrl from '../assets/feature-reader.png';
 import Button from '../components/button';
 import Footer from '../components/home-footer';
 import Header from '../components/home-header';
@@ -33,12 +35,12 @@ const FeatureBlock = ({
   <button
     className={classNames(
       className,
-      'mw-600 w-25p',
+      'mw-600 w-50p w-25p-m ph-2 mw-250',
       highlighted === false && 'o-50p',
     )}
     onClick={onClick}>
-    <h4 className="fw-semibold mb-3">{title}</h4>
-    <p>{description}</p>
+    <h4 className="fw-semibold fs-18 fs-21-m mb-3">{title}</h4>
+    <p className="fs-16 fs-18-m">{description}</p>
   </button>
 );
 
@@ -93,7 +95,7 @@ export default class HomeView extends Component<Props, State> {
     const { highlightedFeature, email, status } = this.state;
 
     return (
-      <div className="mh-100vh c-gray4 bgc-offwhite fs-18">
+      <div className="mh-100vh c-gray4 bgc-offwhite fs-16 fs-18-m">
         <ScrollReset />
         <div className="x xd-column pb-5">
           <Header overlay />
@@ -101,37 +103,51 @@ export default class HomeView extends Component<Props, State> {
           <div className="mw-900 mh-auto ta-center pt-5 pt-6-m pb-3 pb-4-m ph-3">
             <p className="fs-24 fs-32-m">A friendly web manga&nbsp;reader</p>
           </div>
-          <div className="d-none x-m xa-center xj-center mw-900 mh-auto pv-5">
-            <FeatureBlock
-              className="ta-right"
-              highlighted={highlightedFeature === 'follow'}
-              onClick={this.handleFeatureClick('follow')}
-              title="Follow"
-              description="Track series you follow with a feed of new releases."
-            />
-            <div className="ph-5">
-              <Phone
-                direction={highlightedFeature === 'follow' ? 'left' : 'right'}>
-                <div className="Navigation pa-2 x xa-center">
-                  <IconPoketo className="c-coral" width={18} height={18} />
-                </div>
-              </Phone>
+          <div
+            className="bs-100p bs-60p-m"
+            style={{
+              background: `url(${require('../assets/phone-bg.svg')}) center center no-repeat`,
+            }}>
+            <div className="x xw-wrap xa-start xa-center-m xj-center mw-900 mh-auto pv-5 w-90p">
+              <FeatureBlock
+                className="xo-1 ta-left ta-right-m"
+                highlighted={highlightedFeature === 'follow'}
+                onClick={this.handleFeatureClick('follow')}
+                title="Follow"
+                description="Track series you follow with a feed of new releases."
+              />
+              <div className="pv-4 pv-0-m ph-5 xo-3 xo-2-m">
+                <Phone
+                  direction={
+                    highlightedFeature === 'follow' ? 'left' : 'right'
+                  }>
+                  <img
+                    src={
+                      highlightedFeature === 'follow'
+                        ? featureFeedUrl
+                        : featureReaderUrl
+                    }
+                  />
+                </Phone>
+              </div>
+              <FeatureBlock
+                className="xo-2 xo-3-m ta-left"
+                highlighted={highlightedFeature === 'read'}
+                onClick={this.handleFeatureClick('read')}
+                title="Read"
+                description="Read chapters free from distractions. Neat!"
+              />
             </div>
-            <FeatureBlock
-              className="ta-left"
-              highlighted={highlightedFeature === 'read'}
-              onClick={this.handleFeatureClick('read')}
-              title="Read"
-              description="Read series without leaving, in a pleasant reader. Neat!"
-            />
           </div>
-          <div className="mw-900 mh-auto pv-5 ta-center x xd-column xd-row-m xw-wrap">
+          <div className="mw-900 mh-auto pv-5 ta-center-m x xd-column xd-row-m xw-wrap">
             <div className="w-33p-m ph-4 pv-3">
               <h3 className="fw-semibold mb-2">Easy reading</h3>
               <p>Supports thousands of series from sites across the web.</p>
             </div>
             <div className="w-33p-m ph-4 pv-3">
-              <h3 className="fw-semibold mb-2">˗ˏˋ Light and fun ˎˊ˗</h3>
+              <h3 className="fw-semibold mb-2 ml--24 ml-0-m">
+                ˗ˏˋ Light and fun ˎˊ˗
+              </h3>
               <p>No ads, no downloads, no accounts. Niiice and simple.</p>
             </div>
             <div className="w-33p-m ph-4 pv-3">

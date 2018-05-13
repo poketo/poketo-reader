@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import fit from 'canvas-fit';
 import { Noise } from 'noisejs';
+import throttle from 'throttle-debounce/throttle';
 
 import background from '../assets/intro-bg.svg';
 import HomePoketoLetter from './home-poketo-letter';
@@ -12,6 +13,7 @@ const random = (min, max) => Math.random() * (max - min) + min;
 
 type Props = {};
 type State = {
+  windowSizeKey: 's' | 'm',
   hasRendered: boolean,
 };
 
@@ -20,6 +22,8 @@ const Badge = () => (
     Beta
   </span>
 );
+
+const getWindowSizeKey = () => (window.innerWidth > 768 ? 'm' : 's');
 
 const TWO_PI = Math.PI * 2;
 const POKETO = [
@@ -44,6 +48,7 @@ class HomeIntro extends Component<Props, State> {
 
   state = {
     hasRendered: false,
+    windowSizeKey: getWindowSizeKey(),
   };
 
   componentDidMount() {
@@ -75,16 +80,19 @@ class HomeIntro extends Component<Props, State> {
     }
   }
 
-  handleResize = () => {
+  handleResize = throttle(100, () => {
     if (this.resizeHandler) {
       this.resizeHandler();
     }
     this.setupGrid();
     this.setupField();
+    this.setState({
+      windowSizeKey: getWindowSizeKey(),
+    });
     if (this.ctx) {
       this.renderField(this.ctx);
     }
-  };
+  });
 
   setupGrid = () => {
     const canvas = this.canvas;
@@ -132,7 +140,7 @@ class HomeIntro extends Component<Props, State> {
     }
   };
 
-  getLetterTransform = (index: number, count: number) => {
+  getLetterStyle = (index: number, count: number) => {
     if (this.state.hasRendered === false) {
       return { transform: 'rotate(0deg) scale(0)' };
     }
@@ -141,19 +149,23 @@ class HomeIntro extends Component<Props, State> {
     const size = (100 - padding * 2) / count;
     const gutter = 1;
 
+    const scale =
+      this.state.windowSizeKey === 'm' ? random(1.9, 2.1) : random(1.3, 1.5);
+
     return {
       top: `${random(40, 60)}%`,
       left: `${random(
-        padding + (size + gutter) * index,
-        (size - gutter) * (index + 1) - padding,
+        (size + gutter) * index + padding,
+        (size - gutter) * (index + 1),
       )}%`,
-      transform: `rotate(${random(-30, 30)}deg) scale(${random(1.9, 2.1)})`,
+      transform: `rotate(${random(-30, 30)}deg) scale(${scale})`,
+      transitionDelay: `${index * random(40, 70)}ms`,
     };
   };
 
   render() {
     return (
-      <div className="p-relative x xd-column xj-center xa-center ta-center c-white bgc-fadedLightCoral mh-40vh">
+      <div className="p-relative x xd-column xj-center xa-center ta-center c-white bgc-fadedLightCoral mh-50vh">
         <svg
           viewBox="0 0 1200 53"
           className="p-absolute b-0 c-offwhite z-5"
@@ -164,30 +176,26 @@ class HomeIntro extends Component<Props, State> {
             transform="scale(1,-1) translate(0, -53)"
           />
         </svg>
-        <canvas className="o-50p" ref={el => (this.canvas = el)}>
-          Poketo
-        </canvas>
+        <canvas
+          className="p-relative o-50p z-2"
+          ref={el => (this.canvas = el)}
+        />
+        <img className="p-absolute w-90p mw-500 z-1" src={background} />
         <div
-          className="p-relative w-90p mh-auto"
-          style={{
-            background: `url(${background}) center center no-repeat`,
-            height: 450,
-            maxWidth: 550,
-          }}>
-          <div>
-            {POKETO.map((item, index) => (
-              <div
-                key={item.key}
-                className="HomeIntro-letter"
-                style={this.getLetterTransform(index, POKETO.length)}>
-                <div className="HomeIntro-letterInner">
-                  <HomePoketoLetter letter={item.letter} />
-                </div>
+          className="p-relative z-3 mw-600 w-90p mh-auto"
+          style={{ height: '25vh' }}>
+          {POKETO.map((item, index) => (
+            <div
+              key={item.key}
+              className="HomeIntro-letter"
+              style={this.getLetterStyle(index, POKETO.length)}>
+              <div className="HomeIntro-letterInner">
+                <HomePoketoLetter letter={item.letter} />
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-        <div className="p-absolute b-0 l-0 r-0 mb-3">
+        <div className="p-absolute b-0 l-0 r-0 mb-3 z-4">
           <Badge />
         </div>
       </div>

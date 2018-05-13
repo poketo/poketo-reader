@@ -65,6 +65,7 @@ const styles = hibiscss(
       '75%': '75%',
     },
     maxWidths: {
+      250: '250px',
       500: '500px',
       600: '600px',
       900: '900px',

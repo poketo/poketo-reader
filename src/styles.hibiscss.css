@@ -125,6 +125,10 @@
   height: 100vh;
 }
 
+.ml--24 {
+  margin-left: -24px;
+}
+
 .mh-40vh {
   min-height: 40vh;
 }
@@ -139,6 +143,18 @@
 
 .mxh-40vh {
   max-height: 40vh;
+}
+
+.bs-cover {
+  background-size: cover;
+}
+
+.bs-60p {
+  background-size: 60%;
+}
+
+.bs-100p {
+  background-size: 100%;
 }
 
 .bc-transparent {
@@ -271,6 +287,18 @@
 
   .w-100p-m {
     width: 100%;
+  }
+
+  .bs-cover-m {
+    background-size: cover;
+  }
+
+  .bs-60p-m {
+    background-size: 60%;
+  }
+
+  .bs-100p-m {
+    background-size: 100%;
   }
 
   .bt-0-m {

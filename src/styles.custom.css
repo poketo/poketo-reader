@@ -89,7 +89,7 @@ button {
   padding: 0 16px;
   min-width: 120px;
   height: 44px;
-  line-height: 44px;
+  line-height: 47px;
   color: white;
   font-weight: normal;
   font-size: 16px;
@@ -104,6 +104,7 @@ button {
 }
 
 .Button--loading {
+  line-height: 44px;
 }
 
 .Button--white {
@@ -211,6 +212,7 @@ button {
   background: black;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
   padding: 48px 12px 56px;
+  max-width: 204px;
   border-radius: 24px;
   transition: transform 400ms cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -258,6 +260,7 @@ button {
 }
 
 .Phone-screen {
+  position: relative;
   width: 180px;
   height: 320px;
   overflow: hidden;
@@ -266,7 +269,6 @@ button {
 }
 
 .Markdown {
-  /* mb-3 c-gray4 */
 }
 
 .Markdown p + p {
@@ -356,6 +358,7 @@ button {
   border-top-color: currentColor;
   border-left-color: currentColor;
   animation: spinner 500ms linear infinite;
+  vertical-align: middle;
 }
 
 @keyframes spinner {
