@@ -29,6 +29,7 @@ html {
 body {
   font-size: 16px;
   font-weight: normal;
+  font-synthesis: none;
   font-feature-settings: 'kern' 1, 'liga' 1;
   line-height: 1.5;
 }

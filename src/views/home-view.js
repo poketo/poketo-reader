@@ -11,7 +11,6 @@ import Button from '../components/button';
 import Footer from '../components/home-footer';
 import Header from '../components/home-header';
 import HomeIntro from '../components/home-intro';
-import IconPoketo from '../components/icon-poketo';
 import Input from '../components/input';
 import Phone from '../components/phone';
 import ScrollReset from '../components/scroll-reset';
@@ -121,13 +120,17 @@ export default class HomeView extends Component<Props, State> {
                   direction={
                     highlightedFeature === 'follow' ? 'left' : 'right'
                   }>
-                  <img
-                    src={
-                      highlightedFeature === 'follow'
-                        ? featureFeedUrl
-                        : featureReaderUrl
-                    }
-                  />
+                  {highlightedFeature === 'follow' ? (
+                    <img
+                      alt="Track series you follow with a feed of new releases."
+                      src={featureFeedUrl}
+                    />
+                  ) : (
+                    <img
+                      alt="Read chapters free from distractions. Neat!"
+                      src={featureReaderUrl}
+                    />
+                  )}
                 </Phone>
               </div>
               <FeatureBlock

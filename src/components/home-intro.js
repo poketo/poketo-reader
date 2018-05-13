@@ -180,7 +180,7 @@ class HomeIntro extends Component<Props, State> {
           className="p-relative o-50p z-2"
           ref={el => (this.canvas = el)}
         />
-        <img className="p-absolute w-90p mw-500 z-1" src={background} />
+        <img className="p-absolute w-90p mw-500 z-1" alt="" src={background} />
         <div
           className="p-relative z-3 mw-600 w-90p mh-auto"
           style={{ height: '25vh' }}>
