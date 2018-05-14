@@ -2,24 +2,24 @@
   font-family: 'Proxima Soft';
   font-style: normal;
   font-weight: normal;
-  src: url('./assets/fonts/ProximaSoft-Regular.woff') format('woff'),
-    url('./assets/fonts/ProximaSoft-Regular.woff2') format('woff2');
+  src: url('../assets/fonts/ProximaSoft-Regular.woff') format('woff'),
+    url('../assets/fonts/ProximaSoft-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Proxima Soft';
   font-style: italic;
   font-weight: normal;
-  src: url('./assets/fonts/ProximaSoft-RegularItalic.woff') format('woff'),
-    url('./assets/fonts/ProximaSoft-RegularItalic.woff2') format('woff2');
+  src: url('../assets/fonts/ProximaSoft-RegularItalic.woff') format('woff'),
+    url('../assets/fonts/ProximaSoft-RegularItalic.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Proxima Soft';
   font-style: normal;
   font-weight: 500;
-  src: url('./assets/fonts/ProximaSoft-Semibold.woff') format('woff'),
-    url('./assets/fonts/ProximaSoft-Semibold.woff2') format('woff2');
+  src: url('../assets/fonts/ProximaSoft-Semibold.woff') format('woff'),
+    url('../assets/fonts/ProximaSoft-Semibold.woff2') format('woff2');
 }
 
 html {
@@ -191,82 +191,12 @@ button {
   vertical-align: top;
 }
 
-.Badge {
-  display: inline-block;
-  padding: 0 7px 0 9px;
-  height: 24px;
-  line-height: 24px;
-  font-size: 14px;
-  vertical-align: middle;
-}
-
 .Navigation {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
-}
-
-.Phone {
-  position: relative;
-  background: black;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
-  padding: 48px 12px 56px;
-  max-width: 204px;
-  border-radius: 24px;
-  transition: transform 400ms cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.Phone-container {
-  perspective: 400px;
-  perspective-origin: 100% 50%;
-}
-
-@media only screen and (min-width: 768px) {
-  .Phone--facingRight {
-    transform: rotateY(3deg) rotateZ(-0.5deg);
-  }
-
-  .Phone--facingLeft {
-    transform: rotateY(-3deg) rotateZ(0.5deg);
-  }
-}
-
-.Phone-speaker {
-  position: absolute;
-  width: 48px;
-  height: 6px;
-  left: 50%;
-  top: 29px;
-  transform: translateX(-50%);
-}
-
-.Phone-camera {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  left: 50%;
-  top: 13px;
-  transform: translateX(-50%);
-}
-
-.Phone-homeButton {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  left: 50%;
-  bottom: 12px;
-  transform: translateX(-50%);
-}
-
-.Phone-screen {
-  position: relative;
-  width: 180px;
-  height: 320px;
-  overflow: hidden;
-  user-drag: none;
-  user-select: none;
 }
 
 .Markdown {
@@ -338,19 +268,6 @@ button {
   background-color: #fff;
   will-change: transform;
   z-index: 200;
-}
-
-.HomeIntro-letter {
-  position: absolute;
-  transition: transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.175);
-}
-
-.HomeIntro-letterInner {
-  transition: transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.175);
-}
-
-.HomeIntro-letter:hover .HomeIntro-letterInner {
-  transform: scale(0.9);
 }
 
 .CircleLoader {

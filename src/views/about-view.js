@@ -36,7 +36,7 @@ export default () => (
             <a href="https://en.wikipedia.org/wiki/RSS">RSS reader</a> but for
             manga.
           </p>
-          <p className="pa-3 bgc-gray0 br-4">
+          <p className="pa-3 bgc-extraFadedLightCoral br-4">
             <span role="img" aria-label="Construction">
               🚧
             </span>{' '}
@@ -48,7 +48,7 @@ export default () => (
             <p>
               Currently, Poketo can read from{' '}
               <a
-                href="https://github.com/poketo/lib"
+                href={config.githubSupportedSites}
                 target="_blank"
                 rel="noopener noreferrer">
                 all the sites listed here

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import axios from 'axios';
 
+import { CSSTransition } from 'react-transition-group';
 import config from '../config';
 import featureFeedUrl from '../assets/feature-feed.png';
 import featureReaderUrl from '../assets/feature-reader.png';
@@ -11,9 +12,12 @@ import Button from '../components/button';
 import Footer from '../components/home-footer';
 import Header from '../components/home-header';
 import HomeIntro from '../components/home-intro';
+import IconCheck from '../components/icon-check-circle';
 import Input from '../components/input';
 import Phone from '../components/phone';
 import ScrollReset from '../components/scroll-reset';
+
+import '../styles/home.css';
 
 type FeatureId = 'follow' | 'read';
 
@@ -113,7 +117,7 @@ export default class HomeView extends Component<Props, State> {
                 highlighted={highlightedFeature === 'follow'}
                 onClick={this.handleFeatureClick('follow')}
                 title="Follow"
-                description="Track series you follow with a feed of new releases."
+                description="Track series with a feed of new releases."
               />
               <div className="pv-4 pv-0-m ph-5 xo-3 xo-2-m">
                 <Phone
@@ -121,15 +125,19 @@ export default class HomeView extends Component<Props, State> {
                     highlightedFeature === 'follow' ? 'left' : 'right'
                   }>
                   {highlightedFeature === 'follow' ? (
-                    <img
-                      alt="Track series you follow with a feed of new releases."
-                      src={featureFeedUrl}
-                    />
+                    <CSSTransition timeout={300} classNames="fade">
+                      <img
+                        alt="Track series you follow with a feed of new releases."
+                        src={featureFeedUrl}
+                      />
+                    </CSSTransition>
                   ) : (
-                    <img
-                      alt="Read chapters free from distractions. Neat!"
-                      src={featureReaderUrl}
-                    />
+                    <CSSTransition timeout={300} classNames="fade">
+                      <img
+                        alt="Read chapters free from distractions. Neat!"
+                        src={featureReaderUrl}
+                      />
+                    </CSSTransition>
                   )}
                 </Phone>
               </div>
@@ -145,7 +153,12 @@ export default class HomeView extends Component<Props, State> {
           <div className="mw-900 mh-auto pv-5 ta-center-m x xd-column xd-row-m xw-wrap">
             <div className="w-33p-m ph-4 pv-3">
               <h3 className="fw-semibold mb-2">Easy reading</h3>
-              <p>Supports thousands of series from sites across the web.</p>
+              <p>
+                Supports thousands of series from{' '}
+                <a className="Link" href={config.githubSupportedSites}>
+                  sites across the web
+                </a>.
+              </p>
             </div>
             <div className="w-33p-m ph-4 pv-3">
               <h3 className="fw-semibold mb-2 ml--24 ml-0-m">
@@ -157,7 +170,7 @@ export default class HomeView extends Component<Props, State> {
               <h3 className="fw-semibold mb-2">Open source</h3>
               <p>
                 Built as an{' '}
-                <a className="Link" href="https://github.com/poketo/site">
+                <a className="Link" href={config.githubSiteUrl}>
                   open source project
                 </a>. Help out or fork it!
               </p>
@@ -166,8 +179,8 @@ export default class HomeView extends Component<Props, State> {
           <div className="mw-600 w-90p mh-auto pv-5">
             {status === 'success' ? (
               <div className="ta-center">
-                <div className="fw-semibold">Success!</div>
-                <p>We’ll reach out in the coming weeks.</p>
+                <IconCheck width="1.5em" height="1.5em" />
+                <div className="mt-2 va-bottom">Success!</div>
               </div>
             ) : (
               <form onSubmit={this.handleSubmit}>

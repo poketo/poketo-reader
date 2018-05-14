@@ -28,6 +28,7 @@ const styles = hibiscss(
       coral: '#ff6f6f',
       lightCoral: '#ff9c8f',
       fadedLightCoral: 'rgba(255, 156, 143, 0.5)',
+      extraFadedLightCoral: 'rgba(255, 156, 143, 0.15)',
       blue: '#73d2ff',
       green: '#b2f2bb',
       yellow: '#ffe479',
@@ -76,7 +77,7 @@ const styles = hibiscss(
   },
 );
 
-const outputPath = './src/styles.base.css';
+const outputPath = './src/styles/base.css';
 
 async function writeStyles() {
   await fs.writeFile(outputPath, styles);

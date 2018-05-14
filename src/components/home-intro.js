@@ -165,7 +165,7 @@ class HomeIntro extends Component<Props, State> {
 
   render() {
     return (
-      <div className="p-relative x xd-column xj-center xa-center ta-center c-white bgc-fadedLightCoral mh-50vh">
+      <div className="p-relative x xd-column xj-center xa-center ta-center c-white bgc-fadedLightCoral mh-40vh">
         <svg
           viewBox="0 0 1200 53"
           className="p-absolute b-0 c-offwhite z-5"
@@ -180,7 +180,12 @@ class HomeIntro extends Component<Props, State> {
           className="p-relative o-50p z-2"
           ref={el => (this.canvas = el)}
         />
-        <img className="p-absolute w-90p mw-500 z-1" alt="" src={background} />
+        <img
+          className="p-absolute mw-600 z-1"
+          alt=""
+          src={background}
+          style={{ bottom: -20 }}
+        />
         <div
           className="p-relative z-3 mw-600 w-90p mh-auto"
           style={{ height: '25vh' }}>
