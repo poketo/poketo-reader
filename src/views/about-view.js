@@ -18,7 +18,7 @@ const QuestionContainer = ({ id, question, children }) => (
 );
 
 export default () => (
-  <div className="bgc-offwhite fs-18">
+  <div className="bgc-offwhite fs-16 fs-18-m">
     <Head>
       <title>About</title>
     </Head>

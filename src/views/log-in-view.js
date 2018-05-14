@@ -32,7 +32,7 @@ class LogInView extends Component<Props, State> {
 
   render() {
     return (
-      <div className="mh-100vh c-gray4 bgc-offwhite fs-18">
+      <div className="mh-100vh c-gray4 bgc-offwhite fs-16 fs-18-m">
         <Head>
           <title>Log In</title>
         </Head>
