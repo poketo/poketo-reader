@@ -24,12 +24,18 @@ export default class Header extends Component<Props> {
         className={classNames(
           'x xj-spaceBetween pt-4 pb-3 ph-3 mw-900 mh-auto',
           {
-            'p-absolute l-0 r-0 z-9 c-black': overlay,
+            'p-absolute l-0 r-0 z-9 c-gray5': overlay,
           },
         )}>
         <Link to="/">
           <div className="x xa-center c-coral">
-            <IconPoketo height={32} className="c-coral" />
+            <IconPoketo
+              height={32}
+              className={classNames({
+                'c-black': overlay,
+                'c-coral': !overlay,
+              })}
+            />
             {overlay === false && (
               <IconPoketoWordmark
                 className="c-black ml-2"

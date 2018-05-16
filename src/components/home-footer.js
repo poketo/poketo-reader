@@ -10,7 +10,7 @@ type Props = {};
 
 const Footer = (props: Props) => (
   <div className="x xd-column xd-row-m ta-center ta-left-m xj-spaceBetween pv-5 fs-14">
-    <div className="xo-2 mt-2">
+    <div className="x xa-center xo-2 mt-2 mt-0-m">
       <a href={`mailto:${config.email}`}>{config.email}</a>
     </div>
     <div className="xo-1 xo-3-m">

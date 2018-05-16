@@ -5,6 +5,7 @@ import Head from 'react-helmet';
 
 import Header from '../components/home-header';
 import Footer from '../components/home-footer';
+import HomeLayout from '../components/home-layout';
 import ScrollReset from '../components/scroll-reset';
 import config from '../config';
 
@@ -18,7 +19,7 @@ const QuestionContainer = ({ id, question, children }) => (
 );
 
 export default () => (
-  <div className="bgc-offwhite fs-16 fs-18-m">
+  <HomeLayout>
     <Head>
       <title>About</title>
     </Head>
@@ -88,5 +89,5 @@ export default () => (
         <Footer />
       </div>
     </div>
-  </div>
+  </HomeLayout>
 );

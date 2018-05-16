@@ -123,17 +123,17 @@ button {
 }
 
 .Button--primary {
-  background-color: #ff7462;
+  background-color: #ff6f6f;
   border: none;
 }
 
 .Button--primary[disabled] {
-  background-color: #776d6c;
+  background-color: #a69b9b;
   color: rgba(255, 255, 255, 0.5);
 }
 
 .Button--primary:not([disabled]):hover {
-  background-color: #de6c5d;
+  background-color: #eb6e6e;
 }
 
 .CodeBlock {

@@ -37,7 +37,7 @@ const POKETO = [
 
 class HomeIntro extends Component<Props, State> {
   resizeHandler: ?Function;
-  size: number = 50;
+  size: number = 45;
   noiseZ: number;
   columns: number;
   rows: number;
@@ -118,8 +118,8 @@ class HomeIntro extends Component<Props, State> {
         ctx.save();
         ctx.translate(x * this.size, y * this.size);
         ctx.rotate(angle);
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#ff6f6f';
+        ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(0, Math.max(Math.min(length * this.size, 400), 15));
@@ -165,10 +165,10 @@ class HomeIntro extends Component<Props, State> {
 
   render() {
     return (
-      <div className="p-relative x xd-column xj-center xa-center ta-center c-white bgc-fadedLightCoral mh-40vh">
+      <div className="p-relative x xd-column xj-center xa-center of-hidden ta-center c-white bgc-fadedCoral mh-50vh">
         <svg
           viewBox="0 0 1200 53"
-          className="p-absolute b-0 c-offwhite z-5"
+          className="p-absolute b-0 c-offwhite z-4"
           width="100%">
           <path
             fill="currentColor"
@@ -177,18 +177,19 @@ class HomeIntro extends Component<Props, State> {
           />
         </svg>
         <canvas
-          className="p-relative o-50p z-2"
+          className="p-relative o-50p z-1"
           ref={el => (this.canvas = el)}
         />
-        <img
-          className="p-absolute mw-600 z-1"
-          alt=""
-          src={background}
-          style={{ bottom: -20 }}
-        />
         <div
-          className="p-relative z-3 mw-600 w-90p mh-auto"
-          style={{ height: '25vh' }}>
+          className="p-absolute p-fill z-2"
+          style={{
+            backgroundImage: `url(${background})`,
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: '80% 110%',
+          }}
+        />
+        <div className="p-relative z-3 mw-600 w-100p mh-auto mh-40vh">
           {POKETO.map((item, index) => (
             <div
               key={item.key}
@@ -200,7 +201,7 @@ class HomeIntro extends Component<Props, State> {
             </div>
           ))}
         </div>
-        <div className="p-absolute b-0 l-0 r-0 mb-3 z-4">
+        <div className="p-absolute b-0 l-0 r-0 mb-3 mb-5-m z-4">
           <Badge />
         </div>
       </div>

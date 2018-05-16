@@ -27,6 +27,7 @@ const styles = hibiscss(
       black: '#292723',
       coral: '#ff6f6f',
       lightCoral: '#ff9c8f',
+      fadedCoral: 'rgba(255, 106, 106, 0.5)',
       fadedLightCoral: 'rgba(255, 156, 143, 0.5)',
       extraFadedLightCoral: 'rgba(255, 156, 143, 0.15)',
       blue: '#73d2ff',
