@@ -2,12 +2,15 @@
 
 import React from 'react';
 import Head from 'react-helmet';
+import HomeLayout from '../components/home-layout';
 
 export default () => (
-  <div className="pa-3 x xa-center xj-center mh-100vh w-100p">
+  <HomeLayout>
     <Head>
       <title>Not found</title>
     </Head>
-    <p>Page not found</p>
-  </div>
+    <div className="pa-3 x xa-center xj-center">
+      <p>Page not found</p>
+    </div>
+  </HomeLayout>
 );

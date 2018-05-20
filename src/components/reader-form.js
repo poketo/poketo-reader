@@ -8,7 +8,7 @@ import Input from '../components/input';
 import utils from '../utils';
 import api from '../api';
 
-import type { TraeError, TraeResponse } from '../types';
+import type { AxiosResponse, AxiosError } from '../api';
 
 const examplesList = [
   {
@@ -79,7 +79,7 @@ export default class ReaderForm extends Component<Props, State> {
       .catch(this.handleSubmitError);
   };
 
-  handleSubmitSuccess = (response: TraeResponse) => {
+  handleSubmitSuccess = (response: AxiosResponse) => {
     const { history } = this.props;
     const { data: series } = response;
 
@@ -93,13 +93,13 @@ export default class ReaderForm extends Component<Props, State> {
     );
   };
 
-  handleSubmitError = (err: TraeError) => {
+  handleSubmitError = (err: AxiosError) => {
     let errorCode;
 
-    switch (err.status) {
+    switch (err.response.status) {
       case 400:
         errorCode =
-          err.data.indexOf('not supported') === -1
+          err.response.data.indexOf('not supported') === -1
             ? 'INVALID_URL'
             : 'SERVER_UNSUPPORTED_SITE';
         break;

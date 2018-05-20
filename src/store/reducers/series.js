@@ -1,90 +1,85 @@
 // @flow
 
 import { normalize } from 'normalizr';
+import ms from 'milliseconds';
 import schema from '../schema';
 import utils from '../../utils';
-import type { Series } from '../../types';
-import type {
-  FetchStatusState,
-  ThunkAction,
-  AddEntitiesAction,
-  SetMultipleSeriesAction,
-  SetSeriesAction,
-  SetSeriesStatusAction,
-} from '../types';
+import type { SiteId, Id, Slug, Series } from '../../types';
+import type { EntityStatus, Thunk, SeriesAction } from '../types';
 
 type State = {
-  _status: FetchStatusState,
-  [id: string]: Series,
+  _status: { [id: Id]: EntityStatus },
+  [id: Id]: Series,
 };
 
-type Action =
-  | AddEntitiesAction
-  | SetMultipleSeriesAction
-  | SetSeriesAction
-  | SetSeriesStatusAction;
+type Action = SeriesAction;
 
-export function fetchSeriesIfNeeded(siteId: string, slug: string): ThunkAction {
+export function fetchSeriesIfNeeded(siteId: SiteId, slug: Slug): Thunk {
   return (dispatch, getState) => {
-    if (shouldFetchSeries(getState(), siteId, slug)) {
+    const id = utils.getId(siteId, slug);
+    if (shouldFetchSeries(getState(), id)) {
       dispatch(fetchSeries(siteId, slug));
     }
   };
 }
 
-function shouldFetchSeries(state, siteId, slug): boolean {
-  const seriesById = state.series;
+const STALE_AFTER = ms.hours(2) / 1000;
 
-  if (seriesById._status.isFetching) {
-    return false;
+export function shouldFetchSeries(state: Object, id: Id): boolean {
+  const seriesById = state.series;
+  const status = seriesById._status[id];
+
+  switch (status && status.fetchStatus) {
+    case 'fetching':
+      return false;
+    case 'fetched':
+      const isStale = utils.getTimestamp() - status.lastFetchedAt > STALE_AFTER;
+      return status.didInvalidate || isStale;
+    default:
+      return true;
   }
-
-  const seriesId = utils.getId(siteId, slug);
-  const upToDate = isSeriesUpToDate(state, seriesId);
-
-  return !upToDate;
 }
 
-export function isSeriesUpToDate(state: Object, seriesId: string): boolean {
-  const seriesById = state.series;
-  const existingSeries = seriesById[seriesId];
-
-  // NOTE: we're assuming right now that if we have the data on the client,
-  // it's up-to-date.
-  return Boolean(existingSeries);
-}
-
-export function fetchSeries(siteId: string, slug: string): ThunkAction {
+export function fetchSeries(siteId: SiteId, slug: Slug): Thunk {
   return (dispatch, getState, api) => {
+    const id = utils.getId(siteId, slug);
+
     dispatch({
-      type: 'SET_SERIES_STATUS',
-      payload: { isFetching: true, errorCode: null },
+      type: 'SET_SERIES_ENTITY_STATUS',
+      payload: { id, status: { fetchStatus: 'fetching', errorCode: null } },
     });
 
     api
       .fetchSeries(siteId, slug)
       .then(response => {
         const normalized = normalize(response.data, schema.series);
-        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
         dispatch({
-          type: 'SET_SERIES_STATUS',
-          payload: { isFetching: false, errorCode: null },
+          type: 'SET_SERIES_ENTITY_STATUS',
+          payload: {
+            id,
+            status: {
+              fetchStatus: 'fetched',
+              errorCode: null,
+              lastFetchedAt: utils.getTimestamp(),
+            },
+          },
         });
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
       })
       .catch(err => {
         dispatch({
-          type: 'SET_SERIES_STATUS',
-          payload: { isFetching: false, errorCode: 'UNKNOWN_ERROR' },
+          type: 'SET_SERIES_ENTITY_STATUS',
+          payload: {
+            id,
+            status: { fetchStatus: 'error', errorCode: 'UNKNOWN_ERROR' },
+          },
         });
       });
   };
 }
 
 const initialState = {
-  _status: {
-    isFetching: false,
-    errorCode: null,
-  },
+  _status: {},
 };
 
 export default function reducer(
@@ -112,8 +107,17 @@ export default function reducer(
         [action.payload.id]: { ...state[action.payload.id], ...action.payload },
       };
     }
-    case 'SET_SERIES_STATUS': {
-      return { ...state, _status: { ...state._status, ...action.payload } };
+    case 'SET_SERIES_ENTITY_STATUS': {
+      return {
+        ...state,
+        _status: {
+          ...state._status,
+          [action.payload.id]: {
+            ...state._status[action.payload.id],
+            ...action.payload.status,
+          },
+        },
+      };
     }
     default: {
       return state;
