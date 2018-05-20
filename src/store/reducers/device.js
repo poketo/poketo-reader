@@ -7,7 +7,6 @@ export type OrientationValue = 'portrait' | 'landscape';
 
 type Action = DeviceAction;
 type State = {
-  isAppleDevice: boolean,
   isStandalone: boolean,
   isOnline: boolean,
   orientation: OrientationValue,
@@ -24,13 +23,10 @@ export function setOrientation(direction: OrientationValue): Action {
 const initialState: State = {
   isOnline: navigator.onLine,
   isStandalone: utils.isStandalone(),
-  orientation: 'portrait',
+  orientation: utils.getDeviceOrientation(),
 };
 
-export default function reducer(
-  state: State = initialState,
-  action: Action,
-): State {
+export default function reducer(state: State = initialState, action: Action): State {
   switch (action.type) {
     case 'SET_NETWORK_STATUS': {
       return { ...state, isOnline: action.payload };
