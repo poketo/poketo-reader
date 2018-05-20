@@ -18,7 +18,7 @@ type State = {
 };
 
 const Badge = () => (
-  <span className="Badge br-4 bgc-white c-coral fw-semibold ls-loose tt-uppercase ta-center">
+  <span className="Badge br-4 bgc-white c-black fw-semibold ls-loose tt-uppercase ta-center">
     Beta
   </span>
 );
@@ -201,7 +201,7 @@ class HomeIntro extends Component<Props, State> {
             </div>
           ))}
         </div>
-        <div className="p-absolute b-0 l-0 r-0 mb-3 mb-5-m z-4">
+        <div className="p-absolute b-0 l-0 r-0 mb-4 z-4">
           <Badge />
         </div>
       </div>

@@ -125,10 +125,6 @@
   height: 100vh;
 }
 
-.ml--24 {
-  margin-left: -24px;
-}
-
 .mh-40vh {
   min-height: 40vh;
 }
@@ -197,18 +193,6 @@
 }
 .bc-coral {
   border-color: #ff7462;
-}
-.bc-blue {
-  border-color: #73d2ff;
-}
-.bc-green {
-  border-color: #b2f2bb;
-}
-.bc-yellow {
-  border-color: #ffe479;
-}
-.bc-purple {
-  border-color: #81a0fc;
 }
 
 .ba-1 {

@@ -32,8 +32,6 @@ const styles = hibiscss(
       extraFadedLightCoral: 'rgba(255, 156, 143, 0.15)',
       blue: '#73d2ff',
       green: '#b2f2bb',
-      yellow: '#ffe479',
-      purple: '#81a0fc',
     },
     fontSize: {
       9: '9px',
@@ -67,7 +65,6 @@ const styles = hibiscss(
       '75%': '75%',
     },
     maxWidths: {
-      250: '250px',
       500: '500px',
       600: '600px',
       900: '900px',
