@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import classNames from 'classnames';
 
 import config from '../config';
 import Button from '../components/button';
@@ -13,25 +12,10 @@ import ScrollReset from '../components/scroll-reset';
 
 import '../styles/home.css';
 
-type FeatureId = 'follow' | 'read';
-
 type Props = {};
-type State = {
-  highlightedFeature: FeatureId,
-};
 
-export default class HomeView extends Component<Props, State> {
-  state = {
-    highlightedFeature: 'follow',
-  };
-
-  handleFeatureClick = (featureId: FeatureId) => () => {
-    this.setState({ highlightedFeature: featureId });
-  };
-
+export default class HomeView extends Component<Props> {
   render() {
-    const { highlightedFeature } = this.state;
-
     return (
       <HomeLayout>
         <ScrollReset />
