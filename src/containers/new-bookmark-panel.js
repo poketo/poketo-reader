@@ -7,18 +7,19 @@ import debounce from 'throttle-debounce/debounce';
 import Button from '../components/button';
 import Input from '../components/input';
 import Panel from '../components/panel';
-import api from '../api';
+import api, { type AxiosError } from '../api';
+import config from '../config';
 import utils from '../utils';
 
 import schema from '../store/schema';
 
-import type { Series, TraeError } from '../types';
-import type { Dispatch } from '../store/types';
+import type { Series } from '../types';
+import type { Dispatch, EntitiesPayload } from '../store/types';
 
 type NewSeriesErrorCode =
+  | 'INVALID_SERIES'
   | 'INVALID_URL'
   | 'UNSUPPORTED_SITE'
-  | 'INVALID_SERIES'
   | 'SERVER_NOT_FOUND'
   | 'SERVER_ALREADY_EXISTS'
   | 'SERVER_UNKNOWN_ERROR';
@@ -26,8 +27,8 @@ type NewSeriesErrorCode =
 type BookmarkFetchState = 'ADDED' | 'READY' | 'SUBMITTING' | 'UNREADY';
 
 type Props = {
+  addEntities: (entities: EntitiesPayload) => void,
   collectionSlug: string,
-  dispatch: Dispatch,
   onRequestClose: () => void,
 };
 
@@ -59,10 +60,16 @@ class NewBookmarkPanel extends Component<Props, State> {
 
   static mapStateToProps = state => ({});
 
+  static mapDispatchToProps = (dispatch: Dispatch) => ({
+    addEntities(payload) {
+      dispatch({ type: 'ADD_ENTITIES', payload });
+    },
+  });
+
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { collectionSlug, dispatch, onRequestClose } = this.props;
+    const { addEntities, collectionSlug, onRequestClose } = this.props;
     const { bookmarkFetchState, errorCode, seriesUrl, linkToUrl } = this.state;
 
     if (bookmarkFetchState === 'SUBMITTING') {
@@ -89,7 +96,7 @@ class NewBookmarkPanel extends Component<Props, State> {
           series: schema.series,
         });
 
-        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
+        addEntities(normalized.entities);
         this.setState({ bookmarkFetchState: 'ADDED' });
         setTimeout(() => {
           onRequestClose();
@@ -98,17 +105,17 @@ class NewBookmarkPanel extends Component<Props, State> {
       .catch(this.handleSubmitError);
   };
 
-  handleSubmitError = (err: TraeError) => {
+  handleSubmitError = (err: AxiosError) => {
     let errorCode;
 
-    switch (err.status) {
+    switch (err.response.status) {
       case 404:
         errorCode = 'SERVER_NOT_FOUND';
         break;
       case 400:
-        errorCode = /already exists/i.test(err.data)
+        errorCode = /already exists/i.test(err.response.data)
           ? 'SERVER_ALREADY_EXISTS'
-          : 'SERVER_UNKNOWN_ERROR';
+          : 'INVALID_SERIES';
         break;
       default:
         errorCode = 'SERVER_UNKNOWN_ERROR';
@@ -207,14 +214,14 @@ class NewBookmarkPanel extends Component<Props, State> {
             isn't a supported site. Here's{' '}
             <a
               className="Link"
-              href="https://github.com/poketo/service/tree/master/lib/api#supported-sites"
+              href={`${config.githubLibraryUrl}#supported-sites`}
               rel="noopener noreferrer"
               target="_blank">
               a full list of supported sites
             </a>. Make an issue{' '}
             <a
               className="Link"
-              href="https://github.com/poketo/service/issues/new"
+              href={`${config.githubLibraryUrl}/issues/new`}
               rel="noopener noreferrer"
               target="_blank">
               on the Github repo
@@ -254,8 +261,8 @@ class NewBookmarkPanel extends Component<Props, State> {
 
     return (
       <Panel onRequestClose={onRequestClose}>
-        <div className="ph-3 pt-3 pb-5">
-          <h3 className="fw-medium">New series</h3>
+        <div className="ph-3 pt-3 pb-4">
+          <h3 className="fw-semibold">New series</h3>
           <p className="mb-3">Paste the URL of a series you want to follow.</p>
           <form type="post" onSubmit={this.handleSubmit} noValidate>
             <div className="mb-2">
@@ -304,4 +311,7 @@ class NewBookmarkPanel extends Component<Props, State> {
   }
 }
 
-export default connect(NewBookmarkPanel.mapStateToProps)(NewBookmarkPanel);
+export default connect(
+  NewBookmarkPanel.mapStateToProps,
+  NewBookmarkPanel.mapDispatchToProps,
+)(NewBookmarkPanel);

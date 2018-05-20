@@ -12,24 +12,26 @@ import NotFoundView from './not-found-view';
 
 import { fetchCollectionIfNeeded } from '../store/reducers/collections';
 
-import type { Dispatch } from '../store/types';
-import type { Chapter, ChapterMetadata, Collection, Series } from '../types';
+import type { Dispatch, EntityStatus } from '../store/types';
+import type { Collection } from '../types';
 
 type Props = {
-  dispatch: Dispatch,
   collection: ?Collection,
-  collectionsBySlug: { [slug: string]: Collection },
-  chaptersById: { [id: string]: Chapter | ChapterMetadata },
-  seriesById: { [id: string]: Series },
-  match: { params: { collectionSlug: string } },
+  dispatch: Dispatch,
   history: RouterHistory,
+  match: { params: { collectionSlug: string } },
+  status: ?EntityStatus,
 };
 
 class FeedView extends Component<Props> {
-  static mapStateToProps = (state, ownProps) => ({
-    collectionsBySlug: state.collections,
-    collection: state.collections[ownProps.match.params.collectionSlug],
-  });
+  static mapStateToProps = (state, ownProps) => {
+    const slug = ownProps.match.params.collectionSlug;
+
+    return {
+      collection: state.collections[slug],
+      status: state.collections._status[slug],
+    };
+  };
 
   componentDidMount() {
     const { dispatch, match } = this.props;
@@ -39,17 +41,14 @@ class FeedView extends Component<Props> {
   }
 
   render() {
-    const { collection, history, collectionsBySlug } = this.props;
-    const { isFetching, errorCode } = collectionsBySlug._status;
+    const { collection, history, status } = this.props;
+    const { fetchStatus, errorCode } = status || {};
 
-    if (isFetching) {
+    if (fetchStatus === 'fetching') {
       return (
         <div>
           <div className="x xd-column xa-center xj-center p-fixed p-center ta-center">
-            <div className="mb-3">
-              <CircleLoader />
-            </div>
-            <div className="fs-12 o-50p">Spinning up a server, one sec...</div>
+            <CircleLoader />
           </div>
         </div>
       );
