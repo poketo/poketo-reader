@@ -8,8 +8,6 @@ import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
 import CollectionFeed from '../containers/collection-feed';
 
-import NotFoundView from './not-found-view';
-
 import { fetchCollectionIfNeeded } from '../store/reducers/collections';
 
 import type { Dispatch, EntityStatus } from '../store/types';
@@ -41,8 +39,9 @@ class FeedView extends Component<Props> {
   }
 
   render() {
-    const { collection, history, status } = this.props;
+    const { collection, history, status, match } = this.props;
     const { fetchStatus, errorCode } = status || {};
+    const { collectionSlug } = match.params;
 
     if (fetchStatus === 'fetching') {
       return (
@@ -55,7 +54,9 @@ class FeedView extends Component<Props> {
     }
 
     if (errorCode === 'NOT_FOUND' || !collection) {
-      return <NotFoundView />;
+      return (
+        <div className="pa-3">We couldn't find a collection with the code {collectionSlug}</div>
+      );
     } else if (errorCode) {
       return (
         <div className="pa-3">

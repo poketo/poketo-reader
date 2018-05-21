@@ -56,11 +56,7 @@ class HomeIntro extends Component<Props, State> {
 
     if (canvas) {
       this.ctx = canvas.getContext('2d');
-      this.resizeHandler = fit(
-        canvas,
-        canvas.parentNode,
-        window.devicePixelRatio,
-      );
+      this.resizeHandler = fit(canvas, canvas.parentNode, window.devicePixelRatio);
       this.setupGrid();
       this.setupField();
     }
@@ -149,15 +145,11 @@ class HomeIntro extends Component<Props, State> {
     const size = (100 - padding * 2) / count;
     const gutter = 1;
 
-    const scale =
-      this.state.windowSizeKey === 'm' ? random(1.9, 2.1) : random(1.3, 1.5);
+    const scale = this.state.windowSizeKey === 'm' ? random(1.9, 2.1) : random(1.3, 1.5);
 
     return {
-      top: `${random(40, 60)}%`,
-      left: `${random(
-        (size + gutter) * index + padding,
-        (size - gutter) * (index + 1),
-      )}%`,
+      top: `${random(30, 50)}%`,
+      left: `${random((size + gutter) * index + padding, (size - gutter) * (index + 1))}%`,
       transform: `rotate(${random(-30, 30)}deg) scale(${scale})`,
       transitionDelay: `${index * random(40, 70)}ms`,
     };
@@ -165,31 +157,25 @@ class HomeIntro extends Component<Props, State> {
 
   render() {
     return (
-      <div className="p-relative x xd-column xj-center xa-center of-hidden ta-center c-white bgc-fadedCoral mh-50vh">
-        <svg
-          viewBox="0 0 1200 53"
-          className="p-absolute b-0 c-offwhite z-4"
-          width="100%">
+      <div className="p-relative x xd-column xj-center of-hidden ta-center c-white bgc-fadedCoral mh-40vh">
+        <svg viewBox="0 0 1200 53" className="p-absolute b-0 c-offwhite z-4" width="100%">
           <path
             fill="currentColor"
             d="M1196.008 53H1200V0H0v44.816-8.184C159.341 14.63 311.343 2.484 456.007.196 600.122-2.084 846.789 15.518 1196.008 53z"
             transform="scale(1,-1) translate(0, -53)"
           />
         </svg>
-        <canvas
-          className="p-relative o-50p z-1"
-          ref={el => (this.canvas = el)}
-        />
+        <canvas className="p-relative o-50p z-1" ref={el => (this.canvas = el)} />
         <div
           className="p-absolute p-fill z-2"
           style={{
-            backgroundImage: `url(${background})`,
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg height="363" viewBox="0 0 404 363" width="404" xmlns="http://www.w3.org/2000/svg"><path d="m201.882848 360.5c40.112875 0 78.342555 7.538534 111.617152-10.5 49.64757-26.914506 86.707013-91.258107 90-165.5 1.554254-35.041364.16575-74.203903-15-100-38.500912-65.4879092-128.98711-90.75019611-214-82.5-24.327749 2.36092074-45.172494 14.5009178-65 23.5-39.0979202 17.7453183-69.2482938 45.5348782-87.8980493 79.981159-17.96099248 33.174129-25.25515049 72.522374-19.6019507 115.018841 4.37440335 32.883446 19.26438 66.524047 35 86.5 36.4238339 46.239094 95.076607 53.5 164.882848 53.5z" fill-rule="evenodd"/></svg>')`,
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
-            backgroundSize: '80% 110%',
+            backgroundSize: '80% 140%',
           }}
         />
-        <div className="p-relative z-3 mw-600 w-100p mh-auto mh-40vh">
+        <div className="p-relative z-3 mw-600 w-100p mh-auto">
           {POKETO.map((item, index) => (
             <div
               key={item.key}

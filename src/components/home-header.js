@@ -6,12 +6,17 @@ import { Link, NavLink } from 'react-router-dom';
 
 import IconPoketo from '../components/icon-poketo';
 import IconPoketoWordmark from '../components/icon-poketo-wordmark';
+import utils from '../utils';
 
 type Props = {
   overlay?: boolean,
 };
 
-export default class Header extends Component<Props> {
+type State = {
+  isLogInPanelOpen: boolean,
+};
+
+export default class Header extends Component<Props, State> {
   static defaultProps = {
     overlay: false,
   };
@@ -21,29 +26,26 @@ export default class Header extends Component<Props> {
 
     return (
       <header
-        className={classNames(
-          'x xj-spaceBetween pt-4 pb-3 ph-3 mw-900 mh-auto',
-          {
-            'p-absolute l-0 r-0 z-9 c-gray5': overlay,
-          },
-        )}>
+        className={classNames('x xj-spaceBetween pa-3', {
+          'p-absolute l-0 r-0 z-9 c-black': overlay,
+        })}>
         <Link to="/">
           <div className="x xa-center c-coral">
-            <IconPoketo height={32} className="c-coral" />
+            <IconPoketo height={32} />
             {overlay === false && (
-              <IconPoketoWordmark
-                className="c-black ml-2"
-                width={100}
-                height={32}
-              />
+              <IconPoketoWordmark className="c-black ml-2" width={100} height={32} />
             )}
           </div>
         </Link>
         <nav className="x xa-center">
-          <NavLink to="/about" className="mr-3" activeClassName="c-coral">
+          <NavLink to="/about" activeClassName="o-50p">
             About
           </NavLink>
-          <Link to="/login">Log In</Link>
+          {utils.isStandalone() && (
+            <Link className="ml-3" to="/login">
+              Log In
+            </Link>
+          )}
         </nav>
       </header>
     );

@@ -20,29 +20,60 @@
   transform: scale(0.9);
 }
 
+.paper-shadow {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.Browser {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  padding-top: 19px;
+  background: #ccc;
+}
+
+.Browser-button {
+  background: #999;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: 7px;
+  left: 8px;
+}
+
+.Browser-button:nth-child(2) {
+  left: 21px;
+}
+
+.Browser-button:nth-child(3) {
+  left: 34px;
+}
+
+.Browser-screen {
+  height: 0;
+  padding-bottom: 72%;
+  overflow: hidden;
+  user-drag: none;
+  user-select: none;
+}
+
+.Browser img {
+  vertical-align: top;
+}
+
 .Phone {
   position: relative;
-  background: black;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+  background: #141414;
   padding: 48px 12px 56px;
   max-width: 204px;
   border-radius: 24px;
   transition: transform 400ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.Phone-container {
-  perspective: 800px;
-  perspective-origin: center center;
-}
-
-@media only screen and (min-width: 768px) {
-  .Phone--facingRight {
-    transform: rotateY(3deg) rotateZ(-1deg);
-  }
-
-  .Phone--facingLeft {
-    transform: rotateY(-3deg) rotateZ(1deg);
-  }
+.Phone-speaker,
+.Phone-camera,
+.Phone-homeButton {
+  background: #444;
 }
 
 .Phone-speaker {
@@ -79,6 +110,52 @@
   overflow: hidden;
   user-drag: none;
   user-select: none;
+}
+
+.HomeBrowserPreview {
+  display: none;
+}
+
+.HomePhonePreview {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media only screen and (min-width: 400px) {
+  .HomeBrowserPreview {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 140px;
+    min-width: 564px;
+    transform: translateY(-50%) scale(0.8);
+  }
+
+  .HomePhonePreview {
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%) scale(0.8);
+    z-index: 2;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .HomeBrowserPreview {
+    display: block;
+    position: relative;
+    top: -20px;
+    left: auto;
+    transform: none;
+  }
+
+  .HomePhonePreview {
+    top: 60%;
+    left: 50%;
+    transform: translate(30%, -50%);
+    z-index: 2;
+  }
 }
 
 .fade-enter > .Panel-background {

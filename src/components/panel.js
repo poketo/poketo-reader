@@ -3,7 +3,7 @@
 import React, { Component, type Node } from 'react';
 import ReactDOM from 'react-dom';
 import ScrollLock from 'react-scrolllock';
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 type PanelProps = {
   children?: Node,
@@ -29,6 +29,7 @@ type PanelTransitionProps = {
 class Panel extends Component<PanelProps> {
   static Button: (props: PanelButtonProps) => Node;
   static Transition: (props: PanelTransitionProps) => Node;
+  static TransitionGroup: (props: {}) => Node;
   static Link: (props: PanelLinkProps) => Node;
 
   componentDidMount() {
@@ -73,9 +74,7 @@ class Panel extends Component<PanelProps> {
         <div className="Panel-background" onClick={this.handleOverlayClick} />
         <div className="Panel-menu">
           {children}
-          <button
-            className="x w-100p bt-1 bc-gray1 xa-stretch"
-            onClick={this.handleOverlayClick}>
+          <button className="x w-100p bt-1 bc-gray1 xa-stretch" onClick={this.handleOverlayClick}>
             <div className="w-100p pa-3 ta-center o-50p">Cancel</div>
           </button>
         </div>
@@ -102,5 +101,7 @@ Panel.Link = ({ icon, label, ...props }: PanelLinkProps) => (
 Panel.Transition = (props: PanelTransitionProps) => (
   <CSSTransition {...props} timeout={400} classNames="panel" />
 );
+
+Panel.TransitionGroup = TransitionGroup;
 
 export default Panel;

@@ -112,8 +112,8 @@ button {
   background-color: #fff;
   color: hsl(6, 70%, 60%);
   box-shadow: 0 2px 2px hsla(6, 50%, 5%, 0.15);
-  transition: background-color 200ms ease, color 200ms ease,
-    transform 200ms ease, box-shadow 200ms ease;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .Button--white:active {
@@ -141,8 +141,7 @@ button {
 }
 
 .CodeBlock > code {
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
-    monospace;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 }
 
 .StatusBar {
@@ -172,9 +171,7 @@ button {
   opacity: 1;
 }
 
-.PageImage:not(.PageImage--hasSize)
-  .PageImage-image.js-lazysizes-loaded
-  + .PageImage-background {
+.PageImage:not(.PageImage--hasSize) .PageImage-image.js-lazysizes-loaded + .PageImage-background {
   display: none;
 }
 
@@ -197,6 +194,13 @@ button {
   left: 0;
   right: 0;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+}
+
+@media only screen and (min-width: 480px) {
+  .Navigation {
+    position: absolute;
+    box-shadow: none;
+  }
 }
 
 .Markdown {
