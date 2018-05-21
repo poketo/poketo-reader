@@ -16,6 +16,8 @@ class DeviceStatus extends Component<Props> {
     window.addEventListener('orientationchange', this.handleOrientationChange);
     window.addEventListener('online', this.handleNetworkStatusChange);
     window.addEventListener('offline', this.handleNetworkStatusChange);
+    this.handleOrientationChange();
+    this.handleNetworkStatusChange();
   }
 
   componentWillUnmount() {
