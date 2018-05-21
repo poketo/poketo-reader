@@ -157,7 +157,7 @@ class HomeIntro extends Component<Props, State> {
 
   render() {
     return (
-      <div className="p-relative x xd-column xj-center of-hidden ta-center c-white bgc-fadedCoral mh-40vh">
+      <div className="p-relative x xd-column xj-center of-hidden ta-center c-white bgc-fadedCoral mh-50vh">
         <svg viewBox="0 0 1200 53" className="p-absolute b-0 c-offwhite z-4" width="100%">
           <path
             fill="currentColor"
