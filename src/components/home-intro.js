@@ -5,7 +5,6 @@ import fit from 'canvas-fit';
 import { Noise } from 'noisejs';
 import throttle from 'throttle-debounce/throttle';
 
-import background from '../assets/intro-bg.svg';
 import HomePoketoLetter from './home-poketo-letter';
 
 const noise = new Noise(Math.random());
@@ -169,7 +168,7 @@ class HomeIntro extends Component<Props, State> {
         <div
           className="p-absolute p-fill z-2"
           style={{
-            backgroundImage: `url('${background}')`,
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg height="363" viewBox="0 0 404 363" width="404" xmlns="http://www.w3.org/2000/svg"><path d="m201.882848 360.5c40.112875 0 78.342555 7.538534 111.617152-10.5 49.64757-26.914506 86.707013-91.258107 90-165.5 1.554254-35.041364.16575-74.203903-15-100-38.500912-65.4879092-128.98711-90.75019611-214-82.5-24.327749 2.36092074-45.172494 14.5009178-65 23.5-39.0979202 17.7453183-69.2482938 45.5348782-87.8980493 79.981159-17.96099248 33.174129-25.25515049 72.522374-19.6019507 115.018841 4.37440335 32.883446 19.26438 66.524047 35 86.5 36.4238339 46.239094 95.076607 53.5 164.882848 53.5z" fill-rule="evenodd"/></svg>')`,
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
             backgroundSize: '80% 140%',
