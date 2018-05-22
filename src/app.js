@@ -11,6 +11,7 @@ import ErrorBoundary from './components/error-boundary';
 import AboutView from './views/about-view';
 import HomeView from './views/home-view';
 import FeedView from './views/feed-view';
+import FeedbackView from './views/feedback-view';
 import LogInView from './views/log-in-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
@@ -32,10 +33,7 @@ export default class App extends Component<{}> {
         <StandaloneStatusBar />
         <ErrorBoundary>
           <Switch>
-            <Route
-              path="/read/:siteId/:seriesSlug/:chapterSlug+"
-              component={ReaderView}
-            />
+            <Route path="/read/:siteId/:seriesSlug/:chapterSlug+" component={ReaderView} />
             <Route
               path="/c/:collectionSlug/read/:siteId/:seriesSlug/:chapterSlug+"
               component={ReaderView}
@@ -43,6 +41,7 @@ export default class App extends Component<{}> {
             <Route path="/c/:collectionSlug" component={FeedView} />
             <Route path="/login" component={LogInView} />
             <Route path="/about" component={AboutView} />
+            <Route path="/feedback" component={FeedbackView} />
             <Route path="/" exact component={HomeView} />
             <Route component={NotFoundView} />
           </Switch>

@@ -1,0 +1,10 @@
+.TextArea.TextArea {
+  border-radius: 4px;
+  padding: 12px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.TextArea[disabled] {
+  background: #fafafa;
+}

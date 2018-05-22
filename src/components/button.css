@@ -1,0 +1,58 @@
+.Button {
+  background-color: #242424;
+  padding: 0 16px;
+  min-width: 120px;
+  height: 44px;
+  line-height: 47px;
+  color: white;
+  font-weight: normal;
+  font-size: 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.Button--loading {
+  line-height: 44px;
+}
+
+.Button--small.Button--loading {
+  line-height: 32px;
+}
+
+.Button--small {
+  min-width: 80px;
+  height: 32px;
+  line-height: 34px;
+}
+
+.Button:not(.Button--inline) {
+  width: 100%;
+}
+
+.Button--white {
+  background-color: #fff;
+  color: hsl(6, 70%, 60%);
+  box-shadow: 0 2px 2px hsla(6, 50%, 5%, 0.15);
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.Button--white:active {
+  background-color: rgba(255, 255, 255, 0.95);
+  transform: translateY(0.5px);
+  box-shadow: 0 1px 1px hsla(6, 50%, 10%, 0.05);
+}
+
+.Button--primary {
+  background-color: #ff6f6f;
+  border: none;
+}
+
+.Button--primary[disabled] {
+  background-color: #a69b9b;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.Button--primary:not([disabled]):hover {
+  background-color: #eb6e6e;
+}

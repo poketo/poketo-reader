@@ -1,3 +1,5 @@
+// @flow
+
 import React, { type Node } from 'react';
 
 type Props = {

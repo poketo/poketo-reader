@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Head from 'react-helmet';
+import { Link } from 'react-router-dom';
 
 import Header from '../components/home-header';
 import Footer from '../components/home-footer';
@@ -30,7 +31,7 @@ export default () => (
         <div className="Markdown">
           <p className="fs-24 mb-3 fw-semibold">Poketo is a web manga reader.</p>
           <p>
-            It's a tool for following and reading series from across the web in one place. Like an{' '}
+            A tool for following and reading series from across the web in one place. Like an{' '}
             <a href="https://en.wikipedia.org/wiki/RSS">RSS reader</a> but for manga.
           </p>
           <p className="pa-3 bgc-extraFadedLightCoral br-4">
@@ -49,9 +50,9 @@ export default () => (
               </a>.
             </p>
             <p>
-              If there's a site you want to see supported, make an{' '}
-              <a href={`${config.githubLibraryUrl}/issues/new`}>issue here</a>, or shoot us an email
-              at <a href={`mailto:${config.email}`}>{config.email}</a>.
+              If there's a site you want to see supported, leave an{' '}
+              <a href={`${config.githubLibraryUrl}/issues/new`}>issue on Github</a>, or{' '}
+              <Link to="/feedback">drop us a note</Link>.
             </p>
           </QuestionContainer>
           <QuestionContainer
@@ -64,13 +65,13 @@ export default () => (
             </p>
             <p>
               I'm open to figuring something out though. If you're a scanlator and have opinions
-              about how Poketo can help, <a href={`mailto:${config.email}`}>reach out!</a>
+              about how Poketo can help, <Link to="/feedback">reach out!</Link>
             </p>
           </QuestionContainer>
-          <QuestionContainer id="mobile-desktop" question="Is it for phones or computers?">
+          <QuestionContainer id="mobile-desktop" question="Is this a mobile app?">
             <p>
-              Poketo is built on the web, so it works on both! Right now more love has been given to
-              the mobile experience.
+              Poketo is built on the web, so it works on both mobile and desktop. Right now more
+              love has been given to the mobile experience.
             </p>
           </QuestionContainer>
         </div>

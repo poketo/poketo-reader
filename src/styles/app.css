@@ -41,7 +41,8 @@ body,
 }
 
 button,
-input {
+input,
+textarea {
   appearance: none;
   border: none;
   background: none;
@@ -76,64 +77,14 @@ button {
   width: 100%;
   height: 44px;
   line-height: 36px;
-  transition: border-color 100ms ease;
+  transition: border-color 100ms ease, box-shadow 100ms ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .Input:focus {
   border-color: #4494ff;
-}
-
-.Button {
-  background-color: #242424;
-  padding: 0 16px;
-  min-width: 120px;
-  height: 44px;
-  line-height: 47px;
-  color: white;
-  font-weight: normal;
-  font-size: 16px;
-  text-align: center;
-  vertical-align: middle;
-  /* -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
-}
-
-.Button:not(.Button--inline) {
-  width: 100%;
-}
-
-.Button--loading {
-  line-height: 44px;
-}
-
-.Button--white {
-  background-color: #fff;
-  color: hsl(6, 70%, 60%);
-  box-shadow: 0 2px 2px hsla(6, 50%, 5%, 0.15);
-  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease,
-    box-shadow 200ms ease;
-}
-
-.Button--white:active {
-  background-color: rgba(255, 255, 255, 0.95);
-  transform: translateY(0.5px);
-  box-shadow: 0 1px 1px hsla(6, 50%, 10%, 0.05);
-}
-
-.Button--primary {
-  background-color: #ff6f6f;
-  border: none;
-}
-
-.Button--primary[disabled] {
-  background-color: #a69b9b;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.Button--primary:not([disabled]):hover {
-  background-color: #eb6e6e;
+  box-shadow: rgba(0, 0, 0, 0.03) 0px 1px 1px inset, rgba(68, 148, 255, 0.1) 0px 0px 0px 3px;
 }
 
 .CodeBlock {

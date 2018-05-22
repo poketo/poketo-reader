@@ -3,6 +3,7 @@
 import React, { type Node } from 'react';
 import classNames from 'classnames';
 import CircleLoader from './loader-circle';
+import './button.css';
 
 type Props = {
   children?: Node,
@@ -11,6 +12,7 @@ type Props = {
   inline?: boolean,
   loading?: boolean,
   white?: boolean,
+  small?: boolean,
 };
 
 export default ({
@@ -20,6 +22,7 @@ export default ({
   inline = false,
   loading = false,
   white = false,
+  small = false,
   ...props
 }: Props) => (
   <button
@@ -28,6 +31,7 @@ export default ({
       'Button--white': white,
       'Button--loading': loading,
       'Button--inline': inline,
+      'Button--small': small,
     })}
     {...props}>
     {loading ? <CircleLoader color="white" small /> : children}
