@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import Head from 'react-helmet';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import config from '../config';
