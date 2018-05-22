@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import backgroundUrl from '../assets/background.svg';
 import previewFeedUrl from '../assets/home-preview-feed.png';
-import previewReadUrl from '../assets/home-preview-read.png';
+import previewReadUrl from '../assets/home-preview-read.jpg';
 
 import config from '../config';
 import Button from '../components/button';

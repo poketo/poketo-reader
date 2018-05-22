@@ -3,15 +3,15 @@
 import React, { Component } from 'react';
 import Head from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
+import Loadable from 'react-loadable';
 
 import DeviceStatus from './containers/device-status';
 import StandaloneStatusBar from './containers/standalone-status-bar';
 import ErrorBoundary from './components/error-boundary';
+import CircleLoader from './components/loader-circle';
 
 import AboutView from './views/about-view';
-import HomeView from './views/home-view';
 import FeedView from './views/feed-view';
-import FeedbackView from './views/feedback-view';
 import LogInView from './views/log-in-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
@@ -20,6 +20,22 @@ import '@rosszurowski/vanilla/lib/vanilla.css';
 import './styles/hibiscss.css';
 import './styles/base.css';
 import './styles/app.css';
+
+const LoadingView = () => (
+  <div className="x xj-center xa-center mh-100vh">
+    <CircleLoader />
+  </div>
+);
+
+const LoadableFeedbackView = Loadable({
+  loader: () => import('./views/feedback-view'),
+  loading: LoadingView,
+});
+
+const LoadableHomeView = Loadable({
+  loader: () => import('./views/home-view'),
+  loading: LoadingView,
+});
 
 export default class App extends Component<{}> {
   render() {
@@ -41,8 +57,8 @@ export default class App extends Component<{}> {
             <Route path="/c/:collectionSlug" component={FeedView} />
             <Route path="/login" component={LogInView} />
             <Route path="/about" component={AboutView} />
-            <Route path="/feedback" component={FeedbackView} />
-            <Route path="/" exact component={HomeView} />
+            <Route path="/feedback" component={LoadableFeedbackView} />
+            <Route path="/" exact component={LoadableHomeView} />
             <Route component={NotFoundView} />
           </Switch>
         </ErrorBoundary>

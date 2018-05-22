@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import ScrollLock from 'react-scrolllock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
+import './panel.css';
+
 type PanelProps = {
   children?: Node,
   onRequestClose?: () => void,

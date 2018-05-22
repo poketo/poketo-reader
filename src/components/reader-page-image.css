@@ -1,0 +1,33 @@
+.PageImage {
+  display: inline-block;
+  position: relative;
+  min-height: 50px;
+}
+
+.PageImage-image {
+  opacity: 0;
+  transition: opacity 200ms ease;
+  will-change: opacity;
+  vertical-align: top;
+}
+
+.PageImage-image.js-lazysizes-loaded {
+  opacity: 1;
+}
+
+.PageImage:not(.PageImage--hasSize) .PageImage-image.js-lazysizes-loaded + .PageImage-background {
+  display: none;
+}
+
+.PageImage--hasSize .PageImage-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.PageImage-background {
+  background: #cecece;
+  vertical-align: top;
+}
