@@ -8,11 +8,11 @@ import Loadable from 'react-loadable';
 import DeviceStatus from './containers/device-status';
 import StandaloneStatusBar from './containers/standalone-status-bar';
 import ErrorBoundary from './components/error-boundary';
-import CircleLoader from './components/loader-circle';
 
 import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
 import LogInView from './views/log-in-view';
+import LoadingView from './views/loading-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
 
@@ -20,12 +20,6 @@ import '@rosszurowski/vanilla/lib/vanilla.css';
 import './styles/hibiscss.css';
 import './styles/base.css';
 import './styles/app.css';
-
-const LoadingView = () => (
-  <div className="x xj-center xa-center mh-100vh">
-    <CircleLoader />
-  </div>
-);
 
 const LoadableFeedbackView = Loadable({
   loader: () => import('./views/feedback-view'),
