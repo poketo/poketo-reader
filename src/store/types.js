@@ -2,19 +2,12 @@
 
 import api from '../api';
 import type { Store as ReduxStore } from 'redux';
-import type {
-  Slug,
-  Id,
-  Collection,
-  Chapter,
-  ChapterMetadata,
-  Series,
-} from '../types';
+import type { Slug, Id, Collection, Chapter, ChapterMetadata, Series } from '../types';
 
 type ActionType<A, B> = { type: A, payload: B };
 
 export type FetchStatus = 'fetching' | 'fetched' | 'error';
-export type ErrorCode = 'NOT_FOUND' | 'UNKNOWN_ERROR';
+export type ErrorCode = 'NOT_FOUND' | 'TIMED_OUT' | 'UNKNOWN_ERROR';
 
 export type EntityStatus = {
   +didInvalidate: boolean,

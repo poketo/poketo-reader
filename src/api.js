@@ -21,7 +21,7 @@ export type AxiosError = {
 
 const instance = axios.create({
   baseURL: config.apiBaseUrl,
-  timeout: 5000,
+  timeout: 8000,
 });
 
 const api = {

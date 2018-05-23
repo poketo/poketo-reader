@@ -81,8 +81,13 @@ export function fetchCollection(slug: Slug): Thunk {
         });
       })
       .catch(err => {
-        const errorCode =
-          err.response.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
+        let errorCode = 'UNKNOWN_ERROR';
+
+        if (err.response) {
+          errorCode = err.response.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
+        } else {
+          errorCode = 'TIMED_OUT';
+        }
 
         dispatch({
           type: 'SET_COLLECTION_ENTITY_STATUS',
