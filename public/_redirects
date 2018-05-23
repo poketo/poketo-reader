@@ -1,5 +1,5 @@
 # proxy api requests
-/api/* https://api.poketo.site/:splat 200
+/api/* https://api.poketo.app/:splat 200
 
 # serve index.html for all pages
 /*  /index.html  200
