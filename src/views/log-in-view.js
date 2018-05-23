@@ -37,7 +37,8 @@ class LogInView extends Component<Props, State> {
   render() {
     const { code } = this.state;
 
-    const isSubmittable = /^[\da-f]+$/i.test(code) && code.length > 4 && code.length < 8;
+    const isSubmittable =
+      /^[\da-f]+$/i.test(code) && code.length > 4 && code.length < 8;
 
     return (
       <div className="mh-100vh c-gray4 bgc-offwhite fs-16 fs-18-m">

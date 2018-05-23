@@ -39,7 +39,9 @@ const SeriesPageImage = ({ page, preload, fitHeight }: Props) => {
         src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
         data-src={page.url}
         alt={page.alt}
-        className={`PageImage-image js-lazysizes ${preload ? 'js-lazysizes-preload' : ''}`}
+        className={`PageImage-image js-lazysizes ${
+          preload ? 'js-lazysizes-preload' : ''
+        }`}
       />
       <canvas
         className="PageImage-background"

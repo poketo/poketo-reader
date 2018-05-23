@@ -12,7 +12,9 @@ type Props = {
 
 const TextArea = ({ className, disabled, ...rest }: Props) => (
   <AutosizeTextArea
-    className={classNames('TextArea Input', className, { 'bgc-gray0': disabled })}
+    className={classNames('TextArea Input', className, {
+      'bgc-gray0': disabled,
+    })}
     disabled={disabled}
     {...rest}
   />

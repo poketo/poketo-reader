@@ -21,7 +21,10 @@ class DeviceStatus extends Component<Props> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('orientationchange', this.handleOrientationChange);
+    window.removeEventListener(
+      'orientationchange',
+      this.handleOrientationChange,
+    );
   }
 
   handleOrientationChange = () => {

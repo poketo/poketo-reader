@@ -2,7 +2,14 @@
 
 import api from '../api';
 import type { Store as ReduxStore } from 'redux';
-import type { Slug, Id, Collection, Chapter, ChapterMetadata, Series } from '../types';
+import type {
+  Slug,
+  Id,
+  Collection,
+  Chapter,
+  ChapterMetadata,
+  Series,
+} from '../types';
 
 type ActionType<A, B> = { type: A, payload: B };
 

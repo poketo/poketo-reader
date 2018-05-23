@@ -84,7 +84,8 @@ export function fetchCollection(slug: Slug): Thunk {
         let errorCode = 'UNKNOWN_ERROR';
 
         if (err.response) {
-          errorCode = err.response.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
+          errorCode =
+            err.response.status === 404 ? 'NOT_FOUND' : 'UNKNOWN_ERROR';
         } else {
           errorCode = 'TIMED_OUT';
         }

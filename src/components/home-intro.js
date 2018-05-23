@@ -55,7 +55,11 @@ class HomeIntro extends Component<Props, State> {
 
     if (canvas) {
       this.ctx = canvas.getContext('2d');
-      this.resizeHandler = fit(canvas, canvas.parentNode, window.devicePixelRatio);
+      this.resizeHandler = fit(
+        canvas,
+        canvas.parentNode,
+        window.devicePixelRatio,
+      );
       this.setupGrid();
       this.setupField();
     }
@@ -144,11 +148,15 @@ class HomeIntro extends Component<Props, State> {
     const size = (100 - padding * 2) / count;
     const gutter = 1;
 
-    const scale = this.state.windowSizeKey === 'm' ? random(1.9, 2.1) : random(1.3, 1.5);
+    const scale =
+      this.state.windowSizeKey === 'm' ? random(1.9, 2.1) : random(1.3, 1.5);
 
     return {
       top: `${random(30, 50)}%`,
-      left: `${random((size + gutter) * index + padding, (size - gutter) * (index + 1))}%`,
+      left: `${random(
+        (size + gutter) * index + padding,
+        (size - gutter) * (index + 1),
+      )}%`,
       transform: `rotate(${random(-30, 30)}deg) scale(${scale})`,
       transitionDelay: `${index * random(40, 70)}ms`,
     };
@@ -157,14 +165,20 @@ class HomeIntro extends Component<Props, State> {
   render() {
     return (
       <div className="p-relative x xd-column xj-center of-hidden ta-center c-white bgc-fadedCoral mh-50vh">
-        <svg viewBox="0 0 1200 53" className="p-absolute b-0 c-offwhite z-4" width="100%">
+        <svg
+          viewBox="0 0 1200 53"
+          className="p-absolute b-0 c-offwhite z-4"
+          width="100%">
           <path
             fill="currentColor"
             d="M1196.008 53H1200V0H0v44.816-8.184C159.341 14.63 311.343 2.484 456.007.196 600.122-2.084 846.789 15.518 1196.008 53z"
             transform="scale(1,-1) translate(0, -53)"
           />
         </svg>
-        <canvas className="p-relative o-50p z-1" ref={el => (this.canvas = el)} />
+        <canvas
+          className="p-relative o-50p z-1"
+          ref={el => (this.canvas = el)}
+        />
         <div
           className="p-absolute p-fill z-2"
           style={{

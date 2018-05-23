@@ -26,7 +26,10 @@ const initialState: State = {
   orientation: utils.getDeviceOrientation(),
 };
 
-export default function reducer(state: State = initialState, action: Action): State {
+export default function reducer(
+  state: State = initialState,
+  action: Action,
+): State {
   switch (action.type) {
     case 'SET_NETWORK_STATUS': {
       return { ...state, isOnline: action.payload };

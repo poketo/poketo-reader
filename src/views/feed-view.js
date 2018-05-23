@@ -55,7 +55,9 @@ class FeedView extends Component<Props> {
 
     if (errorCode === 'NOT_FOUND' || !collection) {
       return (
-        <div className="pa-3">We couldn't find a collection with the code {collectionSlug}</div>
+        <div className="pa-3">
+          We couldn't find a collection with the code {collectionSlug}
+        </div>
       );
     } else if (errorCode) {
       return (
