@@ -261,7 +261,7 @@ class Feed extends Component<Props, State> {
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
           {isFetching && (
-            <div className="p-fixed t-16 l-0 r-0 z-9 mt-4 pt-2 ph-3">
+            <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3">
               <Toast>
                 Syncing ({seriesIds.length - missingSeries.length} /{' '}
                 {seriesIds.length})...
