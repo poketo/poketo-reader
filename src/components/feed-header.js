@@ -2,19 +2,62 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
+import Loadable from 'react-loadable';
 import { Link } from 'react-router-dom';
 
-import Button from '../components/button';
-import IconAdd from '../components/icon-add';
-import IconDirectDown from '../components/icon-direct-down';
-import IconPoketo from '../components/icon-poketo';
-import Popover from '../components/popover/index';
+import Button from './button';
+import ComponentLoader from './loader-component';
+import IconAdd from './icon-add';
+import IconMessage from './icon-message';
+import IconDirectDown from './icon-direct-down';
+import IconPoketo from './icon-poketo';
+import FeedbackForm from '../containers/feedback-form';
+import Panel from './panel';
+import Popover from './popover/index';
+
+const LoadableFeedbackForm = Loadable({
+  loader: () => import('../containers/feedback-form'),
+  loading: ComponentLoader,
+});
 
 type Props = {
   onAddButtonClick: (e: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-export default class FeedHeader extends PureComponent<Props> {
+type State = {
+  isFeedbackPanelShown: boolean,
+};
+
+export default class FeedHeader extends PureComponent<Props, State> {
+  state = {
+    isFeedbackPanelShown: false,
+  };
+
+  openFeedbackPanel = () => {
+    this.setState({ isFeedbackPanelShown: true });
+  };
+
+  closeFeedbackPanel = () => {
+    this.setState({ isFeedbackPanelShown: false });
+  };
+
+  renderFeedbackPanel() {
+    if (!this.state.isFeedbackPanelShown) {
+      return null;
+    }
+
+    return (
+      <Panel.Transition>
+        <Panel onRequestClose={this.closeFeedbackPanel}>
+          <div className="pa-3 pv-4">
+            <h3 className="fs-18 fw-semibold mb-2">Feedback</h3>
+            <LoadableFeedbackForm />
+          </div>
+        </Panel>
+      </Panel.Transition>
+    );
+  }
+
   renderPopoverContent() {
     const { onAddButtonClick } = this.props;
 
@@ -22,7 +65,6 @@ export default class FeedHeader extends PureComponent<Props> {
       <div>
         <Button
           className="mb-1"
-          ghost
           onClick={onAddButtonClick}
           iconBefore={
             <span
@@ -33,9 +75,17 @@ export default class FeedHeader extends PureComponent<Props> {
           }>
           Add new series
         </Button>
-        <Link to="/feedback">
-          <Button ghost>Send feedback</Button>
-        </Link>
+        <Button
+          onClick={this.openFeedbackPanel}
+          iconBefore={
+            <span
+              className="x xa-center xj-center"
+              style={{ width: 32, height: 44 }}>
+              <IconMessage width={18} height={18} />
+            </span>
+          }>
+          Send feedback
+        </Button>
       </div>
     );
   }
@@ -45,6 +95,9 @@ export default class FeedHeader extends PureComponent<Props> {
         <div className="x xa-center pv-3 ph-3">
           <IconPoketo className="c-coral" />
         </div>
+        <Panel.TransitionGroup>
+          {this.renderFeedbackPanel()}
+        </Panel.TransitionGroup>
         <Popover
           content={this.renderPopoverContent()}
           position={Popover.Position.BOTTOM_LEFT}>

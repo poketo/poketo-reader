@@ -9,7 +9,7 @@ import './panel.css';
 
 type PanelProps = {
   children?: Node,
-  onRequestClose?: () => void,
+  onRequestClose: () => void,
 };
 
 type PanelButtonProps = {
@@ -34,6 +34,10 @@ class Panel extends Component<PanelProps> {
   static TransitionGroup: (props: {}) => Node;
   static Link: (props: PanelLinkProps) => Node;
 
+  static defaultProps = {
+    onRequestClose: () => {},
+  };
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -43,23 +47,13 @@ class Panel extends Component<PanelProps> {
   }
 
   handleKeyDown = (e: KeyboardEvent) => {
-    const { onRequestClose } = this.props;
-
-    if (!onRequestClose) {
-      return;
-    }
-
     if (e.keyCode === 27) {
-      onRequestClose();
+      this.props.onRequestClose();
     }
   };
 
   handleOverlayClick = (e: MouseEvent) => {
-    const { onRequestClose } = this.props;
-
-    if (onRequestClose) {
-      onRequestClose();
-    }
+    this.props.onRequestClose();
   };
 
   render() {
@@ -92,7 +86,7 @@ class Panel extends Component<PanelProps> {
 Panel.Button = (props: PanelButtonProps) => (
   <button className="x w-100p xa-stretch" onClick={props.onClick}>
     <div className="pa-3 x xa-center">{props.icon}</div>
-    <div className="pa-3">{props.label}</div>
+    <div className="pa-3 x xa-center">{props.label}</div>
   </button>
 );
 
