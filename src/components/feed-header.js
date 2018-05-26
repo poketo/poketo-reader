@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import Loadable from 'react-loadable';
-import { Link } from 'react-router-dom';
 
 import Button from './button';
 import ComponentLoader from './loader-component';
@@ -11,7 +10,6 @@ import IconAdd from './icon-add';
 import IconMessage from './icon-message';
 import IconDirectDown from './icon-direct-down';
 import IconPoketo from './icon-poketo';
-import FeedbackForm from '../containers/feedback-form';
 import Panel from './panel';
 import Popover from './popover/index';
 
@@ -49,7 +47,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
     return (
       <Panel.Transition>
         <Panel onRequestClose={this.closeFeedbackPanel}>
-          <div className="pa-3 pv-4">
+          <div className="pa-3">
             <h3 className="fs-18 fw-semibold mb-2">Feedback</h3>
             <LoadableFeedbackForm />
           </div>
@@ -62,7 +60,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
     const { onAddButtonClick } = this.props;
 
     return (
-      <div>
+      <div style={{ maxWidth: '80vw' }}>
         <Button
           className="mb-1"
           onClick={onAddButtonClick}

@@ -1,13 +1,11 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 import Head from 'react-helmet';
 
 import Header from '../components/home-header';
 import HomeLayout from '../components/home-layout';
 import FeedbackForm from '../containers/feedback-form';
-
-type Props = {};
 
 const FeedbackView = () => (
   <HomeLayout>

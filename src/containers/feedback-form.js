@@ -64,7 +64,6 @@ export default class FeedbackForm extends Component<Props, State> {
           <TextArea
             placeholder="Feedback..."
             disabled={status !== 'idle'}
-            autoFocus
             minRows={2}
             onChange={this.handleFeedbackChange}
             value={feedback}
