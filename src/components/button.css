@@ -3,14 +3,20 @@
   align-items: center;
   flex-wrap: nowrap;
   justify-content: center;
-  background-color: #242424;
+  background-color: transparent;
   padding: 0 16px;
   min-width: 120px;
-  height: 44px;
-  line-height: 44px;
-  color: white;
+  color: currentColor;
   font-weight: normal;
   font-size: 16px;
+  line-height: 44px;
+  height: 44px;
+  transition: background-color 200ms ease, color 200ms ease,
+    transform 200ms ease, box-shadow 200ms ease;
+}
+
+.Button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .Button--small {
@@ -23,37 +29,14 @@
   width: 100%;
 }
 
-.Button--ghost {
-  background-color: transparent;
-  color: currentColor;
-}
-
-.Button--ghost:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  transition: background-color 200ms ease, color 200ms ease,
-    transform 200ms ease, box-shadow 200ms ease;
-}
-
-.Button--white {
-  background-color: #fff;
-  color: hsl(6, 70%, 60%);
-  box-shadow: 0 2px 2px hsla(6, 50%, 5%, 0.15);
-  transition: background-color 200ms ease, color 200ms ease,
-    transform 200ms ease, box-shadow 200ms ease;
-}
-
-.Button--white:active {
-  background-color: rgba(255, 255, 255, 0.95);
-  transform: translateY(0.5px);
-  box-shadow: 0 1px 1px hsla(6, 50%, 10%, 0.05);
-}
-
 .Button--primary {
+  color: white;
   background-color: #ff6f6f;
   border: none;
 }
 
 .Button--primary[disabled] {
+  cursor: not-allowed;
   background-color: #a69b9b;
   color: rgba(255, 255, 255, 0.5);
 }

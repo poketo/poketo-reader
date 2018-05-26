@@ -12,7 +12,6 @@ type Props = {
   inline: boolean,
   iconBefore?: Node,
   loading: boolean,
-  ghost: boolean,
   white: boolean,
   small: boolean,
 };
@@ -25,7 +24,6 @@ const Button = ({
   iconBefore,
   loading,
   white,
-  ghost,
   small,
   ...props
 }: Props) => (
@@ -35,9 +33,7 @@ const Button = ({
       'br-3 ff-sans',
       {
         'Button--primary bgc-coral': primary,
-        'Button--white': white,
         'Button--loading': loading,
-        'Button--ghost': ghost,
         'Button--inline': inline,
         'Button--small': small,
       },
@@ -54,7 +50,6 @@ Button.defaultProps = {
   inline: false,
   loading: false,
   white: false,
-  ghost: false,
   small: false,
 };
 
