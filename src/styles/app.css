@@ -84,7 +84,8 @@ button {
 
 .Input:focus {
   border-color: #4494ff;
-  box-shadow: rgba(0, 0, 0, 0.03) 0px 1px 1px inset, rgba(68, 148, 255, 0.1) 0px 0px 0px 3px;
+  box-shadow: rgba(0, 0, 0, 0.03) 0px 1px 1px inset,
+    rgba(68, 148, 255, 0.1) 0px 0px 0px 3px;
 }
 
 .CodeBlock {
@@ -92,7 +93,8 @@ button {
 }
 
 .CodeBlock > code {
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+    monospace;
 }
 
 .StatusBar {
@@ -105,21 +107,6 @@ button {
   }
 }
 
-.Navigation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
-}
-
-@media only screen and (min-width: 480px) {
-  .Navigation {
-    position: absolute;
-    box-shadow: none;
-  }
-}
-
 .Markdown {
 }
 
@@ -129,37 +116,6 @@ button {
 
 .Markdown a {
   color: #ff6f6f;
-}
-
-.Dropdown {
-  position: relative;
-  cursor: pointer;
-  border-radius: 3px;
-  height: 34px;
-}
-
-.Dropdown:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.Dropdown-select {
-  cursor: pointer;
-  background: none;
-  border: none;
-  outline: none;
-  color: inherit;
-  font-size: 1em;
-  padding-left: 16px;
-  padding-right: 32px;
-  appearance: none;
-}
-
-.Dropdown-arrow {
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  right: 12px;
-  bottom: 0;
 }
 
 .CircleLoader {

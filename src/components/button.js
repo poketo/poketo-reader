@@ -8,32 +8,49 @@ import './button.css';
 type Props = {
   children?: Node,
   className?: string,
-  primary?: boolean,
-  inline?: boolean,
-  loading?: boolean,
-  white?: boolean,
-  small?: boolean,
+  primary: boolean,
+  inline: boolean,
+  iconBefore?: Node,
+  loading: boolean,
+  white: boolean,
+  small: boolean,
 };
 
-export default ({
+const Button = ({
   className,
   children,
-  primary = false,
-  inline = false,
-  loading = false,
-  white = false,
-  small = false,
+  primary,
+  inline,
+  iconBefore,
+  loading,
+  white,
+  small,
   ...props
 }: Props) => (
   <button
-    className={classNames('Button', 'br-3 ff-sans', className, {
-      'Button--primary bgc-coral': primary,
-      'Button--white': white,
-      'Button--loading': loading,
-      'Button--inline': inline,
-      'Button--small': small,
-    })}
+    className={classNames(
+      'Button',
+      'br-3 ff-sans',
+      {
+        'Button--primary bgc-coral': primary,
+        'Button--loading': loading,
+        'Button--inline': inline,
+        'Button--small': small,
+      },
+      className,
+    )}
     {...props}>
-    {loading ? <CircleLoader color="white" small /> : children}
+    {loading ? <CircleLoader color="white" small /> : iconBefore}
+    {!loading && children}
   </button>
 );
+
+Button.defaultProps = {
+  primary: false,
+  inline: false,
+  loading: false,
+  white: false,
+  small: false,
+};
+
+export default Button;

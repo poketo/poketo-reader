@@ -8,12 +8,12 @@ import Loadable from 'react-loadable';
 import DeviceStatus from './containers/device-status';
 import StandaloneStatusBar from './containers/standalone-status-bar';
 import ErrorBoundary from './components/error-boundary';
+import ComponentLoader from './components/loader-component';
 
 import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
 import HomeView from './views/home-view';
 import LogInView from './views/log-in-view';
-import LoadingView from './views/loading-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
 
@@ -24,7 +24,7 @@ import './styles/app.css';
 
 const LoadableFeedbackView = Loadable({
   loader: () => import('./views/feedback-view'),
-  loading: LoadingView,
+  loading: ComponentLoader,
 });
 
 export default class App extends Component<{}> {

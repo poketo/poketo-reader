@@ -1,15 +1,15 @@
 // @flow
 
 import React, { Component, type Node } from 'react';
-import ReactDOM from 'react-dom';
 import ScrollLock from 'react-scrolllock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import Portal from './portal';
 
 import './panel.css';
 
 type PanelProps = {
   children?: Node,
-  onRequestClose?: () => void,
+  onRequestClose: () => void,
 };
 
 type PanelButtonProps = {
@@ -34,6 +34,10 @@ class Panel extends Component<PanelProps> {
   static TransitionGroup: (props: {}) => Node;
   static Link: (props: PanelLinkProps) => Node;
 
+  static defaultProps = {
+    onRequestClose: () => {},
+  };
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -43,23 +47,13 @@ class Panel extends Component<PanelProps> {
   }
 
   handleKeyDown = (e: KeyboardEvent) => {
-    const { onRequestClose } = this.props;
-
-    if (!onRequestClose) {
-      return;
-    }
-
     if (e.keyCode === 27) {
-      onRequestClose();
+      this.props.onRequestClose();
     }
   };
 
   handleOverlayClick = (e: MouseEvent) => {
-    const { onRequestClose } = this.props;
-
-    if (onRequestClose) {
-      onRequestClose();
-    }
+    this.props.onRequestClose();
   };
 
   render() {
@@ -70,20 +64,21 @@ class Panel extends Component<PanelProps> {
       return null;
     }
 
-    return ReactDOM.createPortal(
-      <div className="Panel">
-        <ScrollLock />
-        <div className="Panel-background" onClick={this.handleOverlayClick} />
-        <div className="Panel-menu">
-          {children}
-          <button
-            className="x w-100p bt-1 bc-gray1 xa-stretch"
-            onClick={this.handleOverlayClick}>
-            <div className="w-100p pa-3 ta-center o-50p">Cancel</div>
-          </button>
+    return (
+      <Portal>
+        <div className="Panel">
+          <ScrollLock />
+          <div className="Panel-background" onClick={this.handleOverlayClick} />
+          <div className="Panel-menu">
+            {children}
+            <button
+              className="x w-100p bt-1 bc-gray1 xa-stretch"
+              onClick={this.handleOverlayClick}>
+              <div className="w-100p pa-3 ta-center o-50p">Cancel</div>
+            </button>
+          </div>
         </div>
-      </div>,
-      root,
+      </Portal>
     );
   }
 }
@@ -91,7 +86,7 @@ class Panel extends Component<PanelProps> {
 Panel.Button = (props: PanelButtonProps) => (
   <button className="x w-100p xa-stretch" onClick={props.onClick}>
     <div className="pa-3 x xa-center">{props.icon}</div>
-    <div className="pa-3">{props.label}</div>
+    <div className="pa-3 x xa-center">{props.label}</div>
   </button>
 );
 

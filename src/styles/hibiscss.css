@@ -157,6 +157,14 @@
   background-size: 100%;
 }
 
+.e-1 {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+}
+
+.e-2 {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
 .bc-transparent {
   border-color: transparent;
 }

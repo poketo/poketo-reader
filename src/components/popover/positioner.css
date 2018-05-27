@@ -1,0 +1,18 @@
+.Positioner {
+  position: fixed;
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.175);
+}
+
+.Positioner[data-state='entering'],
+.Positioner[data-state='entered'] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: scale(1) !important;
+}
+
+.Positioner[data-state='exiting'] {
+  opacity: 0 !important;
+  transform: scale(1) !important;
+}
