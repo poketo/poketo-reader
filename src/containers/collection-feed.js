@@ -233,11 +233,6 @@ class Feed extends Component<Props, State> {
     const statuses = seriesIds
       .map(id => seriesById._status[id])
       .filter(Boolean);
-    const missingSeries = seriesIds.filter(
-      id =>
-        !seriesById._status[id] ||
-        seriesById._status[id].fetchStatus !== 'fetched',
-    );
 
     const isFetching = statuses.some(
       status => status.fetchStatus === 'fetching',
@@ -260,14 +255,9 @@ class Feed extends Component<Props, State> {
           {this.renderNewBookmarkPanel()}
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
-          {isFetching && (
-            <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3">
-              <Toast>
-                Syncing ({seriesIds.length - missingSeries.length} /{' '}
-                {seriesIds.length})...
-              </Toast>
-            </div>
-          )}
+          <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3">
+            <Toast isShown={isFetching}>Syncing...</Toast>
+          </div>
           {feedItems.map(item => (
             <SeriesRow
               key={item.series.id}
