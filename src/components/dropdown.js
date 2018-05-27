@@ -3,6 +3,8 @@
 import React from 'react';
 import IconDirectDown from './icon-direct-down';
 
+import './dropdown.css';
+
 type Props = {
   onChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
   options: Array<{

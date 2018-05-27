@@ -1,0 +1,14 @@
+.FeedHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+}
+
+@media only screen and (min-width: 480px) {
+  .FeedHeader {
+    position: absolute;
+    box-shadow: none;
+  }
+}
