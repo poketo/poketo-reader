@@ -1,9 +1,10 @@
 // @flow
 
 import React, { Fragment } from 'react';
+import classNames from 'classnames';
+
 import IconMoreHorizontal from './icon-more-horizontal';
 import utils from '../utils';
-
 import type { Series } from '../types';
 
 type Props = {
@@ -37,7 +38,7 @@ const SeriesRow = ({
               <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
             </span>
           )}
-          <span className={isUnread ? 'fw-semibold' : undefined}>
+          <span className={classNames({ 'fw-semibold': isUnread })}>
             {series.title}
           </span>
         </span>

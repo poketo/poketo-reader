@@ -98,7 +98,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
         </Panel.TransitionGroup>
         <Popover
           content={this.renderPopoverContent()}
-          position={Popover.Position.BOTTOM_LEFT}>
+          position={Popover.Position.BOTTOM_RIGHT}>
           <button className={classNames('x xa-center pv-3 ph-3')}>
             <IconDirectDown />
           </button>
