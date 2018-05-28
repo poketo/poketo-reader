@@ -1,15 +1,15 @@
-<h1 align="center">
-	<img width="600" src="https://cdn.rawgit.com/poketo/site/develop/.github/readme-header.svg" alt="Poketo" />
-	<br />
-</h1>
+<div align="center">
+  <img width="600" src="https://cdn.rawgit.com/poketo/site/develop/.github/readme-header.svg" alt="Poketo" />
+  <br />
+</div>
 
 > Friendly web-based manga reader
 
 A lightweight tool for reading and keeping track of manga series. Sorta like a manga RSS reader. If you'd like an invite, check out [poketo.app](https://poketo.app).
 
-> :construction: Poketo is still in development. It's usable, but watch your step! You might run into some bugs.
-
 ### Features
+
+> :construction: Poketo is still in development. It's usable, but watch your step! You might run into some bugs.
 
 * **simple**: no accounts, no downloads, no ads.
 * **inline reader**: read new chapters in a simple reader with just a tap
