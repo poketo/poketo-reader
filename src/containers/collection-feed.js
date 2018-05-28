@@ -59,7 +59,7 @@ class Feed extends Component<Props, State> {
     dispatch(fetchSeriesForCollection(collection.slug));
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     if (nextProps.collection.slug !== this.props.collection.slug) {
       nextProps.dispatch(fetchSeriesForCollection(nextProps.collection.slug));
     }
