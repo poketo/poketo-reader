@@ -41,6 +41,12 @@ export default class FeedHeader extends PureComponent<Props, State> {
     this.setState({ isFeedbackPanelShown: false });
   };
 
+  handleFeedbackSubmitSuccess = () => {
+    setTimeout(() => {
+      this.closeFeedbackPanel();
+    }, 1000);
+  };
+
   renderFeedbackPanel() {
     if (!this.state.isFeedbackPanelShown) {
       return null;
@@ -50,7 +56,9 @@ export default class FeedHeader extends PureComponent<Props, State> {
       <Panel.Transition>
         <Panel onRequestClose={this.closeFeedbackPanel}>
           <Panel.Content title="Feedback">
-            <LoadableFeedbackForm />
+            <LoadableFeedbackForm
+              onSubmitSuccess={this.handleFeedbackSubmitSuccess}
+            />
           </Panel.Content>
         </Panel>
       </Panel.Transition>
