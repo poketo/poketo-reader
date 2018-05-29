@@ -263,7 +263,7 @@ class NewBookmarkPanel extends Component<Props, State> {
       <Panel onRequestClose={onRequestClose}>
         <Panel.Content title="Add new series">
           <p className="mb-3">
-            Paste the listing URL of a series you want to follow.{' '}
+            Paste the URL of the series you want to follow.{' '}
             <a
               href="https://github.com/poketo/site/wiki/Adding-a-New-Series"
               target="_blank"
@@ -279,7 +279,7 @@ class NewBookmarkPanel extends Component<Props, State> {
                 name="seriesUrl"
                 readOnly={disableFormFields}
                 onChange={this.handleSeriesUrlChange}
-                placeholder="Paste series URL"
+                placeholder="http://"
                 value={seriesUrl || ''}
               />
             </div>
