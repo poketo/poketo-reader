@@ -7,7 +7,9 @@ import config from '../config';
 import Button from '../components/button';
 import TextArea from '../components/text-area';
 
-type Props = {};
+type Props = {
+  onSubmitSuccess: () => void,
+};
 type State = {
   feedback: string,
   status: 'idle' | 'fetching' | 'success' | 'error',
@@ -17,6 +19,10 @@ export default class FeedbackForm extends Component<Props, State> {
   state = {
     feedback: '',
     status: 'idle',
+  };
+
+  static defaultProps = {
+    onSubmitSuccess: () => {},
   };
 
   handleFeedbackChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
@@ -36,6 +42,7 @@ export default class FeedbackForm extends Component<Props, State> {
     this.sendFeedback(feedback)
       .then(() => {
         this.setState({ status: 'success' });
+        this.props.onSubmitSuccess();
       })
       .catch(() => {
         this.setState({ status: 'error' });
