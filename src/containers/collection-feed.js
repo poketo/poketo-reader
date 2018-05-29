@@ -184,6 +184,8 @@ class Feed extends Component<Props, State> {
           <Panel.Link
             icon={<IconNewTab />}
             label={`Open on ${series.site.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
             href={series.url}
           />
           {showMarkAsRead && (
@@ -191,7 +193,9 @@ class Feed extends Component<Props, State> {
               icon={<IconBook />}
               label={
                 series.supportsReading === true
-                  ? `Mark ${unreadChapters.length} chapters as read`
+                  ? `Mark ${unreadChapters.length} chapter${
+                      unreadChapters.length === 1 ? '' : 's'
+                    } as read`
                   : `Mark series as read`
               }
               onClick={this.handleSeriesOptionsMarkAsReadClick}

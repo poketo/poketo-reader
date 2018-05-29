@@ -4,6 +4,7 @@ const config: { [string]: string } = {
   apiBaseUrl: process.env.REACT_APP_API_BASE || '',
   apiFeedbackUrl: process.env.REACT_APP_API_FEEDBACK_URL || '',
   researchSurveyUrl: 'https://airtable.com/shrUlZo866ItiOmae',
+  email: 'hello@poketo.app',
   githubUrl: 'https://github.com/poketo',
   githubSiteUrl: 'https://github.com/poketo/site',
   githubServiceUrl: 'https://github.com/poketo/service',

@@ -2,8 +2,6 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-import IconNewTab from '../components/icon-new-tab';
 import config from '../config';
 
 type Props = {};
@@ -17,20 +15,21 @@ const Footer = (props: Props) => (
       <Link to="/about" className="Link mr-3">
         About
       </Link>
-      <Link to="/feedback" className="Link mr-3 mr-0-m">
-        Feedback
-      </Link>
+      <a
+        href={`mailto:${config.email}`}
+        className="Link mr-3 mr-0-m"
+        target="_blank"
+        rel="noreferrer noopener">
+        Email
+      </a>
     </div>
     <div className="x xa-center">
       <a
-        href={config.githubUrl}
-        className="hover va-baseline"
+        className="Link"
+        href={config.githubSiteUrl}
         target="_blank"
         rel="noopener noreferrer">
-        <span className="Link Link--noFade">Github</span>
-        <span>
-          <IconNewTab width={14} height={14} />
-        </span>
+        Github
       </a>
     </div>
   </div>
