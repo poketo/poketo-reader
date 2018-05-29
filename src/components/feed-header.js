@@ -49,8 +49,9 @@ export default class FeedHeader extends PureComponent<Props, State> {
     return (
       <Panel.Transition>
         <Panel onRequestClose={this.closeFeedbackPanel}>
-          <h3 className="fs-18 fw-semibold mb-2">Feedback</h3>
-          <LoadableFeedbackForm />
+          <Panel.Content title="Feedback">
+            <LoadableFeedbackForm />
+          </Panel.Content>
         </Panel>
       </Panel.Transition>
     );

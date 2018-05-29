@@ -18,6 +18,11 @@ type PanelButtonProps = {
   onClick: (e: SyntheticEvent<HTMLButtonElement>) => void,
 };
 
+type PanelContentProps = {
+  children?: Node,
+  title?: string,
+};
+
 type PanelLinkProps = {
   href: string,
   icon: Node,
@@ -30,6 +35,7 @@ type PanelTransitionProps = {
 
 class Panel extends Component<PanelProps> {
   static Button: (props: PanelButtonProps) => Node;
+  static Content: (props: PanelContentProps) => Node;
   static Transition: (props: PanelTransitionProps) => Node;
   static TransitionGroup: (props: {}) => Node;
   static Link: (props: PanelLinkProps) => Node;
@@ -70,7 +76,7 @@ class Panel extends Component<PanelProps> {
           <ScrollLock />
           <div className="Panel-background" onClick={this.handleOverlayClick} />
           <div className="Panel-menu">
-            <div className="pa-3 pa-4-m pb-4">{children}</div>
+            {children}
             <button
               className="Panel-cancelButton x w-100p bt-1 bc-gray1 xa-stretch"
               onClick={this.handleOverlayClick}>
@@ -82,6 +88,15 @@ class Panel extends Component<PanelProps> {
     );
   }
 }
+
+Panel.Content = (props: PanelContentProps) => (
+  <div className="pa-3 pa-4-m pb-4">
+    {props.title ? (
+      <h3 className="fs-18 fw-semibold mb-2">{props.title}</h3>
+    ) : null}
+    {props.children}
+  </div>
+);
 
 Panel.Button = (props: PanelButtonProps) => (
   <button className="x w-100p xa-stretch" onClick={props.onClick}>
