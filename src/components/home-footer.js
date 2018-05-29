@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import config from '../config';
+import IconNewTab from '../components/icon-new-tab';
 
 type Props = {};
 
@@ -25,11 +27,14 @@ const Footer = (props: Props) => (
     </div>
     <div className="x xa-center">
       <a
-        className="Link"
-        href={config.githubSiteUrl}
+        href={config.githubUrl}
+        className="hover va-baseline"
         target="_blank"
         rel="noopener noreferrer">
-        Github
+        <span className="Link Link--noFade">Github</span>
+        <span>
+          <IconNewTab width={14} height={14} />
+        </span>
       </a>
     </div>
   </div>
