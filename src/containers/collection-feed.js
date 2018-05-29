@@ -59,7 +59,7 @@ class Feed extends Component<Props, State> {
     dispatch(fetchSeriesForCollection(collection.slug));
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     if (nextProps.collection.slug !== this.props.collection.slug) {
       nextProps.dispatch(fetchSeriesForCollection(nextProps.collection.slug));
     }
@@ -184,6 +184,8 @@ class Feed extends Component<Props, State> {
           <Panel.Link
             icon={<IconNewTab />}
             label={`Open on ${series.site.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
             href={series.url}
           />
           {showMarkAsRead && (
@@ -191,7 +193,9 @@ class Feed extends Component<Props, State> {
               icon={<IconBook />}
               label={
                 series.supportsReading === true
-                  ? `Mark ${unreadChapters.length} chapters as read`
+                  ? `Mark ${unreadChapters.length} chapter${
+                      unreadChapters.length === 1 ? '' : 's'
+                    } as read`
                   : `Mark series as read`
               }
               onClick={this.handleSeriesOptionsMarkAsReadClick}
@@ -255,7 +259,7 @@ class Feed extends Component<Props, State> {
           {this.renderNewBookmarkPanel()}
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
-          <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3">
+          <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3 pe-none">
             <Toast isShown={isFetching}>Syncing...</Toast>
           </div>
           {feedItems.map(item => (

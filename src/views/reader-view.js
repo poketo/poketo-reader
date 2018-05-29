@@ -58,17 +58,16 @@ class ReaderView extends Component<Props, State> {
     this.loadData(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { match } = this.props;
-    const { siteId, seriesSlug, chapterSlug } = match.params;
-    const { params: nextParams } = nextProps.match;
+  componentDidUpdate(prevProps) {
+    const { params } = this.props.match;
+    const { params: prevParams } = prevProps.match;
 
     if (
-      nextParams.siteId !== siteId ||
-      nextParams.seriesSlug !== seriesSlug ||
-      nextParams.chapterSlug !== chapterSlug
+      prevParams.siteId !== params.siteId ||
+      prevParams.seriesSlug !== params.seriesSlug ||
+      prevParams.chapterSlug !== params.chapterSlug
     ) {
-      this.loadData(nextProps);
+      this.loadData(this.props);
     }
   }
 

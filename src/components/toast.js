@@ -23,10 +23,12 @@ export default class Toast extends PureComponent<Props, State> {
     isShown: true,
   };
 
-  componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.isShown) {
-      this.setState({ isShown: nextProps.isShown });
+  static getDerivedStateFromProps(nextProps: Props, prevProps: Props) {
+    if (nextProps.isShown === prevProps.isShown) {
+      return null;
     }
+
+    return { isShown: nextProps.isShown };
   }
 
   render() {

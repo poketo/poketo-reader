@@ -1,13 +1,15 @@
 {
   "name": "Poketo",
   "short_name": "Poketo",
+  "description": "A simple and fun web-based manga reader.",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#ff8b8b",
   "background_color": "#fffefc",
   "icons": [
     {
-      "src": "touch-icon.png",
+      "src": "android-touch-icon.png",
       "sizes": "192x192 168x168 144x144 96x96 72x72 48x48",
       "type": "image/png"
     }

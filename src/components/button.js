@@ -14,35 +14,45 @@ type Props = {
   loading: boolean,
   white: boolean,
   small: boolean,
+  noPadding: boolean,
 };
 
-const Button = ({
-  className,
-  children,
-  primary,
-  inline,
-  iconBefore,
-  loading,
-  white,
-  small,
-  ...props
-}: Props) => (
-  <button
-    className={classNames(
-      'Button',
-      'br-3 ff-sans',
-      {
-        'Button--primary bgc-coral': primary,
-        'Button--loading': loading,
-        'Button--inline': inline,
-        'Button--small': small,
-      },
+// $FlowFixMe: Flow doesn't yet support React 16.3 features
+const Button = React.forwardRef(
+  (
+    {
       className,
-    )}
-    {...props}>
-    {loading ? <CircleLoader color="white" small /> : iconBefore}
-    {!loading && children}
-  </button>
+      children,
+      primary,
+      inline,
+      iconBefore,
+      loading,
+      white,
+      small,
+      noPadding,
+      ...props
+    }: Props,
+    ref,
+  ) => (
+    <button
+      className={classNames(
+        'Button',
+        'br-3 ff-sans',
+        {
+          'Button--primary bgc-coral': primary,
+          'Button--loading': loading,
+          'Button--inline': inline,
+          'Button--small': small,
+          'Button--noPadding': noPadding,
+        },
+        className,
+      )}
+      ref={ref}
+      {...props}>
+      {loading ? <CircleLoader color="white" small /> : iconBefore}
+      {!loading && children}
+    </button>
+  ),
 );
 
 Button.defaultProps = {
@@ -51,6 +61,7 @@ Button.defaultProps = {
   loading: false,
   white: false,
   small: false,
+  noPadding: false,
 };
 
 export default Button;

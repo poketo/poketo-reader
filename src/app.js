@@ -3,12 +3,10 @@
 import React, { Component } from 'react';
 import Head from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
-import Loadable from 'react-loadable';
 
 import DeviceStatus from './containers/device-status';
 import StandaloneStatusBar from './containers/standalone-status-bar';
 import ErrorBoundary from './components/error-boundary';
-import ComponentLoader from './components/loader-component';
 
 import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
@@ -21,11 +19,6 @@ import '@rosszurowski/vanilla/lib/vanilla.css';
 import './styles/hibiscss.css';
 import './styles/base.css';
 import './styles/app.css';
-
-const LoadableFeedbackView = Loadable({
-  loader: () => import('./views/feedback-view'),
-  loading: ComponentLoader,
-});
 
 export default class App extends Component<{}> {
   render() {
@@ -50,7 +43,6 @@ export default class App extends Component<{}> {
             <Route path="/c/:collectionSlug" component={FeedView} />
             <Route path="/login" component={LogInView} />
             <Route path="/about" component={AboutView} />
-            <Route path="/feedback" component={LoadableFeedbackView} />
             <Route path="/" exact component={HomeView} />
             <Route component={NotFoundView} />
           </Switch>

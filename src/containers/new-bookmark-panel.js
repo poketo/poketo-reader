@@ -261,51 +261,60 @@ class NewBookmarkPanel extends Component<Props, State> {
 
     return (
       <Panel onRequestClose={onRequestClose}>
-        <div className="ph-3 pt-3 pb-4">
-          <h3 className="fw-semibold">New series</h3>
-          <p className="mb-3">Paste the URL of a series you want to follow.</p>
-          <form type="post" onSubmit={this.handleSubmit} noValidate>
-            <div className="mb-2">
-              <Input
-                type="url"
-                name="seriesUrl"
-                readOnly={disableFormFields}
-                onChange={this.handleSeriesUrlChange}
-                placeholder="Paste series URL"
-                value={seriesUrl || ''}
-              />
-            </div>
-            {errorCode && (
-              <p className="c-red fs-12 mb-2">
-                {this.getErrorMessage(errorCode, seriesUrl)}
-              </p>
-            )}
-            {seriesUrl &&
-              showLinkToForm && (
-                <Fragment>
-                  <p className="mb-2">
-                    <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
-                    support reading on Poketo. You can add a different link to
-                    open for reading.
-                  </p>
-                  <Input
-                    type="url"
-                    name="linkToUrl"
-                    readOnly={disableFormFields}
-                    onChange={this.handleLinkToUrlChange}
-                    placeholder="Reading URL (optional)"
-                    value={linkToUrl || ''}
-                  />
-                </Fragment>
-              )}
-            <Button
-              primary
-              disabled={bookmarkFetchState !== 'READY' || errorCode !== null}
-              type="submit">
-              {buttonLabelValues[bookmarkFetchState]}
-            </Button>
-          </form>
+        <div className="x xa-baseline">
+          <h3 className="fw-semibold">Add new series</h3>
         </div>
+        <p className="mb-3">
+          Paste the listing URL of a series you want to follow.{' '}
+          <a
+            href="https://github.com/poketo/site/wiki/Adding-a-New-Series"
+            target="_blank"
+            className="Link"
+            rel="noopener noreferrer">
+            (instructions)
+          </a>
+        </p>
+        <form type="post" onSubmit={this.handleSubmit} noValidate>
+          <div className="mb-2">
+            <Input
+              type="url"
+              name="seriesUrl"
+              readOnly={disableFormFields}
+              onChange={this.handleSeriesUrlChange}
+              placeholder="Paste series URL"
+              value={seriesUrl || ''}
+            />
+          </div>
+          {errorCode && (
+            <p className="c-red fs-12 mb-2">
+              {this.getErrorMessage(errorCode, seriesUrl)}
+            </p>
+          )}
+          {seriesUrl &&
+            showLinkToForm && (
+              <Fragment>
+                <p className="mb-2">
+                  <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
+                  support reading on Poketo. You can add a different link to
+                  open for reading.
+                </p>
+                <Input
+                  type="url"
+                  name="linkToUrl"
+                  readOnly={disableFormFields}
+                  onChange={this.handleLinkToUrlChange}
+                  placeholder="Reading URL (optional)"
+                  value={linkToUrl || ''}
+                />
+              </Fragment>
+            )}
+          <Button
+            primary
+            disabled={bookmarkFetchState !== 'READY' || errorCode !== null}
+            type="submit">
+            {buttonLabelValues[bookmarkFetchState]}
+          </Button>
+        </form>
       </Panel>
     );
   }

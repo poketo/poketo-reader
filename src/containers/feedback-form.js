@@ -57,8 +57,14 @@ export default class FeedbackForm extends Component<Props, State> {
     return (
       <form onSubmit={this.handleSubmit}>
         <p className="mb-3">
-          Share any feedback about Poketo here. I’d love to hear what could be
-          made better.
+          We‘d love to hear any feedback you have about Poketo. You can also{' '}
+          <a
+            className="Link"
+            href={`mailto:${config.email}`}
+            target="_blank"
+            rel="noopener noreferer">
+            email if you'd prefer
+          </a>.
         </p>
         <div className="mb-2">
           <TextArea

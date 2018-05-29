@@ -49,61 +49,86 @@ export default class FeedHeader extends PureComponent<Props, State> {
     return (
       <Panel.Transition>
         <Panel onRequestClose={this.closeFeedbackPanel}>
-          <div className="pa-3">
-            <h3 className="fs-18 fw-semibold mb-2">Feedback</h3>
-            <LoadableFeedbackForm />
-          </div>
+          <h3 className="fs-18 fw-semibold mb-2">Feedback</h3>
+          <LoadableFeedbackForm />
         </Panel>
       </Panel.Transition>
     );
   }
 
-  renderPopoverContent() {
+  renderAddButton(inline: boolean = false) {
     const { onAddButtonClick } = this.props;
+    const label = 'Add new series';
 
     return (
-      <div style={{ maxWidth: '80vw' }}>
-        <Button
-          className="mb-1"
-          onClick={onAddButtonClick}
-          iconBefore={
-            <span
-              className="x xa-center xj-center"
-              style={{ width: 32, height: 44 }}>
-              <IconAdd width={18} height={18} />
-            </span>
-          }>
-          Add new series
-        </Button>
-        <Button
-          onClick={this.openFeedbackPanel}
-          iconBefore={
-            <span
-              className="x xa-center xj-center"
-              style={{ width: 32, height: 44 }}>
-              <IconMessage width={18} height={18} />
-            </span>
-          }>
-          Send feedback
-        </Button>
-      </div>
+      <Button
+        className={classNames({ 'mb-1': !inline, 'ml-1': inline })}
+        onClick={onAddButtonClick}
+        inline={inline}
+        noPadding={inline}
+        title={label}
+        iconBefore={
+          <span
+            className="x xa-center xj-center"
+            style={{ width: inline ? 44 : 32, height: 44 }}>
+            <IconAdd width={18} height={18} />
+          </span>
+        }>
+        {inline ? null : label}
+      </Button>
     );
   }
+
+  renderFeedbackButton(inline: boolean = false) {
+    const label = 'Send feedback';
+    return (
+      <Button
+        onClick={this.openFeedbackPanel}
+        inline={inline}
+        noPadding={inline}
+        title={label}
+        iconBefore={
+          <span
+            className="x xa-center xj-center"
+            style={{ width: inline ? 44 : 32, height: 44 }}>
+            <IconMessage width={18} height={18} />
+          </span>
+        }>
+        {inline ? null : label}
+      </Button>
+    );
+  }
+
   render() {
     return (
-      <header className="FeedHeader z-9 x xa-center xj-spaceBetween fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
+      <header className="FeedHeader z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
           <IconPoketo className="c-coral" />
         </div>
         <Panel.TransitionGroup>
           {this.renderFeedbackPanel()}
         </Panel.TransitionGroup>
+        <div className="d-none d-block-m">
+          {this.renderFeedbackButton(true)}
+          {this.renderAddButton(true)}
+        </div>
         <Popover
-          content={this.renderPopoverContent()}
+          content={
+            <div style={{ maxWidth: '80vw' }}>
+              {this.renderAddButton()}
+              {this.renderFeedbackButton()}
+            </div>
+          }
           position={Popover.Position.BOTTOM_RIGHT}>
-          <button className={classNames('x xa-center pv-3 ph-3')}>
-            <IconDirectDown />
-          </button>
+          <div className="d-none-m">
+            <Button inline noPadding>
+              <span
+                className="x xa-center xj-center"
+                style={{ width: 44, height: 44 }}>
+                <IconDirectDown />
+              </span>
+            </Button>
+          </div>
         </Popover>
       </header>
     );

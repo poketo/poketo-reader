@@ -70,9 +70,9 @@ class Panel extends Component<PanelProps> {
           <ScrollLock />
           <div className="Panel-background" onClick={this.handleOverlayClick} />
           <div className="Panel-menu">
-            {children}
+            <div className="pa-3 pa-4-m pb-4">{children}</div>
             <button
-              className="x w-100p bt-1 bc-gray1 xa-stretch"
+              className="Panel-cancelButton x w-100p bt-1 bc-gray1 xa-stretch"
               onClick={this.handleOverlayClick}>
               <div className="w-100p pa-3 ta-center o-50p">Cancel</div>
             </button>

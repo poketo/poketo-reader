@@ -3,8 +3,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import IconNewTab from '../components/icon-new-tab';
 import config from '../config';
+import IconNewTab from '../components/icon-new-tab';
 
 type Props = {};
 
@@ -17,9 +17,13 @@ const Footer = (props: Props) => (
       <Link to="/about" className="Link mr-3">
         About
       </Link>
-      <Link to="/feedback" className="Link mr-3 mr-0-m">
-        Feedback
-      </Link>
+      <a
+        href={`mailto:${config.email}`}
+        className="Link mr-3 mr-0-m"
+        target="_blank"
+        rel="noreferrer noopener">
+        Email
+      </a>
     </div>
     <div className="x xa-center">
       <a
