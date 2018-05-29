@@ -255,7 +255,7 @@ class Feed extends Component<Props, State> {
           {this.renderNewBookmarkPanel()}
         </TransitionGroup>
         <div className="pt-3 ta-center-m">
-          <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3">
+          <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3 pe-none">
             <Toast isShown={isFetching}>Syncing...</Toast>
           </div>
           {feedItems.map(item => (

@@ -67,12 +67,12 @@ export default () => (
             id="scanlators"
             question="How does reading on Poketo affect scanlators?">
             <p>
-              Honestly, I'm not sure. I know a lot of work goes into translating
-              series, and I don't want Poketo to take away from traffic, ad
-              revenue or other ways scanlators support their work.
+              Honestly, not sure. Lots of work goes into translating series, and
+              we don't want Poketo to take away from traffic, ad revenue or
+              other ways scanlators support their work.
             </p>
             <p>
-              I'm open to figuring something out though. If you're a scanlator
+              We're open to figuring something out though. If you're a scanlator
               and have opinions about how Poketo can help,{' '}
               <Link to="/feedback">reach out!</Link>
             </p>

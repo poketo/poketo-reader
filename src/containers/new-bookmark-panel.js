@@ -262,8 +262,19 @@ class NewBookmarkPanel extends Component<Props, State> {
     return (
       <Panel onRequestClose={onRequestClose}>
         <div className="ph-3 pt-3 pb-4">
-          <h3 className="fw-semibold">New series</h3>
-          <p className="mb-3">Paste the URL of a series you want to follow.</p>
+          <div className="x xa-baseline">
+            <h3 className="fw-semibold">Add new series</h3>
+          </div>
+          <p className="mb-3">
+            Paste the listing URL of a series you want to follow.{' '}
+            <a
+              href="https://github.com/poketo/site/wiki/Adding-a-New-Series"
+              target="_blank"
+              className="Link"
+              rel="noopener noreferrer">
+              (instructions)
+            </a>
+          </p>
           <form type="post" onSubmit={this.handleSubmit} noValidate>
             <div className="mb-2">
               <Input

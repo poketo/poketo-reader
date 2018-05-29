@@ -31,8 +31,8 @@ const SeriesRow = ({
         href={readingUrl}
         onClick={onSeriesClick(series.id)}
         target="_blank"
-        className="hover x-1 x xd-column ph-3 pv-3">
-        <span className="fs-20-m">
+        className="c-pointer hover x-1 x xd-column ph-3 pv-3">
+        <span className="fs-24-m">
           {isUnread && (
             <span className="p-relative t--2 mr-2">
               <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />

@@ -4,25 +4,28 @@
   flex-wrap: nowrap;
   justify-content: center;
   background-color: transparent;
-  padding: 0 16px;
-  min-width: 120px;
   color: currentColor;
   font-weight: normal;
   font-size: 16px;
-  line-height: 44px;
-  height: 44px;
   transition: background-color 200ms ease, color 200ms ease,
     transform 200ms ease, box-shadow 200ms ease;
 }
 
-.Button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+.Button:not(.Button--noPadding) {
+  padding: 0 16px;
+  line-height: 44px;
+  height: 44px;
 }
 
-.Button--small {
+.Button--small:not(.Button--noPadding) {
   min-width: 80px;
   height: 32px;
   line-height: 32px;
+}
+
+.Button:hover,
+.Button:active {
+  background-color: rgba(0, 0, 0, 0.07);
 }
 
 .Button:not(.Button--inline) {
@@ -41,6 +44,7 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.Button--primary:not([disabled]):hover {
+.Button--primary:not([disabled]):hover,
+.Button--primary:not([disabled]):active {
   background-color: #eb6e6e;
 }

@@ -2,6 +2,8 @@
 
 import React, { type Node } from 'react';
 import { Link } from 'react-router-dom';
+
+import Button from '../components/button';
 import utils from '../utils';
 import type { Chapter } from '../types';
 
@@ -27,12 +29,14 @@ const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   }
 
   return (
-    <Link
-      to={to}
-      style={{ pointerEvents: disabled ? 'none' : 'auto' }}
-      className={disabled ? 'o-50p' : ''}>
-      {children}
-    </Link>
+    <Button small>
+      <Link
+        to={to}
+        style={{ pointerEvents: disabled ? 'none' : 'auto' }}
+        className={disabled ? 'o-50p' : ''}>
+        {children}
+      </Link>
+    </Button>
   );
 };
 
