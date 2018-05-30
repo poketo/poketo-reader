@@ -8,7 +8,11 @@ type Props = { visible: boolean };
 
 class StandaloneStatusBar extends Component<Props> {
   componentDidMount() {
-    if (utils.isStandalone() && document.documentElement) {
+    if (
+      utils.isStandalone() &&
+      utils.isAppleDevice() &&
+      document.documentElement
+    ) {
       document.documentElement.classList.add('status-bar-ios-offset-enabled');
     }
   }
