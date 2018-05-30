@@ -14,12 +14,12 @@ import Panel from '../components/panel';
 import SeriesRow from '../components/series-row';
 import Toast from '../components/toast';
 import utils from '../utils';
-
 import {
   removeBookmark,
   markSeriesAsRead,
   fetchSeriesForCollection,
 } from '../store/reducers/collections';
+import { setDefaultCollection } from '../store/reducers/auth';
 
 import type {
   Bookmark,
@@ -57,6 +57,7 @@ class Feed extends Component<Props, State> {
   componentDidMount() {
     const { dispatch, collection } = this.props;
     dispatch(fetchSeriesForCollection(collection.slug));
+    dispatch(setDefaultCollection(collection.slug));
   }
 
   componentDidUpdate(nextProps) {
