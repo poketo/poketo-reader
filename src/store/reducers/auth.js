@@ -7,15 +7,19 @@ type State = {
   collectionSlug: ?string,
 };
 
+const STORAGE_DEFAULT_COLLECTION_KEY = 'defaultCollection';
+
 const initialState = {
-  collectionSlug: null,
+  collectionSlug: localStorage.getItem(STORAGE_DEFAULT_COLLECTION_KEY),
 };
 
 export function setDefaultCollection(slug: string): Action {
+  localStorage.setItem(STORAGE_DEFAULT_COLLECTION_KEY, slug);
   return { type: 'SET_DEFAULT_COLLECTION', payload: slug };
 }
 
 export function clearDefaultCollection(): Action {
+  localStorage.removeItem(STORAGE_DEFAULT_COLLECTION_KEY);
   return { type: 'CLEAR_DEFAULT_COLLECTION' };
 }
 
