@@ -88,13 +88,13 @@ button {
     rgba(68, 148, 255, 0.1) 0px 0px 0px 3px;
 }
 
-.CodeBlock {
-  background-color: rgba(255, 139, 139, 0.1);
-}
-
-.CodeBlock > code {
+code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
     monospace;
+}
+
+.CodeBlock {
+  background-color: rgba(255, 139, 139, 0.1);
 }
 
 .StatusBar {

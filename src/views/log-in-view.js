@@ -49,10 +49,15 @@ class LogInView extends Component<Props, State> {
         <HomeHeader />
         <AuthRedirect redirect history={history} />
         <div className="pt-4 ph-3 mw-500 mh-auto ta-center">
-          <div className="mb-3">
+          <div className="mb-4">
             <h3 className="fw-semibold mb-2">Enter your Poketo code</h3>
             <p>
-              Like so: poketo.app/c/{'<'}your code{'>'}
+              Your code is the last part of the link you got. <br />
+              <code className="fs-14">
+                poketo.app/c/<span className="bgc-extraFadedLightCoral br-4 pa-1">
+                  {'<'}your code{'>'}
+                </span>
+              </code>
             </p>
           </div>
           <form onSubmit={this.handleSubmit}>
