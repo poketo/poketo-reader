@@ -11,7 +11,8 @@ import type {
   Series,
 } from '../types';
 
-type ActionType<A, B> = { type: A, payload: B };
+type ActionType<A, B> = { +type: A, +payload: B };
+type ActionWithoutPayloadType<A> = { +type: A };
 
 export type FetchStatus = 'fetching' | 'fetched' | 'error';
 export type ErrorCode = 'NOT_FOUND' | 'TIMED_OUT' | 'UNKNOWN_ERROR';
@@ -82,6 +83,14 @@ export type SetOrientationAction = ActionType<
   'landscape' | 'portrait',
 >;
 
+export type SetDefaultCollectionAction = ActionType<
+  'SET_DEFAULT_COLLECTION',
+  string,
+>;
+export type ClearDefaultCollectionAction = ActionWithoutPayloadType<
+  'CLEAR_DEFAULT_COLLECTION',
+>;
+
 export type CollectionAction =
   | AddEntitiesAction
   | SetCollectionAction
@@ -101,7 +110,12 @@ export type ChapterAction =
 
 export type DeviceAction = SetNetworkStatusAction | SetOrientationAction;
 
+export type AuthAction =
+  | SetDefaultCollectionAction
+  | ClearDefaultCollectionAction;
+
 export type Action =
+  | AuthAction
   | CollectionAction
   | SeriesAction
   | ChapterAction

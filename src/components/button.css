@@ -23,7 +23,7 @@
   line-height: 32px;
 }
 
-.Button:hover,
+.supports-hover .Button:hover,
 .Button:active {
   background-color: rgba(0, 0, 0, 0.07);
 }
@@ -44,7 +44,7 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.Button--primary:not([disabled]):hover,
+.supports-hover .Button--primary:not([disabled]):hover,
 .Button--primary:not([disabled]):active {
   background-color: #eb6e6e;
 }

@@ -97,6 +97,8 @@ const utils = {
     return isStandaloneSafari || isStandaloneChrome;
   },
 
+  isTouchDevice: () =>
+    Boolean('ontouchstart' in window) || window.navigator.msMaxTouchPoints > 0,
   isAppleDevice: () =>
     /iPad|iPhone|iPod/i.test(navigator.userAgent) && !window.MSStream,
 

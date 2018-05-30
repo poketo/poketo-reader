@@ -1,12 +1,14 @@
 // @flow
 
 import React, { Component } from 'react';
+import { type RouterHistory, type Match } from 'react-router-dom';
 
 import backgroundUrl from '../assets/background.svg';
 import previewFeedUrl from '../assets/home-preview-feed.png';
 import previewReadUrl from '../assets/home-preview-read.jpg';
 
 import config from '../config';
+import AuthRedirect from '../containers/auth-redirect';
 import Button from '../components/button';
 import Footer from '../components/home-footer';
 import Header from '../components/home-header';
@@ -18,14 +20,21 @@ import ScrollReset from '../components/scroll-reset';
 
 import '../styles/home.css';
 
-type Props = {};
+type Props = {
+  history: RouterHistory,
+  match: Match,
+};
 
-export default class HomeView extends Component<Props> {
+class HomeView extends Component<Props> {
   render() {
     return (
       <HomeLayout>
         <ScrollReset />
-        <div className="x xd-column pb-5">
+        <AuthRedirect
+          redirect={this.props.match.path === '/'}
+          history={this.props.history}
+        />
+        <div className="pb-5">
           <Header overlay />
           <HomeIntro />
           <div className="mw-900 mh-auto ta-center pt-5 pt-6-m pb-3 pb-4-m ph-3">
@@ -91,3 +100,5 @@ export default class HomeView extends Component<Props> {
     );
   }
 }
+
+export default HomeView;
