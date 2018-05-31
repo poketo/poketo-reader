@@ -2,6 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import Head from 'react-helmet';
+import BodyClassName from 'react-body-classname';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -179,9 +180,9 @@ class ReaderView extends Component<Props, State> {
           chapter && (
             <Head>
               <title>{`${series.title} – Chapter ${chapter.number}`}</title>
-              <body className="ff-sans bgc-black" />
             </Head>
           )}
+        <BodyClassName className="ff-sans bgc-black" />
         <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
           <Link
             className="x xa-center o-50p p-relative z-2"

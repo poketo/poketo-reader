@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import Head from 'react-helmet';
+import BodyClassName from 'react-body-classname';
 import classNames from 'classnames';
 import { Switch, Route } from 'react-router-dom';
 
@@ -28,11 +29,12 @@ export default class App extends Component<{}> {
       <div id="app" className="status-bar-ios-offset">
         <Head defaultTitle="Poketo" titleTemplate="%s – Poketo">
           <meta name="description" content="Light and fun manga reader." />
-          <html
-            className={classNames({ 'supports-hover': !utils.isTouchDevice() })}
-          />
-          <body className="ff-sans c-gray5 bgc-offwhite" />
         </Head>
+        <BodyClassName
+          className={classNames('ff-sans c-gray5 bgc-offwhite', {
+            'supports-hover': !utils.isTouchDevice(),
+          })}
+        />
         <DeviceStatus />
         <StandaloneStatusBar />
         <ErrorBoundary>
