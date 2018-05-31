@@ -81,14 +81,15 @@ class HomeView extends Component<Props> {
           <div className="mw-600 w-75p mh-auto pv-5 ta-center">
             <h4 className="mb-2 fw-semibold">Interested?</h4>
             <p className="mb-4">
-              Fill out this survey and include your email for a beta invite.
+              Poketo is currently in a private beta.<br />Reach out if you'd
+              like an invite.
             </p>
             <a
-              href={config.researchSurveyUrl}
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+              href="mailto:hello@poketo.app?subject=Poketo+Invite&body=Hi%2C%20I%27d%20like%20a%20Poketo%20invite.%0A%0A(write%20a%20few%20series%20you%20follow%20here)">
               <Button primary inline>
-                Fill out survey
+                Request an invite
               </Button>
             </a>
           </div>
