@@ -5,7 +5,7 @@ import type { Action, Dispatch } from '../types';
 
 type Cache = {
   set: (key: string, value: mixed) => Promise<void>,
-  get: (key: string, value: mixed) => Promise<void>,
+  get: (key: string) => Promise<void>,
 };
 
 type Options = {
