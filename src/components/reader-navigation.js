@@ -22,7 +22,7 @@ const ReaderNavigation = ({
   const chapterSelectorOptions = seriesChapters
     ? seriesChapters.map(c => ({
         value: c.slug,
-        label: `Chapter ${c.number}`,
+        label: `Chapter ${c.chapterNumber}`,
       }))
     : [{ value: '', label: '' }];
 
