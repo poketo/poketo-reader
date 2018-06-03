@@ -5,7 +5,7 @@ import ms from 'milliseconds';
 
 // NOTE: this cache version should be bumped any time the schema of the store
 // changes shape. It'll invalidate the cached data and force a re-fetch.
-const version = '1527870408489';
+const version = '1527870408490';
 
 const cache = getConfiguredCache({
   version,
