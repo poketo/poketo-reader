@@ -4,8 +4,11 @@ import { getConfiguredCache } from 'money-clip';
 import ms from 'milliseconds';
 
 // NOTE: this cache version should be bumped any time the schema of the store
-// changes shape. It'll invalidate the cached data and force a re-fetch.
-const version = '1527870408489';
+// changes shape, or the API responses change. It'll invalidate cached data and
+// force a re-fetch.
+const apiVersion = 'jkqtgajukx';
+const storeVersion = '1527870408490';
+const version = `${apiVersion}-${storeVersion}`;
 
 const cache = getConfiguredCache({
   version,

@@ -13,12 +13,15 @@
   cursor: pointer;
   background: none;
   border: none;
-  outline: none;
   color: inherit;
   font-size: 1rem;
   padding-left: 16px;
   padding-right: 32px;
   appearance: none;
+}
+
+.Dropdown-select option {
+  color: black;
 }
 
 .Dropdown-arrow {

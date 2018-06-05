@@ -38,13 +38,14 @@
   border: none;
 }
 
-.Button--primary[disabled] {
+.Button--primary[disabled],
+.supports-hover .Button--primary[disabled]:hover {
   cursor: not-allowed;
   background-color: #a69b9b;
   color: rgba(255, 255, 255, 0.5);
 }
 
-.supports-hover .Button--primary:not([disabled]):hover,
-.Button--primary:not([disabled]):active {
+.supports-hover .Button--primary:hover,
+.Button--primary:active {
   background-color: #eb6e6e;
 }
