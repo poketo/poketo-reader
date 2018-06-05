@@ -1,7 +1,6 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 import Loadable from 'react-loadable';
 
 import Button from './button';
