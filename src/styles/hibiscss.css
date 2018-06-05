@@ -37,6 +37,9 @@
 .b-0 {
   bottom: 0;
 }
+.b--1 {
+  bottom: -1px;
+}
 .b-16 {
   bottom: 16px;
 }
