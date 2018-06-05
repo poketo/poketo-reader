@@ -68,43 +68,51 @@ export default class FeedHeader extends PureComponent<Props, State> {
   renderAddButton(inline: boolean = false) {
     const { onAddButtonClick } = this.props;
     const label = 'Add new series';
+    const icon = (
+      <span className="x xa-center xj-center" style={{ width: 44, height: 44 }}>
+        <IconAdd width={18} height={18} />
+      </span>
+    );
+
+    if (inline) {
+      return (
+        <Button inline noPadding onClick={this.openFeedbackPanel} title={label}>
+          {icon}
+        </Button>
+      );
+    }
 
     return (
-      <Button
-        className={classNames({ 'mb-1': !inline, 'ml-1': inline })}
+      <Popover.Item
+        label={label}
         onClick={onAddButtonClick}
-        inline={inline}
-        noPadding={inline}
-        title={label}
-        iconBefore={
-          <span
-            className="x xa-center xj-center"
-            style={{ width: inline ? 44 : 32, height: 44 }}>
-            <IconAdd width={18} height={18} />
-          </span>
-        }>
-        {inline ? null : label}
-      </Button>
+        iconBefore={icon}
+      />
     );
   }
 
   renderFeedbackButton(inline: boolean = false) {
     const label = 'Send feedback';
+    const icon = (
+      <span className="x xa-center xj-center" style={{ width: 44, height: 44 }}>
+        <IconMessage width={18} height={18} />
+      </span>
+    );
+
+    if (inline) {
+      return (
+        <Button inline noPadding onClick={this.openFeedbackPanel} title={label}>
+          {icon}
+        </Button>
+      );
+    }
+
     return (
-      <Button
+      <Popover.Item
         onClick={this.openFeedbackPanel}
-        inline={inline}
-        noPadding={inline}
-        title={label}
-        iconBefore={
-          <span
-            className="x xa-center xj-center"
-            style={{ width: inline ? 44 : 32, height: 44 }}>
-            <IconMessage width={18} height={18} />
-          </span>
-        }>
-        {inline ? null : label}
-      </Button>
+        label={label}
+        iconBefore={icon}
+      />
     );
   }
 

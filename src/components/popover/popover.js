@@ -3,6 +3,7 @@
 import React, { Component, type Node, type Element } from 'react';
 import Positioner from './positioner';
 import PopoverStateless from './popover-stateless';
+import PopoverItem from './popover-item';
 import Position from './position';
 import type { RefObject } from './types';
 
@@ -39,6 +40,7 @@ export default class Popover extends Component<Props, State> {
   };
 
   static Position = Position;
+  static Item = PopoverItem;
 
   popoverRef: ?RefObject;
   targetRef: ?RefObject;
