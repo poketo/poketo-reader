@@ -5,7 +5,7 @@
 
 .PopoverItem {
   background-color: transparent;
-  min-width: 200px;
+  min-width: 120px;
   max-width: 80vw;
   transition: background-color 200ms ease, color 200ms ease,
     transform 200ms ease, box-shadow 200ms ease;

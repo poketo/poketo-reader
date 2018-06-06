@@ -6,9 +6,7 @@ import { type RouterHistory } from 'react-router';
 import { connect } from 'react-redux';
 
 import FeedHeader from '../components/feed-header';
-import IconBook from '../components/icon-book';
-import IconNewTab from '../components/icon-new-tab';
-import IconTrash from '../components/icon-trash';
+import Icon from '../components/icon';
 import NewBookmarkPanel from '../containers/new-bookmark-panel';
 import Panel from '../components/panel';
 import SeriesRow from '../components/series-row';
@@ -183,7 +181,7 @@ class Feed extends Component<Props, State> {
       <Panel.Transition>
         <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
           <Panel.Link
-            icon={<IconNewTab />}
+            icon={<Icon name="new-tab" />}
             label={`Open on ${series.site.name}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -191,7 +189,7 @@ class Feed extends Component<Props, State> {
           />
           {showMarkAsRead && (
             <Panel.Button
-              icon={<IconBook />}
+              icon={<Icon name="book" />}
               label={
                 series.supportsReading === true
                   ? `Mark ${unreadChapters.length} chapter${
@@ -203,7 +201,7 @@ class Feed extends Component<Props, State> {
             />
           )}
           <Panel.Button
-            icon={<IconTrash color="red" />}
+            icon={<Icon name="trash" className="c-coral" />}
             label="Remove series"
             onClick={this.handleSeriesOptionsTrashClick}
           />
