@@ -101,14 +101,14 @@ Panel.Content = (props: PanelContentProps) => (
 Panel.Button = (props: PanelButtonProps) => (
   <button className="x w-100p xa-stretch" onClick={props.onClick}>
     <div className="pa-3 x xa-center">{props.icon}</div>
-    <div className="pa-3 x xa-center">{props.label}</div>
+    <div className="pa-3 pl-2 x xa-center">{props.label}</div>
   </button>
 );
 
 Panel.Link = ({ icon, label, ...props }: PanelLinkProps) => (
   <a className="x w-100p xa-stretch" {...props}>
     <div className="pa-3 x xa-center">{icon}</div>
-    <div className="pa-3">{label}</div>
+    <div className="pa-3 pl-2">{label}</div>
   </a>
 );
 

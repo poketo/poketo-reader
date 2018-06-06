@@ -13,10 +13,11 @@
   cursor: pointer;
   background: none;
   border: none;
+  outline: none;
   color: inherit;
   font-size: 1rem;
-  padding-left: 16px;
-  padding-right: 32px;
+  padding-left: 12px;
+  padding-right: 34px;
   appearance: none;
 }
 
@@ -28,6 +29,6 @@
   pointer-events: none;
   position: absolute;
   top: 0;
-  right: 12px;
+  right: 0;
   bottom: 0;
 }
