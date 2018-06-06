@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import config from '../config';
-import IconNewTab from '../components/icon-new-tab';
+import Icon from '../components/icon';
 
 type Props = {};
 
@@ -32,9 +32,7 @@ const Footer = (props: Props) => (
         target="_blank"
         rel="noopener noreferrer">
         <span className="Link Link--noFade">Github</span>
-        <span>
-          <IconNewTab width={14} height={14} />
-        </span>
+        <Icon name="new-tab" iconSize={14} size={14} />
       </a>
     </div>
   </div>

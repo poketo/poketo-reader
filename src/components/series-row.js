@@ -3,7 +3,7 @@
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
 
-import IconMoreHorizontal from './icon-more-horizontal';
+import Icon from './icon';
 import utils from '../utils';
 import type { Series } from '../types';
 
@@ -52,8 +52,13 @@ const SeriesRow = ({
           {utils.formatTimestamp(series.updatedAt)}
         </span>
       </a>
-      <button className="c-gray3 pa-3" onClick={onOptionsClick(series.id)}>
-        <IconMoreHorizontal width={18} height={18} />
+      <button className="pa-3" onClick={onOptionsClick(series.id)}>
+        <Icon
+          name="more-horizontal"
+          className="c-gray3"
+          iconSize={18}
+          size={18}
+        />
       </button>
     </div>
   );

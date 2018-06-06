@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import IconDirectDown from './icon-direct-down';
+import Icon from './icon';
 
 import './dropdown.css';
 
@@ -27,7 +27,7 @@ const Dropdown = ({ options, onChange, value, ...props }: Props) => (
       ))}
     </select>
     <div className="Dropdown-arrow x">
-      <IconDirectDown width={16} height={16} />
+      <Icon name="direct-down" iconSize={16} size={34} />
     </div>
   </div>
 );

@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import DotLoader from '../components/loader-dots';
-import IconArrowLeft from '../components/icon-arrow-left';
+import Icon from '../components/icon';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
@@ -189,7 +189,7 @@ class ReaderView extends Component<Props, State> {
           <Link
             className="x xa-center o-50p p-relative z-2"
             to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
-            <IconArrowLeft width={20} height={20} />
+            <Icon name="arrow-left" iconSize={20} />
           </Link>
         </div>
         {series && (
@@ -243,7 +243,7 @@ class ReaderView extends Component<Props, State> {
                 <Link
                   className="o-50p"
                   to={utils.getCollectionUrl(collection.slug)}>
-                  <IconArrowLeft width={20} height={20} />
+                  <Icon name="arrow-left" iconSize={20} />
                 </Link>
               </nav>
             )}
