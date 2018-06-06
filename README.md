@@ -15,7 +15,7 @@ A lightweight tool for reading and keeping track of manga series. Sorta like a m
 * **inline reader**: read new chapters in a simple reader with just a tap
 * **web-based**: read on a phone, computer, tablet, wherever!
 * **open-source**: all the scraping logic can be reused with [the node library](https://github.com/poketo/poketo)
-* **offline-ready**: downloading chapters for offline _(coming soon)_
+* _coming soon:_ **offline-ready**: downloading chapters for offline
 
 ### Motivation
 
