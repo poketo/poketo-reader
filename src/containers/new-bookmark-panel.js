@@ -17,12 +17,13 @@ import type { Series } from '../types';
 import type { Dispatch, EntitiesPayload } from '../store/types';
 
 type NewSeriesErrorCode =
+  | 'REQUEST_FAILED'
   | 'INVALID_SERIES'
   | 'INVALID_URL'
   | 'UNSUPPORTED_SITE'
-  | 'SERVER_NOT_FOUND'
-  | 'SERVER_ALREADY_EXISTS'
-  | 'SERVER_UNKNOWN_ERROR';
+  | 'SERIES_NOT_FOUND'
+  | 'SERIES_ALREADY_EXISTS'
+  | 'UNKNOWN_ERROR';
 
 type BookmarkFetchState = 'ADDED' | 'READY' | 'SUBMITTING' | 'UNREADY';
 
@@ -106,22 +107,7 @@ class NewBookmarkPanel extends Component<Props, State> {
   };
 
   handleSubmitError = (err: AxiosError) => {
-    let errorCode;
-
-    switch (err.response.status) {
-      case 404:
-        errorCode = 'SERVER_NOT_FOUND';
-        break;
-      case 400:
-        errorCode = /already exists/i.test(err.response.data)
-          ? 'SERVER_ALREADY_EXISTS'
-          : 'INVALID_SERIES';
-        break;
-      default:
-        errorCode = 'SERVER_UNKNOWN_ERROR';
-        break;
-    }
-
+    const errorCode = this.getErrorCode(err);
     this.setState({ bookmarkFetchState: 'UNREADY', errorCode });
   };
 
@@ -191,8 +177,25 @@ class NewBookmarkPanel extends Component<Props, State> {
     return !LINK_TO_SITES.test(seriesUrl);
   };
 
+  getErrorCode = (err: AxiosError): NewSeriesErrorCode => {
+    if (!err.response) {
+      return 'REQUEST_FAILED';
+    }
+
+    switch (err.response.status) {
+      case 404:
+        return 'SERIES_NOT_FOUND';
+      case 400:
+        return /already exists/i.test(err.response.data)
+          ? 'SERIES_ALREADY_EXISTS'
+          : 'INVALID_SERIES';
+      default:
+        return 'UNKNOWN_ERROR';
+    }
+  };
+
   getErrorMessage = (
-    errorCode: NewSeriesErrorCode,
+    errorCode: ?NewSeriesErrorCode,
     seriesUrl: ?string,
   ): Node => {
     if (!errorCode) {
@@ -200,6 +203,8 @@ class NewBookmarkPanel extends Component<Props, State> {
     }
 
     switch (errorCode) {
+      case 'REQUEST_FAILED':
+        return `There was an error reaching the server.`;
       case 'INVALID_URL':
         return `Hmm, this doesn't look like a URL.`;
       case 'UNSUPPORTED_SITE':
@@ -230,11 +235,11 @@ class NewBookmarkPanel extends Component<Props, State> {
           </span>
         );
       case 'INVALID_SERIES':
-      case 'SERVER_NOT_FOUND':
+      case 'SERIES_NOT_FOUND':
         return `We couldn't find a series at that URL.`;
-      case 'SERVER_ALREADY_EXISTS':
+      case 'SERIES_ALREADY_EXISTS':
         return `That series is already in your collection!`;
-      case 'SERVER_UNKNOWN_ERROR':
+      case 'UNKNOWN_ERROR':
         return 'Something went wrong fetching the series. Try again later.';
       default:
         return `Something went wrong.`;

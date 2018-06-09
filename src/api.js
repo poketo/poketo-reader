@@ -13,8 +13,8 @@ export type AxiosResponse = {
 };
 
 export type AxiosError = {
-  response: AxiosResponse,
-  request: XMLHttpRequest,
+  response?: AxiosResponse,
+  request?: XMLHttpRequest,
   code: string,
   config: Object,
 };
