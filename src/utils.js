@@ -11,12 +11,12 @@ const utils = {
   /**
    * Array Helpers
    */
-  getRandomItems: (arr: Array<any>, count: number = 1) =>
+  getRandomItems: (arr: Array<mixed>, count: number = 1) =>
     arr
       .slice()
       .sort(() => 0.5 - Math.random())
       .slice(0, count),
-  flatten: (arr: Array<any>) => [].concat(...arr),
+  flatten: (arr: Array<mixed>) => [].concat(...arr),
 
   /**
    * Store helpers
