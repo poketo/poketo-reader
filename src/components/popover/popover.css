@@ -2,3 +2,16 @@
   min-width: 100px;
   z-index: 99;
 }
+
+.PopoverItem {
+  background-color: transparent;
+  min-width: 120px;
+  max-width: 80vw;
+  transition: background-color 200ms ease, color 200ms ease,
+    transform 200ms ease, box-shadow 200ms ease;
+}
+
+.supports-hover .PopoverItem:hover,
+.PopoverItem:active {
+  background-color: rgba(0, 0, 0, 0.07);
+}

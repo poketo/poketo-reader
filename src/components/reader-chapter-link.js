@@ -29,11 +29,8 @@ const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   }
 
   return (
-    <Button small>
-      <Link
-        to={to}
-        style={{ pointerEvents: disabled ? 'none' : 'auto' }}
-        className={disabled ? 'o-50p' : ''}>
+    <Button small disabled={disabled}>
+      <Link to={to} style={{ pointerEvents: disabled ? 'none' : 'auto' }}>
         {children}
       </Link>
     </Button>

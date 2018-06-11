@@ -1,15 +1,11 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 import Loadable from 'react-loadable';
 
 import Button from './button';
 import ComponentLoader from './loader-component';
-import IconAdd from './icon-add';
-import IconMessage from './icon-message';
-import IconDirectDown from './icon-direct-down';
-import IconPoketo from './icon-poketo';
+import Icon from './icon';
 import Panel from './panel';
 import Popover from './popover/index';
 
@@ -68,43 +64,43 @@ export default class FeedHeader extends PureComponent<Props, State> {
   renderAddButton(inline: boolean = false) {
     const { onAddButtonClick } = this.props;
     const label = 'Add new series';
+    const icon = <Icon name="add" iconSize={18} size={44} />;
+
+    if (inline) {
+      return (
+        <Button inline noPadding onClick={onAddButtonClick} title={label}>
+          {icon}
+        </Button>
+      );
+    }
 
     return (
-      <Button
-        className={classNames({ 'mb-1': !inline, 'ml-1': inline })}
+      <Popover.Item
+        label={label}
         onClick={onAddButtonClick}
-        inline={inline}
-        noPadding={inline}
-        title={label}
-        iconBefore={
-          <span
-            className="x xa-center xj-center"
-            style={{ width: inline ? 44 : 32, height: 44 }}>
-            <IconAdd width={18} height={18} />
-          </span>
-        }>
-        {inline ? null : label}
-      </Button>
+        iconBefore={icon}
+      />
     );
   }
 
   renderFeedbackButton(inline: boolean = false) {
     const label = 'Send feedback';
+    const icon = <Icon name="message" iconSize={18} size={44} />;
+
+    if (inline) {
+      return (
+        <Button inline noPadding onClick={this.openFeedbackPanel} title={label}>
+          {icon}
+        </Button>
+      );
+    }
+
     return (
-      <Button
+      <Popover.Item
         onClick={this.openFeedbackPanel}
-        inline={inline}
-        noPadding={inline}
-        title={label}
-        iconBefore={
-          <span
-            className="x xa-center xj-center"
-            style={{ width: inline ? 44 : 32, height: 44 }}>
-            <IconMessage width={18} height={18} />
-          </span>
-        }>
-        {inline ? null : label}
-      </Button>
+        label={label}
+        iconBefore={icon}
+      />
     );
   }
 
@@ -112,7 +108,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
     return (
       <header className="FeedHeader z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
-          <IconPoketo className="c-coral" />
+          <Icon name="poketo" className="c-coral" />
         </div>
         <Panel.TransitionGroup>
           {this.renderFeedbackPanel()}
@@ -131,11 +127,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
           position={Popover.Position.BOTTOM_RIGHT}>
           <div className="d-none-m">
             <Button inline noPadding>
-              <span
-                className="x xa-center xj-center"
-                style={{ width: 44, height: 44 }}>
-                <IconDirectDown />
-              </span>
+              <Icon name="direct-down" size={44} />
             </Button>
           </div>
         </Popover>
