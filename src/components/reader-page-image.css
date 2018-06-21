@@ -20,14 +20,6 @@
   opacity: 1;
 }
 
-.PageImage--hasSize .PageImage-image.js-lazysizes-loaded {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .PageImage-image.js-lazysizes-loaded + .PageImage-background {
   display: none;
 }
