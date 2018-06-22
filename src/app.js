@@ -6,9 +6,10 @@ import BodyClassName from 'react-body-classname';
 import classNames from 'classnames';
 import { Switch, Route } from 'react-router-dom';
 
+import Analytics from './components/analytics';
 import DeviceStatus from './containers/device-status';
-import StandaloneStatusBar from './containers/standalone-status-bar';
 import ErrorBoundary from './components/error-boundary';
+import StandaloneStatusBar from './containers/standalone-status-bar';
 
 import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
@@ -35,6 +36,7 @@ export default class App extends Component<{}> {
             'supports-hover': !utils.isTouchDevice(),
           })}
         />
+        <Analytics />
         <DeviceStatus />
         <StandaloneStatusBar />
         <ErrorBoundary>
