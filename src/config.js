@@ -4,6 +4,7 @@ const config: { [string]: string } = {
   apiBaseUrl: process.env.REACT_APP_API_BASE || '',
   apiFeedbackUrl: process.env.REACT_APP_API_FEEDBACK_URL || '',
   email: 'hello@poketo.app',
+  discordInviteUrl: 'https://discord.gg/y5gVmY3',
   githubUrl: 'https://github.com/poketo',
   githubSiteUrl: 'https://github.com/poketo/site',
   githubServiceUrl: 'https://github.com/poketo/service',
