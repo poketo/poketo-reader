@@ -102,22 +102,16 @@ export default function reducer(
       return nextState;
     }
     case 'SET_SERIES': {
-      return {
-        ...state,
-        [action.payload.id]: { ...state[action.payload.id], ...action.payload },
-      };
+      return utils.set(state, action.payload.id, prev => ({
+        ...prev,
+        ...action.payload,
+      }));
     }
     case 'SET_SERIES_ENTITY_STATUS': {
-      return {
-        ...state,
-        _status: {
-          ...state._status,
-          [action.payload.id]: {
-            ...state._status[action.payload.id],
-            ...action.payload.status,
-          },
-        },
-      };
+      return utils.set(state, `_status.${action.payload.id}`, prev => ({
+        ...prev,
+        ...action.payload.status,
+      }));
     }
     default: {
       return state;

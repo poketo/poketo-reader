@@ -2044,6 +2044,10 @@ clean-css@4.1.x:
   dependencies:
     source-map "0.5.x"
 
+clean-set@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/clean-set/-/clean-set-1.1.0.tgz#507860370e6e44521f4a4a516c977a864aa8a765"
+
 cli-boxes@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/cli-boxes/-/cli-boxes-1.0.0.tgz#4fa917c3e59c94a004cd61f8ee509da651687143"

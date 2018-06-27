@@ -104,13 +104,16 @@ export default function reducer(
       return nextState;
     }
     case 'SET_CHAPTER': {
-      return {
-        ...state,
-        [action.payload.id]: { ...state[action.payload.id], ...action.payload },
-      };
+      return utils.set(state, action.payload.id, prev => ({
+        ...prev,
+        ...action.payload,
+      }));
     }
     case 'SET_CHAPTER_STATUS': {
-      return { ...state, _status: { ...state._status, ...action.payload } };
+      return utils.set(state, '_status', prev => ({
+        ...prev,
+        ...action.payload,
+      }));
     }
     default: {
       return state;
