@@ -1,6 +1,7 @@
 // @flow
 
 import ago from 's-ago';
+import set from 'clean-set';
 
 import type { Chapter } from './types';
 
@@ -38,6 +39,8 @@ const utils = {
 
     return components;
   },
+
+  set,
 
   /**
    * URL Helpers

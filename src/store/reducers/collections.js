@@ -176,32 +176,19 @@ export default function reducer(
       return nextState;
     }
     case 'SET_COLLECTION': {
-      return {
-        ...state,
-        [action.payload.slug]: {
-          ...state[action.payload.slug],
-          ...action.payload,
-        },
-      };
+      return utils.set(state, `${action.payload.slug}`, prev => ({
+        ...prev,
+        ...action.payload,
+      }));
     }
     case 'MARK_BOOKMARK_AS_READ': {
       const { collectionSlug, seriesId, lastReadAt } = action.payload;
-      const collection = state[collectionSlug];
-      const bookmarks = {
-        ...collection.bookmarks,
-        [seriesId]: {
-          ...collection.bookmarks[seriesId],
-          lastReadAt,
-        },
-      };
 
-      return {
-        ...state,
-        [collectionSlug]: {
-          ...state[collectionSlug],
-          bookmarks,
-        },
-      };
+      return utils.set(
+        state,
+        `${collectionSlug}.bookmarks.${seriesId}.lastReadAt`,
+        lastReadAt,
+      );
     }
     case 'REMOVE_BOOKMARK': {
       const nextState = { ...state };
@@ -210,16 +197,10 @@ export default function reducer(
       return nextState;
     }
     case 'SET_COLLECTION_ENTITY_STATUS': {
-      return {
-        ...state,
-        _status: {
-          ...state._status,
-          [action.payload.slug]: {
-            ...state._status[action.payload.slug],
-            ...action.payload.status,
-          },
-        },
-      };
+      return utils.set(state, `_status.${action.payload.slug}`, prev => ({
+        ...prev,
+        ...action.payload.status,
+      }));
     }
     default: {
       return state;

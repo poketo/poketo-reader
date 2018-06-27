@@ -32,10 +32,10 @@ export default function reducer(
 ): State {
   switch (action.type) {
     case 'SET_NETWORK_STATUS': {
-      return { ...state, isOnline: action.payload };
+      return utils.set(state, 'isOnline', action.payload);
     }
     case 'SET_ORIENTATION': {
-      return { ...state, orientation: action.payload };
+      return utils.set(state, 'orientation', action.payload);
     }
     default: {
       return state;
