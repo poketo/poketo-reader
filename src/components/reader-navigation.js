@@ -13,6 +13,15 @@ type Props = {
   seriesChapters: Series,
 };
 
+const getChapterLabel = (chapter): string => {
+  const parts = [
+    chapter.volumeNumber && `Vol. ${chapter.volumeNumber}`,
+    chapter.chapterNumber && `Chapter ${chapter.chapterNumber}`,
+  ];
+
+  return parts.filter(Boolean).join(' - ');
+};
+
 const ReaderNavigation = ({
   chapter,
   collectionSlug,
@@ -22,7 +31,7 @@ const ReaderNavigation = ({
   const chapterSelectorOptions = seriesChapters
     ? seriesChapters.map(c => ({
         value: c.slug,
-        label: `Chapter ${c.chapterNumber}`,
+        label: getChapterLabel(c),
       }))
     : [{ value: '', label: '' }];
 
