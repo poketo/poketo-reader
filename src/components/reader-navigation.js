@@ -15,11 +15,17 @@ type Props = {
 
 const getChapterLabel = (chapter): string => {
   const parts = [
-    chapter.volumeNumber && `Vol. ${chapter.volumeNumber}`,
+    chapter.volumeNumber &&
+      chapter.volumeNumber !== '0' &&
+      `Vol. ${chapter.volumeNumber}`,
     chapter.chapterNumber && `Chapter ${chapter.chapterNumber}`,
-  ];
+  ].filter(Boolean);
 
-  return parts.filter(Boolean).join(' - ');
+  if (parts.length === 0) {
+    return chapter.title;
+  }
+
+  return parts.join(' - ');
 };
 
 const ReaderNavigation = ({
