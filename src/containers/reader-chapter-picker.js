@@ -60,7 +60,8 @@ export default class ReaderChapterPicker extends Component<Props> {
       <div
         style={{
           background: 'white',
-          padding: 16,
+          paddingLeft: 16,
+          paddingRight: 16,
           overflowY: 'scroll',
           width: '90vw',
           height: '50vh',
