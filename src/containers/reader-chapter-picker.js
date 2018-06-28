@@ -13,6 +13,28 @@ type Props = {
   onChange: (chapter: Chapter) => void,
 };
 
+/**
+ * Sort volumes so non-numeric comes first, followed by descending numeric.
+ */
+const sortVolumes = (a, b) => {
+  const volumeA = parseFloat(a);
+  const volumeB = parseFloat(b);
+
+  if (Number.isNaN(volumeA) && !Number.isNaN(volumeB)) {
+    return -1;
+  } else if (!Number.isNaN(volumeA) && Number.isNaN(volumeB)) {
+    return 1;
+  }
+
+  if (volumeA < volumeB) {
+    return 1;
+  } else if (volumeA > volumeB) {
+    return -1;
+  }
+
+  return 0;
+};
+
 export default class ReaderChapterPicker extends Component<Props> {
   static defaultProps = {
     onChange: () => {},
@@ -32,9 +54,7 @@ export default class ReaderChapterPicker extends Component<Props> {
     const { seriesChapters } = this.props;
 
     const groupedChapters = utils.groupBy(seriesChapters, 'volumeNumber');
-    const groups = Object.keys(groupedChapters)
-      .sort()
-      .reverse();
+    const groups = Object.keys(groupedChapters).sort(sortVolumes);
 
     return (
       <div
@@ -43,15 +63,15 @@ export default class ReaderChapterPicker extends Component<Props> {
           padding: 16,
           overflowY: 'scroll',
           width: '90vw',
-          height: 500,
+          height: '50vh',
           zIndex: 9,
         }}>
         {groups.map((key, index) => (
-          <div key={key} className={classNames({ 'mt-5': index !== 0 })}>
+          <div key={key} className={classNames({ 'mt-4': index !== 0 })}>
             <div
               className="fs-14 c-gray3 pv-2 bgc-white"
               style={{ position: 'sticky', top: 0 }}>
-              {key === 'undefined' ? `Uncategorized` : `Volume ${key}`}
+              {key === 'undefined' ? `Latest` : `Volume ${key}`}
             </div>
             {groupedChapters[key].map(chapter => (
               <ChapterRow
