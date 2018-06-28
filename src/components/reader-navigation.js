@@ -1,7 +1,12 @@
 // @flow
 
 import React from 'react';
+
+import Icon from '../components/icon';
+import Button from '../components/button';
 import Dropdown from '../components/dropdown';
+import Popover from '../components/popover';
+import ReaderChapterPicker from '../containers/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 
 import type { Chapter, Series } from '../types';
@@ -51,21 +56,35 @@ const ReaderNavigation = ({
         <ReaderChapterLink
           collectionSlug={collectionSlug}
           chapter={previousChapter}>
-          Previous
+          <Icon name="direct-left" />
         </ReaderChapterLink>
       </div>
-      <div className="p-fill b-0 z-1 x xj-center xa-center">
-        <Dropdown
-          value={chapter.slug}
-          onChange={onChapterSelectChange}
-          options={chapterSelectorOptions}
-        />
+      <div>
+        <Popover
+          content={({ close }) => (
+            <ReaderChapterPicker
+              chapter={chapter}
+              seriesChapters={seriesChapters}
+              onChange={chapter => {
+                onChapterSelectChange(chapter);
+                close();
+              }}
+            />
+          )}
+          position={Popover.Position.BOTTOM}>
+          <Button className="c-white">
+            <div style={{ lineHeight: '1.25' }}>
+              <div>Chapter {chapter.chapterNumber}</div>
+              <div className="fs-12 o-50p">{chapter.title}</div>
+            </div>
+          </Button>
+        </Popover>
       </div>
       <div className="z-2">
         <ReaderChapterLink
           collectionSlug={collectionSlug}
           chapter={nextChapter}>
-          Next
+          <Icon name="direct-right" />
         </ReaderChapterLink>
       </div>
     </nav>
