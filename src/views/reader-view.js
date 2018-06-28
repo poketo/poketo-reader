@@ -213,24 +213,12 @@ class ReaderView extends Component<Props, State> {
           </div>
         )}
         {seriesChapters && (
-          <div>
-            <Popover
-              content={({ close }) => (
-                <ReaderChapterPicker
-                  chapter={chapter}
-                  seriesChapters={seriesChapters}
-                  onChange={chapter => {
-                    this.handleChapterChange(chapter);
-                    close();
-                  }}
-                />
-              )}
-              position={Popover.Position.BOTTOM}>
-              <Button className="c-white">
-                Chapter {chapter.chapterNumber}
-              </Button>
-            </Popover>
-          </div>
+          <ReaderNavigation
+            collectionSlug={collectionSlug}
+            chapter={chapter}
+            seriesChapters={seriesChapters}
+            onChapterSelectChange={this.handleChapterChange}
+          />
         )}
         {isLoading ? (
           <div className="x xa-center xj-center ta-center pv-6">
