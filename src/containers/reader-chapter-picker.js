@@ -46,7 +46,7 @@ export default class ReaderChapterPicker extends Component<Props> {
           height: 500,
           zIndex: 9,
         }}>
-        {groups.slice(0, 1).map((key, index) => (
+        {groups.map((key, index) => (
           <div key={key} className={classNames({ 'mt-5': index !== 0 })}>
             <div
               className="fs-14 c-gray3 pv-2 bgc-white"
