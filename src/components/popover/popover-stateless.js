@@ -16,7 +16,7 @@ const PopoverStateless = React.forwardRef(
       role="dialog"
       className={classNames(
         'Popover',
-        'bgc-white e-2 br-4 x xa-center xj-center',
+        'bgc-white e-2 br-4 x xa-center xj-center of-hidden',
         className,
       )}
       ref={ref}
