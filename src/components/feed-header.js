@@ -119,7 +119,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
         </div>
         <Popover
           content={
-            <div style={{ maxWidth: '80vw' }}>
+            <div className="pa-2" style={{ maxWidth: '80vw' }}>
               {this.renderAddButton()}
               {this.renderFeedbackButton()}
             </div>
