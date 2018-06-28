@@ -2,6 +2,7 @@
 
 import ago from 's-ago';
 import set from 'clean-set';
+import groupBy from 'lodash.groupby';
 
 import type { Chapter } from './types';
 
@@ -18,6 +19,7 @@ const utils = {
       .sort(() => 0.5 - Math.random())
       .slice(0, count),
   flatten: (arr: Array<mixed>) => [].concat(...arr),
+  groupBy,
 
   /**
    * Store helpers

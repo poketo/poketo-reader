@@ -8,8 +8,11 @@ import { connect } from 'react-redux';
 
 import DotLoader from '../components/loader-dots';
 import Icon from '../components/icon';
+import Button from '../components/button';
+import Popover from '../components/popover';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
+import ReaderChapterPicker from '../containers/reader-chapter-picker';
 import utils from '../utils';
 
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
@@ -157,6 +160,15 @@ class ReaderView extends Component<Props, State> {
     history.push(utils.getReaderUrl(collectionSlug, siteId, seriesSlug, value));
   };
 
+  handleChapterChange = (chapter: Chapter) => {
+    const { match, history } = this.props;
+    const { collectionSlug, siteId, seriesSlug } = match.params;
+
+    history.push(
+      utils.getReaderUrl(collectionSlug, siteId, seriesSlug, chapter.slug),
+    );
+  };
+
   render() {
     const { match, collection, chaptersById, seriesById } = this.props;
     const { chapterSlug, seriesSlug, siteId, collectionSlug } = match.params;
@@ -201,12 +213,26 @@ class ReaderView extends Component<Props, State> {
           </div>
         )}
         {seriesChapters && (
-          <ReaderNavigation
-            chapter={chapter}
-            collectionSlug={collectionSlug}
-            seriesChapters={seriesChapters}
-            onChapterSelectChange={this.handleChapterSelectorChange}
-          />
+          <div>
+            <Popover
+              content={
+                <ReaderChapterPicker
+                  chapter={chapter}
+                  seriesChapters={seriesChapters}
+                  onChange={this.handleChapterChange}
+                />
+              }
+              position={Popover.Position.BOTTOM}>
+              <Button className="c-white">Chapter 761</Button>
+            </Popover>
+
+            <ReaderNavigation
+              chapter={chapter}
+              collectionSlug={collectionSlug}
+              seriesChapters={seriesChapters}
+              onChapterSelectChange={this.handleChapterSelectorChange}
+            />
+          </div>
         )}
         {isLoading ? (
           <div className="x xa-center xj-center ta-center pv-6">

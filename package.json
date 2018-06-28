@@ -21,6 +21,7 @@
     "clean-set": "^1.1.0",
     "filter-obj": "^1.1.0",
     "lazysizes": "^4.0.1",
+    "lodash.groupby": "^4.6.0",
     "milliseconds": "^1.0.3",
     "money-clip": "^2.0.1",
     "noisejs": "^2.1.0",
