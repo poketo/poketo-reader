@@ -3,40 +3,25 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 
-import IconAdd from './icon-add';
-import IconArrowLeft from './icon-arrow-left';
-import IconArrowRight from './icon-arrow-right';
-import IconBook from './icon-book';
-import IconBookmark from './icon-bookmark';
-import IconCheckCircle from './icon-check-circle';
-import IconCheck from './icon-check';
-import IconDirectDown from './icon-direct-down';
-import IconEdit from './icon-edit';
-import IconFeed from './icon-feed';
-import IconMessage from './icon-message';
-import IconMoreHorizontal from './icon-more-horizontal';
-import IconNewTab from './icon-new-tab';
-import IconPoketo from './icon-poketo';
-import IconRefresh from './icon-refresh';
-import IconTrash from './icon-trash';
-
 const Icons = {
-  add: IconAdd,
-  'arrow-left': IconArrowLeft,
-  'arrow-right': IconArrowRight,
-  book: IconBook,
-  bookmark: IconBookmark,
-  'check-circle': IconCheckCircle,
-  check: IconCheck,
-  'direct-down': IconDirectDown,
-  edit: IconEdit,
-  feed: IconFeed,
-  message: IconMessage,
-  'more-horizontal': IconMoreHorizontal,
-  'new-tab': IconNewTab,
-  poketo: IconPoketo,
-  refresh: IconRefresh,
-  trash: IconTrash,
+  add: require('./icon-add').default,
+  'arrow-left': require('./icon-arrow-left').default,
+  'arrow-right': require('./icon-arrow-right').default,
+  book: require('./icon-book').default,
+  bookmark: require('./icon-bookmark').default,
+  'check-circle': require('./icon-check-circle').default,
+  check: require('./icon-check').default,
+  'direct-down': require('./icon-direct-down').default,
+  'direct-left': require('./icon-direct-left').default,
+  'direct-right': require('./icon-direct-right').default,
+  edit: require('./icon-edit').default,
+  feed: require('./icon-feed').default,
+  message: require('./icon-message').default,
+  'more-horizontal': require('./icon-more-horizontal').default,
+  'new-tab': require('./icon-new-tab').default,
+  poketo: require('./icon-poketo').default,
+  refresh: require('./icon-refresh').default,
+  trash: require('./icon-trash').default,
 };
 
 type IconKey = $Keys<typeof Icons>;
