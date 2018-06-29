@@ -4,7 +4,6 @@ import React, { type Node } from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-import Button from '../components/button';
 import utils from '../utils';
 import type { Chapter } from '../types';
 

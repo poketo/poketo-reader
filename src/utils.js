@@ -13,7 +13,6 @@ const utils = {
   formatTimestamp: (n: number): string => ago(toDate(n)),
   formatAbsoluteTimestamp: (n: number) => {
     const date = toDate(n);
-    const now = new Date();
 
     if (isToday(date)) {
       return 'Today';
