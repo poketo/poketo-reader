@@ -6,9 +6,13 @@
   background-color: rgba(50, 0, 0, 0.05);
 }
 
-.ChapterRow--active,
+.ChapterRow--active .ChapterRow-label,
 .supports-hover .ChapterRow--active:hover {
   background: inherit;
+}
+
+.ChapterRow--active .ChapterRow-label,
+.ChapterRow--active .ChapterRow-check {
   opacity: 0.5;
 }
 

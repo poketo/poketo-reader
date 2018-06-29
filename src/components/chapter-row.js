@@ -14,7 +14,8 @@ type Props = {
 };
 
 const ChapterRow = ({ active, chapter, onClick }: Props) => {
-  const hasChapterNumber = Boolean(chapter.chapterNumber);
+  const chapterLabel = utils.getChapterLabel(chapter);
+  const chapterTitle = utils.getChapterTitle(chapter);
 
   return (
     <div
@@ -24,18 +25,13 @@ const ChapterRow = ({ active, chapter, onClick }: Props) => {
       )}
       onClick={onClick}>
       {active && (
-        <span className="p-relative x xa-center mr-2 t--1">
+        <span className="ChapterRow-check p-relative x xa-center mr-2 t--1">
           <Icon name="check" size={18} iconSize={18} />
         </span>
       )}
       <div className="ChapterRow-label xs-1">
-        <span className="fw-semibold">
-          {hasChapterNumber
-            ? `Chapter ${chapter.chapterNumber}`
-            : chapter.title}
-        </span>
-        {hasChapterNumber &&
-          chapter.title && <span className="ml-2">{chapter.title}</span>}
+        <span className="fw-semibold">{chapterLabel}</span>
+        {chapterTitle && <span className="ml-2">{chapter.title}</span>}
       </div>
       <span className="xg-1 xs-0 fs-12 o-50p pl-2 pl-4-m ta-right">
         {utils.formatAbsoluteTimestamp(chapter.createdAt)}

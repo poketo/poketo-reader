@@ -95,6 +95,30 @@ const utils = {
   /**
    * Chapter Helpers
    */
+  getChapterLabel: (chapter: Chapter): string => {
+    if (chapter.chapterNumber) {
+      return `Chapter ${chapter.chapterNumber}`;
+    }
+
+    if (chapter.title) {
+      return chapter.title;
+    }
+
+    if (chapter.volumeNumber) {
+      return `Volume ${chapter.volumeNumber}`;
+    }
+
+    return 'Unknown';
+  },
+
+  getChapterTitle: (chapter: Chapter): ?string => {
+    if (!chapter.chapterNumber && chapter.title) {
+      return null;
+    }
+
+    return chapter.title;
+  },
+
   getUnreadChapters: (
     chapters: Array<Chapter>,
     seriesLastReadAt: number,

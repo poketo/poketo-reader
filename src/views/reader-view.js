@@ -146,7 +146,12 @@ class ReaderView extends Component<Props, State> {
 
   handleChapterChange = (chapter: Chapter) => {
     const { match, history } = this.props;
-    const { collectionSlug, siteId, seriesSlug } = match.params;
+    const { collectionSlug, chapterSlug, siteId, seriesSlug } = match.params;
+    const currentChapterId = utils.getId(siteId, seriesSlug, chapterSlug);
+
+    if (chapter.id === currentChapterId) {
+      return;
+    }
 
     history.push(
       utils.getReaderUrl(collectionSlug, siteId, seriesSlug, chapter.slug),
