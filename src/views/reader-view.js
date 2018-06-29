@@ -8,11 +8,8 @@ import { connect } from 'react-redux';
 
 import DotLoader from '../components/loader-dots';
 import Icon from '../components/icon';
-import Button from '../components/button';
-import Popover from '../components/popover';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
-import ReaderChapterPicker from '../containers/reader-chapter-picker';
 import utils from '../utils';
 
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
