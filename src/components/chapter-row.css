@@ -3,5 +3,17 @@
 }
 
 .supports-hover .ChapterRow:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background-color: rgba(50, 0, 0, 0.05);
+}
+
+.ChapterRow--active,
+.supports-hover .ChapterRow--active:hover {
+  background: inherit;
+  opacity: 0.5;
+}
+
+.ChapterRow-label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
