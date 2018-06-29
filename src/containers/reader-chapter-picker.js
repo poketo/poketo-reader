@@ -55,7 +55,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   };
 
   render() {
-    const { seriesChapters } = this.props;
+    const { chapter, seriesChapters } = this.props;
 
     const groupedChapters = utils.groupBy(seriesChapters, 'volumeNumber');
     const groups = Object.keys(groupedChapters).sort(sortVolumes);
@@ -65,6 +65,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
         style={{
           overflowY: 'scroll',
           webkitOverflowScrolling: 'touch',
+          minWidth: 240,
           maxWidth: '90vw',
           height: '50vh',
           zIndex: 9,
@@ -79,11 +80,12 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
               </div>
             )}
             <div>
-              {groupedChapters[key].map(chapter => (
+              {groupedChapters[key].map(c => (
                 <ChapterRow
-                  key={chapter.id}
-                  chapter={chapter}
-                  onClick={this.handleChapterClick(chapter)}
+                  key={c.id}
+                  active={c.id === chapter.id}
+                  chapter={c}
+                  onClick={this.handleChapterClick(c)}
                 />
               ))}
             </div>
