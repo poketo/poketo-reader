@@ -10,7 +10,7 @@ import type { RefObject } from './types';
 type Props = {
   position: $Keys<typeof Position>,
   isShown: boolean,
-  content: Element<any>,
+  content: Element<any> | (({ close: Function }) => Node),
   children:
     | Element<any>
     | (({ toggle: Function, ref: RefObject, isShown: boolean }) => Node),

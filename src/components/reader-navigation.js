@@ -3,8 +3,6 @@
 import React from 'react';
 
 import Icon from '../components/icon';
-import Button from '../components/button';
-import Dropdown from '../components/dropdown';
 import Popover from '../components/popover';
 import ReaderChapterPicker from '../containers/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
@@ -19,21 +17,6 @@ type Props = {
   seriesChapters: Series,
 };
 
-const getChapterLabel = (chapter): string => {
-  const parts = [
-    chapter.volumeNumber &&
-      chapter.volumeNumber !== '0' &&
-      `Vol. ${chapter.volumeNumber}`,
-    chapter.chapterNumber && `Chapter ${chapter.chapterNumber}`,
-  ].filter(Boolean);
-
-  if (parts.length === 0) {
-    return chapter.title;
-  }
-
-  return parts.join(' - ');
-};
-
 const ReaderNavigation = ({
   isBottom,
   chapter,
@@ -41,13 +24,6 @@ const ReaderNavigation = ({
   onChapterSelectChange,
   seriesChapters,
 }: Props) => {
-  const chapterSelectorOptions = seriesChapters
-    ? seriesChapters.map(c => ({
-        value: c.slug,
-        label: getChapterLabel(c),
-      }))
-    : [{ value: '', label: '' }];
-
   const chapterIndex = seriesChapters.findIndex(c => c.id === chapter.id);
   const previousChapter = seriesChapters[chapterIndex + 1] || null;
   const nextChapter = seriesChapters[chapterIndex - 1] || null;
@@ -63,14 +39,24 @@ const ReaderNavigation = ({
       </div>
       <Popover
         content={({ close }) => (
-          <ReaderChapterPicker
-            chapter={chapter}
-            seriesChapters={seriesChapters}
-            onChange={chapter => {
-              onChapterSelectChange(chapter);
-              close();
-            }}
-          />
+          <div
+            style={{
+              overflowY: 'scroll',
+              webkitOverflowScrolling: 'touch',
+              minWidth: 240,
+              maxWidth: '90vw',
+              height: '50vh',
+              zIndex: 9,
+            }}>
+            <ReaderChapterPicker
+              chapter={chapter}
+              seriesChapters={seriesChapters}
+              onChange={chapter => {
+                onChapterSelectChange(chapter);
+                close();
+              }}
+            />
+          </div>
         )}
         position={isBottom ? Popover.Position.TOP : Popover.Position.BOTTOM}>
         <a

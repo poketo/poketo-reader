@@ -16,7 +16,7 @@ type Props = {
 /**
  * Sort volumes so non-numeric comes first, followed by descending numeric.
  */
-const sortVolumes = (a, b) => {
+const sortVolumes = (a: string, b: string): number => {
   const volumeA = parseFloat(a);
   const volumeB = parseFloat(b);
 
@@ -61,15 +61,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     const groups = Object.keys(groupedChapters).sort(sortVolumes);
 
     return (
-      <div
-        style={{
-          overflowY: 'scroll',
-          webkitOverflowScrolling: 'touch',
-          minWidth: 240,
-          maxWidth: '90vw',
-          height: '50vh',
-          zIndex: 9,
-        }}>
+      <div>
         {groups.map((key, index) => (
           <div key={key} className={classNames({ 'mt-4': index !== 0 })}>
             {!isEmptyVolume(key) && (
