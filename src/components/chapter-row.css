@@ -1,0 +1,7 @@
+.ChapterRow {
+  min-height: 44px;
+}
+
+.supports-hover .ChapterRow:hover {
+  background: rgba(0, 0, 0, 0.05);
+}

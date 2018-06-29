@@ -147,19 +147,6 @@ class ReaderView extends Component<Props, State> {
     );
   };
 
-  handleChapterSelectorChange = (e: SyntheticInputEvent<HTMLSelectElement>) => {
-    const { match, history } = this.props;
-    const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
-
-    const value = e.currentTarget.value;
-
-    if (value === chapterSlug) {
-      return;
-    }
-
-    history.push(utils.getReaderUrl(collectionSlug, siteId, seriesSlug, value));
-  };
-
   handleChapterChange = (chapter: Chapter) => {
     const { match, history } = this.props;
     const { collectionSlug, siteId, seriesSlug } = match.params;
@@ -199,26 +186,28 @@ class ReaderView extends Component<Props, State> {
         <BodyClassName className="ff-sans bgc-black" />
         <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
           <Link
-            className="x xa-center o-50p p-relative z-2"
+            className="x xa-center o-50p p-absolute z-2"
             to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
             <Icon name="arrow-left" iconSize={20} />
           </Link>
-        </div>
-        {series && (
-          <div className="c-white pv-4 mh-auto w-90p-m ta-center mw-900">
-            <div>
-              <div>{series.title}</div>
-              <div className="fs-12 o-50p">{series.site.name}</div>
+          {series && (
+            <div className="c-white mh-auto w-90p-m ta-center mw-900">
+              <div>
+                <div>{series.title}</div>
+                <div className="fs-12 o-50p">{series.site.name}</div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
         {seriesChapters && (
-          <ReaderNavigation
-            collectionSlug={collectionSlug}
-            chapter={chapter}
-            seriesChapters={seriesChapters}
-            onChapterSelectChange={this.handleChapterChange}
-          />
+          <div className="pt-4">
+            <ReaderNavigation
+              collectionSlug={collectionSlug}
+              chapter={chapter}
+              seriesChapters={seriesChapters}
+              onChapterSelectChange={this.handleChapterChange}
+            />
+          </div>
         )}
         {isLoading ? (
           <div className="x xa-center xj-center ta-center pv-6">
@@ -243,10 +232,11 @@ class ReaderView extends Component<Props, State> {
             {seriesChapters && (
               <div className="pb-4">
                 <ReaderNavigation
+                  isBottom
                   chapter={chapter}
                   collectionSlug={collectionSlug}
                   seriesChapters={seriesChapters}
-                  onChapterSelectChange={this.handleChapterSelectorChange}
+                  onChapterSelectChange={this.handleChapterChange}
                 />
               </div>
             )}

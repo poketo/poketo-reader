@@ -3,6 +3,7 @@
 import React from 'react';
 import utils from '../utils';
 import type { Chapter } from '../types';
+import './chapter-row.css';
 
 type Props = {
   chapter: Chapter,
@@ -13,15 +14,19 @@ const ChapterRow = ({ chapter, onClick }: Props) => {
   const hasChapterNumber = Boolean(chapter.chapterNumber);
 
   return (
-    <div className="x xj-spaceBetween pv-1 c-pointer" onClick={onClick}>
-      <div style={{ flex: '1 1 auto' }}>
+    <div
+      className="ChapterRow x xa-center xj-spaceBetween pv-2 ph-3 c-pointer"
+      onClick={onClick}>
+      <div className="xg-1">
         <span className="fw-semibold">
-          {hasChapterNumber ? chapter.chapterNumber : chapter.title}
+          {hasChapterNumber
+            ? `Chapter ${chapter.chapterNumber}`
+            : chapter.title}
         </span>
         {hasChapterNumber &&
           chapter.title && <span className="ml-2">{chapter.title}</span>}
       </div>
-      <span style={{ flex: '1 0 auto' }} className="fs-12 o-50p pl-2 ta-right">
+      <span className="xs-1 fs-12 o-50p pl-2 pl-4-m ta-right">
         {utils.formatAbsoluteTimestamp(chapter.createdAt)}
       </span>
     </div>
