@@ -10,7 +10,7 @@ import type { Chapter } from '../types';
 type Props = {
   chapter: Chapter,
   seriesChapters: Chapter[],
-  onChange: (chapter: Chapter) => void,
+  onChapterClick: (chapter: Chapter) => void,
 };
 
 /**
@@ -41,17 +41,13 @@ const isEmptyVolume = (key: string): boolean => {
 
 export default class ReaderChapterPicker extends PureComponent<Props> {
   static defaultProps = {
-    onChange: () => {},
+    onChapterClick: () => {},
   };
 
   handleChapterClick = (chapter: Chapter) => (
     e: SyntheticMouseEvent<HTMLDivElement>,
   ) => {
-    if (chapter.id === this.props.chapter.id) {
-      return;
-    }
-
-    this.props.onChange(chapter);
+    this.props.onChapterClick(chapter);
   };
 
   render() {
