@@ -22,7 +22,7 @@ const ChapterRow = ({ chapter, onClick }: Props) => {
           chapter.title && <span className="ml-2">{chapter.title}</span>}
       </div>
       <span style={{ flex: '1 0 auto' }} className="fs-12 o-50p pl-2 ta-right">
-        {utils.formatTimestamp(chapter.createdAt)}
+        {utils.formatAbsoluteTimestamp(chapter.createdAt)}
       </span>
     </div>
   );

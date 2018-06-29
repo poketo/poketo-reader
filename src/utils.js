@@ -2,12 +2,28 @@
 
 import ago from 's-ago';
 import set from 'clean-set';
+import { format, isToday, isYesterday } from 'date-fns';
 import groupBy from 'lodash.groupby';
 
 import type { Chapter } from './types';
 
+const toDate = (n: number): Date => new Date(n * 1000);
+
 const utils = {
-  formatTimestamp: (n: number) => ago(new Date(n * 1000)),
+  formatTimestamp: (n: number): string => ago(toDate(n)),
+  formatAbsoluteTimestamp: (n: number) => {
+    const date = toDate(n);
+    const now = new Date();
+
+    if (isToday(date)) {
+      return 'Today';
+    } else if (isYesterday(date)) {
+      return 'Yesterday';
+    } else {
+      return format(date, 'MMM D, YYYY');
+    }
+  },
+
   getTimestamp: (): number => Math.floor(Date.now() / 1000),
 
   /**
