@@ -19,6 +19,7 @@
     "canvas-fit": "^1.5.0",
     "classnames": "^2.2.5",
     "clean-set": "^1.1.0",
+    "date-fns": "^1.29.0",
     "filter-obj": "^1.1.0",
     "lazysizes": "^4.0.1",
     "lodash.groupby": "^4.6.0",
