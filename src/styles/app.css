@@ -105,6 +105,22 @@ code {
   height: 20px;
 }
 
+.Link {
+}
+
+.PillLink {
+  border-radius: 3px;
+  transition: background-color 200ms ease;
+}
+
+.supports-hover .PillLink:hover {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.PillLink.PillLink:active {
+  background: rgba(0, 0, 0, 0.15);
+}
+
 .Markdown {
 }
 

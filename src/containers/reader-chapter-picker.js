@@ -35,6 +35,10 @@ const sortVolumes = (a, b) => {
   return 0;
 };
 
+const isEmptyVolume = (key: string): boolean => {
+  return key === 'undefined' || key === '0';
+};
+
 export default class ReaderChapterPicker extends PureComponent<Props> {
   static defaultProps = {
     onChange: () => {},
@@ -60,18 +64,21 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
       <div
         style={{
           overflowY: 'scroll',
-          width: '90vw',
+          webkitOverflowScrolling: 'touch',
+          maxWidth: '90vw',
           height: '50vh',
           zIndex: 9,
         }}>
         {groups.map((key, index) => (
           <div key={key} className={classNames({ 'mt-4': index !== 0 })}>
-            <div
-              className="fs-14 c-gray3 pt-2 pb-1 mb-1 bgc-white bb-1 bc-gray1 ph-2"
-              style={{ position: 'sticky', top: 0 }}>
-              {key === 'undefined' ? `Latest` : `Volume ${key}`}
-            </div>
-            <div className="ph-2">
+            {!isEmptyVolume(key) && (
+              <div
+                className="fs-14 fs-16-m c-gray3 pt-2 pb-1 pb-2-m ph-3 bgc-white bb-1 bc-gray1"
+                style={{ position: 'sticky', top: 0 }}>
+                Volume {key}
+              </div>
+            )}
+            <div>
               {groupedChapters[key].map(chapter => (
                 <ChapterRow
                   key={chapter.id}
