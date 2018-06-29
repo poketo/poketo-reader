@@ -1,6 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import Button from '../components/button';
@@ -29,11 +30,15 @@ const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   }
 
   return (
-    <Button small disabled={disabled}>
-      <Link to={to} style={{ pointerEvents: disabled ? 'none' : 'auto' }}>
-        {children}
-      </Link>
-    </Button>
+    <Link
+      to={to}
+      className={classNames('PillLink x pa-2', { 'o-50p': disabled })}
+      style={{
+        pointerEvents: disabled ? 'none' : 'auto',
+        lineHeight: '1.0',
+      }}>
+      {children}
+    </Link>
   );
 };
 
