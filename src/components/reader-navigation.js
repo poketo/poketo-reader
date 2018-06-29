@@ -6,6 +6,7 @@ import Icon from '../components/icon';
 import Popover from '../components/popover';
 import ReaderChapterPicker from '../containers/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
+import utils from '../utils';
 
 import type { Chapter, Series } from '../types';
 
@@ -42,16 +43,16 @@ const ReaderNavigation = ({
           <div
             style={{
               overflowY: 'scroll',
-              webkitOverflowScrolling: 'touch',
+              WebkitOverflowScrolling: 'touch',
               minWidth: 240,
               maxWidth: '90vw',
-              height: '50vh',
+              maxHeight: 400,
               zIndex: 9,
             }}>
             <ReaderChapterPicker
               chapter={chapter}
               seriesChapters={seriesChapters}
-              onChange={chapter => {
+              onChapterClick={chapter => {
                 onChapterSelectChange(chapter);
                 close();
               }}
@@ -63,11 +64,13 @@ const ReaderNavigation = ({
           className="PillLink pv-2 ph-3 d-inlineBlock c-white c-pointer ta-center"
           style={{ lineHeight: '1.25' }}>
           <div className="x xa-center xj-center" style={{ lineHeight: '24px' }}>
-            <span className="ml-1 mr-2">Chapter {chapter.chapterNumber}</span>
+            <span className="ml-1 mr-2">{utils.getChapterLabel(chapter)}</span>
             <Icon name="direct-down" size={18} iconSize={18} />
           </div>
-          {chapter.title && (
-            <div className="mt-1 fs-12 o-50p">{chapter.title}</div>
+          {utils.getChapterTitle(chapter) && (
+            <div className="mt-1 fs-12 o-50p">
+              {utils.getChapterTitle(chapter)}
+            </div>
           )}
         </a>
       </Popover>
