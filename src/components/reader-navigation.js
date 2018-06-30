@@ -51,7 +51,6 @@ export default class ReaderNavigation extends Component<Props, State> {
               WebkitOverflowScrolling: 'touch',
               maxHeight: '60vh',
             }}>
-            <Panel.Title className="ph-3 mb-2">Pick a chapter</Panel.Title>
             <ReaderChapterPicker
               chapter={chapter}
               seriesChapters={seriesChapters}
@@ -73,6 +72,9 @@ export default class ReaderNavigation extends Component<Props, State> {
     const previousChapter = seriesChapters[chapterIndex + 1] || null;
     const nextChapter = seriesChapters[chapterIndex - 1] || null;
 
+    const chapterLabel = utils.getChapterLabel(chapter, true);
+    const chapterTitle = utils.getChapterTitle(chapter);
+
     return (
       <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-3">
         <div className="z-2">
@@ -90,13 +92,11 @@ export default class ReaderNavigation extends Component<Props, State> {
           style={{ lineHeight: '1.25' }}
           onClick={this.handlePickerClick}>
           <div className="x xa-center xj-center" style={{ lineHeight: '24px' }}>
-            <span className="ml-1 mr-2">{utils.getChapterLabel(chapter)}</span>
+            <span className="ml-1 mr-2">{chapterLabel}</span>
             <Icon name="direct-down" size={18} iconSize={18} />
           </div>
-          {utils.getChapterTitle(chapter) && (
-            <div className="mt-1 fs-12 o-50p">
-              {utils.getChapterTitle(chapter)}
-            </div>
+          {chapterTitle && (
+            <div className="mt-1 fs-12 o-50p">{chapterTitle}</div>
           )}
         </a>
         <div className="z-2">

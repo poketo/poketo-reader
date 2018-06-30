@@ -8,6 +8,10 @@
   position: fixed;
 }
 
+.p-sticky {
+  position: sticky;
+}
+
 .p-center {
   top: 50%;
   left: 50%;

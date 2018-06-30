@@ -95,9 +95,9 @@ const utils = {
   /**
    * Chapter Helpers
    */
-  getChapterLabel: (chapter: Chapter): string => {
+  getChapterLabel: (chapter: Chapter, extended: boolean = false): string => {
     if (chapter.chapterNumber) {
-      return `Chapter ${chapter.chapterNumber}`;
+      return `${extended ? 'Chapter ' : ''}${chapter.chapterNumber}`;
     }
 
     if (chapter.title) {
