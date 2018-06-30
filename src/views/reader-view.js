@@ -174,7 +174,7 @@ class ReaderView extends Component<Props> {
             <Icon name="arrow-left" iconSize={20} />
           </Link>
           {series && (
-            <div className="c-white mh-auto w-90p-m ta-center mw-900">
+            <div className="c-white mh-auto w-90p ta-center mw-900">
               <div>
                 <div>{series.title}</div>
                 <div className="fs-12 o-50p">{series.site.name}</div>
