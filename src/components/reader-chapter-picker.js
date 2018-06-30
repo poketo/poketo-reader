@@ -13,6 +13,10 @@ type Props = {
   onChapterClick: (chapter: Chapter) => void,
 };
 
+const shouldGroupByVolume = (seriesChapters: Chapter[]) => {
+  return seriesChapters.some(c => Boolean(c.chapterNumber));
+};
+
 /**
  * Sort volumes so non-numeric comes first, followed by descending numeric.
  */
@@ -50,8 +54,29 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     this.props.onChapterClick(chapter);
   };
 
+  renderChapters(chapters: Chapter[]) {
+    const { chapter } = this.props;
+
+    return (
+      <div>
+        {chapters.map(c => (
+          <ChapterRow
+            key={c.id}
+            active={c.id === chapter.id}
+            chapter={c}
+            onClick={this.handleChapterClick(c)}
+          />
+        ))}
+      </div>
+    );
+  }
+
   render() {
     const { chapter, seriesChapters } = this.props;
+
+    if (!shouldGroupByVolume(seriesChapters)) {
+      return this.renderChapters(seriesChapters);
+    }
 
     const groupedChapters = utils.groupBy(seriesChapters, 'volumeNumber');
     const groups = Object.keys(groupedChapters).sort(sortVolumes);
@@ -61,22 +86,11 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
         {groups.map((key, index) => (
           <div key={key} className={classNames({ 'mt-4': index !== 0 })}>
             {!isEmptyVolume(key) && (
-              <div
-                className="fs-14 fs-16-m c-gray3 pt-2 pb-1 pb-2-m ph-3 bgc-white bb-1 bc-gray1"
-                style={{ position: 'sticky', top: 0 }}>
+              <div className="p-sticky t-0 z-3 fs-14 fs-16-m c-gray3 pt-2 pb-1 pb-2-m ph-3 bgc-white bb-1 bc-gray1">
                 Volume {key}
               </div>
             )}
-            <div>
-              {groupedChapters[key].map(c => (
-                <ChapterRow
-                  key={c.id}
-                  active={c.id === chapter.id}
-                  chapter={c}
-                  onClick={this.handleChapterClick(c)}
-                />
-              ))}
-            </div>
+            {this.renderChapters(groupedChapters[key])}
           </div>
         ))}
       </div>

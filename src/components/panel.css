@@ -9,7 +9,7 @@
 
 .Panel-background {
   position: absolute;
-  top: 0;
+  top: -90px; /* NOTE: -90px to cover space under the Android Chrome header, which tucks away even with a scroll lock. */
   bottom: 0;
   left: 0;
   right: 0;
