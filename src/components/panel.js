@@ -64,11 +64,7 @@ class Panel extends Component<PanelProps> {
 
   render() {
     const { children } = this.props;
-    const root = document.getElementById('root');
 
-    if (!root) {
-      return null;
-    }
 
     return (
       <Portal>
