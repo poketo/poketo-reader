@@ -5,7 +5,9 @@
 
 > Friendly web-based manga reader
 
-A lightweight tool for following and reading scanlated manga series. Built natively for the web. If you'd like an invite, check out [poketo.app](https://poketo.app).
+A lightweight tool for following and reading scanlated manga series. Built natively for the web. Currently in beta.
+
+For an invite, check out [poketo.app](https://poketo.app).
 
 #### Features
 
@@ -16,7 +18,7 @@ A lightweight tool for following and reading scanlated manga series. Built nativ
 * **open-source**: anyone can contribute or build features on top
 * _coming soon:_ **offline-ready**: downloading chapters for offline
 
-:construction: Poketo is still in development. It's usable, but watch your step! You might run into some bugs.
+:construction: Poketo is still in beta. It's usable, but watch your step! You might run into some bugs.
 
 ## Motivation
 
