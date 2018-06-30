@@ -27,7 +27,7 @@
   overflow: hidden;
   background-color: #fff;
   will-change: transform;
-  transition: transform 400ms cubic-bezier(0.19, 1, 0.22, 1), opacity 150ms ease;
+  transition: transform 400ms cubic-bezier(0.19, 1, 0.22, 1), opacity 200ms ease;
   z-index: 200;
 }
 
@@ -59,7 +59,7 @@
 
 .panel-exit.panel-exit-active > .Panel-background {
   opacity: 0.01;
-  transition: opacity 200ms ease;
+  transition: opacity 400ms ease;
 }
 
 @media only screen and (max-width: 768px) {
@@ -83,7 +83,7 @@
 @media only screen and (min-width: 768px) {
   .panel-enter > .Panel-menu {
     opacity: 0.01;
-    transform: translate(-50%, -25%);
+    transform: translate(-50%, -40%);
   }
 
   .panel-enter.panel-enter-active > .Panel-menu {
@@ -98,6 +98,6 @@
 
   .panel-exit.panel-exit-active > .Panel-menu {
     opacity: 0.01;
-    transform: translate(-50%, -25%);
+    transform: translate(-50%, -40%);
   }
 }
