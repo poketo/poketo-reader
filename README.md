@@ -11,7 +11,7 @@ A lightweight web app for following and reading scanlated manga series. Scrapes 
 
 For an invite, check out [poketo.app](https://poketo.app).
 
-#### Features
+### Features
 
 * **simple**: no accounts, no downloads, no ads.
 * **track series**: fetches updates from [14+ manga sites](https://github.com/poketo/node#supported-sites)
