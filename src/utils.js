@@ -5,7 +5,7 @@ import set from 'clean-set';
 import { format, isToday, isYesterday } from 'date-fns';
 import groupBy from 'lodash.groupby';
 
-import type { Chapter } from './types';
+import type { Bookmark, Collection, Chapter } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
@@ -91,6 +91,18 @@ const utils = {
       chapterSlug,
     ),
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
+
+  /**
+   * Collection Helpers
+   */
+  getUnreadMap: (collection: Collection): { [string]: number } => {
+    const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
+
+    return bookmarks.reduce((acc, bookmark) => {
+      acc[bookmark.id] = bookmark.lastReadAt;
+      return acc;
+    }, {});
+  },
 
   /**
    * Chapter Helpers

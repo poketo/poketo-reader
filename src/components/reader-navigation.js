@@ -8,13 +8,14 @@ import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
-import type { Chapter, Series } from '../types';
+import type { Collection, Chapter, Series } from '../types';
 
 type Props = {
   chapter: Chapter,
-  collectionSlug: ?string,
+  collection: ?Collection,
   onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
-  seriesChapters: Series,
+  lastReadAt?: number,
+  seriesChapters: Chapter[],
 };
 
 type State = {
@@ -40,7 +41,7 @@ export default class ReaderNavigation extends Component<Props, State> {
   };
 
   renderPickerPanel() {
-    const { chapter, seriesChapters } = this.props;
+    const { chapter, lastReadAt, seriesChapters } = this.props;
 
     if (this.state.showingPanel === false) {
       return null;
@@ -59,6 +60,7 @@ export default class ReaderNavigation extends Component<Props, State> {
               <ReaderChapterPicker
                 activeChapterId={chapter.id}
                 seriesChapters={seriesChapters}
+                lastReadAt={lastReadAt}
                 onChapterClick={this.handleChapterClick}
               />
             </div>
@@ -69,7 +71,7 @@ export default class ReaderNavigation extends Component<Props, State> {
   }
 
   render() {
-    const { chapter, collectionSlug, seriesChapters } = this.props;
+    const { chapter, collection, seriesChapters } = this.props;
 
     const chapterIndex = seriesChapters.findIndex(c => c.id === chapter.id);
     const previousChapter = seriesChapters[chapterIndex + 1] || null;
@@ -82,7 +84,7 @@ export default class ReaderNavigation extends Component<Props, State> {
       <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-3">
         <div className="z-2">
           <ReaderChapterLink
-            collectionSlug={collectionSlug}
+            collectionSlug={collection && collection.slug}
             chapter={previousChapter}>
             <Icon name="direct-left" />
           </ReaderChapterLink>
@@ -104,7 +106,7 @@ export default class ReaderNavigation extends Component<Props, State> {
         </a>
         <div className="z-2">
           <ReaderChapterLink
-            collectionSlug={collectionSlug}
+            collectionSlug={collection && collection.slug}
             chapter={nextChapter}>
             <Icon name="direct-right" />
           </ReaderChapterLink>
