@@ -41,6 +41,21 @@ export default class ReaderNavigation extends Component<Props, State> {
   };
 
   scrollRef = React.createRef();
+  activeChapterRef = React.createRef();
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (
+      prevState.showingPanel !== this.state.showingPanel &&
+      this.state.showingPanel === true
+    ) {
+      const activeChapterEl = this.activeChapterRef.current;
+      const scrollEl = this.scrollRef.current;
+
+      if (scrollEl && activeChapterEl) {
+        scrollEl.scrollTop = Math.max(0, activeChapterEl.offsetTop - 60);
+      }
+    }
+  }
 
   renderPickerPanel() {
     const { chapter, lastReadAt, seriesChapters } = this.props;
@@ -63,6 +78,7 @@ export default class ReaderNavigation extends Component<Props, State> {
             }}>
             <div className="pt-2 pb-4">
               <ReaderChapterPicker
+                activeChapterRef={this.activeChapterRef}
                 activeChapterId={chapter.id}
                 seriesChapters={seriesChapters}
                 lastReadAt={lastReadAt}

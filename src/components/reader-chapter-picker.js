@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type ElementRef } from 'react';
 import classNames from 'classnames';
 import utils from '../utils';
 
@@ -9,6 +9,7 @@ import type { Chapter } from '../types';
 
 type Props = {
   activeChapterId?: string,
+  activeChapterRef?: ElementRef<*>,
   seriesChapters: Chapter[],
   lastReadAt?: number,
   onChapterClick: (chapter: Chapter) => void,
@@ -56,19 +57,25 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   };
 
   renderChapters(chapters: Chapter[]) {
-    const { activeChapterId, lastReadAt } = this.props;
+    const { activeChapterId, activeChapterRef, lastReadAt } = this.props;
 
     return (
       <div>
-        {chapters.map(c => (
-          <ChapterRow
-            key={c.id}
-            chapter={c}
-            isActive={c.id === activeChapterId}
-            isUnread={lastReadAt ? lastReadAt < c.createdAt : false}
-            onClick={this.handleChapterClick(c)}
-          />
-        ))}
+        {chapters.map(c => {
+          const isActive = c.id === activeChapterId;
+          const isUnread = lastReadAt ? lastReadAt < c.createdAt : false;
+
+          return (
+            <ChapterRow
+              key={c.id}
+              chapter={c}
+              innerRef={isActive ? activeChapterRef : undefined}
+              isActive={isActive}
+              isUnread={isUnread}
+              onClick={this.handleChapterClick(c)}
+            />
+          );
+        })}
       </div>
     );
   }

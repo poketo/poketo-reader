@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { type ElementRef } from 'react';
 import classNames from 'classnames';
 import Icon from '../components/icon';
 import utils from '../utils';
@@ -9,12 +9,15 @@ import './chapter-row.css';
 
 type Props = {
   chapter: Chapter,
+  innerRef?: ElementRef<*>,
   isActive?: boolean,
   isUnread?: boolean,
   onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void,
 };
 
-const ChapterRow = ({ chapter, isActive, isUnread, onClick }: Props) => {
+const ChapterRow = (props: Props) => {
+  const { chapter, innerRef, isActive, isUnread, onClick } = props;
+
   const chapterLabel = utils.getChapterLabel(chapter);
   const chapterTitle = utils.getChapterTitle(chapter);
 
@@ -24,6 +27,7 @@ const ChapterRow = ({ chapter, isActive, isUnread, onClick }: Props) => {
         'ChapterRow x xa-center xj-spaceBetween pv-2 ph-3 c-pointer',
         { 'ChapterRow--active': isActive },
       )}
+      ref={innerRef}
       onClick={onClick}>
       {isActive ? (
         <span className="ChapterRow-check p-relative x xa-center mr-2 t--1">
