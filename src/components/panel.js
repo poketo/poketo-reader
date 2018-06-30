@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, type Node } from 'react';
+import classNames from 'classnames';
 import ScrollLock from 'react-scrolllock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Portal from './portal';
@@ -10,6 +11,10 @@ import './panel.css';
 type PanelProps = {
   children?: Node,
   onRequestClose: () => void,
+};
+
+type PanelState = {
+  isMounted: boolean,
 };
 
 type PanelButtonProps = {
@@ -29,13 +34,19 @@ type PanelLinkProps = {
   label: Node,
 };
 
+type PanelTitleProps = {
+  className?: string,
+  children?: Node,
+};
+
 type PanelTransitionProps = {
   children: Node,
 };
 
-class Panel extends Component<PanelProps> {
+class Panel extends Component<PanelProps, PanelState> {
   static Button: (props: PanelButtonProps) => Node;
   static Content: (props: PanelContentProps) => Node;
+  static Title: (props: PanelTitleProps) => Node;
   static Transition: (props: PanelTransitionProps) => Node;
   static TransitionGroup: (props: {}) => Node;
   static Link: (props: PanelLinkProps) => Node;
@@ -44,11 +55,21 @@ class Panel extends Component<PanelProps> {
     onRequestClose: () => {},
   };
 
+  state = {
+    isMounted: false,
+  };
+
+  scrollRef = React.createRef();
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
+    requestAnimationFrame(() => {
+      this.setState({ isMounted: true });
+    });
   }
 
   componentWillUnmount() {
+    this.setState({ isMounted: false });
     document.removeEventListener('keydown', this.handleKeyDown);
   }
 
@@ -64,18 +85,15 @@ class Panel extends Component<PanelProps> {
 
   render() {
     const { children } = this.props;
-    const root = document.getElementById('root');
 
-    if (!root) {
-      return null;
-    }
+    const scrollEl = this.scrollRef && this.scrollRef.current;
 
     return (
       <Portal>
         <div className="Panel">
-          <ScrollLock />
+          {this.state.isMounted && <ScrollLock touchScrollTarget={scrollEl} />}
           <div className="Panel-background" onClick={this.handleOverlayClick} />
-          <div className="Panel-menu">
+          <div className="Panel-menu" ref={this.scrollRef}>
             {children}
             <button
               className="Panel-cancelButton x w-100p bt-1 bc-gray1 xa-stretch"
@@ -89,11 +107,15 @@ class Panel extends Component<PanelProps> {
   }
 }
 
+Panel.Title = ({ className, children, ...props }: PanelTitleProps) => (
+  <h3 className={classNames(className, 'fs-18 fw-semibold mb-2')} {...props}>
+    {children}
+  </h3>
+);
+
 Panel.Content = (props: PanelContentProps) => (
   <div className="pa-3 pa-4-m pb-4">
-    {props.title ? (
-      <h3 className="fs-18 fw-semibold mb-2">{props.title}</h3>
-    ) : null}
+    {props.title ? <Panel.Title>{props.title}</Panel.Title> : null}
     {props.children}
   </div>
 );

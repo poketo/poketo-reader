@@ -234,7 +234,6 @@ class ReaderView extends Component<Props, State> {
             {seriesChapters && (
               <div className="pb-4">
                 <ReaderNavigation
-                  isBottom
                   chapter={chapter}
                   collectionSlug={collectionSlug}
                   seriesChapters={seriesChapters}
