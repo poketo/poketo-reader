@@ -57,7 +57,7 @@ export default class ReaderNavigation extends Component<Props, State> {
             }}>
             <div className="pt-2 pb-4">
               <ReaderChapterPicker
-                chapter={chapter}
+                activeChapterId={chapter.id}
                 seriesChapters={seriesChapters}
                 onChapterClick={this.handleChapterClick}
               />

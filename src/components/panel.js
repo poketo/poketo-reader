@@ -96,7 +96,7 @@ class Panel extends Component<PanelProps, PanelState> {
           <div className="Panel-menu" ref={this.scrollRef}>
             {children}
             <button
-              className="x w-100p bt-1 bc-gray1 xa-stretch"
+              className="d-none x-m w-100p bt-1 bc-gray1 xa-stretch"
               onClick={this.handleOverlayClick}>
               <div className="w-100p pa-3 ta-center">Cancel</div>
             </button>
