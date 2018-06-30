@@ -4,7 +4,7 @@ import React from 'react';
 
 import Icon from '../components/icon';
 import Popover from '../components/popover';
-import ReaderChapterPicker from '../containers/reader-chapter-picker';
+import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
