@@ -34,6 +34,7 @@
 @media only screen and (min-width: 768px) {
   .Panel-menu {
     position: fixed;
+    min-width: 300px;
     max-width: 500px;
     top: 50%;
     left: 50%;
