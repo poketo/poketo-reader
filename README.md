@@ -5,13 +5,9 @@
 
 > Friendly web-based manga reader
 
-A lightweight tool for following and reading scanlated manga series. Built natively for the web.
+A lightweight tool for following and reading scanlated manga series. Built natively for the web. If you'd like an invite, check out [poketo.app](https://poketo.app).
 
-If you'd like an invite, check out [poketo.app](https://poketo.app).
-
----
-
-### Features
+#### Features
 
 * **simple**: no accounts, no downloads, no ads.
 * **track series**: fetches updates from [14+ manga sites](https://github.com/poketo/node#supported-sites)
@@ -36,4 +32,4 @@ Issues and PR's are welcome! Feel free to drop a note on this repo, the [micro-s
 
 Deployed on [Netlify](https://netlify.com). Built with [React](https://reactjs.org/), [Redux](https://redux.js.org/), and [Flow](https://flow.org/en/).
 
-Typeface is [Proxima Nova Soft](https://www.marksimonson.com/fonts/view/proxima-soft) by [Mark Simonson Studio](https://www.marksimonson.com/)
+Typeface is [Proxima Nova Soft](https://www.marksimonson.com/fonts/view/proxima-soft) by [Mark Simonson Studio](https://www.marksimonson.com/).
