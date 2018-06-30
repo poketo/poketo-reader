@@ -169,6 +169,8 @@ class ReaderView extends Component<Props, State> {
     const chapter: ?Chapter = chaptersById[chapterId];
     const series: ?Series = seriesById[seriesId];
 
+    const unreadMap = collection ? utils.getUnreadMap(collection) : {};
+
     const seriesChapters = series
       ? series.chapters.map(id => chaptersById[id])
       : null;
@@ -201,16 +203,18 @@ class ReaderView extends Component<Props, State> {
             </div>
           )}
         </div>
-        {seriesChapters && (
-          <div className="pt-4">
-            <ReaderNavigation
-              collectionSlug={collectionSlug}
-              chapter={chapter}
-              seriesChapters={seriesChapters}
-              onChapterSelectChange={this.handleChapterChange}
-            />
-          </div>
-        )}
+        {series &&
+          seriesChapters && (
+            <div className="pt-4">
+              <ReaderNavigation
+                collection={collection}
+                chapter={chapter}
+                lastReadAt={unreadMap[series.id]}
+                seriesChapters={seriesChapters}
+                onChapterSelectChange={this.handleChapterChange}
+              />
+            </div>
+          )}
         {isLoading ? (
           <div className="x xa-center xj-center ta-center pv-6">
             <div>
@@ -231,16 +235,18 @@ class ReaderView extends Component<Props, State> {
                 </div>
               ))}
             </div>
-            {seriesChapters && (
-              <div className="pb-4">
-                <ReaderNavigation
-                  chapter={chapter}
-                  collectionSlug={collectionSlug}
-                  seriesChapters={seriesChapters}
-                  onChapterSelectChange={this.handleChapterChange}
-                />
-              </div>
-            )}
+            {series &&
+              seriesChapters && (
+                <div className="pb-4">
+                  <ReaderNavigation
+                    chapter={chapter}
+                    collection={collection}
+                    lastReadAt={unreadMap[series.id]}
+                    seriesChapters={seriesChapters}
+                    onChapterSelectChange={this.handleChapterChange}
+                  />
+                </div>
+              )}
             {collection && (
               <nav className="bgc-black c-white ta-center pv-4 fs-14 fs-16-m">
                 <Link

@@ -8,12 +8,13 @@ import type { Chapter } from '../types';
 import './chapter-row.css';
 
 type Props = {
-  active?: boolean,
   chapter: Chapter,
+  isActive?: boolean,
+  isUnread?: boolean,
   onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void,
 };
 
-const ChapterRow = ({ active, chapter, onClick }: Props) => {
+const ChapterRow = ({ chapter, isActive, isUnread, onClick }: Props) => {
   const chapterLabel = utils.getChapterLabel(chapter);
   const chapterTitle = utils.getChapterTitle(chapter);
 
@@ -21,13 +22,19 @@ const ChapterRow = ({ active, chapter, onClick }: Props) => {
     <div
       className={classNames(
         'ChapterRow x xa-center xj-spaceBetween pv-2 ph-3 c-pointer',
-        { 'ChapterRow--active': active },
+        { 'ChapterRow--active': isActive },
       )}
       onClick={onClick}>
-      {active && (
+      {isActive ? (
         <span className="ChapterRow-check p-relative x xa-center mr-2 t--1">
           <Icon name="check" size={18} iconSize={18} />
         </span>
+      ) : (
+        isUnread && (
+          <span className="p-relative t--2 mr-2">
+            <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
+          </span>
+        )
       )}
       <div className="ChapterRow-label xs-1">
         <span className="fw-semibold">{chapterLabel}</span>
@@ -41,7 +48,8 @@ const ChapterRow = ({ active, chapter, onClick }: Props) => {
 };
 
 ChapterRow.defaultProps = {
-  active: false,
+  isActive: false,
+  isUnread: false,
 };
 
 export default ChapterRow;

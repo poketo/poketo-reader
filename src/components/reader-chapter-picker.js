@@ -10,6 +10,7 @@ import type { Chapter } from '../types';
 type Props = {
   activeChapterId?: string,
   seriesChapters: Chapter[],
+  lastReadAt?: number,
   onChapterClick: (chapter: Chapter) => void,
 };
 
@@ -55,15 +56,16 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   };
 
   renderChapters(chapters: Chapter[]) {
-    const { activeChapterId } = this.props;
+    const { activeChapterId, lastReadAt } = this.props;
 
     return (
       <div>
         {chapters.map(c => (
           <ChapterRow
             key={c.id}
-            active={c.id === activeChapterId}
             chapter={c}
+            isActive={c.id === activeChapterId}
+            isUnread={lastReadAt ? lastReadAt < c.createdAt : false}
             onClick={this.handleChapterClick(c)}
           />
         ))}
