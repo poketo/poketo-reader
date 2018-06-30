@@ -8,7 +8,7 @@ import ChapterRow from '../components/chapter-row';
 import type { Chapter } from '../types';
 
 type Props = {
-  chapter: Chapter,
+  activeChapterId?: string,
   seriesChapters: Chapter[],
   onChapterClick: (chapter: Chapter) => void,
 };
@@ -55,14 +55,14 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   };
 
   renderChapters(chapters: Chapter[]) {
-    const { chapter } = this.props;
+    const { activeChapterId } = this.props;
 
     return (
       <div>
         {chapters.map(c => (
           <ChapterRow
             key={c.id}
-            active={c.id === chapter.id}
+            active={c.id === activeChapterId}
             chapter={c}
             onClick={this.handleChapterClick(c)}
           />
