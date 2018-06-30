@@ -3,9 +3,11 @@
   <br />
 </div>
 
+---
+
 > Friendly web-based manga reader
 
-A lightweight tool for following and reading scanlated manga series. Built natively for the web. Currently in beta.
+A lightweight web app for following and reading scanlated manga series. Scrapes scanlator sites to make tracking updates and reading series easier. Currently in beta.
 
 For an invite, check out [poketo.app](https://poketo.app).
 
