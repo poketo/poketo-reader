@@ -50,17 +50,18 @@ export default class ReaderNavigation extends Component<Props, State> {
       <Panel.Transition>
         <Panel onRequestClose={this.handlePickerPanelClose}>
           <div
-            className="pt-3 pb-4"
             style={{
               overflowY: 'scroll',
               WebkitOverflowScrolling: 'touch',
               maxHeight: '60vh',
             }}>
-            <ReaderChapterPicker
-              chapter={chapter}
-              seriesChapters={seriesChapters}
-              onChapterClick={this.handleChapterClick}
-            />
+            <div className="pt-2 pb-4">
+              <ReaderChapterPicker
+                chapter={chapter}
+                seriesChapters={seriesChapters}
+                onChapterClick={this.handleChapterClick}
+              />
+            </div>
           </div>
         </Panel>
       </Panel.Transition>
