@@ -44,6 +44,7 @@ export type Series = {
 };
 
 export type Bookmark = {
+  id: string,
   lastReadAt: number,
   linkTo: ?string,
 };
