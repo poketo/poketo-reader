@@ -34,8 +34,13 @@ export default class ReaderNavigation extends Component<Props, State> {
     this.setState({ showingPanel: false });
   };
 
+  handleChapterClick = (chapter: Chapter) => {
+    this.props.onChapterSelectChange(chapter);
+    this.handlePickerPanelClose();
+  };
+
   renderPickerPanel() {
-    const { chapter, onChapterSelectChange, seriesChapters } = this.props;
+    const { chapter, seriesChapters } = this.props;
 
     if (this.state.showingPanel === false) {
       return null;
@@ -54,10 +59,7 @@ export default class ReaderNavigation extends Component<Props, State> {
             <ReaderChapterPicker
               chapter={chapter}
               seriesChapters={seriesChapters}
-              onChapterClick={chapter => {
-                onChapterSelectChange(chapter);
-                this.handlePickerPanelClose();
-              }}
+              onChapterClick={this.handleChapterClick}
             />
           </div>
         </Panel>
