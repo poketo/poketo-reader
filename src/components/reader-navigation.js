@@ -40,6 +40,8 @@ export default class ReaderNavigation extends Component<Props, State> {
     this.handlePickerPanelClose();
   };
 
+  scrollRef = React.createRef();
+
   renderPickerPanel() {
     const { chapter, lastReadAt, seriesChapters } = this.props;
 
@@ -49,8 +51,11 @@ export default class ReaderNavigation extends Component<Props, State> {
 
     return (
       <Panel.Transition>
-        <Panel onRequestClose={this.handlePickerPanelClose}>
+        <Panel
+          onRequestClose={this.handlePickerPanelClose}
+          scrollRef={this.scrollRef}>
           <div
+            ref={this.scrollRef}
             style={{
               overflowY: 'scroll',
               WebkitOverflowScrolling: 'touch',

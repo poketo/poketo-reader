@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, type Node } from 'react';
+import React, { Component, type Node, type ElementRef } from 'react';
 import classNames from 'classnames';
 import ScrollLock from 'react-scrolllock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -10,6 +10,7 @@ import './panel.css';
 
 type PanelProps = {
   children?: Node,
+  scrollRef?: ElementRef<*>,
   onRequestClose: () => void,
 };
 
@@ -59,8 +60,6 @@ class Panel extends Component<PanelProps, PanelState> {
     isMounted: false,
   };
 
-  scrollRef = React.createRef();
-
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
     requestAnimationFrame(() => {
@@ -84,16 +83,17 @@ class Panel extends Component<PanelProps, PanelState> {
   };
 
   render() {
-    const { children } = this.props;
+    const { children, scrollRef } = this.props;
 
-    const scrollEl = this.scrollRef && this.scrollRef.current;
+    const scrollEl = scrollRef && scrollRef.current;
+    const shouldLockScroll = this.state.isMounted && scrollEl;
 
     return (
       <Portal>
         <div className="Panel">
-          {this.state.isMounted && <ScrollLock touchScrollTarget={scrollEl} />}
+          {shouldLockScroll && <ScrollLock touchScrollTarget={scrollEl} />}
           <div className="Panel-background" onClick={this.handleOverlayClick} />
-          <div className="Panel-menu" ref={this.scrollRef}>
+          <div className="Panel-menu">
             {children}
             <button
               className="d-none x-m w-100p bt-1 bc-gray1 xa-stretch"
