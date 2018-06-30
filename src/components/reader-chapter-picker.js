@@ -72,7 +72,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   }
 
   render() {
-    const { chapter, seriesChapters } = this.props;
+    const { seriesChapters } = this.props;
 
     if (!shouldGroupByVolume(seriesChapters)) {
       return this.renderChapters(seriesChapters);
