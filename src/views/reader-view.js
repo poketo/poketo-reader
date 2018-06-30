@@ -38,13 +38,7 @@ type Props = {
   },
 };
 
-type State = {
-  markAsReadTimer: ?TimeoutID,
-};
-
-const MARK_AS_READ_TIMEOUT = 5000;
-
-class ReaderView extends Component<Props, State> {
+class ReaderView extends Component<Props> {
   state = {
     markAsReadTimer: null,
   };
@@ -72,12 +66,6 @@ class ReaderView extends Component<Props, State> {
     }
   }
 
-  componentWillUnmount() {
-    if (this.state.markAsReadTimer) {
-      clearTimeout(this.state.markAsReadTimer);
-    }
-  }
-
   loadData = props => {
     const { match, dispatch } = props;
     const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
@@ -87,18 +75,9 @@ class ReaderView extends Component<Props, State> {
     dispatch(fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug));
     dispatch(fetchSeriesIfNeeded(siteId, seriesSlug));
 
-    if (this.state.markAsReadTimer) {
-      clearTimeout(this.state.markAsReadTimer);
-    }
-
     if (collectionSlug) {
       dispatch(fetchCollectionIfNeeded(collectionSlug));
-      this.setState({
-        markAsReadTimer: setTimeout(
-          this.handleMarkChapterAsRead,
-          MARK_AS_READ_TIMEOUT,
-        ),
-      });
+      this.handleMarkChapterAsRead();
     }
   };
 
