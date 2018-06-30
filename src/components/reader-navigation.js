@@ -8,7 +8,7 @@ import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
-import type { Collection, Chapter, Series } from '../types';
+import type { Collection, Chapter } from '../types';
 
 type Props = {
   chapter: Chapter,
