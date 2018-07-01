@@ -2,14 +2,7 @@
 
 import api from '../api';
 import type { Store as ReduxStore } from 'redux';
-import type {
-  Slug,
-  Id,
-  Collection,
-  Chapter,
-  ChapterMetadata,
-  Series,
-} from '../types';
+import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
 
 type ActionType<A, B> = { +type: A, +payload: B };
 type ActionWithoutPayloadType<A> = { +type: A };
@@ -42,9 +35,9 @@ type StatusActionPayload = {|
 |};
 
 export type EntitiesPayload = {
-  collections?: { [slug: Slug]: Collection },
-  chapters?: { [id: Id]: Chapter | ChapterMetadata },
-  series?: { [id: Id]: Series },
+  collections?: { [slug: string]: Collection },
+  chapters?: { [id: string]: Chapter | ChapterMetadata },
+  series?: { [id: string]: Series },
 };
 
 export type AddEntitiesAction = ActionType<'ADD_ENTITIES', EntitiesPayload>;
@@ -52,20 +45,20 @@ export type AddEntitiesAction = ActionType<'ADD_ENTITIES', EntitiesPayload>;
 export type SetCollectionAction = ActionType<'SET_COLLECTION', Collection>;
 export type SetCollectionEntityStatusAction = ActionType<
   'SET_COLLECTION_ENTITY_STATUS',
-  { slug: Slug, status: EntityStatusActionPayload },
+  { slug: string, status: EntityStatusActionPayload },
 >;
 export type RemoveBookmarkAction = ActionType<
   'REMOVE_BOOKMARK',
-  { collectionSlug: Slug, seriesId: Id },
+  { collectionSlug: string, seriesId: string },
 >;
 export type MarkBookmarkAsReadAction = ActionType<
   'MARK_BOOKMARK_AS_READ',
-  { collectionSlug: Slug, seriesId: Id, lastReadAt: number },
+  { collectionSlug: string, seriesId: string, lastReadAt: number },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;
 export type SetSeriesEntityStatusAction = ActionType<
   'SET_SERIES_ENTITY_STATUS',
-  { id: Id, status: EntityStatusActionPayload },
+  { id: string, status: EntityStatusActionPayload },
 >;
 export type SetChapterAction = ActionType<
   'SET_CHAPTER',

@@ -4,14 +4,14 @@ import { normalize } from 'normalizr';
 import schema from '../schema';
 import utils from '../../utils';
 
-import type { Id, SiteId, Slug, Chapter, ChapterMetadata } from '../../types';
+import type { Chapter, ChapterMetadata } from '../../types';
 import type { FetchStatusState, Thunk, ChapterAction } from '../types';
 
 type Action = ChapterAction;
 
 type State = {
   _status: FetchStatusState,
-  [id: Id]: Chapter | ChapterMetadata,
+  [id: string]: Chapter | ChapterMetadata,
 };
 
 export function isFullChapter(chapter: ?Chapter | ?ChapterMetadata): boolean {

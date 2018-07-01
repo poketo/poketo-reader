@@ -141,14 +141,7 @@ class Feed extends Component<Props, State> {
         ? utils.leastRecentChapter(unreadChapters)
         : utils.mostRecentChapter(allChapters);
 
-    history.push(
-      utils.getReaderUrl(
-        collection.slug,
-        series.site.id,
-        series.slug,
-        toChapter.slug,
-      ),
-    );
+    history.push(utils.getReaderUrl(collection.slug, toChapter.id));
   };
 
   renderSeriesPanel() {

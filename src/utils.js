@@ -9,6 +9,12 @@ import type { Bookmark, Collection, Chapter } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
+type IdComponents = {
+  siteId: string,
+  seriesSlug: string,
+  chapterSlug?: string,
+};
+
 const utils = {
   formatTimestamp: (n: number): string => ago(toDate(n)),
   formatAbsoluteTimestamp: (n: number) => {
@@ -28,24 +34,14 @@ const utils = {
   /**
    * Array Helpers
    */
-  getRandomItems: (arr: Array<mixed>, count: number = 1) =>
-    arr
-      .slice()
-      .sort(() => 0.5 - Math.random())
-      .slice(0, count),
-  flatten: (arr: Array<mixed>) => [].concat(...arr),
   groupBy,
 
   /**
    * Store helpers
    */
-  getId: (siteId: string, seriesSlug: string, chapterSlug: ?string) =>
-    [siteId, seriesSlug, chapterSlug].filter(Boolean).join(':'),
-  getIdComponents: (
-    id: string,
-  ): { siteId: string, seriesSlug: string, chapterSlug: ?string } => {
+  getIdComponents: (id: string): IdComponents => {
     const parts = id.split(':');
-    const components: any = {
+    const components: IdComponents = {
       siteId: parts[0],
       seriesSlug: parts[1],
     };
@@ -55,6 +51,12 @@ const utils = {
     }
 
     return components;
+  },
+  toSeriesId: (chapterId: string) => {
+    return chapterId
+      .split(':')
+      .slice(0, 2)
+      .join(':');
   },
 
   set,
@@ -76,19 +78,12 @@ const utils = {
     }
     return /^https?:\/\/[^ "]+$/.test(url);
   },
-  getReaderUrl: (
-    collectionSlug: ?string,
-    siteId: string,
-    seriesSlug: string,
-    chapterSlug: ?string,
-  ) =>
+  getReaderUrl: (collectionSlug: ?string, chapterId: string) =>
     '/' +
     utils.constructUrl(
       collectionSlug ? `c/${collectionSlug}` : null,
       'read',
-      siteId,
-      seriesSlug,
-      chapterSlug,
+      encodeURIComponent(chapterId).replace(/%3A/g, ':'),
     ),
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
 

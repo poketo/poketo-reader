@@ -39,15 +39,13 @@ export default class App extends Component<{}> {
         <StandaloneStatusBar />
         <ErrorBoundary>
           <Switch>
+            <Route path="/read/:chapterId" exact component={ReaderView} />
             <Route
-              path="/read/:siteId/:seriesSlug/:chapterSlug+"
+              path="/c/:collectionSlug/read/:chapterId"
               component={ReaderView}
+              exact
             />
-            <Route
-              path="/c/:collectionSlug/read/:siteId/:seriesSlug/:chapterSlug+"
-              component={ReaderView}
-            />
-            <Route path="/c/:collectionSlug" component={FeedView} />
+            <Route path="/c/:collectionSlug" exact component={FeedView} />
             <Route path="/login" component={LogInView} />
             <Route path="/about" component={AboutView} />
             <Route path="/home" component={HomeView} />
