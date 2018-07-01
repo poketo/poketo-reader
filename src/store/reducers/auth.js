@@ -1,5 +1,6 @@
 // @flow
 
+import localStorage from '../local-storage';
 import type { AuthAction } from '../types';
 
 type Action = AuthAction;
