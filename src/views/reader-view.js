@@ -39,10 +39,6 @@ type Props = {
 };
 
 class ReaderView extends Component<Props> {
-  state = {
-    markAsReadTimer: null,
-  };
-
   static mapStateToProps = (state, ownProps) => ({
     collection: state.collections[ownProps.match.params.collectionSlug],
     seriesById: state.series,
