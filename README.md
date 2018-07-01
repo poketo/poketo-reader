@@ -36,4 +36,4 @@ Issues and PR's are welcome! Feel free to drop a note on this repo, the [micro-s
 
 Deployed on [Netlify](https://netlify.com). Built with [React](https://reactjs.org/), [Redux](https://redux.js.org/), and [Flow](https://flow.org/en/).
 
-Typeface is [Proxima Nova Soft](https://www.marksimonson.com/fonts/view/proxima-soft) by [Mark Simonson Studio](https://www.marksimonson.com/).
+Typeface is [Proxima Soft](https://www.marksimonson.com/fonts/view/proxima-soft) by [Mark Simonson Studio](https://www.marksimonson.com/).
