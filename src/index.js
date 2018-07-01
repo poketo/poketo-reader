@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -7,15 +8,24 @@ import App from './app';
 import getStore from './store';
 import serviceWorker from './service-worker';
 
+const rootEl = document.getElementById('root');
+
 getStore().then(store => {
-  ReactDOM.render(
+  const app = (
     <Router>
       <Provider store={store}>
         <App />
       </Provider>
-    </Router>,
-    document.getElementById('root'),
+    </Router>
   );
+
+  if (rootEl.hasChildNodes()) {
+    Loadable.preloadReady().then(() => {
+      ReactDOM.hydrate(app, rootEl);
+    });
+  } else {
+    ReactDOM.render(app, rootEl);
+  }
 });
 
 serviceWorker.register();
