@@ -4,17 +4,17 @@ import { normalize } from 'normalizr';
 import ms from 'milliseconds';
 import schema from '../schema';
 import utils from '../../utils';
-import type { SiteId, Id, Slug, Series } from '../../types';
+import type { Series } from '../../types';
 import type { EntityStatus, Thunk, SeriesAction } from '../types';
 
 type State = {
-  _status: { [id: Id]: EntityStatus },
-  [id: Id]: Series,
+  _status: { [id: string]: EntityStatus },
+  [id: string]: Series,
 };
 
 type Action = SeriesAction;
 
-export function fetchSeriesIfNeeded(seriesId: Id): Thunk {
+export function fetchSeriesIfNeeded(seriesId: string): Thunk {
   return (dispatch, getState) => {
     if (shouldFetchSeries(getState(), seriesId)) {
       dispatch(fetchSeries(seriesId));
@@ -24,7 +24,7 @@ export function fetchSeriesIfNeeded(seriesId: Id): Thunk {
 
 const STALE_AFTER = ms.hours(2) / 1000;
 
-export function shouldFetchSeries(state: Object, seriesId: Id): boolean {
+export function shouldFetchSeries(state: Object, seriesId: string): boolean {
   const seriesById = state.series;
   const status = seriesById._status[seriesId];
 
@@ -39,7 +39,7 @@ export function shouldFetchSeries(state: Object, seriesId: Id): boolean {
   }
 }
 
-export function fetchSeries(id: Id): Thunk {
+export function fetchSeries(id: string): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'SET_SERIES_ENTITY_STATUS',
