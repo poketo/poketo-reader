@@ -83,7 +83,7 @@ const utils = {
     utils.constructUrl(
       collectionSlug ? `c/${collectionSlug}` : null,
       'read',
-      chapterId.replace(/\//g, '%2F'),
+      encodeURIComponent(chapterId).replace(/%3A/g, ':'),
     ),
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
 
