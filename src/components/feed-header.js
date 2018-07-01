@@ -8,6 +8,7 @@ import ComponentLoader from './loader-component';
 import Icon from './icon';
 import Panel from './panel';
 import Popover from './popover/index';
+import cache from '../store/cache';
 
 import './feed-header.css';
 
@@ -41,6 +42,12 @@ export default class FeedHeader extends PureComponent<Props, State> {
     setTimeout(() => {
       this.closeFeedbackPanel();
     }, 1000);
+  };
+
+  handleClearCacheClick = () => {
+    cache.clear().then(() => {
+      window.location.reload();
+    });
   };
 
   renderFeedbackPanel() {
@@ -83,6 +90,16 @@ export default class FeedHeader extends PureComponent<Props, State> {
     );
   }
 
+  renderClearCacheButton() {
+    return (
+      <Popover.Item
+        label="Clear cache"
+        onClick={this.handleClearCacheClick}
+        iconBefore={<Icon name="refresh" iconSize={18} size={44} />}
+      />
+    );
+  }
+
   renderFeedbackButton(inline: boolean = false) {
     const label = 'Send feedback';
     const icon = <Icon name="message" iconSize={18} size={44} />;
@@ -121,6 +138,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
           content={
             <div className="pa-2" style={{ maxWidth: '80vw' }}>
               {this.renderAddButton()}
+              {this.renderClearCacheButton()}
               {this.renderFeedbackButton()}
             </div>
           }
