@@ -31,15 +31,15 @@ type EntityStatusActionPayload = {
   +lastFetchedAt?: number,
 };
 
-export type FetchStatusState = {
+export type FetchStatusState = {|
   +isFetching: boolean,
   +errorCode?: ?ErrorCode,
-};
+|};
 
-type StatusActionPayload = {
+type StatusActionPayload = {|
   isFetching?: boolean,
   errorCode?: ?ErrorCode,
-};
+|};
 
 export type EntitiesPayload = {
   collections?: { [slug: Slug]: Collection },

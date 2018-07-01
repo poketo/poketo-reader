@@ -2,6 +2,7 @@
 
 import config from './config';
 import axios from 'axios';
+import utils from './utils';
 
 export type AxiosResponse = {
   config: Object,
@@ -50,8 +51,13 @@ const api = {
     collectionSlug: string,
     seriesId: string,
   ) => instance.delete(`/collection/${collectionSlug}/bookmark/${seriesId}`),
-  fetchChapter: (siteId: string, seriesSlug: string, chapterSlug: string) =>
-    instance.get(`/chapter`, { params: { siteId, seriesSlug, chapterSlug } }),
+  fetchChapter: (id: string) => {
+    const { siteId, seriesSlug, chapterSlug } = utils.getIdComponents(id);
+
+    return instance.get(`/chapter`, {
+      params: { siteId, seriesSlug, chapterSlug },
+    });
+  },
   fetchSeries: (siteId: string, seriesSlug: string) =>
     instance.get(`/series`, { params: { siteId, seriesSlug } }),
   fetchSeriesByUrl: (url: string) =>

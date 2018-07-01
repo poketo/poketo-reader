@@ -22,6 +22,7 @@ const Icons = {
   poketo: require('./icon-poketo').default,
   refresh: require('./icon-refresh').default,
   trash: require('./icon-trash').default,
+  warning: require('./icon-warning').default,
 };
 
 type IconKey = $Keys<typeof Icons>;
