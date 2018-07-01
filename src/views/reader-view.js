@@ -152,9 +152,10 @@ class ReaderView extends Component<Props> {
         {series &&
           chapter && (
             <Head>
-              <title>{`${series.title} – Chapter ${
-                chapter.chapterNumber
-              }`}</title>
+              <title>{`${series.title} – ${utils.getChapterLabel(
+                chapter,
+                true,
+              )}`}</title>
             </Head>
           )}
         <BodyClassName className="ff-sans bgc-black" />
