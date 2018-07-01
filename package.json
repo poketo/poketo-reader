@@ -9,6 +9,7 @@
     "build:css": "bin/build-css",
     "build:icons": "bin/build-icons",
     "prebuild": "yarn run build:css && yarn run build:icons",
+    "postbuild": "react-snap",
     "test": "react-scripts test --env=jsdom",
     "deploy": "netlify deploy",
     "predeploy": "yarn run build"
@@ -48,6 +49,7 @@
     "mz": "^2.7.0",
     "prettier": "^1.12.0",
     "react-scripts": "^1.1.2",
+    "react-snap": "^1.15.0",
     "redux-logger": "^3.0.6",
     "svgr": "^1.9.0"
   },

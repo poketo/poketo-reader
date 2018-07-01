@@ -7,15 +7,22 @@ import App from './app';
 import getStore from './store';
 import serviceWorker from './service-worker';
 
+const rootEl = document.getElementById('root');
+
 getStore().then(store => {
-  ReactDOM.render(
+  const app = (
     <Router>
       <Provider store={store}>
         <App />
       </Provider>
-    </Router>,
-    document.getElementById('root'),
+    </Router>
   );
+
+  if (rootEl.hasChildNodes()) {
+    ReactDOM.hydrate(app, rootEl);
+  } else {
+    ReactDOM.render(app, rootEl);
+  }
 });
 
 serviceWorker.register();
