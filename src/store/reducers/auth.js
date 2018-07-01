@@ -16,6 +16,15 @@ const initialState = {
 
 export function setDefaultCollection(slug: string): Action {
   localStorage.setItem(STORAGE_DEFAULT_COLLECTION_KEY, slug);
+
+  if (window.Rollbar) {
+    window.Rollbar.configure({
+      person: {
+        id: slug,
+      },
+    });
+  }
+
   return { type: 'SET_DEFAULT_COLLECTION', payload: slug };
 }
 
