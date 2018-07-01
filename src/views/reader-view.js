@@ -3,7 +3,7 @@
 import React, { Component, Fragment, type Node } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Button from '../components/button';
@@ -21,55 +21,73 @@ import {
 } from '../store/reducers/collections';
 
 import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
-import type { Dispatch } from '../store/types';
+import type { Dispatch, FetchStatusState } from '../store/types';
 
 type Props = {
+  chapter: Chapter | ChapterMetadata,
+  chapterId: string,
+  chapterStatus: FetchStatusState,
   collection: ?Collection,
-  seriesById: { [id: string]: Series },
-  chaptersById: { [id: string]: Chapter | ChapterMetadata },
+  collectionSlug: ?string,
+  seriesChapters: Array<Chapter | ChapterMetadata>,
+  seriesId: string,
+  series: ?Series,
   dispatch: Dispatch,
-  history: any,
-  match: {
-    params: {
+  history: RouterHistory,
+  match: {|
+    params: {|
       collectionSlug: ?string,
       siteId: string,
       seriesSlug: string,
       chapterSlug: string,
-    },
-  },
+    |},
+  |},
 };
 
 class ReaderView extends Component<Props> {
-  static mapStateToProps = (state, ownProps) => ({
-    collection: state.collections[ownProps.match.params.collectionSlug],
-    seriesById: state.series,
-    chaptersById: state.chapters,
-  });
+  static mapStateToProps = (state, ownProps: Props) => {
+    const { match } = ownProps;
+    const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
+
+    const seriesId = utils.getId(siteId, seriesSlug);
+    const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
+
+    const series = state.series[seriesId];
+
+    return {
+      chapter: state.chapters[chapterId],
+      chapterId,
+      chapterStatus: state.chapters._status,
+      collection: state.collections[ownProps.match.params.collectionSlug],
+      collectionSlug,
+      series,
+      seriesChapters: series
+        ? series.chapters.map(id => state.chapters[id])
+        : null,
+      seriesId,
+    };
+  };
 
   componentDidMount() {
     this.loadData(this.props);
+    window.scrollTo(0, 0);
   }
 
   componentDidUpdate(prevProps) {
-    const { params } = this.props.match;
-    const { params: prevParams } = prevProps.match;
+    const { chapterId } = this.props;
+    const { chapterId: prevChapterId } = prevProps;
 
-    if (
-      prevParams.siteId !== params.siteId ||
-      prevParams.seriesSlug !== params.seriesSlug ||
-      prevParams.chapterSlug !== params.chapterSlug
-    ) {
+    if (prevChapterId !== chapterId) {
       this.loadData(this.props);
       window.scrollTo(0, 0);
     }
   }
 
   loadData = props => {
-    const { match, dispatch } = props;
-    const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
+    const { collectionSlug, chapterId, seriesId, dispatch } = props;
 
-    dispatch(fetchChapterIfNeeded(siteId, seriesSlug, chapterSlug));
-    dispatch(fetchSeriesIfNeeded(siteId, seriesSlug));
+    dispatch(fetchChapterIfNeeded(chapterId));
+    dispatch(fetchSeriesIfNeeded(seriesId));
 
     if (collectionSlug) {
       dispatch(fetchCollectionIfNeeded(collectionSlug));
@@ -82,36 +100,14 @@ class ReaderView extends Component<Props> {
   };
 
   handleMarkChapterAsRead = () => {
-    const {
-      collection,
-      seriesById,
-      chaptersById,
-      match,
-      dispatch,
-    } = this.props;
-    const { siteId, seriesSlug, chapterSlug } = match.params;
+    const { collection, series, chapter, dispatch } = this.props;
 
-    if (!collection) {
-      return;
-    }
-
-    const seriesId = utils.getId(siteId, seriesSlug);
-    const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
-
-    const series: ?Series = seriesById[seriesId];
-
-    if (!series) {
+    if (!collection || !series || !chapter) {
       return;
     }
 
     const bookmark = collection.bookmarks[series.id];
-    const currentChapter: ?Chapter = chaptersById[chapterId];
-
-    if (!currentChapter) {
-      return;
-    }
-
-    const currentChapterReadAt = currentChapter.createdAt;
+    const currentChapterReadAt = chapter.createdAt;
     const latestReadAt = bookmark.lastReadAt;
 
     if (latestReadAt > currentChapterReadAt) {
@@ -123,36 +119,31 @@ class ReaderView extends Component<Props> {
     );
   };
 
-  handleChapterChange = (chapter: Chapter) => {
-    const { match, history } = this.props;
-    const { collectionSlug, chapterSlug, siteId, seriesSlug } = match.params;
-    const currentChapterId = utils.getId(siteId, seriesSlug, chapterSlug);
+  handleChapterChange = (nextChapter: Chapter) => {
+    const { chapterId: currentChapterId, collectionSlug, history } = this.props;
 
-    if (chapter.id === currentChapterId) {
+    if (nextChapter.id === currentChapterId) {
       return;
     }
 
-    history.push(
-      utils.getReaderUrl(collectionSlug, siteId, seriesSlug, chapter.slug),
-    );
+    const [site, series, chapter] = nextChapter.id.split(':');
+    const url = utils.getReaderUrl(collectionSlug, site, series, chapter);
+
+    history.push(url);
   };
 
   render() {
-    const { match, collection, chaptersById, seriesById } = this.props;
-    const { chapterSlug, seriesSlug, siteId, collectionSlug } = match.params;
-    const { isFetching, errorCode } = chaptersById._status;
-
-    const seriesId = utils.getId(siteId, seriesSlug);
-    const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
-
-    const chapter: ?Chapter = chaptersById[chapterId];
-    const series: ?Series = seriesById[seriesId];
+    const {
+      collection,
+      collectionSlug,
+      chapter,
+      chapterStatus,
+      series,
+      seriesChapters,
+    } = this.props;
+    const { isFetching, errorCode } = chapterStatus;
 
     const unreadMap = collection ? utils.getUnreadMap(collection) : {};
-
-    const seriesChapters = series
-      ? series.chapters.map(id => chaptersById[id])
-      : null;
 
     const isLoading = isFetching || !chapter || !chapter.pages;
 

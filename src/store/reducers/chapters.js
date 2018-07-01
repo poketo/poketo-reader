@@ -18,26 +18,16 @@ export function isFullChapter(chapter: ?Chapter | ?ChapterMetadata): boolean {
   return Boolean(chapter && Array.isArray(chapter.pages));
 }
 
-export function fetchChapterIfNeeded(
-  siteId: SiteId,
-  series: Slug,
-  chapter: Slug,
-): Thunk {
+export function fetchChapterIfNeeded(chapterId: string): Thunk {
   return (dispatch, getState) => {
-    if (shouldFetchChapter(getState(), siteId, series, chapter)) {
-      dispatch(fetchChapter(siteId, series, chapter));
+    if (shouldFetchChapter(getState(), chapterId)) {
+      dispatch(fetchChapter(chapterId));
     }
   };
 }
 
-function shouldFetchChapter(
-  state: Object,
-  siteId: SiteId,
-  seriesSlug: Slug,
-  chapterSlug: Slug,
-): boolean {
+function shouldFetchChapter(state: Object, chapterId: string): boolean {
   const chaptersById = state.chapters;
-  const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
 
   if (isFullChapter(chaptersById[chapterId])) {
     return false;
@@ -46,18 +36,14 @@ function shouldFetchChapter(
   return true;
 }
 
-export function fetchChapter(
-  siteId: SiteId,
-  series: Slug,
-  chapter: Slug,
-): Thunk {
+export function fetchChapter(chapterId: string): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'SET_CHAPTER_STATUS',
-      payload: { isFetching: true, errorMessage: null },
+      payload: { isFetching: true, errorCode: null },
     });
 
-    api.fetchChapter(siteId, series, chapter).then(
+    api.fetchChapter(chapterId).then(
       response => {
         const normalized = normalize(response.data, schema.chapter);
 
