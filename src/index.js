@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -19,7 +20,9 @@ getStore().then(store => {
   );
 
   if (rootEl.hasChildNodes()) {
-    ReactDOM.hydrate(app, rootEl);
+    Loadable.preloadReady().then(() => {
+      ReactDOM.hydrate(app, rootEl);
+    });
   } else {
     ReactDOM.render(app, rootEl);
   }
