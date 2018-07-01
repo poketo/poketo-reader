@@ -110,8 +110,7 @@ export function fetchSeriesForCollection(collectionSlug: Slug): Thunk {
     const missingSeries = seriesIds.filter(id => shouldFetchSeries(state, id));
 
     missingSeries.forEach(id => {
-      const { siteId, seriesSlug } = utils.getIdComponents(id);
-      dispatch(fetchSeries(siteId, seriesSlug));
+      dispatch(fetchSeries(id));
     });
   };
 }

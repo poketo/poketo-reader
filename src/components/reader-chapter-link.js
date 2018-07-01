@@ -16,17 +16,7 @@ type Props = {
 const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   const disabled = !chapter;
 
-  let to = '/';
-
-  if (chapter) {
-    const { siteId, seriesSlug } = utils.getIdComponents(chapter.id);
-    to = utils.getReaderUrl(
-      collectionSlug,
-      siteId,
-      seriesSlug,
-      chapter && chapter.slug,
-    );
-  }
+  const to = chapter ? utils.getReaderUrl(collectionSlug, chapter.id) : '/';
 
   return (
     <Link

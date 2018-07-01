@@ -56,6 +56,12 @@ const utils = {
 
     return components;
   },
+  toSeriesId: (chapterId: string) => {
+    return chapterId
+      .split(':')
+      .slice(0, 2)
+      .join(':');
+  },
 
   set,
 
@@ -76,19 +82,12 @@ const utils = {
     }
     return /^https?:\/\/[^ "]+$/.test(url);
   },
-  getReaderUrl: (
-    collectionSlug: ?string,
-    siteId: string,
-    seriesSlug: string,
-    chapterSlug: ?string,
-  ) =>
+  getReaderUrl: (collectionSlug: ?string, chapterId: string) =>
     '/' +
     utils.constructUrl(
       collectionSlug ? `c/${collectionSlug}` : null,
       'read',
-      siteId,
-      seriesSlug,
-      chapterSlug,
+      chapterId.replace(/\//g, '%2F'),
     ),
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
 

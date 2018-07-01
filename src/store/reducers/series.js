@@ -14,20 +14,19 @@ type State = {
 
 type Action = SeriesAction;
 
-export function fetchSeriesIfNeeded(siteId: SiteId, slug: Slug): Thunk {
+export function fetchSeriesIfNeeded(seriesId: Id): Thunk {
   return (dispatch, getState) => {
-    const id = utils.getId(siteId, slug);
-    if (shouldFetchSeries(getState(), id)) {
-      dispatch(fetchSeries(siteId, slug));
+    if (shouldFetchSeries(getState(), seriesId)) {
+      dispatch(fetchSeries(seriesId));
     }
   };
 }
 
 const STALE_AFTER = ms.hours(2) / 1000;
 
-export function shouldFetchSeries(state: Object, id: Id): boolean {
+export function shouldFetchSeries(state: Object, seriesId: Id): boolean {
   const seriesById = state.series;
-  const status = seriesById._status[id];
+  const status = seriesById._status[seriesId];
 
   switch (status && status.fetchStatus) {
     case 'fetching':
@@ -40,17 +39,15 @@ export function shouldFetchSeries(state: Object, id: Id): boolean {
   }
 }
 
-export function fetchSeries(siteId: SiteId, slug: Slug): Thunk {
+export function fetchSeries(id: Id): Thunk {
   return (dispatch, getState, api) => {
-    const id = utils.getId(siteId, slug);
-
     dispatch({
       type: 'SET_SERIES_ENTITY_STATUS',
       payload: { id, status: { fetchStatus: 'fetching', errorCode: null } },
     });
 
     api
-      .fetchSeries(siteId, slug)
+      .fetchSeries(id)
       .then(response => {
         const normalized = normalize(response.data, schema.series);
         dispatch({

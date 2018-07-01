@@ -37,9 +37,7 @@ type Props = {
   match: {|
     params: {|
       collectionSlug: ?string,
-      siteId: string,
-      seriesSlug: string,
-      chapterSlug: string,
+      chapterId: string,
     |},
   |},
 };
@@ -47,11 +45,10 @@ type Props = {
 class ReaderView extends Component<Props> {
   static mapStateToProps = (state, ownProps: Props) => {
     const { match } = ownProps;
-    const { collectionSlug, siteId, seriesSlug, chapterSlug } = match.params;
+    const { collectionSlug, chapterId: rawChapterId } = match.params;
 
-    const seriesId = utils.getId(siteId, seriesSlug);
-    const chapterId = utils.getId(siteId, seriesSlug, chapterSlug);
-
+    const chapterId = decodeURIComponent(rawChapterId);
+    const seriesId = utils.toSeriesId(chapterId);
     const series = state.series[seriesId];
 
     return {
@@ -91,7 +88,7 @@ class ReaderView extends Component<Props> {
 
     if (collectionSlug) {
       dispatch(fetchCollectionIfNeeded(collectionSlug));
-      this.handleMarkChapterAsRead();
+      this.markSeriesAsRead();
     }
   };
 
@@ -99,7 +96,7 @@ class ReaderView extends Component<Props> {
     this.loadData(this.props);
   };
 
-  handleMarkChapterAsRead = () => {
+  markSeriesAsRead = () => {
     const { collection, series, chapter, dispatch } = this.props;
 
     if (!collection || !series || !chapter) {
@@ -126,8 +123,7 @@ class ReaderView extends Component<Props> {
       return;
     }
 
-    const [site, series, chapter] = nextChapter.id.split(':');
-    const url = utils.getReaderUrl(collectionSlug, site, series, chapter);
+    const url = utils.getReaderUrl(collectionSlug, nextChapter.id);
 
     history.push(url);
   };
@@ -144,7 +140,6 @@ class ReaderView extends Component<Props> {
     const { isFetching, errorCode } = chapterStatus;
 
     const unreadMap = collection ? utils.getUnreadMap(collection) : {};
-
     const isLoading = isFetching || !chapter || !chapter.pages;
 
     return (
@@ -171,7 +166,8 @@ class ReaderView extends Component<Props> {
             </div>
           </div>
         </div>
-        {series &&
+        {chapter &&
+          series &&
           seriesChapters && (
             <div className="pt-4">
               <ReaderNavigation
@@ -222,7 +218,8 @@ class ReaderView extends Component<Props> {
                   </div>
                 ))}
               </div>
-              {series &&
+              {chapter &&
+                series &&
                 seriesChapters && (
                   <div className="pb-4">
                     <ReaderNavigation

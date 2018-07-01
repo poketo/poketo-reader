@@ -53,13 +53,14 @@ const api = {
   ) => instance.delete(`/collection/${collectionSlug}/bookmark/${seriesId}`),
   fetchChapter: (id: string) => {
     const { siteId, seriesSlug, chapterSlug } = utils.getIdComponents(id);
-
     return instance.get(`/chapter`, {
       params: { siteId, seriesSlug, chapterSlug },
     });
   },
-  fetchSeries: (siteId: string, seriesSlug: string) =>
-    instance.get(`/series`, { params: { siteId, seriesSlug } }),
+  fetchSeries: (id: string) => {
+    const { siteId, seriesSlug } = utils.getIdComponents(id);
+    return instance.get(`/series`, { params: { siteId, seriesSlug } });
+  },
   fetchSeriesByUrl: (url: string) =>
     instance.get(`/series`, { params: { url } }),
 };
