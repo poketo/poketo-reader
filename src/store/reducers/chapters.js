@@ -68,9 +68,11 @@ export function fetchChapter(
         dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
       },
       err => {
+        const errorCode = err.response ? 'UNKNOWN_ERROR' : 'TIMED_OUT';
+
         dispatch({
           type: 'SET_CHAPTER_STATUS',
-          payload: { isFetching: false, errorCode: 'UNKNOWN_ERROR' },
+          payload: { isFetching: false, errorCode },
         });
       },
     );
