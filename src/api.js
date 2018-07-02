@@ -20,9 +20,10 @@ export type AxiosError = {
   config: Object,
 };
 
+const SCRAPING_TIMEOUT = 8000;
+
 const instance = axios.create({
   baseURL: config.apiBaseUrl,
-  timeout: 8000,
 });
 
 const api = {
@@ -55,14 +56,18 @@ const api = {
     const { siteId, seriesSlug, chapterSlug } = utils.getIdComponents(id);
     return instance.get(`/chapter`, {
       params: { siteId, seriesSlug, chapterSlug },
+      timeout: SCRAPING_TIMEOUT,
     });
   },
   fetchSeries: (id: string) => {
     const { siteId, seriesSlug } = utils.getIdComponents(id);
-    return instance.get(`/series`, { params: { siteId, seriesSlug } });
+    return instance.get(`/series`, {
+      params: { siteId, seriesSlug },
+      timeout: SCRAPING_TIMEOUT,
+    });
   },
   fetchSeriesByUrl: (url: string) =>
-    instance.get(`/series`, { params: { url } }),
+    instance.get(`/series`, { params: { url }, timeout: SCRAPING_TIMEOUT }),
 };
 
 export default api;

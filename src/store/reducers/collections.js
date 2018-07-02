@@ -2,7 +2,7 @@
 
 import { normalize } from 'normalizr';
 import schema from '../schema';
-import { shouldFetchSeries, fetchSeries } from './series';
+import { fetchSeriesIfNeeded } from './series';
 import utils from '../../utils';
 
 import type { Collection } from '../../types';
@@ -23,7 +23,7 @@ export function fetchCollectionIfNeeded(slug: string): Thunk {
   };
 }
 
-const STALE_AFTER = 15 * 60; // 15 minutes
+const STALE_AFTER = 1 * 60; // 1 minute
 
 function shouldFetchCollection(state: Object, slug: string): boolean {
   const collections = state.collections;
@@ -107,10 +107,8 @@ export function fetchSeriesForCollection(collectionSlug: string): Thunk {
       return;
     }
 
-    const missingSeries = seriesIds.filter(id => shouldFetchSeries(state, id));
-
-    missingSeries.forEach(id => {
-      dispatch(fetchSeries(id));
+    seriesIds.forEach(id => {
+      dispatch(fetchSeriesIfNeeded(id));
     });
   };
 }
@@ -147,7 +145,6 @@ export function markSeriesAsRead(
       payload: { collectionSlug, seriesId, lastReadAt },
     });
 
-    // We don't handle the response since we pass this info optimistically.
     api.fetchMarkAsRead(collectionSlug, seriesId, lastReadAt).catch(err => {
       // swallow errors
     });
