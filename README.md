@@ -18,7 +18,7 @@ For an invite, check out [poketo.app](https://poketo.app).
 * **inline reader**: read new chapters in a simple reader with just a tap
 * **web-based**: read on a phone, computer, tablet, wherever!
 * **open-source**: anyone can contribute or build features on top
-* _coming soon:_ **offline-ready**: downloading chapters for offline
+* _coming soon:_ **offline-ready**: save chapters for offline reading
 
 :construction: Poketo is still in beta. It's usable, but watch your step! You might run into some bugs.
 
