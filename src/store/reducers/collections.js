@@ -2,7 +2,7 @@
 
 import { normalize } from 'normalizr';
 import schema from '../schema';
-import { shouldFetchSeries, fetchSeries } from './series';
+import { fetchSeriesIfNeeded } from './series';
 import utils from '../../utils';
 
 import type { Collection } from '../../types';
@@ -107,10 +107,8 @@ export function fetchSeriesForCollection(collectionSlug: string): Thunk {
       return;
     }
 
-    const missingSeries = seriesIds.filter(id => shouldFetchSeries(state, id));
-
-    missingSeries.forEach(id => {
-      dispatch(fetchSeries(id));
+    seriesIds.forEach(id => {
+      dispatch(fetchSeriesIfNeeded(id));
     });
   };
 }
