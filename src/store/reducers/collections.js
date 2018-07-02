@@ -23,7 +23,7 @@ export function fetchCollectionIfNeeded(slug: string): Thunk {
   };
 }
 
-const STALE_AFTER = 15 * 60; // 15 minutes
+const STALE_AFTER = 1 * 60; // 1 minute
 
 function shouldFetchCollection(state: Object, slug: string): boolean {
   const collections = state.collections;
