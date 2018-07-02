@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 import { withRouter, type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import config from '../config';
 import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
 import CollectionFeed from '../containers/collection-feed';
-
 import { fetchCollectionIfNeeded } from '../store/reducers/collections';
 
 import type { Dispatch, EntityStatus } from '../store/types';
@@ -15,10 +15,11 @@ import type { Collection } from '../types';
 
 type Props = {
   collection: ?Collection,
+  collectionSlug: string,
   dispatch: Dispatch,
   history: RouterHistory,
   match: { params: { collectionSlug: string } },
-  status: ?EntityStatus,
+  status: EntityStatus,
 };
 
 class FeedView extends Component<Props> {
@@ -27,45 +28,68 @@ class FeedView extends Component<Props> {
 
     return {
       collection: state.collections[slug],
-      status: state.collections._status[slug],
+      collectionSlug: slug,
+      status: state.collections._status[slug] || {},
     };
   };
 
   componentDidMount() {
-    const { dispatch, match } = this.props;
-    const { collectionSlug } = match.params;
-
+    const { dispatch, collectionSlug } = this.props;
     dispatch(fetchCollectionIfNeeded(collectionSlug));
   }
 
+  handleRefreshClick = () => {
+    window.location.reload();
+  };
+
   render() {
-    const { collection, history, status, match } = this.props;
-    const { fetchStatus, errorCode } = status || {};
-    const { collectionSlug } = match.params;
+    const { collection, collectionSlug, history, status } = this.props;
+    const { fetchStatus, errorCode } = status;
 
-    if (fetchStatus === 'fetching') {
-      return (
-        <div>
-          <div className="x xd-column xa-center xj-center p-fixed p-center ta-center">
-            <CircleLoader />
+    if (!collection) {
+      if (fetchStatus === 'fetching') {
+        return (
+          <div>
+            <div className="x xd-column xa-center xj-center p-fixed p-center ta-center">
+              <CircleLoader />
+            </div>
           </div>
-        </div>
-      );
-    }
+        );
+      }
 
-    if (errorCode === 'NOT_FOUND' || !collection) {
-      return (
-        <div className="pa-3">
-          We couldn't find a collection with the code {collectionSlug}
-        </div>
-      );
-    } else if (errorCode) {
-      return (
-        <div className="pa-3">
-          Something went wrong while loading.
-          <CodeBlock>{errorCode}</CodeBlock>
-        </div>
-      );
+      switch (fetchStatus) {
+        case 'NOT_FOUND': {
+          return (
+            <div className="pa-3">
+              We couldn't find a collection with the code {collectionSlug}
+            </div>
+          );
+        }
+        case 'TIMED_OUT': {
+          return (
+            <div className="pa-3">
+              Loading your collection timed out.{' '}
+              <button className="Link" onClick={this.handleRefreshClick}>
+                Refresh to try again.
+              </button>
+            </div>
+          );
+        }
+        default: {
+          return (
+            <div className="pa-3">
+              <p>Something went wrong while loading.</p>
+              <CodeBlock>{errorCode}</CodeBlock>
+              <p>
+                If you have a minute, please{' '}
+                <a href={config.githubSiteIssueUrl} className="Link">
+                  report this as a bug.
+                </a>
+              </p>
+            </div>
+          );
+        }
+      }
     }
 
     return <CollectionFeed collection={collection} history={history} />;

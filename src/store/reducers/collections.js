@@ -145,7 +145,6 @@ export function markSeriesAsRead(
       payload: { collectionSlug, seriesId, lastReadAt },
     });
 
-    // We don't handle the response since we pass this info optimistically.
     api.fetchMarkAsRead(collectionSlug, seriesId, lastReadAt).catch(err => {
       // swallow errors
     });
