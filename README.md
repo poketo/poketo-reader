@@ -7,16 +7,18 @@
 
 > Friendly web-based manga reader
 
+<br />
+
 A lightweight web app for following and reading scanlated manga series. Scrapes scanlator sites to make tracking updates and reading series easier. Currently in beta.
 
-For an invite, check out [poketo.app](https://poketo.app).
+For an invite, check out [poketo.app →](https://poketo.app)
 
 ### Features
 
-* **simple**: no accounts, no downloads, no ads.
+* **simple**: no accounts, no downloads, no ads
 * **track series**: fetches updates from [14+ manga sites](https://github.com/poketo/node#supported-sites)
-* **inline reader**: read new chapters in a simple reader with just a tap
-* **web-based**: read on a phone, computer, tablet, wherever!
+* **inline reader**: read new chapters with just a tap
+* **web-based**: use on a phone, computer, tablet, wherever!
 * **open-source**: anyone can contribute or build features on top
 * _coming soon:_ **offline-ready**: save chapters for offline reading
 
