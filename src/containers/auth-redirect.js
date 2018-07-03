@@ -21,7 +21,7 @@ class AuthRedirect extends Component<Props> {
     const { redirect, history, defaultCollection } = this.props;
 
     if (defaultCollection && redirect) {
-      history.push(utils.getCollectionUrl(defaultCollection));
+      history.replace(utils.getCollectionUrl(defaultCollection));
     }
   }
 
