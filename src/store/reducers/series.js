@@ -1,7 +1,6 @@
 // @flow
 
 import { normalize } from 'normalizr';
-import ms from 'milliseconds';
 import schema from '../schema';
 import utils from '../../utils';
 import type { Series } from '../../types';
@@ -22,7 +21,7 @@ export function fetchSeriesIfNeeded(seriesId: string): Thunk {
   };
 }
 
-const STALE_AFTER = ms.hours(2) / 1000;
+const STALE_AFTER = 7200; // 2 hours in seconds
 
 export function shouldFetchSeries(state: Object, seriesId: string): boolean {
   const seriesById = state.series;
