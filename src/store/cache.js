@@ -7,7 +7,7 @@ import ms from 'milliseconds';
 // changes shape, or the API responses change. It'll invalidate cached data and
 // force a re-fetch.
 const apiVersion = 'rxmvmpsuta';
-const storeVersion = '1527870408490';
+const storeVersion = '1530681927316';
 const version = `${apiVersion}-${storeVersion}`;
 
 const cache = getConfiguredCache({
