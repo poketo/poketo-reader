@@ -5221,6 +5221,10 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
+milliseconds@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/milliseconds/-/milliseconds-1.0.3.tgz#1ff437c4f734b138ef7c2cedba4d8880c7f5c2d8"
+
 "mime-db@>= 1.33.0 < 2", mime-db@~1.33.0:
   version "1.33.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.33.0.tgz#a3492050a5cb9b63450541e39d9788d2272783db"

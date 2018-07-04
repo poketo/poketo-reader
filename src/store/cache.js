@@ -1,8 +1,7 @@
 // @flow
 
 import { getConfiguredCache } from 'money-clip';
-
-const MILLISECONDS_IN_A_DAY = 86400000;
+import ms from 'milliseconds';
 
 // NOTE: this cache version should be bumped any time the schema of the store
 // changes shape, or the API responses change. It'll invalidate cached data and
@@ -10,8 +9,10 @@ const MILLISECONDS_IN_A_DAY = 86400000;
 const apiVersion = 'rxmvmpsuta';
 const storeVersion = '1530681927316';
 const version = `${apiVersion}-${storeVersion}`;
-const maxAge = 5 * MILLISECONDS_IN_A_DAY;
 
-const cache = getConfiguredCache({ version, maxAge });
+const cache = getConfiguredCache({
+  version,
+  maxAge: ms.days(5),
+});
 
 export default cache;
