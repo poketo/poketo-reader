@@ -22,7 +22,7 @@ const persistConfig = {
   // so that we don't cache the fetching state and get caught in some
   // infinite loading.
   transformState: (state, key) => {
-    if (key !== 'collections' || key !== 'series') {
+    if (key !== 'collections' && key !== 'series') {
       return state;
     }
 
