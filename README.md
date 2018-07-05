@@ -1,11 +1,9 @@
 <div align="center">
-  <img width="600" src="https://cdn.rawgit.com/poketo/site/f7b961d7/.github/read
-me-header.svg" alt="Poketo" />
+  <img width="900" src="https://cdn.rawgit.com/poketo/site/d15b0db8/.github/readme-header.svg" alt="Poketo" />
   <br />
   <strong>Friendly web manga reader</strong>
 </div>
 
-<br />
 <br />
 
 Poketo is lightweight web app for following and reading [scanlated](https://en.wikipedia.org/wiki/Scanlation) manga series. It scrapes scanlator sites to track series updates and provide a nice reading experience.
