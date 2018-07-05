@@ -3,6 +3,7 @@
 import React, { Component, Fragment, type Node } from 'react';
 import { connect } from 'react-redux';
 import { normalize } from 'normalizr';
+import isSupportedUrl from 'poketo/supports';
 import debounce from 'throttle-debounce/debounce';
 import Button from '../components/button';
 import Input from '../components/input';
@@ -43,9 +44,6 @@ type State = {
   seriesPreview: ?Series,
 };
 
-// TODO: Have these values loaded directly from the poketo library or returned
-// series requests
-const SUPPORTED_SITES = /mangadex|mangahere|mangakakalot|manganelo|mangaupdates|helveticascans|merakiscans|kireicake|readms|hotchocolatescans|jaiminisbox|sensescans|serenade|silentsky-scans|tukimoop/i;
 const LINK_TO_SITES = /mangaupdates/i;
 
 class NewBookmarkPanel extends Component<Props, State> {
@@ -130,8 +128,7 @@ class NewBookmarkPanel extends Component<Props, State> {
       return;
     }
 
-    const domain = utils.getDomainName(normalizedUrl);
-    const supportedSite = SUPPORTED_SITES.test(domain);
+    const supportedSite = isSupportedUrl(normalizedUrl);
 
     if (!supportedSite) {
       this.setState({ errorCode: 'UNSUPPORTED_SITE' });
