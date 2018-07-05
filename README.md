@@ -1,15 +1,16 @@
 <div align="center">
-  <img width="600" src="https://cdn.rawgit.com/poketo/site/f7b961d7/.github/readme-header.svg" alt="Poketo" />
+  <img width="600" src="https://cdn.rawgit.com/poketo/site/f7b961d7/.github/read
+me-header.svg" alt="Poketo" />
   <br />
+  <strong>Friendly web manga reader</strong>
 </div>
 
----
-
-> Friendly web-based manga reader
-
+<br />
 <br />
 
-A lightweight web app for following and reading scanlated manga series. Scrapes scanlator sites to make tracking updates and reading series easier. Currently in beta.
+Poketo is lightweight web app for following and reading [scanlated](https://en.wikipedia.org/wiki/Scanlation) manga series. It scrapes scanlator sites to track series updates and provide a nice reading experience.
+
+Currently in beta.
 
 For an invite, check out [poketo.app →](https://poketo.app)
 
@@ -23,6 +24,8 @@ For an invite, check out [poketo.app →](https://poketo.app)
 * _coming soon:_ **offline-ready**: save chapters for offline reading
 
 :construction: Poketo is still in beta. It's usable, but watch your step! You might run into some bugs.
+
+<br/>
 
 ## Motivation
 
@@ -38,4 +41,4 @@ Issues and PR's are welcome! Feel free to drop a note on this repo, the [micro-s
 
 Deployed on [Netlify](https://netlify.com). Built with [React](https://reactjs.org/), [Redux](https://redux.js.org/), and [Flow](https://flow.org/en/).
 
-Typeface is [Proxima Soft](https://www.marksimonson.com/fonts/view/proxima-soft) by [Mark Simonson Studio](https://www.marksimonson.com/).
+Type is set in [Proxima Soft](https://www.marksimonson.com/fonts/view/proxima-soft) by [Mark Simonson Studio](https://www.marksimonson.com/).
