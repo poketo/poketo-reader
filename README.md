@@ -5,12 +5,15 @@
 </div>
 
 <br />
+<br />
 
 Poketo is lightweight web app for following and reading [scanlated](https://en.wikipedia.org/wiki/Scanlation) manga series. It scrapes scanlator sites to track series updates and provide a nice reading experience.
 
 Currently in beta.
 
 For an invite, check out [poketo.app →](https://poketo.app)
+
+<br />
 
 ### Features
 
