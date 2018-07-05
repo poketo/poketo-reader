@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="600" src="https://cdn.rawgit.com/poketo/site/develop/.github/readme-header.svg" alt="Poketo" />
+  <img width="600" src="https://cdn.rawgit.com/poketo/site/f7b961d7/.github/readme-header.svg" alt="Poketo" />
   <br />
 </div>
 
