@@ -1,6 +1,7 @@
 <div align="center">
   <img width="900" src="https://cdn.rawgit.com/poketo/site/d15b0db8/.github/readme-header.svg" alt="Poketo" />
   <br />
+  <br />
   <strong>Friendly web manga reader</strong>
 </div>
 
