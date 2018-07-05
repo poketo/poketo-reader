@@ -4,7 +4,6 @@
   "description": "A simple and fun web-based manga reader.",
   "start_url": "./",
   "display": "standalone",
-  "orientation": "any",
   "theme_color": "#292723",
   "background_color": "#fffefc",
   "icons": [
