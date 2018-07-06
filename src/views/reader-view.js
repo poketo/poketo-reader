@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import Button from '../components/button';
 import DotLoader from '../components/loader-dots';
 import Icon from '../components/icon';
-import Popover from '../components/popover';
+import ReaderHeader from '../components/reader-header';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
@@ -155,41 +155,12 @@ class ReaderView extends Component<Props> {
             </Head>
           )}
         <BodyClassName className="ff-sans bgc-black" />
-        <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
-          <Link
-            className="x xa-center o-50p z-2"
-            to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
-            <Icon name="arrow-left" iconSize={20} />
-          </Link>
-          <div className="p-absolute p-fill ph-5 x xa-center xj-center">
-            <span className="of-hidden to-ellipsis ws-noWrap">
-              {series && series.title}
-            </span>
-          </div>
-          <Popover
-            content={
-              <div className="pa-2" style={{ maxWidth: '80vw' }}>
-                {series && (
-                  <Popover.Item
-                    iconBefore={<Icon name="new-tab" iconSize={24} size={44} />}
-                    label={`Open on ${series.site.name}`}
-                    href={chapter.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  />
-                )}
-                <Popover.Item
-                  iconBefore={<Icon name="flag" iconSize={24} size={44} />}
-                  label="Report a bug"
-                />
-              </div>
-            }
-            position={Popover.Position.BOTTOM_RIGHT}>
-            <button className="x xa-center o-50p z-2">
-              <Icon name="more-vertical" iconSize={20} />
-            </button>
-          </Popover>
-        </div>
+        <ReaderHeader
+          collectionSlug={collectionSlug}
+          seriesTitle={series && series.title}
+          seriesSiteName={series && series.site.name}
+          chapterUrl={chapter && chapter.url}
+        />
         {chapter &&
           series &&
           seriesChapters && (

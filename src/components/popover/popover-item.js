@@ -7,7 +7,7 @@ type Props = {
   iconBefore?: Node,
   onClick?: (SyntheticMouseEvent<HTMLButtonElement>) => void,
   label: string,
-  href?: boolean,
+  href?: string,
 };
 
 const PopoverItem = ({ iconBefore, onClick, label, ...props }: Props) => {
