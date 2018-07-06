@@ -74,6 +74,19 @@ button::-moz-focus-inner {
   opacity: 0.7;
 }
 
+.PillLink {
+  border-radius: 3px;
+  transition: background-color 200ms ease;
+}
+
+.supports-hover .PillLink:hover {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.PillLink.PillLink:active {
+  background: rgba(0, 0, 0, 0.15);
+}
+
 .Input {
   border: 1px solid #eee;
   box-shadow: rgba(0, 0, 0, 0.03) 0px 1px 1px inset;
@@ -103,22 +116,6 @@ code {
 
 .StatusBar {
   height: 20px;
-}
-
-.Link {
-}
-
-.PillLink {
-  border-radius: 3px;
-  transition: background-color 200ms ease;
-}
-
-.supports-hover .PillLink:hover {
-  background: rgba(0, 0, 0, 0.07);
-}
-
-.PillLink.PillLink:active {
-  background: rgba(0, 0, 0, 0.15);
 }
 
 .Markdown {

@@ -15,11 +15,30 @@ type Props = {
   collection: ?Collection,
   onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
   lastReadAt?: number,
+  seriesTitle: string,
+  seriesSiteName: string,
   seriesChapters: Chapter[],
 };
 
 type State = {
   showingPanel: boolean,
+};
+
+const scrollElementIntoView = (el, parent) => {
+  const top = el.offsetTop;
+  const scrollTop = parent.scrollTop;
+  const height = parent.offsetHeight;
+
+  const start = scrollTop;
+  const end = scrollTop + height;
+
+  if (top > start && top < end) {
+    return;
+  } else if (top < start && top < end) {
+    parent.scrollTop = Math.max(0, el.offsetTop - 60);
+  } else if (top > end && top > start) {
+    parent.scrollTop = el.offsetTop - height + 120;
+  }
 };
 
 export default class ReaderNavigation extends Component<Props, State> {
@@ -52,15 +71,23 @@ export default class ReaderNavigation extends Component<Props, State> {
       const scrollEl = this.scrollRef.current;
 
       if (scrollEl && activeChapterEl) {
-        scrollEl.scrollTop = Math.max(0, activeChapterEl.offsetTop - 60);
+        scrollElementIntoView(activeChapterEl, scrollEl);
       }
     }
   }
 
   renderPickerPanel() {
-    const { chapter, lastReadAt, seriesChapters } = this.props;
+    const {
+      chapter,
+      lastReadAt,
+      seriesChapters,
+      seriesSiteName,
+      seriesTitle,
+    } = this.props;
 
-    if (this.state.showingPanel === false) {
+    const { showingPanel } = this.state;
+
+    if (showingPanel === false) {
       return null;
     }
 
@@ -76,7 +103,11 @@ export default class ReaderNavigation extends Component<Props, State> {
               WebkitOverflowScrolling: 'touch',
               maxHeight: '60vh',
             }}>
-            <div className="pt-2 pb-4">
+            <div className="ph-3 pv-3 mb-2">
+              <h4 className="pt-2 fs-14 fs-16-m c-gray3">{seriesSiteName}</h4>
+              <h3 className="fs-16 fs-20-m fw-semibold">{seriesTitle}</h3>
+            </div>
+            <div className="pt-2 pb-3">
               <ReaderChapterPicker
                 activeChapterRef={this.activeChapterRef}
                 activeChapterId={chapter.id}
@@ -102,7 +133,7 @@ export default class ReaderNavigation extends Component<Props, State> {
     const chapterTitle = utils.getChapterTitle(chapter);
 
     return (
-      <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-3">
+      <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-2">
         <div className="z-2">
           <ReaderChapterLink
             collectionSlug={collection && collection.slug}
