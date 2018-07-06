@@ -218,7 +218,7 @@ class ReaderView extends Component<Props> {
                       Error loading{series ? ` from ${series.site.name}` : ''}
                     </div>
                     <Button inline onClick={this.handleRetryButtonClick}>
-                      <span className="ph-3">Retry</span>
+                      <span className="ph-3">Try again</span>
                     </Button>
                   </div>
                 ) : (
