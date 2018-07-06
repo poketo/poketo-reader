@@ -161,6 +161,11 @@ class ReaderView extends Component<Props> {
             to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
             <Icon name="arrow-left" iconSize={20} />
           </Link>
+          <div className="p-absolute p-fill ph-5 x xa-center xj-center">
+            <span className="of-hidden to-ellipsis ws-noWrap">
+              {series && series.title}
+            </span>
+          </div>
           <Popover
             content={
               <div className="pa-2" style={{ maxWidth: '80vw' }}>

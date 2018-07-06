@@ -87,6 +87,14 @@
   -webkit-user-drag: none;
 }
 
+.to-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.ws-noWrap {
+  white-space: nowrap;
+}
+
 .font-smooth {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
