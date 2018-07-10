@@ -171,8 +171,6 @@ class ReaderView extends Component<Props> {
                 lastReadAt={unreadMap[series.id]}
                 onChapterSelectChange={this.handleChapterChange}
                 seriesChapters={seriesChapters}
-                seriesSiteName={series.site.name}
-                seriesTitle={series.title}
               />
             </div>
           )}
@@ -225,8 +223,6 @@ class ReaderView extends Component<Props> {
                       lastReadAt={unreadMap[series.id]}
                       onChapterSelectChange={this.handleChapterChange}
                       seriesChapters={seriesChapters}
-                      seriesTitle={series.title}
-                      seriesSiteName={series.site.name}
                     />
                   </div>
                 )}

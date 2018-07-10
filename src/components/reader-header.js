@@ -49,8 +49,9 @@ export default class ReaderHeader extends PureComponent<Props, State> {
         <Panel onRequestClose={this.handleFeedbackPanelClose}>
           <Panel.Content title="Report an issue">
             <LoadableFeedbackForm
-              onSubmitSuccess={this.handleFeedbackPanelClose}
-            />
+              onSubmitSuccess={this.handleFeedbackPanelClose}>
+              <p>Something look off with this chapter? Let us know.</p>
+            </LoadableFeedbackForm>
           </Panel.Content>
         </Panel>
       </Panel.Transition>

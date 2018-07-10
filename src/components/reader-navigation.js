@@ -15,8 +15,6 @@ type Props = {
   collection: ?Collection,
   onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
   lastReadAt?: number,
-  seriesTitle: string,
-  seriesSiteName: string,
   seriesChapters: Chapter[],
 };
 
@@ -77,14 +75,7 @@ export default class ReaderNavigation extends Component<Props, State> {
   }
 
   renderPickerPanel() {
-    const {
-      chapter,
-      lastReadAt,
-      seriesChapters,
-      seriesSiteName,
-      seriesTitle,
-    } = this.props;
-
+    const { chapter, lastReadAt, seriesChapters } = this.props;
     const { showingPanel } = this.state;
 
     if (showingPanel === false) {
@@ -103,10 +94,6 @@ export default class ReaderNavigation extends Component<Props, State> {
               WebkitOverflowScrolling: 'touch',
               maxHeight: '60vh',
             }}>
-            <div className="ph-3 pv-3 mb-2">
-              <h4 className="pt-2 fs-14 fs-16-m c-gray3">{seriesSiteName}</h4>
-              <h3 className="fs-16 fs-20-m fw-semibold">{seriesTitle}</h3>
-            </div>
             <div className="pt-2 pb-3">
               <ReaderChapterPicker
                 activeChapterRef={this.activeChapterRef}
