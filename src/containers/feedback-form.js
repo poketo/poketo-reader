@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import axios from 'axios';
 
 import config from '../config';
@@ -8,8 +8,10 @@ import Button from '../components/button';
 import TextArea from '../components/text-area';
 
 type Props = {
+  children?: Node,
   onSubmitSuccess: () => void,
 };
+
 type State = {
   feedback: string,
   status: 'idle' | 'fetching' | 'success' | 'error',
@@ -22,6 +24,18 @@ export default class FeedbackForm extends Component<Props, State> {
   };
 
   static defaultProps = {
+    children: (
+      <p>
+        We’d love to hear any feedback you have about Poketo. You can also{' '}
+        <a
+          className="Link"
+          href={`mailto:${config.email}`}
+          target="_blank"
+          rel="noopener noreferer">
+          email if you'd prefer
+        </a>.
+      </p>
+    ),
     onSubmitSuccess: () => {},
   };
 
@@ -60,22 +74,14 @@ export default class FeedbackForm extends Component<Props, State> {
 
   render() {
     const { feedback, status } = this.state;
+    const { children } = this.props;
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <p className="mb-3">
-          We’d love to hear any feedback you have about Poketo. You can also{' '}
-          <a
-            className="Link"
-            href={`mailto:${config.email}`}
-            target="_blank"
-            rel="noopener noreferer">
-            email if you'd prefer
-          </a>.
-        </p>
-        <div className="mb-2">
+        {children}
+        <div className="mt-3 mb-2">
           <TextArea
-            placeholder="Feedback..."
+            placeholder="Write a message..."
             disabled={status !== 'idle'}
             minRows={2}
             onChange={this.handleFeedbackChange}

@@ -2,13 +2,9 @@
   min-height: 44px;
 }
 
-.supports-hover .ChapterRow:hover {
-  background-color: rgba(50, 0, 0, 0.05);
-}
-
-.ChapterRow--active .ChapterRow-label,
-.supports-hover .ChapterRow--active:hover {
-  background: inherit;
+.supports-hover .ChapterRow:hover,
+.ChapterRow--active {
+  background-color: #f2f2f2; /* gray0 */
 }
 
 .ChapterRow--active .ChapterRow-label,

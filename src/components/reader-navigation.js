@@ -22,6 +22,23 @@ type State = {
   showingPanel: boolean,
 };
 
+const scrollElementIntoView = (el, parent) => {
+  const top = el.offsetTop;
+  const scrollTop = parent.scrollTop;
+  const height = parent.offsetHeight;
+
+  const start = scrollTop;
+  const end = scrollTop + height;
+
+  if (top > start && top < end) {
+    return;
+  } else if (top < start && top < end) {
+    parent.scrollTop = Math.max(0, el.offsetTop - 60);
+  } else if (top > end && top > start) {
+    parent.scrollTop = el.offsetTop - height + 120;
+  }
+};
+
 export default class ReaderNavigation extends Component<Props, State> {
   state = {
     showingPanel: false,
@@ -52,15 +69,16 @@ export default class ReaderNavigation extends Component<Props, State> {
       const scrollEl = this.scrollRef.current;
 
       if (scrollEl && activeChapterEl) {
-        scrollEl.scrollTop = Math.max(0, activeChapterEl.offsetTop - 60);
+        scrollElementIntoView(activeChapterEl, scrollEl);
       }
     }
   }
 
   renderPickerPanel() {
     const { chapter, lastReadAt, seriesChapters } = this.props;
+    const { showingPanel } = this.state;
 
-    if (this.state.showingPanel === false) {
+    if (showingPanel === false) {
       return null;
     }
 
@@ -76,7 +94,7 @@ export default class ReaderNavigation extends Component<Props, State> {
               WebkitOverflowScrolling: 'touch',
               maxHeight: '60vh',
             }}>
-            <div className="pt-2 pb-4">
+            <div className="pt-2 pb-3">
               <ReaderChapterPicker
                 activeChapterRef={this.activeChapterRef}
                 activeChapterId={chapter.id}
@@ -102,7 +120,7 @@ export default class ReaderNavigation extends Component<Props, State> {
     const chapterTitle = utils.getChapterTitle(chapter);
 
     return (
-      <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-3">
+      <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-2">
         <div className="z-2">
           <ReaderChapterLink
             collectionSlug={collection && collection.slug}

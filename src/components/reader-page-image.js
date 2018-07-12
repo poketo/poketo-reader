@@ -68,7 +68,7 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
           <div className="p-absolute p-center">
             <Button noPadding inline onClick={this.handleRetryClick}>
               <Icon name="refresh" iconSize={16} size={44} />
-              <span className="pr-3">Retry</span>
+              <span className="pr-3">Try again</span>
             </Button>
           </div>
         ) : (
