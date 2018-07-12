@@ -33,11 +33,11 @@ For an invite, check out [poketo.app →](https://poketo.app)
 
 People should be able to read content on the web in the way that works for them. Manga reader sites are a special brand of bad. Each page in a chapter is a new page load, ads everywhere, yuck!
 
-Poketo provides a nice experience to follow and read series across the web. It's also built using an [extensible javascript library](https://github.com/poketo/poketo) and [micro-service](https://github.com/poketo/service) so anyone else can build their own reader and share the work behind Poketo! Be free, internet content!
+Poketo provides a nice experience to follow and read series across the web. It's also built using an [extensible node library](https://github.com/poketo/node) and [api](https://github.com/poketo/service) so anyone else can build their own reader and share the work behind Poketo! Be free, internet content!
 
 ## Contributing
 
-Issues and PR's are welcome! Feel free to drop a note on this repo, the [micro-service repo](https://github.com/poketo/service), or [the library repo](https://github.com/poketo/poketo).
+Issues and PR's are welcome! Feel free to drop a note on this repo, the [microservice repo](https://github.com/poketo/service), or [the node library repo](https://github.com/poketo/node).
 
 ## Colophon
 
