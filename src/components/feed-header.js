@@ -145,7 +145,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
           position={Popover.Position.BOTTOM_RIGHT}>
           <div className="d-none-m">
             <Button inline noPadding>
-              <Icon name="direct-down" size={44} />
+              <Icon name="more-vertical" size={44} iconSize={20} />
             </Button>
           </div>
         </Popover>

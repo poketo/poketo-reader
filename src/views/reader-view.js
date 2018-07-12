@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import Button from '../components/button';
 import DotLoader from '../components/loader-dots';
 import Icon from '../components/icon';
+import ReaderHeader from '../components/reader-header';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import utils from '../utils';
@@ -154,29 +155,22 @@ class ReaderView extends Component<Props> {
             </Head>
           )}
         <BodyClassName className="ff-sans bgc-black" />
-        <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
-          <Link
-            className="x xa-center o-50p p-absolute z-2"
-            to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
-            <Icon name="arrow-left" iconSize={20} />
-          </Link>
-          <div className="c-white mh-auto w-90p ta-center mw-900">
-            <div>
-              <div>{series ? series.title : ''}&nbsp;</div>
-              <div className="fs-12 o-50p">{series && series.site.name}</div>
-            </div>
-          </div>
-        </div>
+        <ReaderHeader
+          collectionSlug={collectionSlug}
+          seriesTitle={series && series.title}
+          seriesSiteName={series && series.site.name}
+          chapterUrl={chapter && chapter.url}
+        />
         {chapter &&
           series &&
           seriesChapters && (
-            <div className="pt-4">
+            <div className="pt-3">
               <ReaderNavigation
                 collection={collection}
                 chapter={chapter}
                 lastReadAt={unreadMap[series.id]}
-                seriesChapters={seriesChapters}
                 onChapterSelectChange={this.handleChapterChange}
+                seriesChapters={seriesChapters}
               />
             </div>
           )}
@@ -193,7 +187,7 @@ class ReaderView extends Component<Props> {
                       Error loading{series ? ` from ${series.site.name}` : ''}
                     </div>
                     <Button inline onClick={this.handleRetryButtonClick}>
-                      <span className="ph-3">Retry</span>
+                      <span className="ph-3">Try again</span>
                     </Button>
                   </div>
                 ) : (
@@ -222,23 +216,24 @@ class ReaderView extends Component<Props> {
               {chapter &&
                 series &&
                 seriesChapters && (
-                  <div className="pb-4">
+                  <div className="pb-3">
                     <ReaderNavigation
                       chapter={chapter}
                       collection={collection}
                       lastReadAt={unreadMap[series.id]}
-                      seriesChapters={seriesChapters}
                       onChapterSelectChange={this.handleChapterChange}
+                      seriesChapters={seriesChapters}
                     />
                   </div>
                 )}
               {collection && (
-                <nav className="bgc-black c-white ta-center pv-4 fs-14 fs-16-m">
+                <nav className="x xj-spaceBetween bgc-black c-white ta-center pv-4 ph-3 fs-14 fs-16-m">
                   <Link
                     className="o-50p"
                     to={utils.getCollectionUrl(collection.slug)}>
                     <Icon name="arrow-left" iconSize={20} />
                   </Link>
+                  <div />
                 </nav>
               )}
             </Fragment>
