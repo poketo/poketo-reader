@@ -39,19 +39,6 @@ const utils = {
   /**
    * Store helpers
    */
-  getIdComponents: (id: string): IdComponents => {
-    const parts = id.split(':');
-    const components: IdComponents = {
-      siteId: parts[0],
-      seriesSlug: parts[1],
-    };
-
-    if (parts[2]) {
-      components.chapterSlug = parts[2];
-    }
-
-    return components;
-  },
   toSeriesId: (chapterId: string) => {
     return chapterId
       .split(':')

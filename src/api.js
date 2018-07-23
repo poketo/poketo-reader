@@ -52,20 +52,16 @@ const api = {
     collectionSlug: string,
     seriesId: string,
   ) => instance.delete(`/collection/${collectionSlug}/bookmark/${seriesId}`),
-  fetchChapter: (id: string) => {
-    const { siteId, seriesSlug, chapterSlug } = utils.getIdComponents(id);
-    return instance.get(`/chapter`, {
-      params: { siteId, seriesSlug, chapterSlug },
+  fetchChapter: (id: string) =>
+    instance.get(`/chapter`, {
+      params: { id },
       timeout: SCRAPING_TIMEOUT,
-    });
-  },
-  fetchSeries: (id: string) => {
-    const { siteId, seriesSlug } = utils.getIdComponents(id);
-    return instance.get(`/series`, {
-      params: { siteId, seriesSlug },
+    }),
+  fetchSeries: (id: string) =>
+    instance.get(`/series`, {
+      params: { id },
       timeout: SCRAPING_TIMEOUT,
-    });
-  },
+    }),
   fetchSeriesByUrl: (url: string) =>
     instance.get(`/series`, { params: { url }, timeout: SCRAPING_TIMEOUT }),
 };
