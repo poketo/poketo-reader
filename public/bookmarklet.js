@@ -8,7 +8,7 @@
     .then(function(response) {
       redirect(response.id);
     })
-    .catch(function(err) {
+    .catch(function() {
       return getSeries(targetUrl)
         .then(function(response) {
           redirect(response.chapters[0].id);
