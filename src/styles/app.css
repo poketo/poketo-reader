@@ -50,8 +50,6 @@ textarea {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
-  -webkit-font-smoothing: subpixel-antialiased;
-  -moz-osx-font-smoothing: ;
 }
 
 button {
