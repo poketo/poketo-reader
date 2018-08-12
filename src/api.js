@@ -2,7 +2,6 @@
 
 import config from './config';
 import axios from 'axios';
-import utils from './utils';
 
 export type AxiosResponse = {
   config: Object,

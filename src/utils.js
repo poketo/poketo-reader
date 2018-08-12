@@ -9,12 +9,6 @@ import type { Bookmark, Collection, Chapter } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
-type IdComponents = {
-  siteId: string,
-  seriesSlug: string,
-  chapterSlug?: string,
-};
-
 const utils = {
   formatTimestamp: (n: number): string => ago(toDate(n)),
   formatAbsoluteTimestamp: (n: number) => {
