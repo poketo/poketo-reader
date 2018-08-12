@@ -2,40 +2,56 @@
   var apiBaseUrl = 'https://api.poketo.app';
   var readerBaseUrl = 'https://poketo.app/read';
 
-  getChapter(window.location.href).then(
-    function(response) {
-      window.location = readerBaseUrl + '/' + response.id;
-    },
-    function(err) {
-      switch (err.code) {
-        case 'UNSUPPORTED_SITE':
-          alert(
-            'Sorry, "' + window.location.host + '" is not a supported site.',
-          );
-          break;
-        case 'INVALID_URL':
+  var targetUrl = window.location.href;
+
+  getChapter(targetUrl)
+    .then(function(response) {
+      redirect(response.id);
+    })
+    .catch(function(err) {
+      return getSeries(targetUrl)
+        .then(function(response) {
+          redirect(response.chapters[0].id);
+        })
+        .catch(handleError);
+    });
+
+  function handleError(err) {
+    switch (err.code) {
+      case 'UNSUPPORTED_SITE':
+        alert('Sorry, "' + window.location.host + '" is not a supported site.');
+        break;
+      case 'INVALID_URL':
+        alert(
+          'This is not a chapter page. Find a chapter you’d like to read and use this bookmarklet from that page.',
+        );
+        break;
+      case 'SERVER_ERROR':
+        if (err.message.indexOf('not read chapter slug') !== -1) {
           alert(
             'This is not a chapter page. Find a chapter you’d like to read and use this bookmarklet from that page.',
           );
-          break;
-        case 'SERVER_ERROR':
-          if (err.message.includes('not read chapter slug')) {
-            alert(
-              'This is not a chapter page. Find a chapter you’d like to read and use this bookmarklet from that page.',
-            );
-          } else {
-            alert('Something went wrong: ' + err.message);
-          }
-          break;
-        default:
+        } else {
           alert('Something went wrong: ' + err.message);
-          break;
-      }
-    },
-  );
+        }
+        break;
+      default:
+        alert('Something went wrong: ' + err.message);
+        break;
+    }
+  }
+
+  function redirect(id) {
+    window.location =
+      readerBaseUrl + '/' + encodeURIComponent(id).replace(/%3A/g, ':');
+  }
 
   function getChapter(url) {
     return get(apiBaseUrl + '/chapter?url=' + encodeURIComponent(url));
+  }
+
+  function getSeries(url) {
+    return get(apiBaseUrl + '/series?url=' + encodeURIComponent(url));
   }
 
   function get(url) {
