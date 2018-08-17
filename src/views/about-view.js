@@ -87,6 +87,21 @@ export default () => (
               experience.
             </p>
           </QuestionContainer>
+          <QuestionContainer
+            id="mobile-desktop"
+            question="Can I use Poketo without an invite?">
+            <p>
+              You can! Poketo also provides a standalone reader. The simplest
+              way to use it is to drag the link below to your bookmarks. Using
+              it on any supported site will open the chapter you're reading on
+              Poketo:
+            </p>
+            <p>
+              <a href={config.bookmarkletCode} title="Read on Poketo">
+                Read on Poketo
+              </a>
+            </p>
+          </QuestionContainer>
           <h2 id="help" className="mt-5 mb-3 fs-36 fw-semibold">
             Need help?
           </h2>
