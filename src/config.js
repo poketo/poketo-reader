@@ -4,6 +4,9 @@ const config: { [string]: string } = {
   apiBaseUrl: process.env.REACT_APP_API_BASE || '',
   apiFeedbackUrl: process.env.REACT_APP_API_FEEDBACK_URL || '',
   email: 'hello@poketo.app',
+  bookmarkletCode:
+    // eslint-disable-next-line
+    'javascript:(function()%7Bvar s%3Ddocument.createElement(%27script%27)%3Bs.setAttribute(%27type%27,%27text/javascript%27)%3Bs.setAttribute(%27charset%27,%27UTF-8%27)%3Bs.setAttribute(%27src%27,%27https://poketo.app/bookmarklet.js%27)%3Bdocument.documentElement.appendChild(s)%3B%7D)()',
   discordInviteUrl: 'https://discord.gg/y5gVmY3',
   githubUrl: 'https://github.com/poketo',
   githubSiteUrl: 'https://github.com/poketo/site',
