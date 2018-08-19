@@ -4,6 +4,14 @@
 
   var targetUrl = window.location.href;
 
+  if (
+    targetUrl.indexOf('poketo.app') !== -1 ||
+    targetUrl.indexOf('localhost') !== -1
+  ) {
+    alert('You’re already on Poketo!');
+    return;
+  }
+
   getChapter(targetUrl)
     .then(function(response) {
       redirect(response.id);
