@@ -19,11 +19,17 @@ type Props = {
   collectionSlug: ?string,
   seriesTitle: ?string,
   seriesSiteName: ?string,
+  seriesUrl: ?string,
   chapterUrl: ?string,
 };
 
 type State = {
   isFeedbackPanelOpen: boolean,
+};
+
+const iconProps = {
+  iconSize: 20,
+  size: 44,
 };
 
 export default class ReaderHeader extends PureComponent<Props, State> {
@@ -63,6 +69,7 @@ export default class ReaderHeader extends PureComponent<Props, State> {
       collectionSlug,
       seriesTitle,
       seriesSiteName,
+      seriesUrl,
       chapterUrl,
     } = this.props;
 
@@ -87,20 +94,38 @@ export default class ReaderHeader extends PureComponent<Props, State> {
           <Popover
             content={({ close }) => (
               <div className="pa-2" style={{ maxWidth: '80vw' }}>
-                {seriesSiteName &&
-                  chapterUrl && (
-                    <Popover.Item
-                      iconBefore={
-                        <Icon name="new-tab" iconSize={24} size={44} />
-                      }
-                      label={`Open on ${seriesSiteName}`}
-                      href={chapterUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    />
-                  )}
+                <div className="ph-3 pv-1">
+                  <div>{seriesTitle}</div>
+                  <div className="fs-14 c-gray3">{seriesSiteName}</div>
+                </div>
+                <Popover.Divider />
+                {seriesSiteName && (
+                  <Fragment>
+                    {seriesUrl && (
+                      <Popover.Item
+                        iconBefore={<Icon name="new-tab" {...iconProps} />}
+                        label={`Open on ${seriesSiteName} (series)`}
+                        href={seriesUrl}
+                        onClick={close}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      />
+                    )}
+                    {chapterUrl && (
+                      <Popover.Item
+                        iconBefore={<Icon name="new-tab" {...iconProps} />}
+                        label={`Open on ${seriesSiteName} (chapter)`}
+                        href={chapterUrl}
+                        onClick={close}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      />
+                    )}
+                    <Popover.Divider />
+                  </Fragment>
+                )}
                 <Popover.Item
-                  iconBefore={<Icon name="flag" iconSize={24} size={44} />}
+                  iconBefore={<Icon name="flag" {...iconProps} />}
                   label="Report an issue"
                   onClick={() => {
                     close();

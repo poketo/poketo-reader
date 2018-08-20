@@ -159,6 +159,7 @@ class ReaderView extends Component<Props> {
           collectionSlug={collectionSlug}
           seriesTitle={series && series.title}
           seriesSiteName={series && series.site.name}
+          seriesUrl={series && series.url}
           chapterUrl={chapter && chapter.url}
         />
         {chapter &&
