@@ -186,7 +186,8 @@ class ReaderView extends Component<Props> {
                       <Icon name="warning" />
                     </div>
                     <div className="mb-3 o-50p">
-                      Error loading{series ? ` from ${series.site.name}` : ''}
+                      Error loading
+                      {series ? ` from ${series.site.name}` : ''}
                     </div>
                     <Button inline onClick={this.handleRetryButtonClick}>
                       <span className="ph-3">Try again</span>
@@ -198,7 +199,8 @@ class ReaderView extends Component<Props> {
                       <DotLoader />
                     </div>
                     <div className="fs-12 o-50p">
-                      Loading{series ? ` from ${series.site.name}` : ''}
+                      Loading
+                      {series ? ` from ${series.site.name}` : ''}
                     </div>
                   </div>
                 )}

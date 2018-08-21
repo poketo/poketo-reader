@@ -220,7 +220,8 @@ class NewBookmarkPanel extends Component<Props, State> {
               rel="noopener noreferrer"
               target="_blank">
               a full list of supported sites
-            </a>. Make an issue{' '}
+            </a>
+            . Make an issue{' '}
             <a
               className="Link"
               href={`${config.githubLibraryUrl}/issues/new`}

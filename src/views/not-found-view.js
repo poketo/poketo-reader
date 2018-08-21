@@ -50,7 +50,8 @@ export default () => (
         If you want you can{' '}
         <Link className="Link" to="/">
           head back home
-        </Link>.
+        </Link>
+        .
       </p>
     </div>
   </HomeLayout>

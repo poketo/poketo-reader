@@ -33,7 +33,8 @@ export default class FeedbackForm extends Component<Props, State> {
           target="_blank"
           rel="noopener noreferer">
           email if you'd prefer
-        </a>.
+        </a>
+        .
       </p>
     ),
     onSubmitSuccess: () => {},

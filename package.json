@@ -9,6 +9,7 @@
     "build:css": "bin/build-css",
     "build:icons": "bin/build-icons",
     "prebuild": "yarn run build:css && yarn run build:icons",
+    "format": "prettier --write 'src/**/*.js'",
     "test": "react-scripts test --env=jsdom",
     "deploy": "netlify deploy",
     "predeploy": "yarn run build"

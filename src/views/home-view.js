@@ -74,15 +74,17 @@ class HomeView extends Component<Props> {
                 Built as an{' '}
                 <a className="Link" href={config.githubSiteUrl}>
                   open source project
-                </a>. Help out or fork it!
+                </a>
+                . Help out or fork it!
               </p>
             </div>
           </div>
           <div className="mw-600 w-75p mh-auto pv-5 ta-center">
             <h4 className="mb-2 fw-semibold">Interested?</h4>
             <p className="mb-4">
-              Poketo is currently in a private beta.<br />Reach out if you'd
-              like an invite.
+              Poketo is currently in a private beta.
+              <br />
+              Reach out if you'd like an invite.
             </p>
             <a
               target="_blank"

@@ -55,13 +55,15 @@ export default () => (
                 target="_blank"
                 rel="noopener noreferrer">
                 all the sites listed here
-              </a>.
+              </a>
+              .
             </p>
             <p>
               If there's a site you want to see supported, leave an{' '}
               <a href={`${config.githubLibraryUrl}/issues/new`}>
                 issue on Github
-              </a>, or <a href={`mailto:${config.email}`}>shoot us an email</a>.
+              </a>
+              , or <a href={`mailto:${config.email}`}>shoot us an email</a>.
             </p>
           </QuestionContainer>
           <QuestionContainer
@@ -112,8 +114,9 @@ export default () => (
               target="_blank"
               rel="noreferrer noopener">
               on our wiki
-            </a>. If you're having trouble with something, feel free to drop a
-            note to <a href={`mailto:${config.email}`}>{config.email}</a>
+            </a>
+            . If you're having trouble with something, feel free to drop a note
+            to <a href={`mailto:${config.email}`}>{config.email}</a>
           </p>
         </div>
         <Footer />

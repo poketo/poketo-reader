@@ -54,8 +54,11 @@ class LogInView extends Component<Props, State> {
             <p>
               Your code is the last part of the link you got. <br />
               <code className="fs-14">
-                poketo.app/c/<span className="bgc-extraFadedLightCoral br-4 pa-1">
-                  {'<'}your code{'>'}
+                poketo.app/c/
+                <span className="bgc-extraFadedLightCoral br-4 pa-1">
+                  {'<'}
+                  your code
+                  {'>'}
                 </span>
               </code>
             </p>
