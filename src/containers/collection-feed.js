@@ -68,7 +68,7 @@ class Feed extends Component<Props, State> {
     this.setState({ optionsPanelSeriesId: seriesId });
   };
 
-  handleSeriesOptionsTrashClick = () => {
+  handleSeriesOptionsRemoveClick = () => {
     const { collection, dispatch } = this.props;
     const { optionsPanelSeriesId } = this.state;
 
@@ -76,7 +76,7 @@ class Feed extends Component<Props, State> {
       return;
     }
 
-    if (window.confirm('Do you want to delete this series?')) {
+    if (window.confirm('Do you want to remove this series?')) {
       dispatch(removeBookmark(collection.slug, optionsPanelSeriesId));
       this.handleSeriesOptionsPanelClose();
     }
@@ -174,7 +174,7 @@ class Feed extends Component<Props, State> {
       <Panel.Transition>
         <Panel onRequestClose={this.handleSeriesOptionsPanelClose}>
           <Panel.Link
-            icon={<Icon name="new-tab" />}
+            icon={<Icon name="new-tab" iconSize={20} />}
             label={`Open on ${series.site.name}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -182,7 +182,7 @@ class Feed extends Component<Props, State> {
           />
           {showMarkAsRead && (
             <Panel.Button
-              icon={<Icon name="book" />}
+              icon={<Icon name="book" iconSize={20} />}
               label={
                 series.supportsReading === true
                   ? `Mark ${unreadChapters.length} chapter${
@@ -194,9 +194,9 @@ class Feed extends Component<Props, State> {
             />
           )}
           <Panel.Button
-            icon={<Icon name="trash" className="c-coral" />}
+            icon={<Icon name="trash" iconSize={20} className="c-coral" />}
             label="Remove series"
-            onClick={this.handleSeriesOptionsTrashClick}
+            onClick={this.handleSeriesOptionsRemoveClick}
           />
         </Panel>
       </Panel.Transition>

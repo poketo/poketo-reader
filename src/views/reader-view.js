@@ -3,7 +3,7 @@
 import React, { Component, Fragment, type Node } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
-import { Link, withRouter, type RouterHistory } from 'react-router-dom';
+import { withRouter, type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Button from '../components/button';
@@ -12,6 +12,7 @@ import Icon from '../components/icon';
 import ReaderHeader from '../components/reader-header';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
+import ReaderFooter from '../components/reader-footer';
 import utils from '../utils';
 
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
@@ -159,6 +160,7 @@ class ReaderView extends Component<Props> {
           collectionSlug={collectionSlug}
           seriesTitle={series && series.title}
           seriesSiteName={series && series.site.name}
+          seriesUrl={series && series.url}
           chapterUrl={chapter && chapter.url}
         />
         {chapter &&
@@ -207,7 +209,7 @@ class ReaderView extends Component<Props> {
           return (
             <Fragment>
               <div className="pv-4 mh-auto w-90p-m ta-center mw-900">
-                {(chapter: Chapter).pages.map(page => (
+                {chapter.pages.map(page => (
                   <div key={page.id} className="mb-3 mb-4-m">
                     <ReaderPageImage page={page} />
                   </div>
@@ -226,16 +228,7 @@ class ReaderView extends Component<Props> {
                     />
                   </div>
                 )}
-              {collection && (
-                <nav className="x xj-spaceBetween bgc-black c-white ta-center pv-4 ph-3 fs-14 fs-16-m">
-                  <Link
-                    className="o-50p"
-                    to={utils.getCollectionUrl(collection.slug)}>
-                    <Icon name="arrow-left" iconSize={20} />
-                  </Link>
-                  <div />
-                </nav>
-              )}
+              <ReaderFooter collectionSlug={collection && collection.slug} />
             </Fragment>
           );
         })()}

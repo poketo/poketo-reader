@@ -15,3 +15,10 @@
 .PopoverItem:active {
   background-color: rgba(0, 0, 0, 0.07);
 }
+
+.PopoverDivider {
+  height: 1px;
+  margin-left: -8px;
+  margin-right: -8px;
+  width: calc(100% + 16px);
+}

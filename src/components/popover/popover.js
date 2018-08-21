@@ -4,6 +4,7 @@ import React, { Component, type Node, type Element } from 'react';
 import Positioner from './positioner';
 import PopoverStateless from './popover-stateless';
 import PopoverItem from './popover-item';
+import PopoverDivider from './popover-divider';
 import Position from './position';
 import type { RefObject } from './types';
 
@@ -41,6 +42,7 @@ export default class Popover extends Component<Props, State> {
 
   static Position = Position;
   static Item = PopoverItem;
+  static Divider = PopoverDivider;
 
   popoverRef: ?RefObject;
   targetRef: ?RefObject;
@@ -142,7 +144,7 @@ export default class Popover extends Component<Props, State> {
     }
 
     // Ignore clicks from the popover trigger
-    if (isOrContains(targetRef.current, e.target)) {
+    if (targetRef.current === e.target) {
       return;
     }
 

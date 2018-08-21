@@ -43,7 +43,7 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
     this.setState({ hasError: true });
   };
 
-  handleLoad = () => {
+  handleLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     this.setState({ hasError: false });
   };
 
