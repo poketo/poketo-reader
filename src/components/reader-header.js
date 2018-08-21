@@ -41,7 +41,7 @@ export default class ReaderHeader extends PureComponent<Props, State> {
     this.setState({ isFeedbackPanelOpen: true });
   };
 
-  handleFeedbackPanelClose = () => {
+  handleFeedbackPanelRequestClose = () => {
     this.setState({ isFeedbackPanelOpen: false });
   };
 
@@ -52,10 +52,10 @@ export default class ReaderHeader extends PureComponent<Props, State> {
 
     return (
       <Panel.Transition>
-        <Panel onRequestClose={this.handleFeedbackPanelClose}>
+        <Panel onRequestClose={this.handleFeedbackPanelRequestClose}>
           <Panel.Content title="Report an issue">
             <LoadableFeedbackForm
-              onSubmitSuccess={this.handleFeedbackPanelClose}>
+              onSubmitSuccess={this.handleFeedbackPanelRequestClose}>
               <p>Something look off with this chapter? Let us know.</p>
             </LoadableFeedbackForm>
           </Panel.Content>
@@ -104,7 +104,7 @@ export default class ReaderHeader extends PureComponent<Props, State> {
                     {seriesUrl && (
                       <Popover.Item
                         iconBefore={<Icon name="new-tab" {...iconProps} />}
-                        label={`Open on ${seriesSiteName} (series)`}
+                        label="Open series on site"
                         href={seriesUrl}
                         onClick={close}
                         target="_blank"
@@ -114,7 +114,7 @@ export default class ReaderHeader extends PureComponent<Props, State> {
                     {chapterUrl && (
                       <Popover.Item
                         iconBefore={<Icon name="new-tab" {...iconProps} />}
-                        label={`Open on ${seriesSiteName} (chapter)`}
+                        label="Open chapter on site"
                         href={chapterUrl}
                         onClick={close}
                         target="_blank"
