@@ -104,9 +104,11 @@ export default function reducer(
       }));
     }
     case 'SET_SERIES_ENTITY_STATUS': {
-      return utils.set(state, `_status.${action.payload.id}`, prev => ({
+      const { id, status } = action.payload;
+
+      return utils.set(state, `_status.${id}`, prev => ({
         ...prev,
-        ...action.payload.status,
+        ...status,
       }));
     }
     default: {

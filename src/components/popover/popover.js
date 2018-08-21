@@ -6,15 +6,15 @@ import PopoverStateless from './popover-stateless';
 import PopoverItem from './popover-item';
 import PopoverDivider from './popover-divider';
 import Position from './position';
-import type { RefObject } from './types';
+import type { ReactObjRef } from './types';
 
 type Props = {
   position: $Keys<typeof Position>,
   isShown: boolean,
-  content: Element<any> | (({ close: Function }) => Node),
+  content: Element<*> | (({ close: Function }) => Node),
   children:
-    | Element<any>
-    | (({ toggle: Function, ref: RefObject, isShown: boolean }) => Node),
+    | Element<*>
+    | (({ toggle: Function, ref: ReactObjRef<*>, isShown: boolean }) => Node),
   onOpen: () => void,
   onOpenComplete: () => void,
   onClose: () => void,
@@ -44,8 +44,8 @@ export default class Popover extends Component<Props, State> {
   static Item = PopoverItem;
   static Divider = PopoverDivider;
 
-  popoverRef: ?RefObject;
-  targetRef: ?RefObject;
+  popoverRef: ReactObjRef<*>;
+  targetRef: ReactObjRef<*>;
 
   constructor(props: Props) {
     super(props);
@@ -212,7 +212,7 @@ export default class Popover extends Component<Props, State> {
     this.props.onCloseComplete();
   };
 
-  renderTarget = ({ ref, isShown }: { ref: RefObject, isShown: boolean }) => {
+  renderTarget = ({ ref, isShown }: { ref: ReactObjRef<*>, isShown: boolean }) => {
     this.targetRef = ref;
 
     if (typeof this.props.children === 'function') {
@@ -225,7 +225,6 @@ export default class Popover extends Component<Props, State> {
 
     return React.cloneElement(this.props.children, {
       onClick: this.toggle,
-      // $FlowFixMe: the React 16.3 createRef() syntax isn't supported yet
       ref,
     });
   };

@@ -1,7 +1,7 @@
 // @flow
 
 import api from '../api';
-import type { Store as ReduxStore } from 'redux';
+import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
 import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
 
 type ActionType<A, B> = { +type: A, +payload: B };
@@ -114,7 +114,7 @@ export type Action =
   | ChapterAction
   | DeviceAction;
 
-export type Dispatch = (action: Action | Thunk) => void;
+export type Dispatch = ReduxDispatch;
 export type GetState = () => Object;
 export type Thunk = (
   dispatch: Dispatch,

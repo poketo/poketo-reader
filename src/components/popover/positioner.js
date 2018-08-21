@@ -5,18 +5,19 @@ import Transition from 'react-transition-group/Transition';
 import Portal from '../portal';
 import getPosition from './get-position';
 import Position from './position';
-import type { RefObject } from './types';
+
+import type { ReactObjRef } from './types';
 
 import './positioner.css';
 
 type Props = {
   position: $Keys<typeof Position>,
   isShown: boolean,
-  children: any => Node,
+  children: Object => Node,
   bodyOffset: number,
   targetOffset: number,
   target: ({
-    ref: RefObject,
+    ref: ReactObjRef<*>,
     isShown: boolean,
   }) => Node,
   zIndex: number,

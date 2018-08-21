@@ -196,9 +196,11 @@ export default function reducer(
       return nextState;
     }
     case 'SET_COLLECTION_ENTITY_STATUS': {
-      return utils.set(state, `_status.${action.payload.slug}`, prev => ({
+      const { slug, status } = action.payload;
+
+      return utils.set(state, `_status.${slug}`, prev => ({
         ...prev,
-        ...action.payload.status,
+        ...status,
       }));
     }
     default: {
