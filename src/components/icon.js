@@ -17,6 +17,7 @@ const Icons = {
   edit: require('./icon-edit').default,
   feed: require('./icon-feed').default,
   flag: require('./icon-flag').default,
+  image: require('./icon-image').default,
   message: require('./icon-message').default,
   'more-horizontal': require('./icon-more-horizontal').default,
   'more-vertical': require('./icon-more-vertical').default,
