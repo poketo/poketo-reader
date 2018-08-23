@@ -1,16 +1,43 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
 import utils from '../utils';
 
-type Props = { visible: boolean };
+type Props = {};
+type State = { visible: boolean, orientation: 'portrait' | 'landscape' };
 
-class StandaloneStatusBar extends Component<Props> {
+export default class StandaloneStatusBar extends Component<Props, State> {
   static offsetClassName = 'status-bar-ios-offset';
 
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      visible: utils.isStandalone() && utils.isAppleDevice(),
+      orientation: 'landscape',
+    };
+  }
+
+  componentDidMount() {
+    window.addEventListener('orientationchange', this.handleOrientationChange);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(
+      'orientationchange',
+      this.handleOrientationChange,
+    );
+  }
+
+  handleOrientationChange = () => {
+    this.setState({ orientation: utils.getDeviceOrientation() });
+  };
+
   render() {
-    if (!this.props.visible) {
+    if (!this.state.visible) {
+      return null;
+    }
+
+    if (this.state.orientation !== 'portrait') {
       return null;
     }
 
@@ -24,12 +51,3 @@ class StandaloneStatusBar extends Component<Props> {
     );
   }
 }
-
-export default connect(state => {
-  const { orientation } = state.device;
-
-  const visible =
-    utils.isStandalone() && utils.isAppleDevice() && orientation === 'portrait';
-
-  return { visible };
-})(StandaloneStatusBar);

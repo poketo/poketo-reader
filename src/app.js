@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import { Switch, Route } from 'react-router-dom';
 
 import Analytics from './components/analytics';
-import DeviceStatus from './containers/device-status';
 import ErrorBoundary from './components/error-boundary';
 import StandaloneStatusBar from './containers/standalone-status-bar';
 
@@ -37,7 +36,6 @@ export default class App extends Component<{}> {
           })}
         />
         <Analytics />
-        <DeviceStatus />
         <StandaloneStatusBar />
         <ErrorBoundary>
           <Switch>
