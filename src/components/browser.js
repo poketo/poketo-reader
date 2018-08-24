@@ -8,7 +8,7 @@ type Props = {
   className?: string,
 };
 
-const Phone = ({ children, className, ...props }: Props) => (
+const Browser = ({ children, className, ...props }: Props) => (
   <div className={classNames('Browser-container', className)} {...props}>
     <div className="Browser paper-shadow">
       <div className="Browser-button br-round" />
@@ -19,4 +19,4 @@ const Phone = ({ children, className, ...props }: Props) => (
   </div>
 );
 
-export default Phone;
+export default Browser;
