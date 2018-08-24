@@ -45,7 +45,7 @@ export default class App extends Component<{}> {
               component={ReaderView}
               exact
             />
-            <Route path="/c/:collectionSlug" exact component={FeedView} />
+            <Route path="/c/:collectionSlug" component={FeedView} />
             <Route path="/login" component={LogInView} />
             <Route path="/about" component={AboutView} />
             <Route path="/home" component={HomeView} />

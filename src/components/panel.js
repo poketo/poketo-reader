@@ -8,10 +8,15 @@ import Portal from './portal';
 
 import './panel.css';
 
-type PanelProps = {
-  children?: Node,
+type PanelChildrenProps = {
+  isShown: boolean,
   scrollRef?: ElementRef<*>,
   onRequestClose: () => void,
+};
+
+type PanelProps = {
+  ...$Exact<PanelChildrenProps>,
+  children: PanelChildrenProps => Node,
 };
 
 type PanelState = {
@@ -40,19 +45,14 @@ type PanelTitleProps = {
   children?: Node,
 };
 
-type PanelTransitionProps = {
-  children: Node,
-};
-
 class Panel extends Component<PanelProps, PanelState> {
   static Button: (props: PanelButtonProps) => Node;
   static Content: (props: PanelContentProps) => Node;
   static Title: (props: PanelTitleProps) => Node;
-  static Transition: (props: PanelTransitionProps) => Node;
-  static TransitionGroup: (props: {}) => Node;
   static Link: (props: PanelLinkProps) => Node;
 
   static defaultProps = {
+    children: () => null,
     onRequestClose: () => {},
   };
 
@@ -83,25 +83,36 @@ class Panel extends Component<PanelProps, PanelState> {
   };
 
   render() {
-    const { children, scrollRef } = this.props;
+    const { children, scrollRef, isShown, onRequestClose } = this.props;
 
     const scrollEl = scrollRef && scrollRef.current;
     const shouldLockScroll = this.state.isMounted && scrollEl;
 
     return (
       <Portal>
-        <div className="Panel">
-          {shouldLockScroll && <ScrollLock touchScrollTarget={scrollEl} />}
-          <div className="Panel-background" onClick={this.handleOverlayClick} />
-          <div className="Panel-menu">
-            {children}
-            <button
-              className="d-none x-m w-100p bt-1 bc-gray1 xa-stretch"
-              onClick={this.handleOverlayClick}>
-              <div className="w-100p pa-3 ta-center">Cancel</div>
-            </button>
-          </div>
-        </div>
+        <TransitionGroup>
+          {isShown && (
+            <CSSTransition unmountOnExit timeout={400} classNames="panel">
+              <div className="Panel">
+                {shouldLockScroll && (
+                  <ScrollLock touchScrollTarget={scrollEl} />
+                )}
+                <div
+                  className="Panel-background"
+                  onClick={this.handleOverlayClick}
+                />
+                <div className="Panel-menu">
+                  {children({ isShown, scrollRef, onRequestClose })}
+                  <button
+                    className="d-none x-m w-100p bt-1 bc-gray1 xa-stretch"
+                    onClick={this.handleOverlayClick}>
+                    <div className="w-100p pa-3 ta-center">Cancel</div>
+                  </button>
+                </div>
+              </div>
+            </CSSTransition>
+          )}
+        </TransitionGroup>
       </Portal>
     );
   }
@@ -133,11 +144,5 @@ Panel.Link = ({ icon, label, ...props }: PanelLinkProps) => (
     <div className="pa-3 pl-2">{label}</div>
   </a>
 );
-
-Panel.Transition = (props: PanelTransitionProps) => (
-  <CSSTransition {...props} timeout={400} classNames="panel" />
-);
-
-Panel.TransitionGroup = TransitionGroup;
 
 export default Panel;

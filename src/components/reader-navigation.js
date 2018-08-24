@@ -79,15 +79,12 @@ export default class ReaderNavigation extends Component<Props, State> {
     const { chapter, lastReadChapterId, seriesChapters } = this.props;
     const { showingPanel } = this.state;
 
-    if (showingPanel === false) {
-      return null;
-    }
-
     return (
-      <Panel.Transition>
-        <Panel
-          onRequestClose={this.handlePickerPanelClose}
-          scrollRef={this.scrollRef}>
+      <Panel
+        isShown={showingPanel}
+        onRequestClose={this.handlePickerPanelClose}
+        scrollRef={this.scrollRef}>
+        {() => (
           <div
             ref={this.scrollRef}
             style={{
@@ -105,8 +102,8 @@ export default class ReaderNavigation extends Component<Props, State> {
               />
             </div>
           </div>
-        </Panel>
-      </Panel.Transition>
+        )}
+      </Panel>
     );
   }
 
@@ -128,9 +125,7 @@ export default class ReaderNavigation extends Component<Props, State> {
             chapter={previousChapter}>
             <Icon name="direct-left" />
           </ReaderChapterLink>
-          <Panel.TransitionGroup>
-            {this.renderPickerPanel()}
-          </Panel.TransitionGroup>
+          {this.renderPickerPanel()}
         </div>
         <a
           className="PillLink pv-2 ph-3 d-inlineBlock c-white c-pointer ta-center"

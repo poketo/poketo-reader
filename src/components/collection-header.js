@@ -1,16 +1,18 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 import Button from './button';
 import ComponentLoader from './loader-component';
 import Icon from './icon';
 import Panel from './panel';
+import NewBookmarkPanel from './collection-new-bookmark-panel';
 import Popover from './popover/index';
 import cache from '../store/cache';
 
-import './feed-header.css';
+import './collection-header.css';
 
 const LoadableFeedbackForm = Loadable({
   loader: () => import('../containers/feedback-form'),
@@ -18,16 +20,26 @@ const LoadableFeedbackForm = Loadable({
 });
 
 type Props = {
-  onAddButtonClick: (e: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  collectionSlug: string,
 };
 
 type State = {
   isFeedbackPanelShown: boolean,
+  isBookmarkPanelShown: boolean,
 };
 
-export default class FeedHeader extends PureComponent<Props, State> {
+export default class CollectionHeader extends PureComponent<Props, State> {
   state = {
     isFeedbackPanelShown: false,
+    isBookmarkPanelShown: false,
+  };
+
+  openAddBookmarkPanel = () => {
+    this.setState({ isBookmarkPanelShown: true });
+  };
+
+  closeAddBookmarkPanel = () => {
+    this.setState({ isBookmarkPanelShown: false });
   };
 
   openFeedbackPanel = () => {
@@ -50,32 +62,17 @@ export default class FeedHeader extends PureComponent<Props, State> {
     });
   };
 
-  renderFeedbackPanel() {
-    if (!this.state.isFeedbackPanelShown) {
-      return null;
-    }
-
-    return (
-      <Panel.Transition>
-        <Panel onRequestClose={this.closeFeedbackPanel}>
-          <Panel.Content title="Feedback">
-            <LoadableFeedbackForm
-              onSubmitSuccess={this.handleFeedbackSubmitSuccess}
-            />
-          </Panel.Content>
-        </Panel>
-      </Panel.Transition>
-    );
-  }
-
   renderAddButton(inline: boolean = false) {
-    const { onAddButtonClick } = this.props;
     const label = 'Add new series';
     const icon = <Icon name="add" iconSize={18} size={44} />;
 
     if (inline) {
       return (
-        <Button inline noPadding onClick={onAddButtonClick} title={label}>
+        <Button
+          inline
+          noPadding
+          onClick={this.openAddBookmarkPanel}
+          title={label}>
           {icon}
         </Button>
       );
@@ -84,7 +81,7 @@ export default class FeedHeader extends PureComponent<Props, State> {
     return (
       <Popover.Item
         label={label}
-        onClick={onAddButtonClick}
+        onClick={this.openAddBookmarkPanel}
         iconBefore={icon}
       />
     );
@@ -122,18 +119,41 @@ export default class FeedHeader extends PureComponent<Props, State> {
   }
 
   render() {
+    const { collectionSlug: slug } = this.props;
+
     return (
-      <header className="FeedHeader z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
+      <header className="CollectionHeader z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
           <Icon name="poketo" className="c-coral" />
         </div>
-        <Panel.TransitionGroup>
-          {this.renderFeedbackPanel()}
-        </Panel.TransitionGroup>
-        <div className="d-none d-block-m">
-          {this.renderFeedbackButton(true)}
-          {this.renderAddButton(true)}
+        <div>
+          <Link to={`/c/${slug}/releases`}>Releases</Link>
+          <Link className="ml-3" to={`/c/${slug}/library`}>
+            Library
+          </Link>
         </div>
+        <Panel
+          isShown={this.state.isFeedbackPanelShown}
+          onRequestClose={this.closeFeedbackPanel}>
+          {() => (
+            <Panel.Content title="Feedback">
+              <LoadableFeedbackForm
+                onSubmitSuccess={this.handleFeedbackSubmitSuccess}
+              />
+            </Panel.Content>
+          )}
+        </Panel>
+        <Panel
+          isShown={this.state.isBookmarkPanelShown}
+          onRequestClose={this.closeAddBookmarkPanel}>
+          {() => (
+            <NewBookmarkPanel
+              collectionSlug={this.props.collectionSlug}
+              onRequestClose={this.closeAddBookmarkPanel}
+            />
+          )}
+        </Panel>
+        <div className="d-none d-block-m">{this.renderAddButton(true)}</div>
         <Popover
           content={
             <div className="pa-2" style={{ maxWidth: '80vw' }}>

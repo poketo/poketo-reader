@@ -1,41 +1,52 @@
 // @flow
 
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-
 import Icon from './icon';
 import utils from '../utils';
+import type { FeedItem } from '../types';
+
+const getLinkTo = (item: FeedItem, slug: string) => {
+  if (item.linkTo || item.series.supportsReading === false) {
+    return item.linkTo || item.series.url;
+  }
+
+  const unreadChapters = utils.getUnreadChapters(
+    item.chapters,
+    item.lastReadAt,
+  );
+
+  const toChapter =
+    unreadChapters.length > 0
+      ? utils.leastRecentChapter(unreadChapters)
+      : utils.mostRecentChapter(item.chapters);
+
+  return `/c/${slug}/read/${toChapter.id}`;
+};
 
 type Props = {
-  series: {
-    id: string,
-    url: string,
-    title: string,
-    supportsReading: boolean,
-    updatedAt: number,
-  },
-  isUnread: boolean,
-  linkTo: ?string,
+  collectionSlug: string,
+  feedItem: FeedItem,
   onOptionsClick: (i: string) => (e: SyntheticEvent<HTMLAnchorElement>) => void,
-  onSeriesClick: (i: string) => (e: SyntheticEvent<HTMLButtonElement>) => void,
 };
 
 const SeriesRow = ({
-  series,
-  isUnread,
-  linkTo,
+  collectionSlug,
+  feedItem: item,
   onOptionsClick,
-  onSeriesClick,
 }: Props) => {
-  const readingUrl = linkTo ? linkTo : series.url;
-  const usesExternalReader = linkTo || series.supportsReading === false;
+  const isUnread = false; // item.series.updatedAt > item.lastReadAt;
+  const to = getLinkTo(item, collectionSlug);
+
+  const isExternalLink = to.startsWith('http');
+  const Component = isExternalLink ? 'a' : Link;
+  const linkProps = isExternalLink ? { href: to, target: '_blank' } : { to };
 
   return (
     <div className="SeriesRow x bb-1 bc-lightGray bc-transparent-m">
-      <a
-        href={readingUrl}
-        onClick={onSeriesClick(series.id)}
-        target="_blank"
+      <Component
+        {...linkProps}
         className="c-pointer hover x-1 x xd-column ph-3 pv-3">
         <span className="fs-24-m">
           {isUnread && (
@@ -44,20 +55,20 @@ const SeriesRow = ({
             </span>
           )}
           <span className={classNames({ 'fw-semibold': isUnread })}>
-            {series.title}
+            {item.series.title}
           </span>
         </span>
         <span className="fs-12 o-50p">
-          {usesExternalReader && (
+          {isExternalLink && (
             <Fragment>
-              {utils.getDomainName(readingUrl)}
+              {utils.getDomainName(to)}
               <span className="fs-9 ph-1 p-relative t--1">&bull;</span>
             </Fragment>
           )}
-          {utils.formatTimestamp(series.updatedAt)}
+          {utils.formatTimestamp(item.series.updatedAt)}
         </span>
-      </a>
-      <button className="pa-3" onClick={onOptionsClick(series.id)}>
+      </Component>
+      <button className="pa-3" onClick={onOptionsClick(item.series.id)}>
         <Icon
           name="more-horizontal"
           className="c-gray3"

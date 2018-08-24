@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import config from '../config';
 import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
-import CollectionFeed from '../containers/collection-feed';
+import CollectionPage from '../components/collection-page';
 import { fetchCollectionIfNeeded } from '../store/reducers/collections';
 
 import type { Dispatch, EntityStatus } from '../store/types';
@@ -92,7 +92,7 @@ class FeedView extends Component<Props> {
       }
     }
 
-    return <CollectionFeed collection={collection} history={history} />;
+    return <CollectionPage collection={collection} history={history} />;
   }
 }
 

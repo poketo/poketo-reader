@@ -246,7 +246,6 @@ class NewBookmarkPanel extends Component<Props, State> {
   };
 
   render() {
-    const { onRequestClose } = this.props;
     const { bookmarkFetchState, errorCode, linkToUrl, seriesUrl } = this.state;
 
     const buttonLabelValues = {
@@ -264,61 +263,59 @@ class NewBookmarkPanel extends Component<Props, State> {
       this.seriesSupportsReading(seriesUrl) === false;
 
     return (
-      <Panel onRequestClose={onRequestClose}>
-        <Panel.Content title="Add new series">
-          <p className="mb-3">
-            Paste the URL of the series you want to follow.{' '}
-            <a
-              href="https://github.com/poketo/site/wiki/Adding-a-New-Series"
-              target="_blank"
-              className="Link"
-              rel="noopener noreferrer">
-              (instructions)
-            </a>
-          </p>
-          <form type="post" onSubmit={this.handleSubmit} noValidate>
-            <div className="mb-2">
-              <Input
-                type="url"
-                name="seriesUrl"
-                readOnly={disableFormFields}
-                onChange={this.handleSeriesUrlChange}
-                placeholder="http://"
-                value={seriesUrl || ''}
-              />
-            </div>
-            {errorCode && (
-              <p className="c-red fs-12 mb-2">
-                {this.getErrorMessage(errorCode, seriesUrl)}
-              </p>
+      <Panel.Content title="Add new series">
+        <p className="mb-3">
+          Paste the URL of the series you want to follow.{' '}
+          <a
+            href="https://github.com/poketo/site/wiki/Adding-a-New-Series"
+            target="_blank"
+            className="Link"
+            rel="noopener noreferrer">
+            (instructions)
+          </a>
+        </p>
+        <form type="post" onSubmit={this.handleSubmit} noValidate>
+          <div className="mb-2">
+            <Input
+              type="url"
+              name="seriesUrl"
+              readOnly={disableFormFields}
+              onChange={this.handleSeriesUrlChange}
+              placeholder="http://"
+              value={seriesUrl || ''}
+            />
+          </div>
+          {errorCode && (
+            <p className="c-red fs-12 mb-2">
+              {this.getErrorMessage(errorCode, seriesUrl)}
+            </p>
+          )}
+          {seriesUrl &&
+            showLinkToForm && (
+              <Fragment>
+                <p className="mb-2">
+                  <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
+                  support reading on Poketo. You can add a different link to
+                  open for reading.
+                </p>
+                <Input
+                  type="url"
+                  name="linkToUrl"
+                  readOnly={disableFormFields}
+                  onChange={this.handleLinkToUrlChange}
+                  placeholder="Reading URL (optional)"
+                  value={linkToUrl || ''}
+                />
+              </Fragment>
             )}
-            {seriesUrl &&
-              showLinkToForm && (
-                <Fragment>
-                  <p className="mb-2">
-                    <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
-                    support reading on Poketo. You can add a different link to
-                    open for reading.
-                  </p>
-                  <Input
-                    type="url"
-                    name="linkToUrl"
-                    readOnly={disableFormFields}
-                    onChange={this.handleLinkToUrlChange}
-                    placeholder="Reading URL (optional)"
-                    value={linkToUrl || ''}
-                  />
-                </Fragment>
-              )}
-            <Button
-              primary
-              disabled={bookmarkFetchState !== 'READY' || errorCode !== null}
-              type="submit">
-              {buttonLabelValues[bookmarkFetchState]}
-            </Button>
-          </form>
-        </Panel.Content>
-      </Panel>
+          <Button
+            primary
+            disabled={bookmarkFetchState !== 'READY' || errorCode !== null}
+            type="submit">
+            {buttonLabelValues[bookmarkFetchState]}
+          </Button>
+        </form>
+      </Panel.Content>
     );
   }
 }

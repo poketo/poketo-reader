@@ -45,25 +45,6 @@ export default class ReaderHeader extends PureComponent<Props, State> {
     this.setState({ isFeedbackPanelOpen: false });
   };
 
-  renderFeedbackPanel() {
-    if (!this.state.isFeedbackPanelOpen) {
-      return null;
-    }
-
-    return (
-      <Panel.Transition>
-        <Panel onRequestClose={this.handleFeedbackPanelRequestClose}>
-          <Panel.Content title="Report an issue">
-            <LoadableFeedbackForm
-              onSubmitSuccess={this.handleFeedbackPanelRequestClose}>
-              <p>Something look off with this chapter? Let us know.</p>
-            </LoadableFeedbackForm>
-          </Panel.Content>
-        </Panel>
-      </Panel.Transition>
-    );
-  }
-
   render() {
     const {
       collectionSlug,
@@ -75,9 +56,18 @@ export default class ReaderHeader extends PureComponent<Props, State> {
 
     return (
       <Fragment>
-        <Panel.TransitionGroup>
-          {this.renderFeedbackPanel()}
-        </Panel.TransitionGroup>
+        <Panel
+          isShown={this.state.isFeedbackPanelOpen}
+          onRequestClose={this.handleFeedbackPanelRequestClose}>
+          {() => (
+            <Panel.Content title="Report an issue">
+              <LoadableFeedbackForm
+                onSubmitSuccess={this.handleFeedbackPanelRequestClose}>
+                <p>Something look off with this chapter? Let us know.</p>
+              </LoadableFeedbackForm>
+            </Panel.Content>
+          )}
+        </Panel>
         <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
           <Link
             className="x xa-center o-50p z-2"

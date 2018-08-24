@@ -1,4 +1,4 @@
-.FeedHeader {
+.CollectionHeader {
   position: fixed;
   top: 0;
   left: 0;
@@ -7,7 +7,7 @@
 }
 
 @media only screen and (min-width: 480px) {
-  .FeedHeader {
+  .CollectionHeader {
     position: absolute;
     box-shadow: none;
   }
