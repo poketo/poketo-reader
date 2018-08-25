@@ -8,7 +8,7 @@ import previewFeedUrl from '../assets/home-preview-feed.png';
 import previewReadUrl from '../assets/home-preview-read.jpg';
 
 import config from '../config';
-import AuthRedirect from '../containers/auth-redirect';
+import AuthRedirect from '../components/auth-redirect';
 import Button from '../components/button';
 import Footer from '../components/home-footer';
 import Header from '../components/home-header';

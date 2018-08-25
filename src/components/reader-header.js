@@ -11,7 +11,7 @@ import Popover from '../components/popover';
 import utils from '../utils';
 
 const LoadableFeedbackForm = Loadable({
-  loader: () => import('../containers/feedback-form'),
+  loader: () => import('../components/feedback-form'),
   loading: ComponentLoader,
 });
 

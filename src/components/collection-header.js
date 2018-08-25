@@ -15,7 +15,7 @@ import cache from '../store/cache';
 import './collection-header.css';
 
 const LoadableFeedbackForm = Loadable({
-  loader: () => import('../containers/feedback-form'),
+  loader: () => import('../components/feedback-form'),
   loading: ComponentLoader,
 });
 

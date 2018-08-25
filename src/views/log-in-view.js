@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { type RouterHistory } from 'react-router-dom';
 import Head from 'react-helmet';
 
-import AuthRedirect from '../containers/auth-redirect';
+import AuthRedirect from '../components/auth-redirect';
 import Button from '../components/button';
 import HomeHeader from '../components/home-header';
 import Input from '../components/input';

@@ -8,7 +8,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import Analytics from './components/analytics';
 import ErrorBoundary from './components/error-boundary';
-import StandaloneStatusBar from './containers/standalone-status-bar';
+import StandaloneStatusBar from './components/standalone-status-bar';
 
 import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
