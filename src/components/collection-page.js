@@ -45,7 +45,7 @@ class CollectionPage extends Component<Props, State> {
     const { bookmarks } = collection;
 
     return (
-      <div className="pt-5 pb-6">
+      <div className="pt-5 pb-6 h-100p">
         <CollectionHeader collectionSlug={collection.slug} />
         <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3 pe-none">
           <Toast isShown={isFetching}>Syncing...</Toast>

@@ -35,7 +35,10 @@ class Feed extends Component<Props, State> {
     const { currentSeriesActionPanelId } = this.state;
 
     return (
-      <div className="pt-3 ta-center-m">
+      <div className="pt-3 pt-4-m mw-600 mh-auto">
+        <header className="ph-3 mb-3">
+          <h1 className="fs-24 fw-semibold">Library</h1>
+        </header>
         <Panel
           isShown={Boolean(currentSeriesActionPanelId)}
           onRequestClose={this.handleSeriesOptionsPanelClose}>
@@ -49,14 +52,17 @@ class Feed extends Component<Props, State> {
             />
           )}
         </Panel>
-        {feedItems.map(item => (
-          <SeriesRow
-            key={item.series.id}
-            collectionSlug={collectionSlug}
-            feedItem={item}
-            onOptionsClick={this.handleSeriesOptionsClick}
-          />
-        ))}
+        <div className="x xw-wrap">
+          {feedItems.map(item => (
+            <SeriesRow
+              className="w-50p w-25p-m"
+              key={item.series.id}
+              collectionSlug={collectionSlug}
+              feedItem={item}
+              onOptionsClick={this.handleSeriesOptionsClick}
+            />
+          ))}
+        </div>
       </div>
     );
   }

@@ -14,6 +14,7 @@ import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
 import HomeView from './views/home-view';
 import LogInView from './views/log-in-view';
+import SeriesView from './views/series-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
 import utils from './utils';
@@ -39,6 +40,7 @@ export default class App extends Component<{}> {
         <StandaloneStatusBar />
         <ErrorBoundary>
           <Switch>
+            <Route path="/series/:seriesId" exact component={SeriesView} />
             <Route path="/read/:chapterId" exact component={ReaderView} />
             <Route
               path="/c/:collectionSlug/read/:chapterId"

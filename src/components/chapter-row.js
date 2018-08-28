@@ -1,59 +1,38 @@
 // @flow
 
-import React, { type ElementRef } from 'react';
+import React from 'react';
 import type { ChapterMetadata } from 'poketo';
-import classNames from 'classnames';
-import Icon from '../components/icon';
+import { Link } from 'react-router-dom';
 import utils from '../utils';
-import './chapter-row.css';
 
 type Props = {
   chapter: ChapterMetadata,
-  innerRef?: ElementRef<*>,
-  isActive?: boolean,
-  isUnread?: boolean,
-  onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void,
+  collectionSlug?: string,
+  extendedLabel?: boolean,
 };
 
-const ChapterRow = (props: Props) => {
-  const { chapter, innerRef, isActive, isUnread, onClick } = props;
-
-  const chapterLabel = utils.getChapterLabel(chapter);
+const ChapterRow = ({ chapter, collectionSlug, extendedLabel }: Props) => {
+  const chapterLabel = utils.getChapterLabel(chapter, extendedLabel);
   const chapterTitle = utils.getChapterTitle(chapter);
 
+  const prefix = collectionSlug ? `/c/${collectionSlug}` : '';
+  const to = prefix + `/read/${chapter.id}`;
+
   return (
-    <div
-      className={classNames(
-        'ChapterRow x xa-center xj-spaceBetween pv-2 ph-3 c-pointer',
-        { 'ChapterRow--active': isActive },
-      )}
-      ref={innerRef}
-      onClick={onClick}>
-      {isActive ? (
-        <span className="ChapterRow-check p-relative x xa-center mr-2 t--1">
-          <Icon name="check" size={18} iconSize={18} />
-        </span>
-      ) : (
-        isUnread && (
-          <span className="p-relative t--2 mr-2">
-            <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
-          </span>
-        )
-      )}
-      <div className="ChapterRow-label xs-1">
-        <span className="fw-semibold">{chapterLabel}</span>
-        {chapterTitle && <span className="ml-2">{chapter.title}</span>}
+    <Link className="x xj-spaceBetween pv-2" to={to}>
+      <div className="of-hidden to-ellipsis ws-noWrap">
+        {chapterLabel}
+        {chapterTitle && `: ${chapterTitle}`}
       </div>
-      <span className="xg-1 xs-0 fs-12 o-50p pl-2 pl-4-m ta-right">
-        {utils.formatAbsoluteTimestamp(chapter.createdAt)}
-      </span>
-    </div>
+      <div className="pl-4 xs-0 fs-12 o-50p">
+        {utils.formatTimestamp(chapter.createdAt)}
+      </div>
+    </Link>
   );
 };
 
 ChapterRow.defaultProps = {
-  isActive: false,
-  isUnread: false,
+  extendedLabel: false,
 };
 
 export default ChapterRow;

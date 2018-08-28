@@ -1,9 +1,9 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import utils from '../utils';
+import ChapterRow from './chapter-row';
 import type { FeedItem } from '../types';
 
 type Props = {
@@ -16,26 +16,30 @@ class Releases extends Component<Props> {
     const { collectionSlug, feedItems } = this.props;
 
     return (
-      <div>
+      <div className="pt-5 ph-3 mw-600 mh-auto">
         {feedItems.length > 0 ? (
-          feedItems.map(item => (
-            <div>
-              <h3>{item.series.title}</h3>
-              {item.chapters.map(chapter => {
-                const chapterLabel = utils.getChapterLabel(chapter, true);
-                const chapterTitle = utils.getChapterTitle(chapter);
-
-                return (
-                  <Link to={`/c/${collectionSlug}/read/${chapter.id}`}>
-                    {chapterLabel}
-                    {chapterTitle && `: ${chapterTitle}`}
-                  </Link>
-                );
-              })}
-            </div>
-          ))
+          <Fragment>
+            <header className="mb-3">
+              <h1 className="fs-24 fw-semibold">Releases</h1>
+            </header>
+            {feedItems.map(item => (
+              <div key={item.series.id}>
+                <h3 className="mb-3">{item.series.title}</h3>
+                {item.chapters.map(chapter => (
+                  <ChapterRow
+                    key={chapter.id}
+                    chapter={chapter}
+                    extendedLabel
+                  />
+                ))}
+              </div>
+            ))}
+          </Fragment>
         ) : (
-          <div>No new updates! </div>
+          <div>
+            <div>No new updates!</div>
+            <Link to={`/c/${collectionSlug}/library`}>Go to Library</Link>
+          </div>
         )}
       </div>
     );
@@ -54,10 +58,12 @@ const mapStateToProps = (state, ownProps) => {
 
       return {
         series,
-        chapters: series.chapters
+        chapters: series
           ? series.chapters
-              .map(id => chaptersById[id])
-              .filter(chapter => chapter.createdAt > bookmark.lastReadAt)
+            ? series.chapters
+                .map(id => chaptersById[id])
+                .filter(chapter => chapter.createdAt > bookmark.lastReadAt)
+            : []
           : [],
         lastReadAt: bookmark.lastReadAt,
         linkTo: bookmark.linkTo,

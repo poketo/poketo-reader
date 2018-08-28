@@ -1,8 +1,9 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React from 'react';
+import cx from 'classnames';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
+import CoverImage from './series-cover-image';
 import Icon from './icon';
 import utils from '../utils';
 import type { FeedItem } from '../types';
@@ -26,56 +27,48 @@ const getLinkTo = (item: FeedItem, slug: string) => {
 };
 
 type Props = {
+  className?: string,
   collectionSlug: string,
   feedItem: FeedItem,
   onOptionsClick: (i: string) => (e: SyntheticEvent<HTMLAnchorElement>) => void,
 };
 
 const SeriesRow = ({
+  className,
   collectionSlug,
   feedItem: item,
   onOptionsClick,
 }: Props) => {
-  const isUnread = false; // item.series.updatedAt > item.lastReadAt;
-  const to = getLinkTo(item, collectionSlug);
+  const to = `/series/${item.series.id}`; //getLinkTo(item, collectionSlug);
 
   const isExternalLink = to.startsWith('http');
   const Component = isExternalLink ? 'a' : Link;
   const linkProps = isExternalLink ? { href: to, target: '_blank' } : { to };
 
   return (
-    <div className="SeriesRow x bb-1 bc-lightGray bc-transparent-m">
+    <div className={cx('SeriesRow', 'x', className)}>
       <Component
         {...linkProps}
-        className="c-pointer hover x-1 x xd-column ph-3 pv-3">
-        <span className="fs-24-m">
-          {isUnread && (
-            <span className="p-relative t--2 mr-2">
-              <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
-            </span>
-          )}
-          <span className={classNames({ 'fw-semibold': isUnread })}>
-            {item.series.title}
-          </span>
-        </span>
-        <span className="fs-12 o-50p">
-          {isExternalLink && (
-            <Fragment>
-              {utils.getDomainName(to)}
-              <span className="fs-9 ph-1 p-relative t--1">&bull;</span>
-            </Fragment>
-          )}
-          {utils.formatTimestamp(item.series.updatedAt)}
-        </span>
+        className="c-pointer x-1 d-block xa-center hover ph-3 pv-3">
+        <div className="x-1 mb-2">
+          <CoverImage series={item.series} />
+        </div>
+        <div>
+          <div className="fs-14 lh-1d25">{item.series.title}</div>
+          <div className="fs-12 o-50p">
+            {item.series.site.name}
+            {isExternalLink && <Icon name="new-tab" iconSize={12} size={12} />}
+          </div>
+        </div>
       </Component>
-      <button className="pa-3" onClick={onOptionsClick(item.series.id)}>
+      {/* <button className="pa-3" onClick={onOptionsClick(item.series.id)}>
         <Icon
           name="more-horizontal"
           className="c-gray3"
           iconSize={18}
           size={18}
         />
-      </button>
+      </button> */}
     </div>
   );
 };

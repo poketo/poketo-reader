@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import type { ChapterMetadata } from 'poketo';
 import type { BookmarkLastReadChapterId } from '../types';
 import utils from '../utils';
-import ChapterRow from '../components/chapter-row';
+import ChapterRow from '../components/reader-chapter-row';
 
 type Props = {
   activeChapterId?: string,
