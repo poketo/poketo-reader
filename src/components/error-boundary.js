@@ -9,17 +9,23 @@ type Props = {
 
 type State = {
   hasError: boolean,
+  errorMessage: ?string,
   errorStack: ?string,
 };
 
 export default class ErrorBoundary extends Component<Props, State> {
   state = {
     hasError: false,
+    errorMessage: null,
     errorStack: null,
   };
 
   componentDidCatch(error: Error, info: { componentStack: string }) {
-    this.setState({ hasError: true, errorStack: info.componentStack });
+    this.setState({
+      hasError: true,
+      errorMessage: error.message,
+      errorStack: info.componentStack,
+    });
     window.Rollbar.error(error);
   }
 
@@ -29,11 +35,11 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   render() {
     const { children } = this.props;
-    const { hasError, errorStack } = this.state;
+    const { hasError, errorMessage, errorStack } = this.state;
 
     if (hasError) {
       return (
-        <div>
+        <div className="pa-3 pt-4 pt-6-m mw-900 mh-auto">
           <h2>Something went wrong.</h2>
           <p>
             You can{' '}
@@ -46,7 +52,10 @@ export default class ErrorBoundary extends Component<Props, State> {
             </a>{' '}
             with the error below.
           </p>
-          <CodeBlock>{errorStack}</CodeBlock>
+          <CodeBlock>
+            {errorMessage}
+            {errorStack}
+          </CodeBlock>
         </div>
       );
     }
