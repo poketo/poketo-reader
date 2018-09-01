@@ -128,7 +128,7 @@ export default class Popover extends Component<Props, State> {
     }
 
     // Ignore clicks from the popover trigger
-    if (targetRef.current === e.target) {
+    if (isOrContains(targetRef.current, e.target)) {
       return;
     }
 
