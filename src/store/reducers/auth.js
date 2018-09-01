@@ -14,6 +14,9 @@ const initialState = {
   collectionSlug: localStorage.getItem(STORAGE_DEFAULT_COLLECTION_KEY),
 };
 
+export const getCollectionSlug = (state: { auth: State }) =>
+  state.auth.collectionSlug;
+
 export function setDefaultCollection(slug: string): Action {
   localStorage.setItem(STORAGE_DEFAULT_COLLECTION_KEY, slug);
 

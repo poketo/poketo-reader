@@ -4,10 +4,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import cx from 'classnames';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
 import CoverImage from '../components/series-cover-image';
 import CircleLoader from '../components/loader-circle';
 import ChapterRow from '../components/chapter-row';
+import FollowButton from '../components/follow-button';
 import Icon from '../components/icon';
 import type { Dispatch } from '../store/types';
 import type { Series, Chapter } from '../types';
@@ -52,14 +54,24 @@ class SeriesPageContainer extends Component<ContainerProps> {
   }
 }
 
+const Label = ({ className, ...props }: { className?: string }) => (
+  <div className={cx(className, 'fs-14 c-gray3 mb-1')} {...props} />
+);
+
 const SeriesPage = ({ series, chapters }: Props) => (
   <div className="pt-4 pb-6">
     <div className="mw-600 mh-auto ph-3">
-      <header>
-        <Link to="/">Back</Link>
+      <header className="x xj-spaceBetween mb-2">
+        <Link to="/">
+          <Icon name="arrow-left" iconSize={20} size={20} />
+        </Link>
+
+        <div>
+          <Icon name="more-vertical" iconSize={20} size={20} />
+        </div>
       </header>
       <header className="x xa-end mb-4">
-        <div className="x-1 mr-3 paper-shadow" style={{ maxWidth: 100 }}>
+        <div className="x-1 mr-3" style={{ maxWidth: 100 }}>
           <CoverImage series={series} />
         </div>
         <div>
@@ -74,11 +86,35 @@ const SeriesPage = ({ series, chapters }: Props) => (
           </a>
         </div>
       </header>
-      <div>{series.description}</div>
+      <div className="mb-4">
+        <FollowButton seriesId={series.id} />
+      </div>
+      <div className="mb-4">
+        <div className="mb-3">
+          <Label>Author</Label>
+          <div>{series.author}</div>
+        </div>
+        <div>
+          <Label>Description</Label>
+          <div>{series.description}</div>
+        </div>
+      </div>
       <div>
-        {chapters.map(chapter => (
-          <ChapterRow key={chapter.id} chapter={chapter} />
-        ))}
+        {series.supportsReading ? (
+          chapters.map(chapter => (
+            <div className="bb-1 bc-gray1">
+              <ChapterRow key={chapter.id} chapter={chapter} />
+            </div>
+          ))
+        ) : (
+          <div className="bgc-gray0 ta-center br-3 ph-4 pv-4">
+            <Icon name="warning" className="mb-3" />
+            <div className="mb-3 fw-semibold">No chapters</div>
+            <p className="c-gray4">
+              {series.site.name} doesn't support reading on Poketo.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   </div>
@@ -89,7 +125,9 @@ const mapStateToProps = (state, ownProps) => {
   const { seriesId } = ownProps;
 
   const series = seriesById[seriesId];
-  const chapters = series.chapters.map(chapterId => chaptersById[chapterId]);
+  const chapters = series.chapters
+    ? series.chapters.map(chapterId => chaptersById[chapterId])
+    : [];
 
   return { series, chapters };
 };

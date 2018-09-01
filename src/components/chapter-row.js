@@ -19,7 +19,7 @@ const ChapterRow = ({ chapter, collectionSlug, extendedLabel }: Props) => {
   const to = prefix + `/read/${chapter.id}`;
 
   return (
-    <Link className="x xj-spaceBetween pv-2" to={to}>
+    <Link className="x xj-spaceBetween xa-center pv-2" to={to}>
       <div className="of-hidden to-ellipsis ws-noWrap">
         {chapterLabel}
         {chapterTitle && `: ${chapterTitle}`}

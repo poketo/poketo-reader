@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import './loader-dots.css';
 
 const DotLoader = () => (
   <div className="DotLoader">

@@ -49,7 +49,7 @@ const Button = React.forwardRef(
       )}
       ref={ref}
       {...props}>
-      {loading ? <CircleLoader color="white" small /> : iconBefore}
+      {loading ? <CircleLoader small /> : iconBefore}
       {!loading && children}
     </button>
   ),

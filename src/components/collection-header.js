@@ -1,7 +1,8 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link, Route } from 'react-router-dom';
+import classNames from 'classnames';
 import Loadable from 'react-loadable';
 
 import Button from './button';
@@ -19,6 +20,33 @@ const LoadableFeedbackForm = Loadable({
   loading: ComponentLoader,
 });
 
+type HeaderLinkProps = {
+  to: string,
+  exact?: boolean,
+  children: React$Node,
+};
+
+const HeaderLink = ({
+  to,
+  exact,
+  children,
+  activeClassName,
+  className,
+  ...props
+}: HeaderLinkProps) => (
+  <Route
+    path={to}
+    children={({ match }) => (
+      <Link
+        to={to}
+        className={classNames(className, { [activeClassName]: match })}
+        {...props}>
+        {children}
+      </Link>
+    )}
+  />
+);
+
 type Props = {
   collectionSlug: string,
 };
@@ -28,7 +56,7 @@ type State = {
   isBookmarkPanelShown: boolean,
 };
 
-export default class CollectionHeader extends PureComponent<Props, State> {
+export default class CollectionHeader extends Component<Props, State> {
   state = {
     isFeedbackPanelShown: false,
     isBookmarkPanelShown: false,
@@ -127,10 +155,18 @@ export default class CollectionHeader extends PureComponent<Props, State> {
           <Icon name="poketo" className="c-coral" />
         </div>
         <div>
-          <Link to={`/c/${slug}/releases`}>Releases</Link>
-          <Link className="ml-3" to={`/c/${slug}/library`}>
+          <HeaderLink
+            className="pa-2 bgc-white br-3"
+            activeClassName="bgc-gray1"
+            to={`/c/${slug}/releases`}>
+            Releases
+          </HeaderLink>
+          <HeaderLink
+            className="pa-2 bgc-white br-3 ml-3"
+            activeClassName="bgc-gray1"
+            to={`/c/${slug}/library`}>
             Library
-          </Link>
+          </HeaderLink>
         </div>
         <Panel
           isShown={this.state.isFeedbackPanelShown}

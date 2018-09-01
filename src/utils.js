@@ -1,8 +1,13 @@
 // @flow
 
-import ago from 's-ago';
 import set from 'clean-set';
-import { format, isToday, isYesterday } from 'date-fns';
+import {
+  format,
+  distanceInWordsToNow,
+  subMonths,
+  isToday,
+  isYesterday,
+} from 'date-fns';
 import groupBy from 'lodash.groupby';
 
 import type { ChapterMetadata } from 'poketo';
@@ -11,7 +16,20 @@ import type { Bookmark, BookmarkLastReadChapterId, Collection } from './types';
 const toDate = (n: number): Date => new Date(n * 1000);
 
 const utils = {
-  formatTimestamp: (n: number): string => ago(toDate(n)),
+  formatTimestamp: (timestamp: number): string => {
+    const date = toDate(timestamp);
+    const absoluteDateCutOff = subMonths(new Date(), 2);
+
+    if (date < absoluteDateCutOff) {
+      return format(date, 'MMM D, YYYY');
+    }
+
+    const distanceString = distanceInWordsToNow(date);
+    const formattedDistance = distanceString.replace(/about /i, '') + ' ago';
+
+    return formattedDistance;
+  },
+
   formatAbsoluteTimestamp: (n: number) => {
     const date = toDate(n);
 

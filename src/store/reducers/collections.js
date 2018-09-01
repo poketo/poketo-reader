@@ -1,8 +1,8 @@
 // @flow
 
 import { normalize } from 'normalizr';
-import schema from '../schema';
 import { fetchSeriesIfNeeded } from './series';
+import schema from '../schema';
 import utils from '../../utils';
 
 import type { BookmarkLastReadChapterId, Collection } from '../../types';

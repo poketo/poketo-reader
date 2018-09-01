@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Icon from './icon';
 import ChapterRow from './chapter-row';
 import type { FeedItem } from '../types';
 
@@ -24,7 +25,11 @@ class Releases extends Component<Props> {
             </header>
             {feedItems.map(item => (
               <div key={item.series.id}>
-                <h3 className="mb-3">{item.series.title}</h3>
+                <h3 className="mb-3">
+                  <Link to={`/series/${item.series.id}`}>
+                    {item.series.title}
+                  </Link>
+                </h3>
                 {item.chapters.map(chapter => (
                   <ChapterRow
                     key={chapter.id}
@@ -36,9 +41,14 @@ class Releases extends Component<Props> {
             ))}
           </Fragment>
         ) : (
-          <div>
-            <div>No new updates!</div>
-            <Link to={`/c/${collectionSlug}/library`}>Go to Library</Link>
+          <div className="x xj-center ta-center">
+            <div>
+              <div>No new updates!</div>
+              <Link to={`/c/${collectionSlug}/library`} className="x xa-center">
+                <span className="pl-2">Go to Library</span>
+                <Icon name="arrow-right" iconSize={16} />
+              </Link>
+            </div>
           </div>
         )}
       </div>

@@ -76,19 +76,18 @@ const mapStateToProps = (state, ownProps) => {
   const feedItems: FeedItem[] = seriesIds
     .map(seriesId => {
       const series = seriesById[seriesId];
+      const chapters = series ? series.chapters || [] : [];
 
       return {
         series,
-        chapters: series.chapters
-          ? series.chapters.map(id => chaptersById[id])
-          : [],
+        chapters: chapters.map(id => chaptersById[id]),
         lastReadAt: bookmarks[seriesId].lastReadAt,
         linkTo: bookmarks[seriesId].linkTo,
       };
     })
     // Ignore bookmarks where the series hasn't loaded
     .filter(item => item.series)
-    .sort((a, b) => b.series.updatedAt - a.series.updatedAt);
+    .sort((a, b) => a.series.title.localeCompare(b.series.title));
 
   return { feedItems };
 };
