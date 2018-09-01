@@ -32,7 +32,7 @@ class SeriesPageContainer extends Component<ContainerProps> {
     const { match, dispatch } = this.props;
 
     if (prevMatch.params.seriesId !== match.params.seriesId) {
-      dispatch(match.params.seriesId);
+      dispatch(fetchSeriesIfNeeded(match.params.seriesId));
     }
   }
 
