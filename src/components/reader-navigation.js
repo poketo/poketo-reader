@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-
 import Icon from '../components/icon';
 import Panel from '../components/panel';
 import ReaderChapterPicker from '../components/reader-chapter-picker';

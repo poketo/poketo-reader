@@ -1,10 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { cx } from 'react-emotion';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import cx from 'classnames';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
 import Button from '../components/button';
 import CoverImage from '../components/series-cover-image';

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 import CircleLoader from './loader-circle';
 import './button.css';
 
@@ -35,7 +35,7 @@ const Button = React.forwardRef(
     ref,
   ) => (
     <button
-      className={classNames(
+      className={cx(
         'Button',
         'br-3 ff-sans',
         {

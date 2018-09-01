@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 
 const Icons = {
   add: require('./icon-add').default,
@@ -49,7 +49,7 @@ export default class Icon extends PureComponent<Props> {
 
     return (
       <span
-        className={classNames('xj-center xa-center', className)}
+        className={cx('xj-center xa-center', className)}
         style={{ display: 'inline-flex', width: size, height: size }}>
         <Component width={iconSize} height={iconSize} />
       </span>

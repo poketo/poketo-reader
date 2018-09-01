@@ -1,7 +1,20 @@
 // @flow
 
 import React, { type Node } from 'react';
-import classNames from 'classnames';
+import { css, cx } from 'react-emotion';
+
+const className = css`
+  background-color: transparent;
+  min-width: 120px;
+  max-width: 80vw;
+  transition: background-color 200ms ease, color 200ms ease,
+    transform 200ms ease, box-shadow 200ms ease;
+
+  .supports-hover &:hover,
+  &:active {
+    background-color: rgba(0, 0, 0, 0.07);
+  }
+`;
 
 type Props = {
   iconBefore?: Node,
@@ -15,13 +28,9 @@ const PopoverItem = ({ iconBefore, onClick, label, ...props }: Props) => {
 
   return (
     <Component
-      className={classNames(
-        'PopoverItem',
-        'br-3 x xa-center ta-left pr-3 w-100p',
-        {
-          'pl-3': !Boolean(iconBefore),
-        },
-      )}
+      className={cx(className, 'br-3 x xa-center ta-left pr-3 w-100p', {
+        'pl-3': !Boolean(iconBefore),
+      })}
       style={{ height: 44 }}
       onClick={onClick}
       title={label}

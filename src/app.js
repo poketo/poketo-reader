@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 import { Switch, Route } from 'react-router-dom';
 
 import Analytics from './components/analytics';
@@ -32,7 +32,7 @@ export default class App extends Component<{}> {
           <meta name="description" content="Light and fun manga reader." />
         </Head>
         <BodyClassName
-          className={classNames('ff-sans c-gray5 bgc-offwhite', {
+          className={cx('ff-sans c-gray5 bgc-offwhite', {
             'supports-hover': !utils.isTouchDevice(),
           })}
         />

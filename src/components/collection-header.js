@@ -1,8 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
+import { cx } from 'react-emotion';
 import { Link, Route } from 'react-router-dom';
-import classNames from 'classnames';
 import Loadable from 'react-loadable';
 
 import Button from './button';
@@ -41,7 +41,7 @@ const HeaderLink = ({
     children={({ match }) => (
       <Link
         to={to}
-        className={classNames(className, { [activeClassName || '']: match })}
+        className={cx(className, { [activeClassName || '']: match })}
         {...props}>
         {children}
       </Link>

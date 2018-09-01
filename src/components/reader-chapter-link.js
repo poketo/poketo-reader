@@ -2,7 +2,7 @@
 
 import React, { type Node } from 'react';
 import type { ChapterMetadata } from 'poketo';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 
 import utils from '../utils';
@@ -21,7 +21,7 @@ const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   return (
     <Link
       to={to}
-      className={classNames('PillLink x pa-2', { 'o-50p': disabled })}
+      className={cx('PillLink x pa-2', { 'o-50p': disabled })}
       style={{
         pointerEvents: disabled ? 'none' : 'auto',
         lineHeight: '1.0',

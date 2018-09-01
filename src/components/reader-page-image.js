@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 import Button from './button';
 import Icon from './icon';
 import './reader-page-image.css';
@@ -59,7 +59,7 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
 
     return (
       <span
-        className={classNames('PageImage', {
+        className={cx('PageImage', {
           'PageImage--hasSize': hasSize,
           'PageImage--hasError': hasError,
         })}>

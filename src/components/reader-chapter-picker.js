@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent, type ElementRef } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 import type { ChapterMetadata } from 'poketo';
 import type { BookmarkLastReadChapterId } from '../types';
 import utils from '../utils';
@@ -96,7 +96,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     return (
       <div>
         {groups.map((key, index) => (
-          <div key={key} className={classNames({ 'mt-4': index !== 0 })}>
+          <div key={key} className={cx({ 'mt-4': index !== 0 })}>
             {!isEmptyVolume(key) && (
               <div className="p-sticky t-0 z-3 fs-14 fs-16-m c-gray3 pt-2 pb-1 pb-2-m ph-3 bgc-white bb-1 bc-gray1">
                 Volume {key}

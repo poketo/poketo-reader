@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Fragment, PureComponent, type Node } from 'react';
+import { css } from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
 import Portal from '../portal';
 import getPosition from './get-position';
@@ -8,7 +9,24 @@ import Position from './position';
 
 import type { ReactObjRef } from './types';
 
-import './positioner.css';
+const className = css`
+  position: fixed;
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.175);
+
+  &[data-state='entering'],
+  &[data-state='entered'] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: scale(1) !important;
+  }
+
+  &[data-state='exiting'] {
+    opacity: 0 !important;
+    transform: scale(1) !important;
+  }
+`;
 
 type Props = {
   position: $Keys<typeof Position>,
@@ -156,7 +174,7 @@ export default class Positioner extends PureComponent<Props, State> {
             unmountOnExit>
             {state =>
               children({
-                className: 'Positioner',
+                className,
                 state,
                 style: {
                   transitionDuration: `${animationDuration}ms`,

@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import cx from 'classnames';
+import { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import CoverImage from './series-cover-image';
 import Icon from './icon';
@@ -46,7 +46,7 @@ const SeriesRow = ({
   const linkProps = isExternalLink ? { href: to, target: '_blank' } : { to };
 
   return (
-    <div className={cx('SeriesRow', 'x', className)}>
+    <div className={cx('x', className)}>
       <Component
         {...linkProps}
         className="c-pointer x-1 d-block xa-center hover ph-3 pv-3">

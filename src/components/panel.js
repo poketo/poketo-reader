@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, type Node, type ElementRef } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 import ScrollLock from 'react-scrolllock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Portal from './portal';
@@ -119,7 +119,7 @@ class Panel extends Component<PanelProps, PanelState> {
 }
 
 Panel.Title = ({ className, children, ...props }: PanelTitleProps) => (
-  <h3 className={classNames(className, 'fs-18 fw-semibold mb-2')} {...props}>
+  <h3 className={cx(className, 'fs-18 fw-semibold mb-2')} {...props}>
     {children}
   </h3>
 );

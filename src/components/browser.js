@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion';
 
 type Props = {
   children: Node,
@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Browser = ({ children, className, ...props }: Props) => (
-  <div className={classNames('Browser-container', className)} {...props}>
+  <div className={cx('Browser-container', className)} {...props}>
     <div className="Browser paper-shadow">
       <div className="Browser-button br-round" />
       <div className="Browser-button br-round" />
