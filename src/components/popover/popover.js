@@ -26,6 +26,7 @@ type State = {
   isShown: boolean,
 };
 
+const hasRef = (ref: ReactObjRef<*>) => Boolean(ref && ref.current);
 const isOrContains = (el: any, target: any): boolean =>
   el === target || el.contains(target);
 
@@ -71,8 +72,7 @@ export default class Popover extends Component<Props, State> {
 
       if (
         !this.props.isShown ||
-        !popoverRef ||
-        !popoverRef.current ||
+        !hasRef(popoverRef) ||
         document.activeElement == null
       ) {
         return;
@@ -102,11 +102,7 @@ export default class Popover extends Component<Props, State> {
     return requestAnimationFrame(() => {
       const { popoverRef, targetRef } = this;
 
-      if (
-        !popoverRef ||
-        !popoverRef.current ||
-        document.activeElement == null
-      ) {
+      if (!hasRef(popoverRef) || document.activeElement == null) {
         return;
       }
 
@@ -116,8 +112,7 @@ export default class Popover extends Component<Props, State> {
 
       // Bring back focus on the target.
       if (
-        targetRef &&
-        targetRef.current &&
+        hasRef(targetRef) &&
         (document.activeElement === document.body || isFocusInsideModal)
       ) {
         targetRef.current.focus();
@@ -128,12 +123,7 @@ export default class Popover extends Component<Props, State> {
   handleBodyClick = (e: MouseEvent) => {
     const { targetRef, popoverRef } = this;
 
-    if (
-      !targetRef ||
-      !targetRef.current ||
-      !popoverRef ||
-      !popoverRef.current
-    ) {
+    if (!hasRef(targetRef) || !hasRef(popoverRef)) {
       return;
     }
 
