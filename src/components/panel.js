@@ -21,28 +21,6 @@ type PanelState = {
   isMounted: boolean,
 };
 
-type PanelButtonProps = {
-  icon: Node,
-  label: Node,
-  onClick: (e: SyntheticEvent<HTMLButtonElement>) => void,
-};
-
-type PanelContentProps = {
-  children?: Node,
-  title?: string,
-};
-
-type PanelLinkProps = {
-  href: string,
-  icon: Node,
-  label: Node,
-};
-
-type PanelTitleProps = {
-  className?: string,
-  children?: Node,
-};
-
 const styles = {
   container: css`
     position: fixed;
@@ -218,25 +196,47 @@ class Panel extends Component<PanelProps, PanelState> {
   }
 }
 
+type PanelTitleProps = {
+  className?: string,
+  children?: Node,
+};
+
 Panel.Title = ({ className, children, ...props }: PanelTitleProps) => (
   <h3 className={cx(className, 'fs-18 fw-semibold mb-2')} {...props}>
     {children}
   </h3>
 );
 
-Panel.Content = (props: PanelContentProps) => (
+type PanelContentProps = {
+  children?: Node,
+  title?: string,
+};
+
+Panel.Content = ({ title, children }: PanelContentProps) => (
   <div className="pa-3 pa-4-m pb-4">
-    {props.title ? <Panel.Title>{props.title}</Panel.Title> : null}
-    {props.children}
+    {title ? <Panel.Title>{title}</Panel.Title> : null}
+    {children}
   </div>
 );
 
-Panel.Button = (props: PanelButtonProps) => (
-  <button className="x w-100p xa-stretch" onClick={props.onClick}>
-    <div className="pa-3 x xa-center">{props.icon}</div>
-    <div className="pa-3 pl-2 x xa-center">{props.label}</div>
+type PanelButtonProps = {
+  icon: Node,
+  label: Node,
+  onClick: (e: SyntheticEvent<HTMLButtonElement>) => void,
+};
+
+Panel.Button = ({ icon, label, ...props }: PanelButtonProps) => (
+  <button className="x w-100p xa-stretch" {...props}>
+    <div className="pa-3 x xa-center">{icon}</div>
+    <div className="pa-3 pl-2 x xa-center">{label}</div>
   </button>
 );
+
+type PanelLinkProps = {
+  href: string,
+  icon: Node,
+  label: Node,
+};
 
 Panel.Link = ({ icon, label, ...props }: PanelLinkProps) => (
   <a className="x w-100p xa-stretch" {...props}>
