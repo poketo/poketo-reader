@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import styled, { css } from 'react-emotion';
+import styled, { css, cx } from 'react-emotion';
 import { connect } from 'react-redux';
 import { normalize } from 'normalizr';
 import api from '../api';
@@ -21,12 +21,12 @@ const StyledButton = styled(Button)`
 
           .supports-hover &:hover,
           &:active {
-            background: #12a86b;
+            background: #ff6f6f;
           }
 
           .supports-hover &[disabled]:hover,
           &[disabled]:active {
-            background: #13cf83;
+            background: #ff6f6f;
           }
         `
       : css`
@@ -40,6 +40,20 @@ const StyledButton = styled(Button)`
             color: #888786;
           }
         `};
+`;
+
+const followClassName = css`
+  ${StyledButton}:hover & {
+    display: none;
+  }
+`;
+
+const unfollowClassName = css`
+  display: none;
+
+  ${StyledButton}:hover & {
+    display: inline;
+  }
 `;
 
 type Props = {
@@ -114,8 +128,14 @@ class FollowButton extends Component<Props, State> {
         onClick={this.handleClick}>
         {isFollowing ? (
           <Fragment>
-            <Icon name="check" iconSize={18} size={32} />
-            <span className="pr-2">Following</span>
+            <Icon
+              className={followClassName}
+              name="check"
+              iconSize={18}
+              size={32}
+            />
+            <span className={cx(followClassName, 'pr-2')}>Following</span>
+            <span className={unfollowClassName}>Unfollow</span>
           </Fragment>
         ) : (
           <Fragment>Follow</Fragment>

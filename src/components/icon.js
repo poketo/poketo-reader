@@ -50,7 +50,11 @@ export default class Icon extends PureComponent<Props> {
     return (
       <span
         className={cx('xj-center xa-center', className)}
-        style={{ display: 'inline-flex', width: size, height: size }}>
+        css={`
+          display: inline-flex;
+          width: ${size}px;
+          height: ${size}px;
+        `}>
         <Component width={iconSize} height={iconSize} />
       </span>
     );
