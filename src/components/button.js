@@ -21,13 +21,14 @@ const StyledButton = styled.button`
   justify-content: center;
   background-color: transparent;
   border-radius: 3px;
+  min-width: 80px;
   color: currentColor;
   font-weight: normal;
   font-family: Proxima Soft, -apple-system, BlinkMacSystemFont, helvetica neue,
     helvetica, roboto, segoe ui, arial, sans-serif;
   font-size: 16px;
   transition: background-color 200ms ease, color 200ms ease,
-    transform 200ms ease, box-shadow 200ms ease;
+    border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 
   .supports-hover &:hover {
     background-color: rgba(0, 0, 0, 0.07);
@@ -40,11 +41,6 @@ const StyledButton = styled.button`
   &[disabled] {
     opacity: 0.5;
     cursor: default;
-  }
-
-  .supports-hover &[disabled]:hover,
-  &[disabled]:active {
-    background-color: inherit;
   }
 
   ${props =>

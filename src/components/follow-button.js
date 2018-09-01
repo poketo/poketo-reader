@@ -1,16 +1,46 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
+import styled, { css } from 'react-emotion';
 import { connect } from 'react-redux';
 import { normalize } from 'normalizr';
 import api from '../api';
 import { type Series } from '../types';
-import schema from '../store/schema';
 import { type Dispatch } from '../store/types';
 import { getCollectionSlug } from '../store/reducers/auth';
-import { removeBookmark } from '../store/reducers/collections';
+import schema from '../store/schema';
 import Icon from '../components/icon';
 import Button from '../components/button';
+
+const StyledButton = styled(Button)`
+  ${props =>
+    props.isFollowing === true && props.loading !== true
+      ? css`
+          background: #13cf83;
+          color: white;
+
+          .supports-hover &:hover,
+          &:active {
+            background: #12a86b;
+          }
+
+          .supports-hover &[disabled]:hover,
+          &[disabled]:active {
+            background: #13cf83;
+          }
+        `
+      : css`
+          border: 1px #cfccc8 solid;
+          color: #292723;
+
+          .supports-hover &:hover,
+          &:active {
+            background-color: transparent;
+            border-color: #f2f2f2;
+            color: #888786;
+          }
+        `};
+`;
 
 type Props = {
   collectionSlug: string,
@@ -20,30 +50,43 @@ type Props = {
 };
 
 type State = {
-  isAdding: boolean,
+  isFetching: boolean,
 };
 
 class FollowButton extends Component<Props, State> {
   state = {
-    isAdding: false,
+    isFetching: false,
   };
 
   handleClick = () => {
     const { collectionSlug, dispatch, isFollowing, series } = this.props;
-    const { isAdding } = this.state;
+    const { isFetching } = this.state;
+
+    if (isFetching) {
+      return;
+    }
 
     if (isFollowing) {
       if (window.confirm(`Do you want to unfollow ${series.title}?`)) {
-        dispatch(removeBookmark(collectionSlug, series.id));
+        this.setState({ isFetching: true });
+        api
+          .fetchRemoveBookmarkFromCollection(collectionSlug, series.id)
+          .then(response => {
+            dispatch({
+              type: 'REMOVE_BOOKMARK',
+              payload: { collectionSlug, seriesId: series.id },
+            });
+            this.setState({ isFetching: false });
+          })
+          .catch(err => {
+            this.setState({ isFetching: false });
+            // TODO: Handle errors
+          });
       }
       return;
     }
 
-    if (isAdding) {
-      return;
-    }
-
-    this.setState({ isAdding: true });
+    this.setState({ isFetching: true });
     api
       .fetchAddBookmarkToCollection(collectionSlug, series.url)
       .then(response => {
@@ -52,7 +95,7 @@ class FollowButton extends Component<Props, State> {
           series: schema.series,
         });
         dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
-        this.setState({ isAdding: false });
+        this.setState({ isFetching: false });
       })
       .catch(err => {
         // TODO: handle errors
@@ -61,22 +104,23 @@ class FollowButton extends Component<Props, State> {
 
   render() {
     const { isFollowing } = this.props;
-    const { isAdding } = this.state;
+    const { isFetching } = this.state;
 
     return (
-      <Button disabled={isAdding} loading={isAdding} onClick={this.handleClick}>
+      <StyledButton
+        disabled={isFetching}
+        loading={isFetching}
+        isFollowing={isFollowing}
+        onClick={this.handleClick}>
         {isFollowing ? (
           <Fragment>
-            <Icon name="check" iconSize={16} size={32} />
-            Following
+            <Icon name="check" iconSize={18} size={32} />
+            <span className="pr-2">Following</span>
           </Fragment>
         ) : (
-          <Fragment>
-            <Icon name="bookmark" iconSize={16} size={32} />
-            Follow
-          </Fragment>
+          <Fragment>Follow</Fragment>
         )}
-      </Button>
+      </StyledButton>
     );
   }
 }
