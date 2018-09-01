@@ -6,11 +6,13 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import cx from 'classnames';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
+import Button from '../components/button';
 import CoverImage from '../components/series-cover-image';
 import CircleLoader from '../components/loader-circle';
 import ChapterRow from '../components/chapter-row';
 import FollowButton from '../components/follow-button';
 import Icon from '../components/icon';
+import Popover from '../components/popover';
 import type { Dispatch } from '../store/types';
 import type { Series, Chapter } from '../types';
 
@@ -59,27 +61,47 @@ const Label = ({ className, ...props }: { className?: string }) => (
   <div className={cx(className, 'fs-14 c-gray3 mb-1')} {...props} />
 );
 
+const iconProps = {
+  iconSize: 20,
+  size: 44,
+};
+
 const SeriesPage = ({ series, chapters, hasCollection }: Props) => (
   <div className="pb-5">
     <div className="mw-600 mh-auto">
-      <header className="x xa-center xj-spaceBetween ph-3 pv-3 mb-3 c-white p-relative z-3">
+      <header className="x xa-center xj-spaceBetween pv-3 mb-3 c-white p-relative z-3">
         <Link to="/" className="x hover">
-          <Icon name="arrow-left" iconSize={20} />
+          <Icon name="arrow-left" {...iconProps} />
         </Link>
-        <div className="x hover">
-          <Icon name="more-vertical" iconSize={20} />
-        </div>
+        <Popover
+          content={({ close }) => (
+            <div className="pa-2">
+              <Popover.Item
+                iconBefore={<Icon name="new-tab" {...iconProps} />}
+                label={`Open on ${series.site.name}`}
+                href={series.url}
+                onClick={close}
+                target="_blank"
+                rel="noreferrer noopener"
+              />
+            </div>
+          )}
+          position={Popover.Position.BOTTOM_RIGHT}>
+          <Button inline noPadding className="x hover">
+            <Icon name="more-vertical" {...iconProps} />
+          </Button>
+        </Popover>
       </header>
       <div
         className="bgc-black w-100p p-absolute t-0 l-0"
         style={{ height: 140 }}
       />
       <header className="x xa-end mb-4 ph-3">
-        <div className="x-1 mr-3" style={{ maxWidth: 100 }}>
+        <div className="x-1 mr-3 mw-100 mw-140-m">
           <CoverImage series={series} />
         </div>
         <div>
-          <h1 className="fs-24 fw-semibold">{series.title}</h1>
+          <h1 className="fs-24 fs-32-m fw-semibold">{series.title}</h1>
           <a
             href={series.url}
             className="c-gray3"

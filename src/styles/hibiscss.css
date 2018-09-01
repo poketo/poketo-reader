@@ -148,6 +148,14 @@
   width: 90%;
 }
 
+.mw-100 {
+  max-width: 100px;
+}
+
+.mw-140 {
+  max-width: 140px;
+}
+
 .w-100p {
   width: 100%;
 }
@@ -318,6 +326,14 @@
 
   .w-100p-m {
     width: 100%;
+  }
+
+  .mw-100-m {
+    max-width: 100px;
+  }
+
+  .mw-140-m {
+    max-width: 140px;
   }
 
   .bs-cover-m {
