@@ -80,15 +80,11 @@ export default class Popover extends Component<Props, State> {
 
       const popoverEl = popoverRef.current;
 
-      // $FlowFixMe: React 16.3 ref issue
       const isFocusOutsideModal = !popoverEl.contains(document.activeElement);
       if (isFocusOutsideModal && popoverEl) {
         // Element marked autofocus has higher priority than the other clowns
-        // $FlowFixMe: React 16.3 ref issue
         const autofocusElement = popoverEl.querySelector('[autofocus]');
-        // $FlowFixMe: React 16.3 ref issue
         const wrapperElement = popoverEl.querySelector('[tabindex]');
-        // $FlowFixMe: React 16.3 ref issue
         const buttonElement = popoverEl.querySelector('button');
 
         if (autofocusElement) {
@@ -114,7 +110,6 @@ export default class Popover extends Component<Props, State> {
         return;
       }
 
-      // $FlowFixMe: React 16.3 ref issue
       const isFocusInsideModal = popoverRef.current.contains(
         document.activeElement,
       );
@@ -125,7 +120,6 @@ export default class Popover extends Component<Props, State> {
         targetRef.current &&
         (document.activeElement === document.body || isFocusInsideModal)
       ) {
-        // $FlowFixMe: React 16.3 ref issue
         targetRef.current.focus();
       }
     });
@@ -212,7 +206,13 @@ export default class Popover extends Component<Props, State> {
     this.props.onCloseComplete();
   };
 
-  renderTarget = ({ ref, isShown }: { ref: ReactObjRef<*>, isShown: boolean }) => {
+  renderTarget = ({
+    ref,
+    isShown,
+  }: {
+    ref: ReactObjRef<*>,
+    isShown: boolean,
+  }) => {
     this.targetRef = ref;
 
     if (typeof this.props.children === 'function') {

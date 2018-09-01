@@ -23,6 +23,8 @@ const LoadableFeedbackForm = Loadable({
 type HeaderLinkProps = {
   to: string,
   exact?: boolean,
+  activeClassName?: string,
+  className?: string,
   children: React$Node,
 };
 
@@ -39,7 +41,7 @@ const HeaderLink = ({
     children={({ match }) => (
       <Link
         to={to}
-        className={classNames(className, { [activeClassName]: match })}
+        className={classNames(className, { [activeClassName || '']: match })}
         {...props}>
         {children}
       </Link>
