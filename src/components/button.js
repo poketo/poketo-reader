@@ -1,67 +1,111 @@
 // @flow
 
 import React, { type Node } from 'react';
-import { cx } from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import CircleLoader from './loader-circle';
-import './button.css';
 
 type Props = {
   children?: Node,
   className?: string,
-  primary: boolean,
-  inline: boolean,
+  primary?: boolean,
+  inline?: boolean,
   iconBefore?: Node,
-  loading: boolean,
-  white: boolean,
-  small: boolean,
-  noPadding: boolean,
+  loading?: boolean,
+  noPadding?: boolean,
 };
+
+const StyledButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: 3px;
+  color: currentColor;
+  font-weight: normal;
+  font-family: Proxima Soft, -apple-system, BlinkMacSystemFont, helvetica neue,
+    helvetica, roboto, segoe ui, arial, sans-serif;
+  font-size: 16px;
+  transition: background-color 200ms ease, color 200ms ease,
+    transform 200ms ease, box-shadow 200ms ease;
+
+  .supports-hover &:hover {
+    background-color: rgba(0, 0, 0, 0.07);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .supports-hover &[disabled]:hover,
+  &[disabled]:active {
+    background-color: inherit;
+  }
+
+  ${props =>
+    props.noPadding !== true &&
+    css`
+      padding: 0 16px;
+      line-height: 44px;
+      height: 44px;
+    `};
+
+  ${props =>
+    props.inline !== true &&
+    css`
+      width: 100%;
+    `};
+
+  ${props =>
+    props.primary === true &&
+    css`
+      color: white;
+      background-color: #ff6f6f; /* bgc-coral */
+      border: none;
+
+      &[disabled],
+      .supports-hover &[disabled]:hover {
+        cursor: default;
+        background-color: #a69b9b;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .supports-hover &:hover,
+      &:active {
+        background-color: #eb6e6e;
+      }
+    `};
+`;
 
 // $FlowFixMe: Flow doesn't yet support React 16.3 features
 const Button = React.forwardRef(
   (
     {
-      className,
       children,
       primary,
       inline,
       iconBefore,
       loading,
-      white,
-      small,
       noPadding,
       ...props
     }: Props,
     ref,
   ) => (
-    <button
-      className={cx(
-        'Button',
-        'br-3 ff-sans',
-        {
-          'Button--primary bgc-coral': primary,
-          'Button--loading': loading,
-          'Button--inline': inline,
-          'Button--small': small,
-          'Button--noPadding': noPadding,
-        },
-        className,
-      )}
-      ref={ref}
+    <StyledButton
+      noPadding={noPadding}
+      primary={primary}
+      inline={inline}
+      innerRef={ref}
       {...props}>
       {loading ? <CircleLoader small /> : iconBefore}
       {!loading && children}
-    </button>
+    </StyledButton>
   ),
 );
-
-Button.defaultProps = {
-  primary: false,
-  inline: false,
-  loading: false,
-  white: false,
-  small: false,
-  noPadding: false,
-};
 
 export default Button;

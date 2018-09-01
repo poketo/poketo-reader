@@ -1,10 +1,9 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { cx } from 'react-emotion';
+import { cx, css } from 'react-emotion';
 import Button from './button';
 import Icon from './icon';
-import './reader-page-image.css';
 
 if (typeof global.window !== 'undefined') {
   global.window.lazySizesConfig = window.lazySizesConfig || {};
@@ -17,6 +16,32 @@ if (typeof global.window !== 'undefined') {
   require('lazysizes/plugins/attrchange/ls.attrchange.js');
   require('lazysizes');
 }
+
+const styles = {
+  container: css`
+    display: inline-block;
+    position: relative;
+    min-height: 50px;
+  `,
+  image: css`
+    position: absolute;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    vertical-align: top;
+
+    &.js-lazysizes-loaded {
+      position: static;
+      opacity: 1;
+    }
+  `,
+  background: css`
+    vertical-align: top;
+
+    .js-lazysizes-loaded + & {
+      display: none;
+    }
+  `,
+};
 
 type Props = {
   page: {
@@ -55,14 +80,8 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
     const { hasError } = this.state;
     const { width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT } = page;
 
-    const hasSize = Boolean(page.width) && Boolean(page.height);
-
     return (
-      <span
-        className={cx('PageImage', {
-          'PageImage--hasSize': hasSize,
-          'PageImage--hasError': hasError,
-        })}>
+      <span className={styles.container}>
         {hasError ? (
           <div className="p-absolute p-center">
             <Button noPadding inline onClick={this.handleRetryClick}>
@@ -77,11 +96,11 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
             alt=""
             onError={this.handleError}
             onLoad={this.handleLoad}
-            className="PageImage-image js-lazysizes"
+            className={cx(styles.image, 'js-lazysizes')}
           />
         )}
         <canvas
-          className="PageImage-background bgc-gray3"
+          className={cx(styles.background, 'bgc-gray3')}
           width={width}
           height={height}
         />

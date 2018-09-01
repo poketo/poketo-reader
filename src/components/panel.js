@@ -1,12 +1,10 @@
 // @flow
 
 import React, { Component, type Node, type ElementRef } from 'react';
-import { cx } from 'react-emotion';
+import { css, cx } from 'react-emotion';
 import ScrollLock from 'react-scrolllock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Portal from './portal';
-
-import './panel.css';
 
 type PanelChildrenProps = {
   isShown: boolean,
@@ -43,6 +41,108 @@ type PanelLinkProps = {
 type PanelTitleProps = {
   className?: string,
   children?: Node,
+};
+
+const styles = {
+  container: css`
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+  `,
+  background: css`
+    position: absolute;
+    top: -90px; /* NOTE: -90px to cover space under the Android Chrome header, which tucks away even with a scroll lock. */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    will-change: opacity;
+    background-color: rgba(0, 0, 0, 0.9);
+
+    .panel-enter > & {
+      opacity: 0.01;
+    }
+
+    .panel-enter.panel-enter-active > & {
+      opacity: 1;
+      transition: opacity 150ms ease;
+    }
+
+    .panel-exit > & {
+      opacity: 1;
+    }
+
+    .panel-exit.panel-exit-active > & {
+      opacity: 0.01;
+      transition: opacity 400ms ease;
+    }
+  `,
+  menu: css`
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    overflow: hidden;
+    background-color: #fff;
+    will-change: transform;
+    transition: transform 400ms cubic-bezier(0.19, 1, 0.22, 1),
+      opacity 200ms ease;
+    z-index: 200;
+
+    @media only screen and (min-width: 768px) {
+      position: fixed;
+      width: 90%;
+      max-width: 500px;
+      top: 50%;
+      left: 50%;
+      border-radius: 4px;
+      bottom: auto;
+      right: auto;
+      transform: translate(-50%, -50%);
+
+      .panel-enter > & {
+        opacity: 0.01;
+        transform: translate(-50%, -40%);
+      }
+
+      .panel-enter.panel-enter-active > & {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      .panel-exit > & {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      .panel-exit.panel-exit-active > & {
+        opacity: 0.01;
+        transform: translate(-50%, -40%);
+      }
+    }
+
+    @media only screen and (max-width: 768px) {
+      .panel-enter > & {
+        transform: translateY(100%);
+      }
+
+      .panel-enter.panel-enter-active > & {
+        transform: translateY(0%);
+      }
+
+      .panel-exit > & {
+        transform: translateY(0%);
+      }
+
+      .panel-exit.panel-exit-active > & {
+        transform: translateY(100%);
+      }
+    }
+  `,
 };
 
 class Panel extends Component<PanelProps, PanelState> {
@@ -93,15 +193,15 @@ class Panel extends Component<PanelProps, PanelState> {
         <TransitionGroup>
           {isShown && (
             <CSSTransition unmountOnExit timeout={400} classNames="panel">
-              <div className="Panel">
+              <div className={styles.container}>
                 {shouldLockScroll && (
                   <ScrollLock touchScrollTarget={scrollEl} />
                 )}
                 <div
-                  className="Panel-background"
+                  className={styles.background}
                   onClick={this.handleOverlayClick}
                 />
-                <div className="Panel-menu">
+                <div className={styles.menu}>
                   {children({ isShown, scrollRef, onRequestClose })}
                   <button
                     className="d-none x-m w-100p bt-1 bc-gray1 xa-stretch"

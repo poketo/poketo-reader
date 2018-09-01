@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { cx } from 'react-emotion';
+import styled, { cx } from 'react-emotion';
 import { Link, Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
@@ -12,8 +12,6 @@ import Panel from './panel';
 import NewBookmarkPanel from './collection-new-bookmark-panel';
 import Popover from './popover/index';
 import cache from '../store/cache';
-
-import './collection-header.css';
 
 const LoadableFeedbackForm = Loadable({
   loader: () => import('../components/feedback-form'),
@@ -48,6 +46,19 @@ const HeaderLink = ({
     )}
   />
 );
+
+const StyledHeader = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+
+  @media only screen and (min-width: 480px) {
+    position: absolute;
+    box-shadow: none;
+  }
+`;
 
 type Props = {
   collectionSlug: string,
@@ -152,7 +163,7 @@ export default class CollectionHeader extends Component<Props, State> {
     const { collectionSlug: slug } = this.props;
 
     return (
-      <header className="CollectionHeader z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
+      <StyledHeader className="z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
           <Icon name="poketo" className="c-coral" />
         </div>
@@ -207,7 +218,7 @@ export default class CollectionHeader extends Component<Props, State> {
             </Button>
           </div>
         </Popover>
-      </header>
+      </StyledHeader>
     );
   }
 }
