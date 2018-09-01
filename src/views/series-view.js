@@ -14,11 +14,6 @@ import Icon from '../components/icon';
 import type { Dispatch } from '../store/types';
 import type { Series, Chapter } from '../types';
 
-type Props = {
-  series: Series,
-  chapters: Chapter[],
-};
-
 type ContainerProps = {
   dispatch: Dispatch,
   isFetching: boolean,
@@ -54,23 +49,32 @@ class SeriesPageContainer extends Component<ContainerProps> {
   }
 }
 
+type Props = {
+  series: Series,
+  chapters: Chapter[],
+  hasCollection: boolean,
+};
+
 const Label = ({ className, ...props }: { className?: string }) => (
   <div className={cx(className, 'fs-14 c-gray3 mb-1')} {...props} />
 );
 
-const SeriesPage = ({ series, chapters }: Props) => (
-  <div className="pt-4 pb-6">
-    <div className="mw-600 mh-auto ph-3">
-      <header className="x xj-spaceBetween mb-2">
-        <Link to="/">
-          <Icon name="arrow-left" iconSize={20} size={20} />
+const SeriesPage = ({ series, chapters, hasCollection }: Props) => (
+  <div className="pb-5">
+    <div className="mw-600 mh-auto">
+      <header className="x xa-center xj-spaceBetween ph-3 pv-3 mb-3 c-white p-relative z-3">
+        <Link to="/" className="x hover">
+          <Icon name="arrow-left" iconSize={20} />
         </Link>
-
-        <div>
-          <Icon name="more-vertical" iconSize={20} size={20} />
+        <div className="x hover">
+          <Icon name="more-vertical" iconSize={20} />
         </div>
       </header>
-      <header className="x xa-end mb-4">
+      <div
+        className="bgc-black w-100p p-absolute t-0 l-0"
+        style={{ height: 140 }}
+      />
+      <header className="x xa-end mb-4 ph-3">
         <div className="x-1 mr-3" style={{ maxWidth: 100 }}>
           <CoverImage series={series} />
         </div>
@@ -86,10 +90,12 @@ const SeriesPage = ({ series, chapters }: Props) => (
           </a>
         </div>
       </header>
-      <div className="mb-4">
-        <FollowButton seriesId={series.id} />
-      </div>
-      <div className="mb-4">
+      <div className="ph-3 mb-4">
+        {hasCollection && (
+          <div className="mb-4">
+            <FollowButton seriesId={series.id} />
+          </div>
+        )}
         <div className="mb-3">
           <Label>Author</Label>
           <div>{series.author}</div>
@@ -102,8 +108,8 @@ const SeriesPage = ({ series, chapters }: Props) => (
       <div>
         {series.supportsReading ? (
           chapters.map(chapter => (
-            <div className="bb-1 bc-gray1">
-              <ChapterRow key={chapter.id} chapter={chapter} />
+            <div className="bb-1 bc-gray1 ph-3" key={chapter.id}>
+              <ChapterRow chapter={chapter} />
             </div>
           ))
         ) : (
@@ -129,7 +135,9 @@ const mapStateToProps = (state, ownProps) => {
     ? series.chapters.map(chapterId => chaptersById[chapterId])
     : [];
 
-  return { series, chapters };
+  const hasCollection = Boolean(state.auth.collectionSlug);
+
+  return { series, chapters, hasCollection };
 };
 
 const ConnectedSeriesPage = connect(mapStateToProps)(SeriesPage);

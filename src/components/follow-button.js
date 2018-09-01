@@ -32,7 +32,9 @@ class FollowButton extends Component<Props, State> {
     const { isAdding } = this.state;
 
     if (isFollowing) {
-      dispatch(removeBookmark(collectionSlug, series.id));
+      if (window.confirm(`Do you want to unfollow ${series.title}?`)) {
+        dispatch(removeBookmark(collectionSlug, series.id));
+      }
       return;
     }
 

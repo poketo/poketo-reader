@@ -53,7 +53,7 @@ class CollectionPage extends Component<Props, State> {
         <Route
           exact
           path="/c/:slug/"
-          render={() => <Redirect to={`/c/${collection.slug}/library`} />}
+          render={() => <Redirect to={`/c/${collection.slug}/releases`} />}
         />
         <Route
           path="/c/:slug/releases"
