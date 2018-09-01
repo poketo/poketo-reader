@@ -35,9 +35,9 @@ class Feed extends Component<Props, State> {
     const { currentSeriesActionPanelId } = this.state;
 
     return (
-      <div className="pt-3 pt-4-m mw-600 mh-auto">
+      <div className="pt-3 pt-4-m pb-6 mw-600 mh-auto">
         <header className="ph-3 mb-3">
-          <h1 className="fs-24 fw-semibold">Library</h1>
+          <h1 className="fs-18 fw-semibold">Reading</h1>
         </header>
         <Panel
           isShown={Boolean(currentSeriesActionPanelId)}

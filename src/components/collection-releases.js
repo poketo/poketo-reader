@@ -22,7 +22,7 @@ class Releases extends Component<Props> {
         {feedItems.length > 0 ? (
           <Fragment>
             <header className="mb-3">
-              <h1 className="fs-24 fw-semibold">Releases</h1>
+              <h1 className="fs-18 fw-semibold">New Releases</h1>
             </header>
             {feedItems.map(item => (
               <div key={item.series.id} className="mb-4">
@@ -48,8 +48,12 @@ class Releases extends Component<Props> {
                     />
                   ))}
                 {item.chapters.length > 3 && (
-                  <Link to={`/series/${item.series.id}`}>
-                    And {item.chapters.length - 3} more...
+                  <Link
+                    to={`/series/${item.series.id}`}
+                    className="d-block pv-3 ta-center">
+                    <span className="fs-14 o-50p">
+                      And {item.chapters.length - 3} more...
+                    </span>
                   </Link>
                 )}
               </div>

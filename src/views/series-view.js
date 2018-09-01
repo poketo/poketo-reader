@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { cx } from 'react-emotion';
+import styled, { cx } from 'react-emotion';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
@@ -10,6 +10,7 @@ import CoverImage from '../components/series-cover-image';
 import CircleLoader from '../components/loader-circle';
 import ChapterRow from '../components/chapter-row';
 import FollowButton from '../components/follow-button';
+import ScrollReset from '../components/scroll-reset';
 import Icon from '../components/icon';
 import Popover from '../components/popover';
 import type { Dispatch } from '../store/types';
@@ -60,6 +61,11 @@ const Label = ({ className, ...props }: { className?: string }) => (
   <div className={cx(className, 'fs-14 c-gray3 mb-1')} {...props} />
 );
 
+const CoverImageContainer = styled.div`
+  width: 50%;
+  max-width: 140px;
+`;
+
 const iconProps = {
   iconSize: 20,
   size: 44,
@@ -67,8 +73,9 @@ const iconProps = {
 
 const SeriesPage = ({ series, chapters, hasCollection }: Props) => (
   <div className="pb-5">
-    <div className="mw-600 mh-auto">
-      <header className="x xa-center xj-spaceBetween pv-3 mb-3 c-white p-relative z-3">
+    <ScrollReset />
+    <div className="mw-600 w-100p mh-auto p-relative">
+      <header className="x xa-center xj-spaceBetween pv-3 mb-3 c-white p-absolute t-0 w-100p z-3">
         <Link to="/" className="x hover">
           <Icon name="arrow-left" {...iconProps} />
         </Link>
@@ -91,16 +98,15 @@ const SeriesPage = ({ series, chapters, hasCollection }: Props) => (
           </Button>
         </Popover>
       </header>
-      <div
-        className="bgc-black w-100p p-absolute t-0 l-0"
-        style={{ height: 140 }}
-      />
-      <header className="x xa-end mb-4 ph-3">
-        <div className="x-1 mr-3 mw-100 mw-140-m">
+    </div>
+    <div className="bgc-black w-100p" style={{ height: 140 }} />
+    <div className="mw-600 mh-auto p-relative">
+      <header className="x xa-end mb-4 ph-3" css="margin-top: -60px;">
+        <CoverImageContainer className="mr-3">
           <CoverImage series={series} />
-        </div>
+        </CoverImageContainer>
         <div>
-          <h1 className="fs-24 fs-32-m fw-semibold">{series.title}</h1>
+          <h1 className="fs-24 fs-32-m fw-semibold lh-1d25">{series.title}</h1>
           <a
             href={series.url}
             className="c-gray3"

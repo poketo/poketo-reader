@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { Route, Redirect, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
 import Feed from '../components/feed';
@@ -14,7 +14,7 @@ import type { Collection } from '../types';
 import type { Dispatch } from '../store/types';
 
 type Props = {
-  dispatch: Dispatch,
+  loadData: (collectionSlug: string) => void,
   collection: Collection,
   isFetching: boolean,
 };
@@ -29,14 +29,15 @@ class CollectionPage extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { dispatch, collection } = this.props;
-    dispatch(fetchSeriesForCollection(collection.slug));
-    dispatch(setDefaultCollection(collection.slug));
+    const { loadData, collection } = this.props;
+    loadData(collection.slug);
   }
 
-  componentDidUpdate(nextProps: Props) {
-    if (nextProps.collection.slug !== this.props.collection.slug) {
-      nextProps.dispatch(fetchSeriesForCollection(nextProps.collection.slug));
+  componentDidUpdate(prevProps: Props) {
+    const { loadData, collection } = this.props;
+
+    if (prevProps.collection.slug !== collection.slug) {
+      loadData(collection.slug);
     }
   }
 
@@ -45,28 +46,13 @@ class CollectionPage extends Component<Props, State> {
     const { bookmarks } = collection;
 
     return (
-      <div className="pt-5 pb-6 h-100p">
+      <div className="pt-4 pb-6 h-100p">
         <CollectionHeader collectionSlug={collection.slug} />
         <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3 pe-none">
           <Toast isShown={isFetching}>Syncing...</Toast>
         </div>
-        <Route
-          exact
-          path="/c/:slug/"
-          render={() => <Redirect to={`/c/${collection.slug}/releases`} />}
-        />
-        <Route
-          path="/c/:slug/releases"
-          render={() => (
-            <Releases collectionSlug={collection.slug} bookmarks={bookmarks} />
-          )}
-        />
-        <Route
-          path="/c/:slug/library"
-          render={() => (
-            <Feed collectionSlug={collection.slug} bookmarks={bookmarks} />
-          )}
-        />
+        <Releases collectionSlug={collection.slug} bookmarks={bookmarks} />
+        <Feed collectionSlug={collection.slug} bookmarks={bookmarks} />
       </div>
     );
   }
@@ -83,4 +69,18 @@ const mapStateToProps = (state, ownProps) => {
   return { isFetching };
 };
 
-export default withRouter(connect(mapStateToProps)(CollectionPage));
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    loadData(collectionSlug) {
+      dispatch(setDefaultCollection(collectionSlug));
+      dispatch(fetchSeriesForCollection(collectionSlug));
+    },
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(CollectionPage),
+);

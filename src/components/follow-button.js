@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { normalize } from 'normalizr';
 import api from '../api';
@@ -9,6 +9,7 @@ import schema from '../store/schema';
 import { type Dispatch } from '../store/types';
 import { getCollectionSlug } from '../store/reducers/auth';
 import { removeBookmark } from '../store/reducers/collections';
+import Icon from '../components/icon';
 import Button from '../components/button';
 
 type Props = {
@@ -64,7 +65,17 @@ class FollowButton extends Component<Props, State> {
 
     return (
       <Button disabled={isAdding} loading={isAdding} onClick={this.handleClick}>
-        {isFollowing ? 'Following' : 'Follow'}
+        {isFollowing ? (
+          <Fragment>
+            <Icon name="check" iconSize={16} size={32} />
+            Following
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Icon name="bookmark" iconSize={16} size={32} />
+            Follow
+          </Fragment>
+        )}
       </Button>
     );
   }

@@ -1,8 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import styled, { cx } from 'react-emotion';
-import { Link, Route } from 'react-router-dom';
+import styled from 'react-emotion';
 import Loadable from 'react-loadable';
 
 import Button from './button';
@@ -17,35 +16,6 @@ const LoadableFeedbackForm = Loadable({
   loader: () => import('../components/feedback-form'),
   loading: ComponentLoader,
 });
-
-type HeaderLinkProps = {
-  to: string,
-  exact?: boolean,
-  activeClassName?: string,
-  className?: string,
-  children: React$Node,
-};
-
-const HeaderLink = ({
-  to,
-  exact,
-  children,
-  activeClassName,
-  className,
-  ...props
-}: HeaderLinkProps) => (
-  <Route
-    path={to}
-    children={({ match }) => (
-      <Link
-        to={to}
-        className={cx(className, { [activeClassName || '']: match })}
-        {...props}>
-        {children}
-      </Link>
-    )}
-  />
-);
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -160,26 +130,10 @@ export default class CollectionHeader extends Component<Props, State> {
   }
 
   render() {
-    const { collectionSlug: slug } = this.props;
-
     return (
       <StyledHeader className="z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
           <Icon name="poketo" className="c-coral" />
-        </div>
-        <div>
-          <HeaderLink
-            className="pa-2 bgc-white br-3"
-            activeClassName="bgc-gray1"
-            to={`/c/${slug}/releases`}>
-            Releases
-          </HeaderLink>
-          <HeaderLink
-            className="pa-2 bgc-white br-3 ml-3"
-            activeClassName="bgc-gray1"
-            to={`/c/${slug}/library`}>
-            Library
-          </HeaderLink>
         </div>
         <Panel
           isShown={this.state.isFeedbackPanelShown}
