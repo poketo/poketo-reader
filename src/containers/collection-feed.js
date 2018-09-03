@@ -83,18 +83,29 @@ class Feed extends Component<Props, State> {
   };
 
   handleSeriesOptionsMarkAsReadClick = () => {
-    const { collection, dispatch } = this.props;
+    const { collection, dispatch, seriesById } = this.props;
     const { optionsPanelSeriesId } = this.state;
 
     if (!optionsPanelSeriesId) {
       return;
     }
 
+    const series: ?Series = seriesById[optionsPanelSeriesId];
+
+    if (!series) {
+      return;
+    }
+
+    const lastReadChapterId =
+      series.supportsReading !== true || !series.chapters
+        ? null
+        : utils.sortChapters(series.chapters)[0].id;
+
     dispatch(
       markSeriesAsRead(
         collection.slug,
         optionsPanelSeriesId,
-        utils.getTimestamp(),
+        lastReadChapterId,
       ),
     );
 
@@ -131,15 +142,7 @@ class Feed extends Component<Props, State> {
 
     const bookmark = collection.bookmarks[series.id];
     const allChapters = series.chapters.map(id => chaptersById[id]);
-    const unreadChapters = utils.getUnreadChapters(
-      allChapters,
-      bookmark.lastReadAt,
-    );
-
-    const toChapter =
-      unreadChapters.length > 0
-        ? utils.leastRecentChapter(unreadChapters)
-        : utils.mostRecentChapter(allChapters);
+    const toChapter = utils.nextChapterToRead(allChapters, bookmark);
 
     history.push(utils.getReaderUrl(collection.slug, toChapter.id));
   };

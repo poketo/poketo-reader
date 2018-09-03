@@ -9,6 +9,7 @@ export type ChapterMetadata = {
   id: string,
   seriesId: string,
   createdAt: number,
+  order: number,
 };
 
 export type Chapter = {

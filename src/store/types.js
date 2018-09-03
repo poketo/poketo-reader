@@ -53,7 +53,7 @@ export type RemoveBookmarkAction = ActionType<
 >;
 export type MarkBookmarkAsReadAction = ActionType<
   'MARK_BOOKMARK_AS_READ',
-  { collectionSlug: string, seriesId: string, lastReadAt: number },
+  { collectionSlug: string, seriesId: string, lastReadChapterId: string },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;
 export type SetSeriesEntityStatusAction = ActionType<

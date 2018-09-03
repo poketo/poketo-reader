@@ -107,20 +107,44 @@ const utils = {
     return chapter.title;
   },
 
-  getUnreadChapters: (
-    chapters: Array<Chapter>,
-    seriesLastReadAt: number,
-  ): Array<Chapter> =>
-    chapters.filter(chapter => chapter.createdAt > seriesLastReadAt),
-  getReadChapters: (
-    chapters: Array<Chapter>,
-    seriesLastReadAt: number,
-  ): Array<Chapter> =>
-    chapters.filter(chapter => chapter.createdAt <= seriesLastReadAt),
-  mostRecentChapter: (chapters: Array<Chapter>): Chapter =>
-    chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
-  leastRecentChapter: (chapters: Array<Chapter>): Chapter =>
-    chapters.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
+  /**
+   * Sorts chapters by publication order, most recent first.
+   */
+  sortChapters: (chapters: Chapter[]): Chapter[] => {
+    return chapters.slice().sort((a, b) => b.order - a.order);
+  },
+
+  getUnreadChapters: (chapters: Chapter[], lastReadId: string): Chapter[] => {
+    const orderedChapters = utils.sortChapters(chapters);
+    const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
+    const unreadChapters = orderedChapters.slice(0, lastReadIndex - 1);
+
+    return unreadChapters;
+  },
+
+  getReadChapters: (chapters: Chapter[], lastReadId: string): Chapter[] => {
+    const orderedChapters = utils.sortChapters(chapters);
+    const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
+    const readChapters = orderedChapters.slice(lastReadIndex);
+
+    return readChapters;
+  },
+
+  nextChapterToRead: (chapters: Chapter[], bookmark: Bookmark): Chapter => {
+    const sortedChapters = utils.sortChapters(chapters);
+    const unreadChapters = utils.getUnreadChapters(
+      sortedChapters,
+      bookmark.lastReadChapterId,
+    );
+
+    // If there are later chapters, get the next one.
+    if (unreadChapters.length > 0) {
+      return unreadChapters.pop();
+    }
+
+    // Otherwise, return the latest chapter;
+    return sortedChapters.shift();
+  },
 
   isStandalone: () => {
     const isStandaloneSafari = window.navigator.standalone === true;
