@@ -14,7 +14,7 @@ type Props = {
   chapter: Chapter,
   collection: ?Collection,
   onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
-  lastReadAt?: number,
+  lastReadChapterId: ?string,
   seriesChapters: Chapter[],
 };
 
@@ -75,7 +75,7 @@ export default class ReaderNavigation extends Component<Props, State> {
   }
 
   renderPickerPanel() {
-    const { chapter, lastReadAt, seriesChapters } = this.props;
+    const { chapter, lastReadChapterId, seriesChapters } = this.props;
     const { showingPanel } = this.state;
 
     if (showingPanel === false) {
@@ -99,7 +99,7 @@ export default class ReaderNavigation extends Component<Props, State> {
                 activeChapterRef={this.activeChapterRef}
                 activeChapterId={chapter.id}
                 seriesChapters={seriesChapters}
-                lastReadAt={lastReadAt}
+                lastReadChapterId={lastReadChapterId}
                 onChapterClick={this.handleChapterClick}
               />
             </div>

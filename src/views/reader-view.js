@@ -51,7 +51,7 @@ class ReaderView extends Component<Props> {
 
     const chapterId = decodeURIComponent(rawChapterId);
     const seriesId = utils.toSeriesId(chapterId);
-    const series = state.series[seriesId];
+    const series: ?Series = state.series[seriesId];
 
     return {
       chapter: state.chapters[chapterId],
@@ -99,23 +99,33 @@ class ReaderView extends Component<Props> {
   };
 
   markSeriesAsRead = () => {
-    const { collection, series, chapter, dispatch } = this.props;
+    const {
+      collection,
+      series,
+      seriesChapters,
+      chapter,
+      dispatch,
+    } = this.props;
 
     if (!collection || !series || !chapter) {
       return;
     }
 
     const bookmark = collection.bookmarks[series.id];
-    const currentChapterReadAt = chapter.createdAt;
-    const latestReadAt = bookmark.lastReadAt;
 
-    if (latestReadAt > currentChapterReadAt) {
+    if (!bookmark) {
       return;
     }
 
-    dispatch(
-      markSeriesAsRead(collection.slug, series.id, currentChapterReadAt),
+    const lastReadChapter = seriesChapters.find(
+      c => c.id === bookmark.lastReadChapterId,
     );
+
+    if (lastReadChapter && chapter.order <= lastReadChapter.order) {
+      return;
+    }
+
+    dispatch(markSeriesAsRead(collection.slug, series.id, chapter.id));
   };
 
   handleChapterChange = (nextChapter: Chapter) => {
@@ -170,7 +180,7 @@ class ReaderView extends Component<Props> {
               <ReaderNavigation
                 collection={collection}
                 chapter={chapter}
-                lastReadAt={unreadMap[series.id]}
+                lastReadChapterId={unreadMap[series.id]}
                 onChapterSelectChange={this.handleChapterChange}
                 seriesChapters={seriesChapters}
               />
@@ -224,7 +234,7 @@ class ReaderView extends Component<Props> {
                     <ReaderNavigation
                       chapter={chapter}
                       collection={collection}
-                      lastReadAt={unreadMap[series.id]}
+                      lastReadChapterId={unreadMap[series.id]}
                       onChapterSelectChange={this.handleChapterChange}
                       seriesChapters={seriesChapters}
                     />

@@ -32,11 +32,12 @@ export type Series = {
 
 export type Bookmark = {
   id: string,
-  lastReadAt: number,
+  lastReadChapterId: string,
+  url: string,
   linkTo: ?string,
 };
 
 export type Collection = {
   slug: string,
-  bookmarks: Bookmark[],
+  bookmarks: { [id: string]: Bookmark },
 };

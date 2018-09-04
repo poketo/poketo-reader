@@ -11,7 +11,7 @@ type Props = {
   activeChapterId?: string,
   activeChapterRef?: ElementRef<*>,
   seriesChapters: Chapter[],
-  lastReadAt?: number,
+  lastReadChapterId: ?string,
   onChapterClick: (chapter: Chapter) => void,
 };
 
@@ -56,14 +56,14 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     this.props.onChapterClick(chapter);
   };
 
-  renderChapters(chapters: Chapter[]) {
-    const { activeChapterId, activeChapterRef, lastReadAt } = this.props;
+  renderChapters(chapters: Chapter[], lastReadOrder: number) {
+    const { activeChapterId, activeChapterRef } = this.props;
 
     return (
       <div>
         {chapters.map(c => {
           const isActive = c.id === activeChapterId;
-          const isUnread = lastReadAt ? lastReadAt < c.createdAt : false;
+          const isUnread = c.order > lastReadOrder;
 
           return (
             <ChapterRow
@@ -81,10 +81,13 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   }
 
   render() {
-    const { seriesChapters } = this.props;
+    const { seriesChapters, lastReadChapterId } = this.props;
+
+    const lastRead = seriesChapters.find(c => c.id === lastReadChapterId);
+    const lastReadOrder = lastRead ? lastRead.order : 0;
 
     if (!shouldGroupByVolume(seriesChapters)) {
-      return this.renderChapters(seriesChapters);
+      return this.renderChapters(seriesChapters, lastReadOrder);
     }
 
     const groupedChapters = utils.groupBy(seriesChapters, 'volumeNumber');
@@ -99,7 +102,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
                 Volume {key}
               </div>
             )}
-            {this.renderChapters(groupedChapters[key])}
+            {this.renderChapters(groupedChapters[key], lastReadOrder)}
           </div>
         ))}
       </div>

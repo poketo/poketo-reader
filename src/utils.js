@@ -5,7 +5,7 @@ import set from 'clean-set';
 import { format, isToday, isYesterday } from 'date-fns';
 import groupBy from 'lodash.groupby';
 
-import type { Bookmark, Collection, Chapter } from './types';
+import type { Bookmark, Collection, Chapter, Series } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
@@ -71,11 +71,11 @@ const utils = {
   /**
    * Collection Helpers
    */
-  getUnreadMap: (collection: Collection): { [string]: number } => {
+  getUnreadMap: (collection: Collection): { [string]: ?string } => {
     const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
 
     return bookmarks.reduce((acc, bookmark) => {
-      acc[bookmark.id] = bookmark.lastReadAt;
+      acc[bookmark.id] = bookmark.lastReadChapterId;
       return acc;
     }, {});
   },
@@ -117,7 +117,7 @@ const utils = {
   getUnreadChapters: (chapters: Chapter[], lastReadId: string): Chapter[] => {
     const orderedChapters = utils.sortChapters(chapters);
     const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
-    const unreadChapters = orderedChapters.slice(0, lastReadIndex - 1);
+    const unreadChapters = orderedChapters.slice(0, lastReadIndex);
 
     return unreadChapters;
   },
@@ -125,17 +125,14 @@ const utils = {
   getReadChapters: (chapters: Chapter[], lastReadId: string): Chapter[] => {
     const orderedChapters = utils.sortChapters(chapters);
     const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
-    const readChapters = orderedChapters.slice(lastReadIndex);
+    const readChapters = orderedChapters.slice(lastReadIndex + 1);
 
     return readChapters;
   },
 
-  nextChapterToRead: (chapters: Chapter[], bookmark: Bookmark): Chapter => {
+  nextChapterToRead: (chapters: Chapter[], lastReadId: string): Chapter => {
     const sortedChapters = utils.sortChapters(chapters);
-    const unreadChapters = utils.getUnreadChapters(
-      sortedChapters,
-      bookmark.lastReadChapterId,
-    );
+    const unreadChapters = utils.getUnreadChapters(sortedChapters, lastReadId);
 
     // If there are later chapters, get the next one.
     if (unreadChapters.length > 0) {

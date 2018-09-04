@@ -83,7 +83,7 @@ class Feed extends Component<Props, State> {
   };
 
   handleSeriesOptionsMarkAsReadClick = () => {
-    const { collection, dispatch, seriesById } = this.props;
+    const { collection, dispatch, seriesById, chaptersById } = this.props;
     const { optionsPanelSeriesId } = this.state;
 
     if (!optionsPanelSeriesId) {
@@ -96,10 +96,13 @@ class Feed extends Component<Props, State> {
       return;
     }
 
-    const lastReadChapterId =
-      series.supportsReading !== true || !series.chapters
-        ? null
-        : utils.sortChapters(series.chapters)[0].id;
+    let lastReadChapterId = null;
+
+    if (series.chapters && series.chapters.length > 0) {
+      const allChapters = series.chapters.map(id => chaptersById[id]);
+      const sortedChapters = utils.sortChapters(allChapters);
+      lastReadChapterId = sortedChapters[0].id;
+    }
 
     dispatch(
       markSeriesAsRead(
@@ -142,9 +145,31 @@ class Feed extends Component<Props, State> {
 
     const bookmark = collection.bookmarks[series.id];
     const allChapters = series.chapters.map(id => chaptersById[id]);
-    const toChapter = utils.nextChapterToRead(allChapters, bookmark);
+    const toChapter = utils.nextChapterToRead(
+      allChapters,
+      bookmark.lastReadChapterId,
+    );
 
     history.push(utils.getReaderUrl(collection.slug, toChapter.id));
+  };
+
+  isSeriesUnread = (seriesId, lastReadChapterId): boolean => {
+    const { chaptersById, seriesById } = this.props;
+
+    const series = seriesById[seriesId];
+
+    if (!series) {
+      return false;
+    }
+
+    if (!series.chapters) {
+      return false;
+    }
+
+    const chapters = series.chapters.map(chapterId => chaptersById[chapterId]);
+    const unreadChapters = utils.getUnreadChapters(chapters, lastReadChapterId);
+
+    return unreadChapters.length > 0;
   };
 
   renderSeriesPanel() {
@@ -155,23 +180,21 @@ class Feed extends Component<Props, State> {
       return null;
     }
 
-    const series: Series = seriesById[optionsPanelSeriesId];
-    const bookmark: Bookmark = collection.bookmarks[optionsPanelSeriesId];
+    const series: ?Series = seriesById[optionsPanelSeriesId];
+    const bookmark: ?Bookmark = collection.bookmarks[optionsPanelSeriesId];
 
     if (!series || !bookmark) {
       return null;
     }
 
-    const showMarkAsRead = series.updatedAt > bookmark.lastReadAt;
+    const unreadChapters = series.chapters
+      ? utils.getUnreadChapters(
+          series.chapters.map(id => chaptersById[id]),
+          bookmark.lastReadChapterId,
+        )
+      : [];
 
-    let unreadChapters = [];
-
-    if (showMarkAsRead && series && series.chapters) {
-      unreadChapters = utils.getUnreadChapters(
-        series.chapters.map(id => chaptersById[id]),
-        bookmark.lastReadAt,
-      );
-    }
+    const showMarkAsRead = unreadChapters.length > 0;
 
     return (
       <Panel.Transition>
@@ -240,7 +263,7 @@ class Feed extends Component<Props, State> {
     const feedItems = seriesIds
       .map(seriesId => ({
         series: seriesById[seriesId],
-        lastReadAt: bookmarks[seriesId].lastReadAt,
+        lastReadChapterId: bookmarks[seriesId].lastReadChapterId,
         linkTo: bookmarks[seriesId].linkTo,
       }))
       .filter(item => item.series)
@@ -261,7 +284,10 @@ class Feed extends Component<Props, State> {
             <SeriesRow
               key={item.series.id}
               series={item.series}
-              isUnread={item.series.updatedAt > item.lastReadAt}
+              isUnread={this.isSeriesUnread(
+                item.series.id,
+                item.lastReadChapterId,
+              )}
               linkTo={item.linkTo}
               onOptionsClick={this.handleSeriesOptionsClick}
               onSeriesClick={this.handleSeriesClick}
