@@ -5,7 +5,7 @@ import set from 'clean-set';
 import { format, isToday, isYesterday } from 'date-fns';
 import groupBy from 'lodash.groupby';
 
-import type { Bookmark, Collection, Chapter, Series } from './types';
+import type { Bookmark, Collection, Chapter } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
