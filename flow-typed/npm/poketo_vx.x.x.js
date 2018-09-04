@@ -14,7 +14,51 @@
  */
 
 declare module 'poketo' {
-  declare module.exports: any;
+  declare export type Page = {
+    id: string,
+    url: string,
+    width?: number,
+    height?: number,
+  };
+
+  declare export type ChapterMetadata = {
+    id: string,
+    title: string,
+    slug: string,
+    url: string,
+    order: number,
+    chapterNumber: ?string,
+    volumeNumber: ?string,
+    createdAt: number,
+  };
+
+  declare export type Chapter = {
+    ...$Exact<ChapterMetadata>,
+    pages: Array<Page>,
+  };
+
+  declare export type Series = {
+    id: string,
+    slug: string,
+    url: string,
+    title: string,
+    description: ?string,
+    author: ?string,
+    coverImageUrl: ?string,
+    site: {
+      name: string,
+      id: string,
+    },
+    supportsReading: boolean,
+    chapters?: ChapterMetadata[],
+    updatedAt: number,
+  };
+
+  declare export default {
+    getType: (idOrUrl: string) => 'series' | 'chapter',
+    getSeries: (idOrUrl: string) => Promise<Series>,
+    getChapter: (idOrUrl: string) => Promise<Chapter>,
+  };
 }
 
 /**
@@ -22,186 +66,8 @@ declare module 'poketo' {
  * require those files directly. Feel free to delete any files that aren't
  * needed.
  */
-declare module 'poketo/lib/adapters/helvetica-scans' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/hot-chocolate-scans' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/index' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/jaiminis-box' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/kirei-cake' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/manga-here' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/manga-rock' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/manga-stream' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/manga-updates' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/mangadex' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/mangakakalot' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/manganelo' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/meraki-scans' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/phoenix-serenade' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/sen-manga' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/sense-scans' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/shared/fool-slide' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/shared/mangakakalot' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/silent-sky-scans' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/adapters/tuki-scans' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/errors' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/get' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/index' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/setup-tests' {
-  declare module.exports: any;
-}
-
-declare module 'poketo/lib/utils' {
-  declare module.exports: any;
-}
 
 declare module 'poketo/supports' {
-  declare module.exports: any;
-}
-
-// Filename aliases
-declare module 'poketo/lib/adapters/helvetica-scans.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/helvetica-scans'>;
-}
-declare module 'poketo/lib/adapters/hot-chocolate-scans.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/hot-chocolate-scans'>;
-}
-declare module 'poketo/lib/adapters/index.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/index'>;
-}
-declare module 'poketo/lib/adapters/jaiminis-box.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/jaiminis-box'>;
-}
-declare module 'poketo/lib/adapters/kirei-cake.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/kirei-cake'>;
-}
-declare module 'poketo/lib/adapters/manga-here.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/manga-here'>;
-}
-declare module 'poketo/lib/adapters/manga-rock.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/manga-rock'>;
-}
-declare module 'poketo/lib/adapters/manga-stream.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/manga-stream'>;
-}
-declare module 'poketo/lib/adapters/manga-updates.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/manga-updates'>;
-}
-declare module 'poketo/lib/adapters/mangadex.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/mangadex'>;
-}
-declare module 'poketo/lib/adapters/mangakakalot.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/mangakakalot'>;
-}
-declare module 'poketo/lib/adapters/manganelo.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/manganelo'>;
-}
-declare module 'poketo/lib/adapters/meraki-scans.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/meraki-scans'>;
-}
-declare module 'poketo/lib/adapters/phoenix-serenade.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/phoenix-serenade'>;
-}
-declare module 'poketo/lib/adapters/sen-manga.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/sen-manga'>;
-}
-declare module 'poketo/lib/adapters/sense-scans.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/sense-scans'>;
-}
-declare module 'poketo/lib/adapters/shared/fool-slide.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/shared/fool-slide'>;
-}
-declare module 'poketo/lib/adapters/shared/mangakakalot.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/shared/mangakakalot'>;
-}
-declare module 'poketo/lib/adapters/silent-sky-scans.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/silent-sky-scans'>;
-}
-declare module 'poketo/lib/adapters/tuki-scans.js' {
-  declare module.exports: $Exports<'poketo/lib/adapters/tuki-scans'>;
-}
-declare module 'poketo/lib/errors.js' {
-  declare module.exports: $Exports<'poketo/lib/errors'>;
-}
-declare module 'poketo/lib/get.js' {
-  declare module.exports: $Exports<'poketo/lib/get'>;
-}
-declare module 'poketo/lib/index.js' {
-  declare module.exports: $Exports<'poketo/lib/index'>;
-}
-declare module 'poketo/lib/setup-tests.js' {
-  declare module.exports: $Exports<'poketo/lib/setup-tests'>;
-}
-declare module 'poketo/lib/utils.js' {
-  declare module.exports: $Exports<'poketo/lib/utils'>;
-}
-declare module 'poketo/supports.js' {
-  declare module.exports: $Exports<'poketo/supports'>;
+  declare function supportsUrl(url: string): boolean;
+  declare export default supportsUrl;
 }

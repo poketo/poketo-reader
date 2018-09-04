@@ -4,7 +4,7 @@ import { normalize } from 'normalizr';
 import schema from '../schema';
 import utils from '../../utils';
 
-import type { Chapter, ChapterMetadata } from '../../types';
+import type { Chapter, ChapterMetadata } from 'poketo';
 import type { FetchStatusState, Thunk, ChapterAction } from '../types';
 
 type Action = ChapterAction;
@@ -14,8 +14,8 @@ type State = {
   [id: string]: Chapter | ChapterMetadata,
 };
 
-export function isFullChapter(chapter: ?Chapter | ?ChapterMetadata): boolean {
-  return Boolean(chapter && Array.isArray(chapter.pages));
+export function isFullChapter(chapter: ?(Chapter | ChapterMetadata)): boolean {
+  return Boolean(chapter && chapter.pages && Array.isArray(chapter.pages));
 }
 
 export function fetchChapterIfNeeded(chapterId: string): Thunk {

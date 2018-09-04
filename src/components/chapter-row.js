@@ -1,10 +1,10 @@
 // @flow
 
 import React, { type ElementRef } from 'react';
+import { type Chapter } from 'poketo';
 import classNames from 'classnames';
 import Icon from '../components/icon';
 import utils from '../utils';
-import type { Chapter } from '../types';
 import './chapter-row.css';
 
 type Props = {

@@ -8,12 +8,13 @@ import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
-import type { Collection, Chapter } from '../types';
+import type { Chapter } from 'poketo';
+import type { Collection } from '../types';
 
 type Props = {
   chapter: Chapter,
   collection: ?Collection,
-  onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
+  onChapterSelectChange: (chapter: Chapter) => void,
   lastReadChapterId: string | null,
   seriesChapters: Chapter[],
 };

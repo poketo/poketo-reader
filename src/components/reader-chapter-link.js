@@ -1,11 +1,11 @@
 // @flow
 
 import React, { type Node } from 'react';
+import { type Chapter } from 'poketo';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import utils from '../utils';
-import type { Chapter } from '../types';
 
 type Props = {
   collectionSlug: ?string,

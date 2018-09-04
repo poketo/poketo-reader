@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import Icon from './icon';
 import utils from '../utils';
-import type { Series } from '../types';
+import type { Series } from 'poketo';
 
 type Props = {
   series: Series,

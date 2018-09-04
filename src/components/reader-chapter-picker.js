@@ -1,11 +1,11 @@
 // @flow
 
 import React, { PureComponent, type ElementRef } from 'react';
+import { type Chapter } from 'poketo';
 import classNames from 'classnames';
 import utils from '../utils';
 
 import ChapterRow from '../components/chapter-row';
-import type { Chapter } from '../types';
 
 type Props = {
   activeChapterId?: string,
@@ -61,7 +61,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
 
     return (
       <div>
-        {chapters.map(c => {
+        {chapters.map((c: Chapter) => {
           const isActive = c.id === activeChapterId;
           const isUnread = c.order > lastReadOrder;
 

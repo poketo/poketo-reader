@@ -3,7 +3,7 @@
 import { normalize } from 'normalizr';
 import schema from '../schema';
 import utils from '../../utils';
-import type { Series } from '../../types';
+import type { Series } from 'poketo';
 import type { EntityStatus, Thunk, SeriesAction } from '../types';
 
 type State = {

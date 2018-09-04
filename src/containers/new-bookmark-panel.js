@@ -14,7 +14,7 @@ import utils from '../utils';
 
 import schema from '../store/schema';
 
-import type { Series } from '../types';
+import type { Series } from 'poketo';
 import type { Dispatch, EntitiesPayload } from '../store/types';
 
 type NewSeriesErrorCode =
