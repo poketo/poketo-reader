@@ -114,7 +114,14 @@ const utils = {
     return chapters.slice().sort((a, b) => b.order - a.order);
   },
 
-  getUnreadChapters: (chapters: Chapter[], lastReadId: string): Chapter[] => {
+  getUnreadChapters: (
+    chapters: Chapter[],
+    lastReadId: string | null,
+  ): Chapter[] => {
+    if (lastReadId === null) {
+      return chapters;
+    }
+
     const orderedChapters = utils.sortChapters(chapters);
     const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
     const unreadChapters = orderedChapters.slice(0, lastReadIndex);
@@ -122,7 +129,14 @@ const utils = {
     return unreadChapters;
   },
 
-  getReadChapters: (chapters: Chapter[], lastReadId: string): Chapter[] => {
+  getReadChapters: (
+    chapters: Chapter[],
+    lastReadId: string | null,
+  ): Chapter[] => {
+    if (lastReadId === null) {
+      return [];
+    }
+
     const orderedChapters = utils.sortChapters(chapters);
     const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
     const readChapters = orderedChapters.slice(lastReadIndex + 1);
@@ -130,7 +144,10 @@ const utils = {
     return readChapters;
   },
 
-  nextChapterToRead: (chapters: Chapter[], lastReadId: string): Chapter => {
+  nextChapterToRead: (
+    chapters: Chapter[],
+    lastReadId: string | null,
+  ): Chapter => {
     const sortedChapters = utils.sortChapters(chapters);
     const unreadChapters = utils.getUnreadChapters(sortedChapters, lastReadId);
 
