@@ -153,7 +153,7 @@ class Feed extends Component<Props, State> {
     history.push(utils.getReaderUrl(collection.slug, toChapter.id));
   };
 
-  isSeriesUnread = (seriesId, lastReadChapterId): boolean => {
+  isSeriesUnread = (seriesId, lastReadChapterId: string | null): boolean => {
     const { chaptersById, seriesById } = this.props;
 
     const series = seriesById[seriesId];

@@ -40,7 +40,7 @@ const api = {
     collectionSlug: string,
     seriesUrl: string,
     linkToUrl: ?string,
-    lastReadChapterId: ?string,
+    lastReadChapterId: string | null,
   ) =>
     instance.post(`/collection/${collectionSlug}/bookmark/new`, {
       seriesUrl,

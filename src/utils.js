@@ -147,7 +147,7 @@ const utils = {
 
   nextChapterToRead: (
     chapters: Chapter[],
-    lastReadId: string | null,
+    lastReadId: string | null = null,
   ): Chapter => {
     const sortedChapters = utils.sortChapters(chapters);
     const unreadChapters = utils.getUnreadChapters(sortedChapters, lastReadId);

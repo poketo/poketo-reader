@@ -32,7 +32,7 @@ export type Series = {
 
 export type Bookmark = {
   id: string,
-  lastReadChapterId: string,
+  lastReadChapterId: string | null,
   url: string,
   linkTo: ?string,
 };

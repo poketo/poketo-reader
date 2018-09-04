@@ -11,7 +11,7 @@ type Props = {
   activeChapterId?: string,
   activeChapterRef?: ElementRef<*>,
   seriesChapters: Chapter[],
-  lastReadChapterId: ?string,
+  lastReadChapterId: string | null,
   onChapterClick: (chapter: Chapter) => void,
 };
 
