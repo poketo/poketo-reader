@@ -21,9 +21,8 @@ if (typeof global.window !== 'undefined') {
 type Props = {
   page: {
     url: string,
-    alt?: string,
-    width: number,
-    height: number,
+    width?: number,
+    height?: number,
   },
 };
 
@@ -75,7 +74,7 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
           <img
             src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
             data-src={page.url}
-            alt={page.alt}
+            alt=""
             onError={this.handleError}
             onLoad={this.handleLoad}
             className="PageImage-image js-lazysizes"

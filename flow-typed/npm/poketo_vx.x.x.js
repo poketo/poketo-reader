@@ -14,6 +14,8 @@
  */
 
 declare module 'poketo' {
+  declare export type PublicationStatus = 'ONGOING' | 'COMPLETED' | 'UNKNOWN';
+
   declare export type Page = {
     id: string,
     url: string,
@@ -23,7 +25,7 @@ declare module 'poketo' {
 
   declare export type ChapterMetadata = {
     id: string,
-    title: string,
+    title: ?string,
     slug: string,
     url: string,
     order: number,
@@ -34,7 +36,7 @@ declare module 'poketo' {
 
   declare export type Chapter = {
     ...$Exact<ChapterMetadata>,
-    pages: Array<Page>,
+    pages: Page[],
   };
 
   declare export type Series = {
@@ -44,6 +46,7 @@ declare module 'poketo' {
     title: string,
     description: ?string,
     author: ?string,
+    status: PublicationStatus,
     coverImageUrl: ?string,
     site: {
       name: string,

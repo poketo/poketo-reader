@@ -5,7 +5,7 @@ import set from 'clean-set';
 import { format, isToday, isYesterday } from 'date-fns';
 import groupBy from 'lodash.groupby';
 
-import type { Chapter } from 'poketo';
+import type { Chapter, ChapterMetadata } from 'poketo';
 import type { Bookmark, Collection } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
@@ -84,7 +84,10 @@ const utils = {
   /**
    * Chapter Helpers
    */
-  getChapterLabel: (chapter: Chapter, extended: boolean = false): string => {
+  getChapterLabel: (
+    chapter: ChapterMetadata,
+    extended: boolean = false,
+  ): string => {
     if (chapter.chapterNumber) {
       return `${extended ? 'Chapter ' : ''}${chapter.chapterNumber}`;
     }
@@ -100,7 +103,7 @@ const utils = {
     return 'Unknown';
   },
 
-  getChapterTitle: (chapter: Chapter): ?string => {
+  getChapterTitle: (chapter: ChapterMetadata): ?string => {
     if (!chapter.chapterNumber && chapter.title) {
       return null;
     }

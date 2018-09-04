@@ -1,14 +1,14 @@
 // @flow
 
 import React, { type ElementRef } from 'react';
-import { type Chapter } from 'poketo';
+import type { ChapterMetadata } from 'poketo';
 import classNames from 'classnames';
 import Icon from '../components/icon';
 import utils from '../utils';
 import './chapter-row.css';
 
 type Props = {
-  chapter: Chapter,
+  chapter: ChapterMetadata,
   innerRef?: ElementRef<*>,
   isActive?: boolean,
   isUnread?: boolean,

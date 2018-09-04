@@ -8,15 +8,15 @@ import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
-import type { Chapter } from 'poketo';
+import type { ChapterMetadata } from 'poketo';
 import type { Collection } from '../types';
 
 type Props = {
-  chapter: Chapter,
+  chapter: ChapterMetadata,
   collection: ?Collection,
-  onChapterSelectChange: (chapter: Chapter) => void,
+  onChapterSelectChange: (chapter: ChapterMetadata) => void,
   lastReadChapterId: string | null,
-  seriesChapters: Chapter[],
+  seriesChapters: ChapterMetadata[],
 };
 
 type State = {
@@ -53,7 +53,7 @@ export default class ReaderNavigation extends Component<Props, State> {
     this.setState({ showingPanel: false });
   };
 
-  handleChapterClick = (chapter: Chapter) => {
+  handleChapterClick = (chapter: ChapterMetadata) => {
     this.props.onChapterSelectChange(chapter);
     this.handlePickerPanelClose();
   };
