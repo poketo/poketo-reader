@@ -14,7 +14,7 @@ type Props = {
   chapter: Chapter,
   collection: ?Collection,
   onChapterSelectChange: (e: SyntheticInputEvent<HTMLSelectElement>) => void,
-  lastReadChapterId: ?string,
+  lastReadChapterId: string | null,
   seriesChapters: Chapter[],
 };
 

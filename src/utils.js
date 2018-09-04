@@ -71,11 +71,11 @@ const utils = {
   /**
    * Collection Helpers
    */
-  getUnreadMap: (collection: Collection): { [string]: ?string } => {
+  getUnreadMap: (collection: Collection): { [string]: string | null } => {
     const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
 
     return bookmarks.reduce((acc, bookmark) => {
-      acc[bookmark.id] = bookmark.lastReadChapterId;
+      acc[bookmark.id] = bookmark.lastReadChapterId || null;
       return acc;
     }, {});
   },
