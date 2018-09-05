@@ -5,26 +5,7 @@ import { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import CoverImage from './series-cover-image';
 import Icon from './icon';
-import utils from '../utils';
 import type { FeedItem } from '../types';
-
-const getLinkTo = (item: FeedItem, slug: string) => {
-  if (item.linkTo || item.series.supportsReading === false) {
-    return item.linkTo || item.series.url;
-  }
-
-  const unreadChapters = utils.getUnreadChapters(
-    item.chapters,
-    item.lastReadAt,
-  );
-
-  const toChapter =
-    unreadChapters.length > 0
-      ? utils.leastRecentChapter(unreadChapters)
-      : utils.mostRecentChapter(item.chapters);
-
-  return `/c/${slug}/read/${toChapter.id}`;
-};
 
 type Props = {
   className?: string,
@@ -39,7 +20,7 @@ const SeriesRow = ({
   feedItem: item,
   onOptionsClick,
 }: Props) => {
-  const to = `/series/${item.series.id}`; //getLinkTo(item, collectionSlug);
+  const to = `/series/${item.series.id}`;
 
   const isExternalLink = to.startsWith('http');
   const Component = isExternalLink ? 'a' : Link;
