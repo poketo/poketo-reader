@@ -74,13 +74,6 @@ export type SetChapterStatusAction = ActionType<
   StatusActionPayload,
 >;
 
-export type SetNetworkStatusAction = ActionType<'SET_NETWORK_STATUS', boolean>;
-
-export type SetOrientationAction = ActionType<
-  'SET_ORIENTATION',
-  'landscape' | 'portrait',
->;
-
 export type SetDefaultCollectionAction = ActionType<
   'SET_DEFAULT_COLLECTION',
   string,
@@ -106,8 +99,6 @@ export type ChapterAction =
   | SetChapterAction
   | SetChapterStatusAction;
 
-export type DeviceAction = SetNetworkStatusAction | SetOrientationAction;
-
 export type AuthAction =
   | SetDefaultCollectionAction
   | ClearDefaultCollectionAction;
@@ -116,8 +107,7 @@ export type Action =
   | AuthAction
   | CollectionAction
   | SeriesAction
-  | ChapterAction
-  | DeviceAction;
+  | ChapterAction;
 
 export type Dispatch = ReduxDispatch;
 export type GetState = () => Object;

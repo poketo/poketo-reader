@@ -14,7 +14,7 @@ type State = {
   [id: string]: Chapter | ChapterMetadata,
 };
 
-export function isFullChapter(chapter: ?(Chapter | ChapterMetadata)): boolean {
+export function isFullChapter(chapter: ?(Chapter | ChapterMetadata)) {
   return Boolean(chapter && chapter.pages && Array.isArray(chapter.pages));
 }
 
@@ -26,7 +26,7 @@ export function fetchChapterIfNeeded(chapterId: string): Thunk {
   };
 }
 
-function shouldFetchChapter(state: Object, chapterId: string): boolean {
+function shouldFetchChapter(state: Object, chapterId: string) {
   const chaptersById = state.chapters;
 
   if (isFullChapter(chaptersById[chapterId])) {
