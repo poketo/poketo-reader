@@ -5,10 +5,15 @@ import classNames from 'classnames';
 
 import Icon from './icon';
 import utils from '../utils';
-import type { Series } from '../types';
 
 type Props = {
-  series: Series,
+  series: {
+    id: string,
+    url: string,
+    title: string,
+    supportsReading: boolean,
+    updatedAt: number,
+  },
   isUnread: boolean,
   linkTo: ?string,
   onOptionsClick: (i: string) => (e: SyntheticEvent<HTMLAnchorElement>) => void,

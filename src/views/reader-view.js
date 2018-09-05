@@ -22,16 +22,17 @@ import {
   markSeriesAsRead,
 } from '../store/reducers/collections';
 
-import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
+import type { Chapter, ChapterMetadata, Series } from 'poketo';
+import type { Collection } from '../types';
 import type { Dispatch, FetchStatusState } from '../store/types';
 
 type Props = {
-  chapter: Chapter | ChapterMetadata,
+  chapter: Chapter,
   chapterId: string,
   chapterStatus: FetchStatusState,
   collection: ?Collection,
   collectionSlug: ?string,
-  seriesChapters: Array<Chapter | ChapterMetadata>,
+  seriesChapters: Array<ChapterMetadata>,
   seriesId: string,
   series: ?Series,
   dispatch: Dispatch,
@@ -60,9 +61,10 @@ class ReaderView extends Component<Props> {
       collection: state.collections[ownProps.match.params.collectionSlug],
       collectionSlug,
       series,
-      seriesChapters: series
-        ? series.chapters.map(id => state.chapters[id])
-        : null,
+      seriesChapters:
+        series && series.chapters
+          ? series.chapters.map(id => state.chapters[id])
+          : null,
       seriesId,
     };
   };
@@ -128,7 +130,7 @@ class ReaderView extends Component<Props> {
     dispatch(markSeriesAsRead(collection.slug, series.id, chapter.id));
   };
 
-  handleChapterChange = (nextChapter: Chapter) => {
+  handleChapterChange = nextChapter => {
     const { chapterId: currentChapterId, collectionSlug, history } = this.props;
 
     if (nextChapter.id === currentChapterId) {

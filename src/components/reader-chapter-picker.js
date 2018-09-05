@@ -2,20 +2,20 @@
 
 import React, { PureComponent, type ElementRef } from 'react';
 import classNames from 'classnames';
+import type { ChapterMetadata } from 'poketo';
+import type { BookmarkLastReadChapterId } from '../types';
 import utils from '../utils';
-
 import ChapterRow from '../components/chapter-row';
-import type { Chapter } from '../types';
 
 type Props = {
   activeChapterId?: string,
   activeChapterRef?: ElementRef<*>,
-  seriesChapters: Chapter[],
-  lastReadChapterId: string | null,
-  onChapterClick: (chapter: Chapter) => void,
+  seriesChapters: ChapterMetadata[],
+  lastReadChapterId: BookmarkLastReadChapterId,
+  onChapterClick: (chapter: ChapterMetadata) => void,
 };
 
-const shouldGroupByVolume = (seriesChapters: Chapter[]) => {
+const shouldGroupByVolume = (seriesChapters: ChapterMetadata[]) => {
   return seriesChapters.some(c => Boolean(c.chapterNumber));
 };
 
@@ -50,18 +50,18 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     onChapterClick: () => {},
   };
 
-  handleChapterClick = (chapter: Chapter) => (
+  handleChapterClick = (chapter: ChapterMetadata) => (
     e: SyntheticMouseEvent<HTMLDivElement>,
   ) => {
     this.props.onChapterClick(chapter);
   };
 
-  renderChapters(chapters: Chapter[], lastReadOrder: number) {
+  renderChapters(chapters: ChapterMetadata[], lastReadOrder: number) {
     const { activeChapterId, activeChapterRef } = this.props;
 
     return (
       <div>
-        {chapters.map(c => {
+        {chapters.map((c: ChapterMetadata) => {
           const isActive = c.id === activeChapterId;
           const isUnread = c.order > lastReadOrder;
 

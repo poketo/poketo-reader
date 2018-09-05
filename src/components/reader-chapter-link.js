@@ -1,15 +1,15 @@
 // @flow
 
 import React, { type Node } from 'react';
+import type { ChapterMetadata } from 'poketo';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import utils from '../utils';
-import type { Chapter } from '../types';
 
 type Props = {
   collectionSlug: ?string,
-  chapter: ?Chapter,
+  chapter: ChapterMetadata,
   children: Node,
 };
 

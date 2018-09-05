@@ -5,7 +5,8 @@ import set from 'clean-set';
 import { format, isToday, isYesterday } from 'date-fns';
 import groupBy from 'lodash.groupby';
 
-import type { Bookmark, Collection, Chapter } from './types';
+import type { ChapterMetadata } from 'poketo';
+import type { Bookmark, BookmarkLastReadChapterId, Collection } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
@@ -71,7 +72,9 @@ const utils = {
   /**
    * Collection Helpers
    */
-  getUnreadMap: (collection: Collection): { [string]: string | null } => {
+  getUnreadMap: (
+    collection: Collection,
+  ): { [string]: BookmarkLastReadChapterId } => {
     const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
 
     return bookmarks.reduce((acc, bookmark) => {
@@ -83,7 +86,10 @@ const utils = {
   /**
    * Chapter Helpers
    */
-  getChapterLabel: (chapter: Chapter, extended: boolean = false): string => {
+  getChapterLabel: (
+    chapter: ChapterMetadata,
+    extended: boolean = false,
+  ): string => {
     if (chapter.chapterNumber) {
       return `${extended ? 'Chapter ' : ''}${chapter.chapterNumber}`;
     }
@@ -99,7 +105,7 @@ const utils = {
     return 'Unknown';
   },
 
-  getChapterTitle: (chapter: Chapter): ?string => {
+  getChapterTitle: (chapter: ChapterMetadata): ?string => {
     if (!chapter.chapterNumber && chapter.title) {
       return null;
     }
@@ -110,14 +116,14 @@ const utils = {
   /**
    * Sorts chapters by publication order, most recent first.
    */
-  sortChapters: (chapters: Chapter[]): Chapter[] => {
+  sortChapters: (chapters: ChapterMetadata[]): ChapterMetadata[] => {
     return chapters.slice().sort((a, b) => b.order - a.order);
   },
 
   getUnreadChapters: (
-    chapters: Chapter[],
-    lastReadId: string | null = null,
-  ): Chapter[] => {
+    chapters: ChapterMetadata[],
+    lastReadId: BookmarkLastReadChapterId = null,
+  ): ChapterMetadata[] => {
     const orderedChapters = utils.sortChapters(chapters);
 
     if (lastReadId === null) {
@@ -131,9 +137,9 @@ const utils = {
   },
 
   getReadChapters: (
-    chapters: Chapter[],
-    lastReadId: string | null = null,
-  ): Chapter[] => {
+    chapters: ChapterMetadata[],
+    lastReadId: BookmarkLastReadChapterId = null,
+  ): ChapterMetadata[] => {
     if (lastReadId === null) {
       return [];
     }
@@ -146,9 +152,9 @@ const utils = {
   },
 
   nextChapterToRead: (
-    chapters: Chapter[],
-    lastReadId: string | null = null,
-  ): Chapter => {
+    chapters: ChapterMetadata[],
+    lastReadId: BookmarkLastReadChapterId = null,
+  ): ChapterMetadata => {
     const sortedChapters = utils.sortChapters(chapters);
     const unreadChapters = utils.getUnreadChapters(sortedChapters, lastReadId);
 

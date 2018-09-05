@@ -2,7 +2,8 @@
 
 import api from '../api';
 import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
-import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
+import type { Chapter, ChapterMetadata, Series } from 'poketo';
+import type { BookmarkLastReadChapterId, Collection } from '../types';
 
 type ActionType<A, B> = { +type: A, +payload: B };
 type ActionWithoutPayloadType<A> = { +type: A };
@@ -56,7 +57,7 @@ export type MarkBookmarkAsReadAction = ActionType<
   {
     collectionSlug: string,
     seriesId: string,
-    lastReadChapterId: string | null,
+    lastReadChapterId: BookmarkLastReadChapterId,
   },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;
@@ -71,13 +72,6 @@ export type SetChapterAction = ActionType<
 export type SetChapterStatusAction = ActionType<
   'SET_CHAPTER_STATUS',
   StatusActionPayload,
->;
-
-export type SetNetworkStatusAction = ActionType<'SET_NETWORK_STATUS', boolean>;
-
-export type SetOrientationAction = ActionType<
-  'SET_ORIENTATION',
-  'landscape' | 'portrait',
 >;
 
 export type SetDefaultCollectionAction = ActionType<
@@ -105,8 +99,6 @@ export type ChapterAction =
   | SetChapterAction
   | SetChapterStatusAction;
 
-export type DeviceAction = SetNetworkStatusAction | SetOrientationAction;
-
 export type AuthAction =
   | SetDefaultCollectionAction
   | ClearDefaultCollectionAction;
@@ -115,8 +107,7 @@ export type Action =
   | AuthAction
   | CollectionAction
   | SeriesAction
-  | ChapterAction
-  | DeviceAction;
+  | ChapterAction;
 
 export type Dispatch = ReduxDispatch;
 export type GetState = () => Object;
