@@ -21,7 +21,6 @@ const StyledButton = styled.button`
   justify-content: center;
   background-color: transparent;
   border-radius: 3px;
-  min-width: 80px;
   color: currentColor;
   font-weight: normal;
   font-family: Proxima Soft, -apple-system, BlinkMacSystemFont, helvetica neue,
@@ -49,6 +48,7 @@ const StyledButton = styled.button`
       padding: 0 16px;
       line-height: 44px;
       height: 44px;
+      min-width: 80px;
     `};
 
   ${props =>
