@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Icon from './icon';
 import CoverImage from './series-cover-image';
 import ChapterRow from './chapter-row';
+import utils from '../utils';
 import type { FeedItem } from '../types';
 
 type Props = {
@@ -89,12 +90,13 @@ const mapStateToProps = (state, ownProps) => {
         series,
         chapters: series
           ? series.chapters
-            ? series.chapters
-                .map(id => chaptersById[id])
-                .filter(chapter => chapter.createdAt > bookmark.lastReadAt)
+            ? utils.getUnreadChapters(
+                series.chapters.map(id => chaptersById[id]),
+                bookmark.lastReadChapterId,
+              )
             : []
           : [],
-        lastReadAt: bookmark.lastReadAt,
+        lastReadChapterId: bookmark.lastReadChapterId,
         linkTo: bookmark.linkTo,
       };
     })

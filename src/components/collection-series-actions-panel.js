@@ -76,16 +76,17 @@ class SeriesActionsPanel extends Component<Props> {
 }
 
 export default connect((state, ownProps) => {
+  const { series: seriesById, chapters: chaptersById } = state;
   const { seriesId, bookmark } = ownProps;
 
-  const series = state.series[seriesId];
-  const showMarkAsRead = series.updatedAt > bookmark.lastReadAt;
-  const unreadChapterCount = showMarkAsRead
+  const series = seriesById[seriesId];
+  const unreadChapterCount = series.chapters
     ? utils.getUnreadChapters(
-        series.chapters.map(id => state.chapters[id]),
-        bookmark.lastReadAt,
+        series.chapters.map(id => chaptersById[id]),
+        bookmark.lastReadChapterId,
       ).length
     : 0;
+  const showMarkAsRead = unreadChapterCount > 0;
 
   return {
     showMarkAsRead,

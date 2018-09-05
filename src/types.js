@@ -11,7 +11,7 @@ export type Bookmark = {
 
 export type FeedItem = {
   linkTo?: string,
-  lastReadAt: number,
+  lastReadChapterId: BookmarkLastReadChapterId,
   chapters: ChapterMetadata[],
   series: Series,
 };

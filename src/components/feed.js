@@ -81,7 +81,7 @@ const mapStateToProps = (state, ownProps) => {
       return {
         series,
         chapters: chapters.map(id => chaptersById[id]),
-        lastReadAt: bookmarks[seriesId].lastReadAt,
+        lastReadChapterId: bookmarks[seriesId].lastReadChapterId,
         linkTo: bookmarks[seriesId].linkTo,
       };
     })
