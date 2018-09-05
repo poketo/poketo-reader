@@ -4,8 +4,8 @@ import React, { Component, Fragment } from 'react';
 import styled, { css, cx } from 'react-emotion';
 import { connect } from 'react-redux';
 import { normalize } from 'normalizr';
+import type { Series } from 'poketo';
 import api from '../api';
-import { type Series } from '../types';
 import { type Dispatch } from '../store/types';
 import { getCollectionSlug } from '../store/reducers/auth';
 import schema from '../store/schema';
@@ -117,8 +117,12 @@ class FollowButton extends Component<Props, State> {
   };
 
   render() {
-    const { isFollowing } = this.props;
+    const { collectionSlug, isFollowing } = this.props;
     const { isFetching } = this.state;
+
+    if (!collectionSlug) {
+      return null;
+    }
 
     return (
       <StyledButton
@@ -149,7 +153,9 @@ const mapStateToProps = (state, ownProps) => {
   const collectionSlug = getCollectionSlug(state);
   const collection = state.collections[collectionSlug];
 
-  const isFollowing = Boolean(collection.bookmarks[ownProps.seriesId]);
+  const isFollowing = Boolean(
+    collection.bookmarks && collection.bookmarks[ownProps.seriesId],
+  );
   const series = state.series[ownProps.seriesId];
 
   return { collectionSlug, isFollowing, series };
