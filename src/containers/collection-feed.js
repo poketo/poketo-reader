@@ -19,21 +19,22 @@ import {
 } from '../store/reducers/collections';
 import { setDefaultCollection } from '../store/reducers/auth';
 
-import type {
-  Bookmark,
-  Chapter,
-  ChapterMetadata,
-  Collection,
-  Series,
-} from '../types';
+import type { Chapter, ChapterMetadata, Series } from 'poketo';
+import type { Bookmark, Collection } from '../types';
 import type { Dispatch } from '../store/types';
 
 type Props = {
   dispatch: Dispatch,
   history: RouterHistory,
   collection: Collection,
-  chaptersById: { [id: string]: Chapter | ChapterMetadata },
-  seriesById: { [id: string]: Series },
+  chaptersById: { [id: string]: Chapter | ChapterMetadata, _status: {} },
+  seriesById: {
+    [id: string]: {
+      ...$Exact<Series>,
+      chapters: string[],
+    },
+    _status: {},
+  },
 };
 
 type State = {
@@ -90,7 +91,7 @@ class Feed extends Component<Props, State> {
       return;
     }
 
-    const series: ?Series = seriesById[optionsPanelSeriesId];
+    const series = seriesById[optionsPanelSeriesId];
 
     if (!series) {
       return;
@@ -130,7 +131,7 @@ class Feed extends Component<Props, State> {
   handleSeriesClick = seriesId => e => {
     const { history, collection, seriesById, chaptersById } = this.props;
 
-    const series: ?Series = seriesById[seriesId];
+    const series = seriesById[seriesId];
 
     if (
       !collection ||
@@ -180,7 +181,7 @@ class Feed extends Component<Props, State> {
       return null;
     }
 
-    const series: ?Series = seriesById[optionsPanelSeriesId];
+    const series = seriesById[optionsPanelSeriesId];
     const bookmark: ?Bookmark = collection.bookmarks[optionsPanelSeriesId];
 
     if (!series || !bookmark) {
