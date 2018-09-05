@@ -2,7 +2,8 @@
 
 import api from '../api';
 import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
-import type { Collection, Chapter, ChapterMetadata, Series } from '../types';
+import type { Chapter, ChapterMetadata, Series } from 'poketo';
+import type { Collection } from '../types';
 
 type ActionType<A, B> = { +type: A, +payload: B };
 type ActionWithoutPayloadType<A> = { +type: A };
