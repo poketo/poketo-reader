@@ -151,7 +151,7 @@ class ReaderView extends Component<Props> {
   };
 
   handleChapterChange = nextChapter => {
-    const { chapterId: currentChapterId, collectionSlug, history } = this.props;
+    const { chapterId: currentChapterId, history } = this.props;
 
     if (nextChapter.id === currentChapterId) {
       return;

@@ -37,15 +37,12 @@ class Feed extends Component<Props, State> {
     const { collectionSlug, bookmarks, feedItems } = this.props;
     const { currentSeriesActionPanelId, showAll } = this.state;
 
-    const filteredFeedItems = showAll
-      ? feedItems
-      : feedItems.filter(item => item.isCaughtUp === false);
+    const unreadFeedItems = feedItems.filter(item => item.isCaughtUp === false);
+    const filteredFeedItems = showAll ? feedItems : unreadFeedItems;
+    const hiddenItemCount = feedItems.length - filteredFeedItems.length;
 
     return (
       <div className="pt-3 pt-4-m pb-6 mw-600 mh-auto">
-        <Button onClick={() => this.setState({ showAll: !this.state.showAll })}>
-          Toggle All
-        </Button>
         <Panel
           isShown={Boolean(currentSeriesActionPanelId)}
           onRequestClose={this.handleSeriesOptionsPanelClose}>
@@ -70,6 +67,11 @@ class Feed extends Component<Props, State> {
             />
           ))}
         </div>
+        <Button onClick={() => this.setState({ showAll: !showAll })}>
+          {showAll
+            ? `Show ${unreadFeedItems.length} unread series`
+            : `Show ${hiddenItemCount} more series`}
+        </Button>
       </div>
     );
   }

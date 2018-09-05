@@ -55,6 +55,7 @@ type Props = {
   series: Series,
   chapters: Chapter[],
   hasCollection: boolean,
+  lastReadChapterId: boolean,
 };
 
 const Label = ({ className, ...props }: { className?: string }) => (
@@ -71,7 +72,12 @@ const iconProps = {
   size: 44,
 };
 
-const SeriesPage = ({ series, chapters, hasCollection }: Props) => (
+const SeriesPage = ({
+  series,
+  chapters,
+  hasCollection,
+  lastReadChapterId,
+}: Props) => (
   <div className="pb-5">
     <ScrollReset />
     <div className="mw-600 w-100p mh-auto p-relative">
@@ -136,7 +142,10 @@ const SeriesPage = ({ series, chapters, hasCollection }: Props) => (
         {series.supportsReading ? (
           chapters.map(chapter => (
             <div className="bb-1 bc-gray1 ph-3" key={chapter.id}>
-              <ChapterRow chapter={chapter} />
+              <ChapterRow
+                chapter={chapter}
+                isLastReadChapter={chapter.id === lastReadChapterId}
+              />
             </div>
           ))
         ) : (
@@ -162,9 +171,14 @@ const mapStateToProps = (state, ownProps) => {
     ? series.chapters.map(chapterId => chaptersById[chapterId])
     : [];
 
-  const hasCollection = Boolean(state.auth.collectionSlug);
+  const collectionSlug = state.auth.collectionSlug;
+  const collection = state.collections[collectionSlug];
+  const hasCollection = Boolean(collection);
 
-  return { series, chapters, hasCollection };
+  const bookmark = hasCollection ? collection.bookmarks[seriesId] : null;
+  const lastReadChapterId = bookmark ? bookmark.lastReadChapterId : null;
+
+  return { series, chapters, hasCollection, lastReadChapterId };
 };
 
 const ConnectedSeriesPage = connect(mapStateToProps)(SeriesPage);

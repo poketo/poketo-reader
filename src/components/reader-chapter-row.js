@@ -28,12 +28,6 @@ const StyledContainer = styled.div`
     `};
 `;
 
-const StyledLabel = styled.div`
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-`;
-
 const ChapterRow = (props: Props) => {
   const { chapter, innerRef, isActive, isUnread, onClick } = props;
 
@@ -57,10 +51,13 @@ const ChapterRow = (props: Props) => {
           </span>
         )
       )}
-      <StyledLabel className={cx('xs-1', { 'o-50p': isActive })}>
+      <div
+        className={cx('of-hidden ws-noWrap to-ellipsis xs-1', {
+          'o-50p': isActive,
+        })}>
         <span className="fw-semibold">{chapterLabel}</span>
         {chapterTitle && <span className="ml-2">{chapter.title}</span>}
-      </StyledLabel>
+      </div>
       <span className="xg-1 xs-0 fs-12 o-50p pl-2 pl-4-m ta-right">
         {utils.formatAbsoluteTimestamp(chapter.createdAt)}
       </span>
