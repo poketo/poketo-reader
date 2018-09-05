@@ -19,7 +19,7 @@ import {
 } from '../store/reducers/collections';
 import { setDefaultCollection } from '../store/reducers/auth';
 
-import type { Chapter, ChapterMetadata, Series } from 'poketo';
+import type { ChapterMetadata, Page, Series } from 'poketo';
 import type { Bookmark, BookmarkLastReadChapterId, Collection } from '../types';
 import type { Dispatch } from '../store/types';
 
@@ -27,7 +27,13 @@ type Props = {
   dispatch: Dispatch,
   history: RouterHistory,
   collection: Collection,
-  chaptersById: { [id: string]: Chapter | ChapterMetadata, _status: {} },
+  chaptersById: {
+    [id: string]: {
+      ...$Exact<ChapterMetadata>,
+      pages?: Page[],
+    },
+    _status: {},
+  },
   seriesById: {
     [id: string]: {
       ...$Exact<Series>,
