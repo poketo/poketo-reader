@@ -137,17 +137,19 @@ export function removeBookmark(
 export function markSeriesAsRead(
   collectionSlug: string,
   seriesId: string,
-  lastReadAt: number,
+  lastReadChapterId: string | null,
 ): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'MARK_BOOKMARK_AS_READ',
-      payload: { collectionSlug, seriesId, lastReadAt },
+      payload: { collectionSlug, seriesId, lastReadChapterId },
     });
 
-    api.fetchMarkAsRead(collectionSlug, seriesId, lastReadAt).catch(err => {
-      // swallow errors
-    });
+    api
+      .fetchMarkAsRead(collectionSlug, seriesId, lastReadChapterId)
+      .catch(err => {
+        // swallow errors
+      });
   };
 }
 
@@ -181,12 +183,12 @@ export default function reducer(
       }));
     }
     case 'MARK_BOOKMARK_AS_READ': {
-      const { collectionSlug, seriesId, lastReadAt } = action.payload;
+      const { collectionSlug, seriesId, lastReadChapterId } = action.payload;
 
       return utils.set(
         state,
-        `${collectionSlug}.bookmarks.${seriesId}.lastReadAt`,
-        lastReadAt,
+        `${collectionSlug}.bookmarks.${seriesId}.lastReadChapterId`,
+        lastReadChapterId,
       );
     }
     case 'REMOVE_BOOKMARK': {

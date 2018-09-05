@@ -88,6 +88,7 @@ class NewBookmarkPanel extends Component<Props, State> {
         collectionSlug,
         utils.normalizeUrl(seriesUrl),
         linkToUrl ? utils.normalizeUrl(linkToUrl) : null,
+        null,
       )
       .then(response => {
         const normalized = normalize(response.data, {

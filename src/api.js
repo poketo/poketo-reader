@@ -31,21 +31,21 @@ const api = {
   fetchMarkAsRead: (
     collectionSlug: string,
     seriesId: string,
-    lastReadAt: number,
+    lastReadChapterId: string | null,
   ) =>
     instance.post(`/collection/${collectionSlug}/bookmark/${seriesId}/read`, {
-      lastReadAt,
+      lastReadChapterId,
     }),
   fetchAddBookmarkToCollection: (
     collectionSlug: string,
     seriesUrl: string,
     linkToUrl: ?string,
-    lastReadAt: ?number,
+    lastReadChapterId: string | null = null,
   ) =>
     instance.post(`/collection/${collectionSlug}/bookmark/new`, {
       seriesUrl,
       linkToUrl,
-      lastReadAt,
+      lastReadChapterId,
     }),
   fetchRemoveBookmarkFromCollection: (
     collectionSlug: string,

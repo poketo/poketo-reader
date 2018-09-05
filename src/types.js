@@ -9,6 +9,7 @@ export type ChapterMetadata = {
   id: string,
   seriesId: string,
   createdAt: number,
+  order: number,
 };
 
 export type Chapter = {
@@ -31,11 +32,12 @@ export type Series = {
 
 export type Bookmark = {
   id: string,
-  lastReadAt: number,
+  lastReadChapterId: string | null,
+  url: string,
   linkTo: ?string,
 };
 
 export type Collection = {
   slug: string,
-  bookmarks: Bookmark[],
+  bookmarks: { [id: string]: Bookmark },
 };

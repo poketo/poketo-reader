@@ -71,11 +71,11 @@ const utils = {
   /**
    * Collection Helpers
    */
-  getUnreadMap: (collection: Collection): { [string]: number } => {
+  getUnreadMap: (collection: Collection): { [string]: string | null } => {
     const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
 
     return bookmarks.reduce((acc, bookmark) => {
-      acc[bookmark.id] = bookmark.lastReadAt;
+      acc[bookmark.id] = bookmark.lastReadChapterId || null;
       return acc;
     }, {});
   },
@@ -107,20 +107,59 @@ const utils = {
     return chapter.title;
   },
 
+  /**
+   * Sorts chapters by publication order, most recent first.
+   */
+  sortChapters: (chapters: Chapter[]): Chapter[] => {
+    return chapters.slice().sort((a, b) => b.order - a.order);
+  },
+
   getUnreadChapters: (
-    chapters: Array<Chapter>,
-    seriesLastReadAt: number,
-  ): Array<Chapter> =>
-    chapters.filter(chapter => chapter.createdAt > seriesLastReadAt),
+    chapters: Chapter[],
+    lastReadId: string | null = null,
+  ): Chapter[] => {
+    const orderedChapters = utils.sortChapters(chapters);
+
+    if (lastReadId === null) {
+      return orderedChapters;
+    }
+
+    const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
+    const unreadChapters = orderedChapters.slice(0, lastReadIndex);
+
+    return unreadChapters;
+  },
+
   getReadChapters: (
-    chapters: Array<Chapter>,
-    seriesLastReadAt: number,
-  ): Array<Chapter> =>
-    chapters.filter(chapter => chapter.createdAt <= seriesLastReadAt),
-  mostRecentChapter: (chapters: Array<Chapter>): Chapter =>
-    chapters.reduce((a, b) => (a.createdAt > b.createdAt ? a : b), {}),
-  leastRecentChapter: (chapters: Array<Chapter>): Chapter =>
-    chapters.reduce((a, b) => (a.createdAt < b.createdAt ? a : b), {}),
+    chapters: Chapter[],
+    lastReadId: string | null = null,
+  ): Chapter[] => {
+    if (lastReadId === null) {
+      return [];
+    }
+
+    const orderedChapters = utils.sortChapters(chapters);
+    const lastReadIndex = orderedChapters.findIndex(c => c.id === lastReadId);
+    const readChapters = orderedChapters.slice(lastReadIndex);
+
+    return readChapters;
+  },
+
+  nextChapterToRead: (
+    chapters: Chapter[],
+    lastReadId: string | null = null,
+  ): Chapter => {
+    const sortedChapters = utils.sortChapters(chapters);
+    const unreadChapters = utils.getUnreadChapters(sortedChapters, lastReadId);
+
+    // If there are later chapters, get the next one.
+    if (unreadChapters.length > 0) {
+      return unreadChapters.pop();
+    }
+
+    // Otherwise, return the latest chapter;
+    return sortedChapters.shift();
+  },
 
   isStandalone: () => {
     const isStandaloneSafari = window.navigator.standalone === true;
