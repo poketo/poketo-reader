@@ -1,6 +1,8 @@
+export type BookmarkLastReadChapterId = string | null;
+
 export type Bookmark = {
   id: string,
-  lastReadChapterId: string | null,
+  lastReadChapterId: BookmarkLastReadChapterId,
   url: string,
   linkTo: ?string,
 };

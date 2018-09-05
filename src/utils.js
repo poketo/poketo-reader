@@ -6,7 +6,7 @@ import { format, isToday, isYesterday } from 'date-fns';
 import groupBy from 'lodash.groupby';
 
 import type { ChapterMetadata } from 'poketo';
-import type { Bookmark, Collection } from './types';
+import type { Bookmark, BookmarkLastReadChapterId, Collection } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
@@ -72,7 +72,9 @@ const utils = {
   /**
    * Collection Helpers
    */
-  getUnreadMap: (collection: Collection): { [string]: string | null } => {
+  getUnreadMap: (
+    collection: Collection,
+  ): { [string]: BookmarkLastReadChapterId } => {
     const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
 
     return bookmarks.reduce((acc, bookmark) => {
@@ -120,7 +122,7 @@ const utils = {
 
   getUnreadChapters: (
     chapters: ChapterMetadata[],
-    lastReadId: string | null = null,
+    lastReadId: BookmarkLastReadChapterId = null,
   ): ChapterMetadata[] => {
     const orderedChapters = utils.sortChapters(chapters);
 
@@ -136,7 +138,7 @@ const utils = {
 
   getReadChapters: (
     chapters: ChapterMetadata[],
-    lastReadId: string | null = null,
+    lastReadId: BookmarkLastReadChapterId = null,
   ): ChapterMetadata[] => {
     if (lastReadId === null) {
       return [];
@@ -151,7 +153,7 @@ const utils = {
 
   nextChapterToRead: (
     chapters: ChapterMetadata[],
-    lastReadId: string | null = null,
+    lastReadId: BookmarkLastReadChapterId = null,
   ): ChapterMetadata => {
     const sortedChapters = utils.sortChapters(chapters);
     const unreadChapters = utils.getUnreadChapters(sortedChapters, lastReadId);

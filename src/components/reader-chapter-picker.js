@@ -3,6 +3,7 @@
 import React, { PureComponent, type ElementRef } from 'react';
 import classNames from 'classnames';
 import type { ChapterMetadata } from 'poketo';
+import type { BookmarkLastReadChapterId } from '../types';
 import utils from '../utils';
 import ChapterRow from '../components/chapter-row';
 
@@ -10,7 +11,7 @@ type Props = {
   activeChapterId?: string,
   activeChapterRef?: ElementRef<*>,
   seriesChapters: ChapterMetadata[],
-  lastReadChapterId: string | null,
+  lastReadChapterId: BookmarkLastReadChapterId,
   onChapterClick: (chapter: ChapterMetadata) => void,
 };
 

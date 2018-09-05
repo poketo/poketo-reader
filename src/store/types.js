@@ -3,7 +3,7 @@
 import api from '../api';
 import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
 import type { Chapter, ChapterMetadata, Series } from 'poketo';
-import type { Collection } from '../types';
+import type { BookmarkLastReadChapterId, Collection } from '../types';
 
 type ActionType<A, B> = { +type: A, +payload: B };
 type ActionWithoutPayloadType<A> = { +type: A };
@@ -57,7 +57,7 @@ export type MarkBookmarkAsReadAction = ActionType<
   {
     collectionSlug: string,
     seriesId: string,
-    lastReadChapterId: string | null,
+    lastReadChapterId: BookmarkLastReadChapterId,
   },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;

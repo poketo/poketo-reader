@@ -20,7 +20,7 @@ import {
 import { setDefaultCollection } from '../store/reducers/auth';
 
 import type { Chapter, ChapterMetadata, Series } from 'poketo';
-import type { Bookmark, Collection } from '../types';
+import type { Bookmark, BookmarkLastReadChapterId, Collection } from '../types';
 import type { Dispatch } from '../store/types';
 
 type Props = {
@@ -154,7 +154,10 @@ class Feed extends Component<Props, State> {
     history.push(utils.getReaderUrl(collection.slug, toChapter.id));
   };
 
-  isSeriesUnread = (seriesId, lastReadChapterId: string | null): boolean => {
+  isSeriesUnread = (
+    seriesId,
+    lastReadChapterId: BookmarkLastReadChapterId,
+  ): boolean => {
     const { chaptersById, seriesById } = this.props;
 
     const series = seriesById[seriesId];

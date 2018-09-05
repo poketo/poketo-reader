@@ -5,7 +5,7 @@ import schema from '../schema';
 import { fetchSeriesIfNeeded } from './series';
 import utils from '../../utils';
 
-import type { Collection } from '../../types';
+import type { BookmarkLastReadChapterId, Collection } from '../../types';
 import type { EntityStatus, Thunk, CollectionAction } from '../types';
 
 type Action = CollectionAction;
@@ -137,7 +137,7 @@ export function removeBookmark(
 export function markSeriesAsRead(
   collectionSlug: string,
   seriesId: string,
-  lastReadChapterId: string | null,
+  lastReadChapterId: BookmarkLastReadChapterId,
 ): Thunk {
   return (dispatch, getState, api) => {
     dispatch({

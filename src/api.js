@@ -2,6 +2,7 @@
 
 import config from './config';
 import axios from 'axios';
+import type { BookmarkLastReadChapterId } from './types';
 
 export type AxiosResponse = {
   config: Object,
@@ -31,7 +32,7 @@ const api = {
   fetchMarkAsRead: (
     collectionSlug: string,
     seriesId: string,
-    lastReadChapterId: string | null,
+    lastReadChapterId: BookmarkLastReadChapterId,
   ) =>
     instance.post(`/collection/${collectionSlug}/bookmark/${seriesId}/read`, {
       lastReadChapterId,
@@ -40,7 +41,7 @@ const api = {
     collectionSlug: string,
     seriesUrl: string,
     linkToUrl: ?string,
-    lastReadChapterId: string | null = null,
+    lastReadChapterId: BookmarkLastReadChapterId = null,
   ) =>
     instance.post(`/collection/${collectionSlug}/bookmark/new`, {
       seriesUrl,

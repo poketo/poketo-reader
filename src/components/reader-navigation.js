@@ -9,13 +9,13 @@ import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
 import type { ChapterMetadata } from 'poketo';
-import type { Collection } from '../types';
+import type { BookmarkLastReadChapterId, Collection } from '../types';
 
 type Props = {
   chapter: ChapterMetadata,
   collection: ?Collection,
   onChapterSelectChange: (chapter: ChapterMetadata) => void,
-  lastReadChapterId: string | null,
+  lastReadChapterId: BookmarkLastReadChapterId,
   seriesChapters: ChapterMetadata[],
 };
 
