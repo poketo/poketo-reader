@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
 import { cx } from 'react-emotion';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Redirect, Route } from 'react-router-dom';
 
 import Analytics from './components/analytics';
 import ErrorBoundary from './components/error-boundary';
@@ -42,10 +42,9 @@ export default class App extends Component<{}> {
           <Switch>
             <Route path="/series/:seriesId" exact component={SeriesView} />
             <Route path="/read/:chapterId" exact component={ReaderView} />
-            <Route
-              path="/c/:collectionSlug/read/:chapterId"
-              component={ReaderView}
-              exact
+            <Redirect
+              from="/c/:collectionSlug/read/:chapterId"
+              to="/read/:chapterId"
             />
             <Route path="/c/:collectionSlug" component={FeedView} />
             <Route path="/login" component={LogInView} />

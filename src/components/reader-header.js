@@ -21,6 +21,7 @@ type Props = {
   seriesSiteName: ?string,
   seriesUrl: ?string,
   chapterUrl: ?string,
+  onMarkAsReadClick: () => void,
 };
 
 type State = {
@@ -110,6 +111,19 @@ export default class ReaderHeader extends PureComponent<Props, State> {
                         target="_blank"
                         rel="noreferrer noopener"
                       />
+                    )}
+                    {collectionSlug && (
+                      <Fragment>
+                        <Popover.Divider />
+                        <Popover.Item
+                          iconBefore={<Icon name="bookmark" {...iconProps} />}
+                          label="Mark read at this chapter"
+                          onClick={() => {
+                            close();
+                            this.props.onMarkAsReadClick();
+                          }}
+                        />
+                      </Fragment>
                     )}
                     <Popover.Divider />
                   </Fragment>

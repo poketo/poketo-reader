@@ -9,14 +9,13 @@ import utils from '../utils';
 
 type Props = {
   collectionSlug: ?string,
-  chapter: ChapterMetadata,
+  chapter: ?ChapterMetadata,
   children: Node,
 };
 
 const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   const disabled = !chapter;
-
-  const to = chapter ? utils.getReaderUrl(collectionSlug, chapter.id) : '/';
+  const to = chapter ? utils.getReaderUrl(chapter.id) : '/';
 
   return (
     <Link

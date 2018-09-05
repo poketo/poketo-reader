@@ -78,13 +78,9 @@ const utils = {
     }
     return /^https?:\/\/[^ "]+$/.test(url);
   },
-  getReaderUrl: (collectionSlug: ?string, chapterId: string) =>
-    '/' +
-    utils.constructUrl(
-      collectionSlug ? `c/${collectionSlug}` : null,
-      'read',
-      encodeURIComponent(chapterId).replace(/%3A/g, ':'),
-    ),
+  encodeId: (id: string) => encodeURIComponent(id).replace(/%3A/g, ':'),
+  getSeriesUrl: (seriesId: string) => `/series/${utils.encodeId(seriesId)}`,
+  getReaderUrl: (chapterId: string) => `/read/${utils.encodeId(chapterId)}`,
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
 
   /**

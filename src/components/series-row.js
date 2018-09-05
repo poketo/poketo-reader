@@ -27,13 +27,10 @@ const SeriesRow = ({
   const linkProps = isExternalLink ? { href: to, target: '_blank' } : { to };
 
   return (
-    <div className={cx('x', className)}>
+    <div className={cx('x', className, { 'o-50p': item.isCaughtUp })}>
       <Component
         {...linkProps}
         className="c-pointer x-1 d-block xa-center hover ph-3 pv-3">
-        <div className="x-1 mb-2">
-          <CoverImage series={item.series} />
-        </div>
         <div>
           <div className="fs-14 lh-1d25">{item.series.title}</div>
           <div className="fs-12 o-50p">

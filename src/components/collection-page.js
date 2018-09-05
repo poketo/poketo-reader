@@ -19,15 +19,7 @@ type Props = {
   isFetching: boolean,
 };
 
-type State = {
-  view: 'releases' | 'library',
-};
-
-class CollectionPage extends Component<Props, State> {
-  state = {
-    view: 'releases',
-  };
-
+class CollectionPage extends Component<Props> {
   componentDidMount() {
     const { loadData, collection } = this.props;
     loadData(collection.slug);
@@ -51,7 +43,7 @@ class CollectionPage extends Component<Props, State> {
         <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3 pe-none">
           <Toast isShown={isFetching}>Syncing...</Toast>
         </div>
-        <Releases collectionSlug={collection.slug} bookmarks={bookmarks} />
+        {/* <Releases collectionSlug={collection.slug} bookmarks={bookmarks} /> */}
         <Feed collectionSlug={collection.slug} bookmarks={bookmarks} />
       </div>
     );

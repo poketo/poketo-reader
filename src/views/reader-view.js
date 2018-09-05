@@ -48,8 +48,12 @@ type Props = {
 class ReaderView extends Component<Props> {
   static mapStateToProps = (state, ownProps: Props) => {
     const { match } = ownProps;
-    const { collectionSlug, chapterId: rawChapterId } = match.params;
+    const { chapterId: rawChapterId } = match.params;
 
+    const collectionSlug = state.auth.collectionSlug;
+    const collection = collectionSlug
+      ? state.collections[collectionSlug]
+      : null;
     const chapterId = decodeURIComponent(rawChapterId);
     const seriesId = utils.toSeriesId(chapterId);
     const series: ?Series = state.series[seriesId];
@@ -58,7 +62,7 @@ class ReaderView extends Component<Props> {
       chapter: state.chapters[chapterId],
       chapterId,
       chapterStatus: state.chapters._status,
-      collection: state.collections[ownProps.match.params.collectionSlug],
+      collection,
       collectionSlug,
       series,
       seriesChapters:
@@ -100,6 +104,22 @@ class ReaderView extends Component<Props> {
     this.loadData(this.props);
   };
 
+  handleMarkAsRead = () => {
+    const { collection, series, chapter, dispatch } = this.props;
+
+    if (!collection || !series || !chapter) {
+      return;
+    }
+
+    const bookmark = collection.bookmarks[series.id];
+
+    if (!bookmark) {
+      return;
+    }
+
+    dispatch(markSeriesAsRead(collection.slug, series.id, chapter.id));
+  };
+
   markSeriesAsRead = () => {
     const {
       collection,
@@ -137,7 +157,7 @@ class ReaderView extends Component<Props> {
       return;
     }
 
-    const url = utils.getReaderUrl(collectionSlug, nextChapter.id);
+    const url = utils.getReaderUrl(nextChapter.id);
 
     history.push(url);
   };
@@ -174,6 +194,7 @@ class ReaderView extends Component<Props> {
           seriesSiteName={series && series.site.name}
           seriesUrl={series && series.url}
           chapterUrl={chapter && chapter.url}
+          onMarkAsReadClick={this.handleMarkAsRead}
         />
         {chapter &&
           series &&

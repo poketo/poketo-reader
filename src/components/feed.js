@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Button from './button';
 import Panel from './panel';
 import SeriesActionsPanel from './collection-series-actions-panel';
 import SeriesRow from './series-row';
@@ -15,11 +16,13 @@ type Props = {
 
 type State = {
   currentSeriesActionPanelId: ?string,
+  showAll: boolean,
 };
 
 class Feed extends Component<Props, State> {
   state = {
     currentSeriesActionPanelId: null,
+    showAll: false,
   };
 
   handleSeriesOptionsClick = (id: string) => (e: SyntheticEvent<*>) => {
@@ -32,13 +35,17 @@ class Feed extends Component<Props, State> {
 
   render() {
     const { collectionSlug, bookmarks, feedItems } = this.props;
-    const { currentSeriesActionPanelId } = this.state;
+    const { currentSeriesActionPanelId, showAll } = this.state;
+
+    const filteredFeedItems = showAll
+      ? feedItems
+      : feedItems.filter(item => item.isCaughtUp === false);
 
     return (
       <div className="pt-3 pt-4-m pb-6 mw-600 mh-auto">
-        <header className="ph-3 mb-3">
-          <h1 className="fs-18 fw-semibold">Reading</h1>
-        </header>
+        <Button onClick={() => this.setState({ showAll: !this.state.showAll })}>
+          Toggle All
+        </Button>
         <Panel
           isShown={Boolean(currentSeriesActionPanelId)}
           onRequestClose={this.handleSeriesOptionsPanelClose}>
@@ -53,7 +60,7 @@ class Feed extends Component<Props, State> {
           )}
         </Panel>
         <div className="x xw-wrap">
-          {feedItems.map(item => (
+          {filteredFeedItems.map(item => (
             <SeriesRow
               className="w-50p w-25p-m"
               key={item.series.id}
@@ -75,19 +82,28 @@ const mapStateToProps = (state, ownProps) => {
   const seriesIds = Object.keys(bookmarks);
   const feedItems: FeedItem[] = seriesIds
     .map(seriesId => {
+      const { lastReadChapterId, linkTo } = bookmarks[seriesId];
+
       const series = seriesById[seriesId];
-      const chapters = series ? series.chapters || [] : [];
+      const chapterIds = series ? series.chapters || [] : [];
+      const chapters = chapterIds.map(id => chaptersById[id]);
 
       return {
         series,
-        chapters: chapters.map(id => chaptersById[id]),
-        lastReadChapterId: bookmarks[seriesId].lastReadChapterId,
-        linkTo: bookmarks[seriesId].linkTo,
+        chapters,
+        isCaughtUp: chapters.length > 0 && chapters[0].id === lastReadChapterId,
+        lastReadChapterId,
+        linkTo,
       };
     })
     // Ignore bookmarks where the series hasn't loaded
     .filter(item => item.series)
-    .sort((a, b) => a.series.title.localeCompare(b.series.title));
+    .sort((a, b) => {
+      if (a.isCaughtUp !== b.isCaughtUp) {
+        return a.isCaughtUp - b.isCaughtUp;
+      }
+      return a.series.title.localeCompare(b.series.title);
+    });
 
   return { feedItems };
 };

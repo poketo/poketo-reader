@@ -14,9 +14,7 @@ type Props = {
 const ChapterRow = ({ chapter, collectionSlug, extendedLabel }: Props) => {
   const chapterLabel = utils.getChapterLabel(chapter, extendedLabel);
   const chapterTitle = utils.getChapterTitle(chapter);
-
-  const prefix = collectionSlug ? `/c/${collectionSlug}` : '';
-  const to = prefix + `/read/${chapter.id}`;
+  const to = utils.getReaderUrl(chapter.id);
 
   return (
     <Link className="x xj-spaceBetween xa-center pv-2" to={to}>
