@@ -38,8 +38,7 @@ class Feed extends Component<Props, State> {
     const { currentSeriesActionPanelId, showAll } = this.state;
 
     const unreadFeedItems = feedItems.filter(item => item.isCaughtUp === false);
-    const filteredFeedItems = showAll ? feedItems : unreadFeedItems;
-    const hiddenItemCount = feedItems.length - filteredFeedItems.length;
+    const readFeedItems = feedItems.filter(item => item.isCaughtUp === true);
 
     return (
       <div className="pt-3 pt-4-m pb-6 mw-600 mh-auto">
@@ -57,9 +56,9 @@ class Feed extends Component<Props, State> {
           )}
         </Panel>
         <div className="x xw-wrap">
-          {filteredFeedItems.map(item => (
+          {unreadFeedItems.map(item => (
             <SeriesRow
-              className="w-50p w-25p-m"
+              className="w-50p"
               key={item.series.id}
               collectionSlug={collectionSlug}
               feedItem={item}
@@ -69,9 +68,22 @@ class Feed extends Component<Props, State> {
         </div>
         <Button onClick={() => this.setState({ showAll: !showAll })}>
           {showAll
-            ? `Show ${unreadFeedItems.length} unread series`
-            : `Show ${hiddenItemCount} more series`}
+            ? `Hide read series`
+            : `Show ${unreadFeedItems.length} read series`}
         </Button>
+        {showAll && (
+          <div className="x xw-wrap">
+            {readFeedItems.map(item => (
+              <SeriesRow
+                className="w-50p"
+                key={item.series.id}
+                collectionSlug={collectionSlug}
+                feedItem={item}
+                onOptionsClick={this.handleSeriesOptionsClick}
+              />
+            ))}
+          </div>
+        )}
       </div>
     );
   }
@@ -102,7 +114,7 @@ const mapStateToProps = (state, ownProps) => {
     .filter(item => item.series)
     .sort((a, b) => {
       if (a.isCaughtUp !== b.isCaughtUp) {
-        return a.isCaughtUp - b.isCaughtUp;
+        return Number(a.isCaughtUp) - Number(b.isCaughtUp);
       }
       return a.series.title.localeCompare(b.series.title);
     });
