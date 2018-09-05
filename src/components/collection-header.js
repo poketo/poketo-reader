@@ -17,6 +17,8 @@ const LoadableFeedbackForm = Loadable({
   loading: ComponentLoader,
 });
 
+const iconProps = { iconSize: 18, size: 44 };
+
 const StyledHeader = styled.header`
   position: fixed;
   top: 0;
@@ -75,7 +77,7 @@ export default class CollectionHeader extends Component<Props, State> {
 
   renderAddButton(inline: boolean = false) {
     const label = 'Add new series';
-    const icon = <Icon name="add" iconSize={18} size={44} />;
+    const icon = <Icon name="add" {...iconProps} />;
 
     if (inline) {
       return (
@@ -103,14 +105,14 @@ export default class CollectionHeader extends Component<Props, State> {
       <Popover.Item
         label="Clear cache"
         onClick={this.handleClearCacheClick}
-        iconBefore={<Icon name="refresh" iconSize={18} size={44} />}
+        iconBefore={<Icon name="refresh" {...iconProps} />}
       />
     );
   }
 
   renderFeedbackButton(inline: boolean = false) {
     const label = 'Send feedback';
-    const icon = <Icon name="message" iconSize={18} size={44} />;
+    const icon = <Icon name="message" {...iconProps} />;
 
     if (inline) {
       return (
@@ -163,6 +165,11 @@ export default class CollectionHeader extends Component<Props, State> {
               {this.renderAddButton()}
               {this.renderClearCacheButton()}
               {this.renderFeedbackButton()}
+              <Popover.Item
+                iconBefore={<Icon name="new-tab" {...iconProps} />}
+                label="Open Poketo site"
+                href="/home"
+              />
             </div>
           }
           position={Popover.Position.BOTTOM_RIGHT}>
