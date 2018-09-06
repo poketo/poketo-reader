@@ -3,7 +3,7 @@
 import React from 'react';
 import { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
-// import CoverImage from './series-cover-image';
+import CoverImage from './series-cover-image';
 import Icon from './icon';
 import utils from '../utils';
 import type { FeedItem } from '../types';
@@ -32,9 +32,9 @@ const SeriesRow = ({
       <Component
         {...linkProps}
         className="c-pointer x-1 d-block xa-center hover ph-3 pv-3">
-        {/* <div className="x-1 mb-2">
+        <div className="x-1 mb-2">
           <CoverImage series={item.series} />
-        </div> */}
+        </div>
         <div>
           <div className="fs-14 lh-1d25">{item.series.title}</div>
           <div className="fs-12 o-50p">

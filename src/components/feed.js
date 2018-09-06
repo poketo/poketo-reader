@@ -58,7 +58,7 @@ class Feed extends Component<Props, State> {
         <div className="x xw-wrap">
           {unreadFeedItems.map(item => (
             <SeriesRow
-              className="w-50p"
+              className="w-50p w-25p-m"
               key={item.series.id}
               collectionSlug={collectionSlug}
               feedItem={item}
@@ -75,7 +75,7 @@ class Feed extends Component<Props, State> {
           <div className="x xw-wrap">
             {readFeedItems.map(item => (
               <SeriesRow
-                className="w-50p"
+                className="w-50p w-25p-m"
                 key={item.series.id}
                 collectionSlug={collectionSlug}
                 feedItem={item}
