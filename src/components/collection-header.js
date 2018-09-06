@@ -76,7 +76,7 @@ export default class CollectionHeader extends Component<Props, State> {
   };
 
   renderAddButton(inline: boolean = false) {
-    const label = 'Add new series';
+    const label = 'Follow new series';
     const icon = <Icon name="add" {...iconProps} />;
 
     if (inline) {
