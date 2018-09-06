@@ -8,6 +8,7 @@ import debounce from 'throttle-debounce/debounce';
 import Button from '../components/button';
 import Input from '../components/input';
 import Panel from '../components/panel';
+import SeriesPreview from '../components/series-preview';
 import api, { type AxiosError } from '../api';
 import config from '../config';
 import utils from '../utils';
@@ -117,7 +118,7 @@ class NewBookmarkPanel extends Component<Props, State> {
       return;
     }
 
-    if (!seriesUrl) {
+    if (!seriesUrl || seriesUrl.length < 5) {
       this.setState({ errorCode: null });
       return;
     }
@@ -142,21 +143,27 @@ class NewBookmarkPanel extends Component<Props, State> {
       return;
     }
 
-    this.setState({ errorCode: null, bookmarkFetchState: 'READY' });
+    this.setState({
+      errorCode: null,
+      isFetchingPreview: true,
+      bookmarkFetchState: 'READY',
+    });
 
-    // this.setState({ isFetchingPreview: true });
-    // utils
-    //   .fetchSeriesByUrl(seriesUrl)
-    //   .then(response => {
-    //     this.setState({ isFetchingPreview: false, seriesPreview: response.data });
-    //   })
-    //   .catch(err => {
-    //     this.setState({
-    //       isFetchingPreview: false,
-    //       seriesPreview: null,
-    //       errorCode: 'INVALID_SERIES',
-    //     });
-    //   });
+    api
+      .fetchSeriesByUrl(seriesUrl)
+      .then(response => {
+        this.setState({
+          isFetchingPreview: false,
+          seriesPreview: response.data,
+        });
+      })
+      .catch(err => {
+        this.setState({
+          isFetchingPreview: false,
+          seriesPreview: null,
+          errorCode: 'INVALID_SERIES',
+        });
+      });
   };
 
   debouncedSeriesUrlValidation = debounce(500, this.handleSeriesUrlValidation);
@@ -246,7 +253,14 @@ class NewBookmarkPanel extends Component<Props, State> {
   };
 
   render() {
-    const { bookmarkFetchState, errorCode, linkToUrl, seriesUrl } = this.state;
+    const {
+      bookmarkFetchState,
+      errorCode,
+      isFetchingPreview,
+      linkToUrl,
+      seriesPreview,
+      seriesUrl,
+    } = this.state;
 
     const buttonLabelValues = {
       SUBMITTING: 'Adding...',
@@ -263,25 +277,34 @@ class NewBookmarkPanel extends Component<Props, State> {
       this.seriesSupportsReading(seriesUrl) === false;
 
     return (
-      <Panel.Content title="Add new series">
+      <Panel.Content title="Follow new series">
         <p className="mb-3">
-          Paste the URL of the series you want to follow.{' '}
+          Paste the URL of the series to follow, or read our{' '}
           <a
             href="https://github.com/poketo/site/wiki/Adding-a-New-Series"
             target="_blank"
             className="Link"
             rel="noopener noreferrer">
-            (instructions)
-          </a>
+            guide to following series
+          </a>{' '}
+          for help.
         </p>
         <form type="post" onSubmit={this.handleSubmit} noValidate>
+          {(seriesPreview || isFetchingPreview) && (
+            <div className="mb-3">
+              <SeriesPreview
+                isFetching={isFetchingPreview}
+                series={seriesPreview}
+              />
+            </div>
+          )}
           <div className="mb-2">
             <Input
               type="url"
               name="seriesUrl"
               readOnly={disableFormFields}
               onChange={this.handleSeriesUrlChange}
-              placeholder="http://"
+              placeholder="http://example.com/manga/..."
               value={seriesUrl || ''}
             />
           </div>
