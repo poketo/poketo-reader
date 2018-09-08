@@ -12,15 +12,9 @@ type Props = {
   className?: string,
   collectionSlug: string,
   feedItem: FeedItem,
-  onOptionsClick: (i: string) => (e: SyntheticEvent<HTMLAnchorElement>) => void,
 };
 
-const SeriesRow = ({
-  className,
-  collectionSlug,
-  feedItem: item,
-  onOptionsClick,
-}: Props) => {
+const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
   const to = utils.getSeriesUrl(item.series.id);
 
   const isExternalLink = to.startsWith('http');
@@ -31,26 +25,18 @@ const SeriesRow = ({
     <div className={cx('x', className, { 'o-50p': item.isCaughtUp })}>
       <Component
         {...linkProps}
-        className="c-pointer x-1 d-block xa-center hover ph-3 pv-3">
-        <div className="x-1 mb-2">
+        className="c-pointer x x-1 xa-center hover ph-3 pv-2">
+        <div className="mr-2 mr-3-m" css="max-width: 50px; flex: 1 0 50px;">
           <CoverImage series={item.series} />
         </div>
         <div>
-          <div className="fs-14 lh-1d25">{item.series.title}</div>
-          <div className="fs-12 o-50p">
+          <div className="fs-14 fs-18-m lh-1d25">{item.series.title}</div>
+          <div className="fs-12 fs-14-m o-50p">
             {item.series.site.name}
             {isExternalLink && <Icon name="new-tab" iconSize={12} size={12} />}
           </div>
         </div>
       </Component>
-      {/* <button className="pa-3" onClick={onOptionsClick(item.series.id)}>
-        <Icon
-          name="more-horizontal"
-          className="c-gray3"
-          iconSize={18}
-          size={18}
-        />
-      </button> */}
     </div>
   );
 };

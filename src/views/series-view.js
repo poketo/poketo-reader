@@ -1,7 +1,7 @@
 // @flow
 
-import React, { Component } from 'react';
-import styled, { cx } from 'react-emotion';
+import React, { Component, Fragment } from 'react';
+import { cx } from 'react-emotion';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
@@ -13,6 +13,8 @@ import FollowButton from '../components/follow-button';
 import ScrollReset from '../components/scroll-reset';
 import Icon from '../components/icon';
 import Popover from '../components/popover';
+import utils from '../utils';
+import { markSeriesAsRead } from '../store/reducers/collections';
 import type { Dispatch } from '../store/types';
 import type { Series, Chapter } from '../types';
 
@@ -54,18 +56,19 @@ class SeriesPageContainer extends Component<ContainerProps> {
 type Props = {
   series: Series,
   chapters: Chapter[],
-  hasCollection: boolean,
+  collectionSlug: ?string,
   lastReadChapterId: boolean,
+  markAsRead: (
+    collectionSlug: string,
+    seriesId: string,
+    lastReadChapterId: string,
+  ) => void,
+  unreadChapterCount: number,
 };
 
 const Label = ({ className, ...props }: { className?: string }) => (
   <div className={cx(className, 'fs-14 c-gray3 mb-1')} {...props} />
 );
-
-const CoverImageContainer = styled.div`
-  width: 50%;
-  max-width: 140px;
-`;
 
 const iconProps = {
   iconSize: 20,
@@ -75,8 +78,10 @@ const iconProps = {
 const SeriesPage = ({
   series,
   chapters,
-  hasCollection,
+  collectionSlug,
   lastReadChapterId,
+  markAsRead,
+  unreadChapterCount,
 }: Props) => (
   <div className="pb-5">
     <ScrollReset />
@@ -96,6 +101,21 @@ const SeriesPage = ({
                 target="_blank"
                 rel="noreferrer noopener"
               />
+              {collectionSlug &&
+                unreadChapterCount > 0 && (
+                  <Fragment>
+                    <Popover.Divider />
+                    <Popover.Item
+                      iconBefore={<Icon name="bookmark" {...iconProps} />}
+                      label={`Mark ${unreadChapterCount} chapters as read`}
+                      onClick={() => {
+                        const latestChapter = chapters[0];
+                        markAsRead(collectionSlug, series.id, latestChapter.id);
+                        close();
+                      }}
+                    />
+                  </Fragment>
+                )}
             </div>
           )}
           position={Popover.Position.BOTTOM_RIGHT}>
@@ -108,9 +128,9 @@ const SeriesPage = ({
     <div className="bgc-black w-100p" style={{ height: 140 }} />
     <div className="mw-600 mh-auto p-relative">
       <header className="x xa-end mb-4 ph-3" css="margin-top: -60px;">
-        <CoverImageContainer className="mr-3">
+        <div className="mr-3 w-50p" css="max-width: 140px;">
           <CoverImage series={series} />
-        </CoverImageContainer>
+        </div>
         <div>
           <h1 className="fs-24 fs-32-m fw-semibold lh-1d25">{series.title}</h1>
           <a
@@ -124,7 +144,7 @@ const SeriesPage = ({
         </div>
       </header>
       <div className="ph-3 mb-4">
-        {hasCollection && (
+        {collectionSlug && (
           <div className="mb-4">
             <FollowButton seriesId={series.id} />
           </div>
@@ -173,15 +193,34 @@ const mapStateToProps = (state, ownProps) => {
 
   const collectionSlug = state.auth.collectionSlug;
   const collection = state.collections[collectionSlug];
-  const hasCollection = Boolean(collection);
 
-  const bookmark = hasCollection ? collection.bookmarks[seriesId] : null;
+  const bookmark = collection ? collection.bookmarks[seriesId] : null;
   const lastReadChapterId = bookmark ? bookmark.lastReadChapterId : null;
+  const unreadChapterCount = lastReadChapterId
+    ? utils.getUnreadChapters(chapters, lastReadChapterId).length
+    : 0;
 
-  return { series, chapters, hasCollection, lastReadChapterId };
+  return {
+    series,
+    chapters,
+    collectionSlug,
+    lastReadChapterId,
+    unreadChapterCount,
+  };
 };
 
-const ConnectedSeriesPage = connect(mapStateToProps)(SeriesPage);
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
+  return {
+    markAsRead: (collectionSlug, seriesId, chapterId) => {
+      dispatch(markSeriesAsRead(collectionSlug, seriesId, chapterId));
+    },
+  };
+};
+
+const ConnectedSeriesPage = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SeriesPage);
 
 export default withRouter(
   connect((state, ownProps) => {
