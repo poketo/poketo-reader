@@ -15,17 +15,29 @@ type Props = {
 };
 
 const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
-  const to = utils.getSeriesUrl(item.series.id);
+  const seriesTo = utils.getSeriesUrl(item.series.id);
 
-  const isExternalLink = to.startsWith('http');
+  const unreadChapters = utils.getUnreadChapters(
+    item.chapters,
+    item.lastReadChapterId,
+  );
+  // TODO: unread chapters is empty if you're caught up. We actually want the
+  // last read chapter here.
+  const latestChapter = unreadChapters[unreadChapters.length - 1];
+  const chapterTo = latestChapter ? utils.getReaderUrl(latestChapter.id) : '/';
+
+  const isExternalLink = seriesTo.startsWith('http');
   const Component = isExternalLink ? 'a' : Link;
-  const linkProps = isExternalLink ? { href: to, target: '_blank' } : { to };
+  const linkProps = isExternalLink
+    ? { href: seriesTo, target: '_blank' }
+    : { to: seriesTo };
 
   return (
-    <div className={cx('x', className, { 'o-50p': item.isCaughtUp })}>
-      <Component
-        {...linkProps}
-        className="c-pointer x x-1 xa-center hover ph-3 pv-2">
+    <div
+      className={cx('x xa-center ph-3 pv-2', className, {
+        'o-50p': item.isCaughtUp,
+      })}>
+      <Component {...linkProps} className="c-pointer x x-1 xa-center hover">
         <div className="mr-2 mr-3-m" css="max-width: 50px; flex: 1 0 50px;">
           <CoverImage series={item.series} />
         </div>
@@ -37,6 +49,11 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
           </div>
         </div>
       </Component>
+      {latestChapter && (
+        <Link to={chapterTo} className="fs-12 fs-14-m hover">
+          {latestChapter.order} of {item.chapters[0].order + 1}
+        </Link>
+      )}
     </div>
   );
 };
