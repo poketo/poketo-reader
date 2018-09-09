@@ -57,7 +57,7 @@ type Props = {
   series: Series,
   chapters: Chapter[],
   collectionSlug: ?string,
-  lastReadChapterId: boolean,
+  lastReadChapterId: ?string,
   markAsRead: (
     collectionSlug: string,
     seriesId: string,
@@ -129,7 +129,12 @@ const SeriesPage = ({
     <div className="mw-600 mh-auto p-relative">
       <header className="x xa-end mb-4 ph-3" css="margin-top: -60px;">
         <div className="mr-3 w-50p" css="max-width: 140px;">
-          <CoverImage series={series} />
+          <a
+            href={series.coverImageUrl}
+            target="_blank"
+            rel="noreferrer noopener">
+            <CoverImage series={series} />
+          </a>
         </div>
         <div>
           <h1 className="fs-24 fs-32-m fw-semibold lh-1d25">{series.title}</h1>
@@ -158,6 +163,14 @@ const SeriesPage = ({
           <div>{series.description}</div>
         </div>
       </div>
+      {unreadChapterCount > 0 &&
+        lastReadChapterId && (
+          <div className="ph-3 mb-4">
+            <Link to={utils.getReaderUrl(lastReadChapterId)}>
+              <Button>Continue Reading</Button>
+            </Link>
+          </div>
+        )}
       <div>
         {series.supportsReading ? (
           chapters.map(chapter => (
