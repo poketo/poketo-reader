@@ -47,26 +47,10 @@ type Props = {
   isShown: boolean,
 };
 
-type State = {
-  isShown: boolean,
-};
-
-export default class Toast extends PureComponent<Props, State> {
+export default class Toast extends PureComponent<Props> {
   static defaultProps = {
     onRemove: () => {},
   };
-
-  state = {
-    isShown: true,
-  };
-
-  static getDerivedStateFromProps(nextProps: Props, prevProps: Props) {
-    if (nextProps.isShown === prevProps.isShown) {
-      return null;
-    }
-
-    return { isShown: nextProps.isShown };
-  }
 
   render() {
     const { isShown, children } = this.props;

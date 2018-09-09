@@ -3,8 +3,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from './button';
-import Panel from './panel';
-import SeriesActionsPanel from './collection-series-actions-panel';
 import SeriesRow from './series-row';
 import type { Bookmark, FeedItem } from '../types';
 
@@ -25,61 +23,36 @@ class Feed extends Component<Props, State> {
     showAll: false,
   };
 
-  handleSeriesOptionsClick = (id: string) => (e: SyntheticEvent<*>) => {
-    this.setState({ currentSeriesActionPanelId: id });
-  };
-
-  handleSeriesOptionsPanelClose = () => {
-    this.setState({ currentSeriesActionPanelId: null });
-  };
-
   render() {
-    const { collectionSlug, bookmarks, feedItems } = this.props;
-    const { currentSeriesActionPanelId, showAll } = this.state;
+    const { collectionSlug, feedItems } = this.props;
+    const { showAll } = this.state;
 
     const unreadFeedItems = feedItems.filter(item => item.isCaughtUp === false);
     const readFeedItems = feedItems.filter(item => item.isCaughtUp === true);
 
     return (
-      <div className="pt-3 pt-4-m pb-6 mw-600 mh-auto">
-        <Panel
-          isShown={Boolean(currentSeriesActionPanelId)}
-          onRequestClose={this.handleSeriesOptionsPanelClose}>
-          {({ onRequestClose }) => (
-            <SeriesActionsPanel
-              collectionSlug={collectionSlug}
-              seriesId={currentSeriesActionPanelId}
-              // $FlowFixMe: `currentSeriesActionPanelId` is guaranteed to exist by the `isShown` prop
-              bookmark={bookmarks[currentSeriesActionPanelId]}
-              onRequestClose={onRequestClose}
-            />
-          )}
-        </Panel>
-        <div className="x xw-wrap">
+      <div className="pt-4 pb-6 mw-600 mh-auto">
+        <div>
           {unreadFeedItems.map(item => (
             <SeriesRow
-              className="w-50p w-25p-m"
               key={item.series.id}
               collectionSlug={collectionSlug}
               feedItem={item}
-              onOptionsClick={this.handleSeriesOptionsClick}
             />
           ))}
         </div>
         <Button onClick={() => this.setState({ showAll: !showAll })}>
           {showAll
             ? `Hide read series`
-            : `Show ${unreadFeedItems.length} read series`}
+            : `Show ${readFeedItems.length} read series`}
         </Button>
         {showAll && (
-          <div className="x xw-wrap">
+          <div>
             {readFeedItems.map(item => (
               <SeriesRow
-                className="w-50p w-25p-m"
                 key={item.series.id}
                 collectionSlug={collectionSlug}
                 feedItem={item}
-                onOptionsClick={this.handleSeriesOptionsClick}
               />
             ))}
           </div>
