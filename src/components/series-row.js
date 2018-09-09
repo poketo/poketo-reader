@@ -17,7 +17,11 @@ type Props = {
 const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
   const seriesTo = utils.getSeriesUrl(item.series.id);
 
-  const nextChapter = utils.lastReadChapter(
+  const lastChapter = utils.lastReadChapter(
+    item.chapters,
+    item.lastReadChapterId,
+  );
+  const nextChapter = utils.nextChapterToRead(
     item.chapters,
     item.lastReadChapterId,
   );
@@ -36,7 +40,7 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
       })}>
       <Component
         {...linkProps}
-        className="c-pointer x x-1 xa-center ph-3 pv-2 hover-bg">
+        className="c-pointer x x-1 xa-center ph-2 pv-2 hover-bg">
         <div className="mr-2 mr-3-m" css="max-width: 50px; flex: 1 0 50px;">
           <CoverImage series={item.series} />
         </div>
@@ -52,7 +56,7 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
         <Link
           to={chapterTo}
           className="x xa-center fs-12 fs-14-m ph-3 pv-2 hover-bg">
-          {nextChapter.chapterNumber} / {item.chapters[0].chapterNumber}
+          {lastChapter.chapterNumber} / {item.chapters[0].chapterNumber}
         </Link>
       )}
     </div>
