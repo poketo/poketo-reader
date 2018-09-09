@@ -31,7 +31,7 @@ class Feed extends Component<Props, State> {
     const readFeedItems = feedItems.filter(item => item.isCaughtUp === true);
 
     return (
-      <div className="pt-4 pb-6 mw-600 mh-auto">
+      <div className="pt-4 ph-3 pb-6 mw-600 mh-auto">
         <div>
           {unreadFeedItems.map(item => (
             <SeriesRow
