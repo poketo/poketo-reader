@@ -299,6 +299,19 @@
   opacity: 0.5;
 }
 
+.hover-bg {
+  border-radius: 3px;
+  transition: background-color 200ms ease;
+}
+
+.supports-hover .hover-bg:hover {
+  background-color: rgba(0, 0, 0, 0.07);
+}
+
+.hover-bg:active {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
 .t-shrinkOnActive {
   transition: transform 200ms ease;
 }

@@ -165,6 +165,22 @@ const utils = {
     return readChapters;
   },
 
+  lastReadChapter: (
+    chapters: ChapterMetadata[],
+    lastReadId: BookmarkLastReadChapterId = null,
+  ): ChapterMetadata => {
+    const sortedChapters = utils.sortChapters(chapters);
+    const readChapters = utils.getReadChapters(sortedChapters, lastReadId);
+
+    // If there are read chapters, get the last one.
+    if (readChapters.length > 0) {
+      return readChapters.shift();
+    }
+
+    // Otherwise, return the first chapter;
+    return sortedChapters.pop();
+  },
+
   nextChapterToRead: (
     chapters: ChapterMetadata[],
     lastReadId: BookmarkLastReadChapterId = null,
