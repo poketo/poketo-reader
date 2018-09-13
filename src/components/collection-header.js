@@ -20,16 +20,10 @@ const LoadableFeedbackForm = Loadable({
 const iconProps = { iconSize: 18, size: 44 };
 
 const StyledHeader = styled.header`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
-
-  @media only screen and (min-width: 480px) {
-    position: absolute;
-    box-shadow: none;
-  }
 `;
 
 type Props = {
@@ -135,7 +129,7 @@ export default class CollectionHeader extends Component<Props, State> {
     return (
       <StyledHeader className="z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
-          <Icon name="poketo" className="c-coral" />
+          <Icon name="poketo" className="c-lightCoral" />
         </div>
         <Panel
           isShown={this.state.isFeedbackPanelShown}

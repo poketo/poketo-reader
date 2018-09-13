@@ -32,6 +32,7 @@ const styles = hibiscss(
       extraFadedLightCoral: 'rgba(255, 156, 143, 0.15)',
       blue: '#73d2ff',
       green: '#13cf83',
+      lightGreen: '#47e4a5',
       yellow: '#ffe479',
     },
     fontSize: {

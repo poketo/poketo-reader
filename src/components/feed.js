@@ -1,10 +1,32 @@
 // @flow
 
 import React, { Component } from 'react';
+import { css, cx } from 'react-emotion';
 import { connect } from 'react-redux';
 import Button from './button';
+import Icon from './icon';
 import SeriesRow from './series-row';
 import type { Bookmark, FeedItem } from '../types';
+
+const TextLink = props => (
+  <a
+    className="fs-14 c-gray3 c-pointer"
+    css={`
+      border: 1px transparent solid;
+      border-radius: 3px;
+      padding: 4px 6px 3px;
+      user-select: none;
+      &:hover {
+        border: 1px #e2e2e2 solid;
+      }
+      &:active {
+        border-color: transparent;
+        background: #f2f2f2;
+      }
+    `}
+    {...props}
+  />
+);
 
 type Props = {
   collectionSlug: string,
@@ -31,8 +53,13 @@ class Feed extends Component<Props, State> {
     const readFeedItems = feedItems.filter(item => item.isCaughtUp === true);
 
     return (
-      <div className="pt-4 ph-3 pb-6 mw-600 mh-auto">
-        <div>
+      <div className="pt-5 ph-3 pb-6 mw-600 mh-auto">
+        <header className="mb-3 ph-2">
+          <h1 className="c-green fs-20 fs-24-m fw-semibold x xa-center">
+            <Icon name="book" className="c-lightGreen mr-3" /> Reading
+          </h1>
+        </header>
+        <div className="mb-4">
           {unreadFeedItems.map(item => (
             <SeriesRow
               key={item.series.id}
@@ -41,11 +68,13 @@ class Feed extends Component<Props, State> {
             />
           ))}
         </div>
-        <Button onClick={() => this.setState({ showAll: !showAll })}>
-          {showAll
-            ? `Hide read series`
-            : `Show ${readFeedItems.length} read series`}
-        </Button>
+        <div className="mb-4">
+          <TextLink onClick={() => this.setState({ showAll: !showAll })}>
+            {showAll
+              ? `Hide read series`
+              : `Show ${readFeedItems.length} read series`}
+          </TextLink>
+        </div>
         {showAll && (
           <div>
             {readFeedItems.map(item => (

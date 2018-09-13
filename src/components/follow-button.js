@@ -13,6 +13,7 @@ import Icon from '../components/icon';
 import Button from '../components/button';
 
 const StyledButton = styled(Button)`
+  min-width: 140px;
   ${props =>
     props.isFollowing === true && props.loading !== true
       ? css`
@@ -117,7 +118,7 @@ class FollowButton extends Component<Props, State> {
   };
 
   render() {
-    const { collectionSlug, isFollowing } = this.props;
+    const { collectionSlug, isFollowing, ...props } = this.props;
     const { isFetching } = this.state;
 
     if (!collectionSlug) {
@@ -129,7 +130,8 @@ class FollowButton extends Component<Props, State> {
         disabled={isFetching}
         loading={isFetching}
         isFollowing={isFollowing}
-        onClick={this.handleClick}>
+        onClick={this.handleClick}
+        {...props}>
         {isFollowing ? (
           <Fragment>
             <Icon
