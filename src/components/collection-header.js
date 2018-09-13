@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 import Loadable from 'react-loadable';
-
+import { Link } from 'react-router-dom';
 import Button from './button';
 import ComponentLoader from './loader-component';
 import Icon from './icon';
@@ -129,7 +129,9 @@ export default class CollectionHeader extends Component<Props, State> {
     return (
       <StyledHeader className="z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
-          <Icon name="poketo" className="c-lightCoral" />
+          <Link to="/">
+            <Icon name="poketo" className="c-lightCoral" />
+          </Link>
         </div>
         <Panel
           isShown={this.state.isFeedbackPanelShown}
