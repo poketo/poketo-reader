@@ -46,7 +46,11 @@ class SeriesPageContainer extends Component<ContainerProps> {
     }
 
     if (this.props.isFetching) {
-      return <CircleLoader />;
+      return (
+        <div className="x xj-center xa-center mh-100vh">
+          <CircleLoader />
+        </div>
+      );
     }
 
     return <ConnectedSeriesPage seriesId={this.props.match.params.seriesId} />;
@@ -88,6 +92,8 @@ const SeriesPage = ({
     unreadChapterCount > 0 && lastReadChapterId
       ? chapters.find(c => c.id === lastReadChapterId)
       : null;
+  const supportsReading = series.supportsReading;
+  const hasChapters = chapters.length > 0;
 
   return (
     <div className="pb-5">
@@ -176,19 +182,21 @@ const SeriesPage = ({
             <div>{series.description}</div>
           </div>
         </div>
-        <div className="ph-3 mb-4">
-          {lastReadChapter ? (
-            <Link to={utils.getReaderUrl(lastReadChapter.id)}>
-              <Button>Continue Reading</Button>
-            </Link>
-          ) : (
-            <Link to={utils.getReaderUrl(firstChapter)}>
-              <Button>Read</Button>
-            </Link>
-          )}
-        </div>
+        {hasChapters && (
+          <div className="ph-3 mb-4">
+            {lastReadChapter ? (
+              <Link to={utils.getReaderUrl(lastReadChapter.id)}>
+                <Button>Continue Reading</Button>
+              </Link>
+            ) : (
+              <Link to={utils.getReaderUrl(firstChapter)}>
+                <Button>Read</Button>
+              </Link>
+            )}
+          </div>
+        )}
         <div>
-          {series.supportsReading ? (
+          {hasChapters ? (
             chapters.map(chapter => (
               <div className="bb-1 bc-gray1 ph-3" key={chapter.id}>
                 <ChapterRow
@@ -199,10 +207,16 @@ const SeriesPage = ({
             ))
           ) : (
             <div className="bgc-gray0 ta-center br-3 ph-4 pv-4">
-              <Icon name="warning" className="mb-3" />
-              <div className="mb-3 fw-semibold">No chapters</div>
+              {!supportsReading && (
+                <Fragment>
+                  <Icon name="warning" className="mb-3" />
+                  <div className="mb-3 fw-semibold">No chapters</div>
+                </Fragment>
+              )}
               <p className="c-gray4">
-                {series.site.name} doesn't support reading on Poketo.
+                {supportsReading
+                  ? `This series has no chapters available to read.`
+                  : `${series.site.name} doesn't support reading on Poketo.`}
               </p>
             </div>
           )}
