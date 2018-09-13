@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { css, cx } from 'react-emotion';
 import { connect } from 'react-redux';
 import Button from './button';
+import Icon from './icon';
 import SeriesRow from './series-row';
 import type { Bookmark, FeedItem } from '../types';
 
@@ -53,10 +54,12 @@ class Feed extends Component<Props, State> {
 
     return (
       <div className="pt-5 ph-3 pb-6 mw-600 mh-auto">
-        <header className="mb-3">
-          <h1 className="fs-24 fw-semibold">Reading</h1>
+        <header className="mb-3 ph-2">
+          <h1 className="c-green fs-20 fs-24-m fw-semibold x xa-center">
+            <Icon name="book" className="c-lightGreen mr-3" /> Reading
+          </h1>
         </header>
-        <div className="mb-4" css="margin-left: -8px; margin-right: -8px;">
+        <div className="mb-4">
           {unreadFeedItems.map(item => (
             <SeriesRow
               key={item.series.id}
@@ -73,7 +76,7 @@ class Feed extends Component<Props, State> {
           </TextLink>
         </div>
         {showAll && (
-          <div css="margin-left: -8px; margin-right: -8px;">
+          <div>
             {readFeedItems.map(item => (
               <SeriesRow
                 key={item.series.id}

@@ -26,6 +26,7 @@ type Props = {
 const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
   const seriesTo = utils.getSeriesUrl(item.series.id);
 
+  const mostRecentChapter = item.chapters[0];
   const lastChapter = utils.lastReadChapter(
     item.chapters,
     item.lastReadChapterId,
@@ -43,16 +44,13 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
     : { to: seriesTo };
 
   return (
-    <div
-      className={cx('x xa-stretch', className, {
-        'o-50p': item.isCaughtUp,
-      })}>
+    <div className={cx('x xa-stretch', className)}>
       <Component
         {...linkProps}
         className="c-pointer x x-1 xa-center ph-2 pv-2 hover-bg">
-        <CoverImageContainer className="mr-2 mr-3-m">
+        {/* <CoverImageContainer className="mr-2 mr-3-m">
           <CoverImage series={item.series} />
-        </CoverImageContainer>
+        </CoverImageContainer> */}
         <div>
           <div className="fs-14 fs-18-m lh-1d25">{item.series.title}</div>
           <div className="fs-12 fs-14-m o-50p">
@@ -68,7 +66,7 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
           {lastChapter.chapterNumber}
           <span className="o-50p">
             <span className="ph-1">/</span>
-            {item.chapters[0].chapterNumber}
+            {mostRecentChapter.chapterNumber}
           </span>
         </Link>
       )}
