@@ -302,10 +302,11 @@
 .hover-bg {
   border-radius: 3px;
   transition: background-color 200ms ease;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.15);
 }
 
 .supports-hover .hover-bg:hover {
-  background-color: rgba(0, 0, 0, 0.07);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .hover-bg:active {

@@ -10,19 +10,12 @@ import type { Bookmark, FeedItem } from '../types';
 
 const TextLink = props => (
   <a
-    className="fs-14 c-gray3 c-pointer"
+    className="fs-14 c-gray3 c-pointer hover-bg "
     css={`
       border: 1px transparent solid;
       border-radius: 3px;
       padding: 4px 6px 3px;
       user-select: none;
-      &:hover {
-        border: 1px #e2e2e2 solid;
-      }
-      &:active {
-        border-color: transparent;
-        background: #f2f2f2;
-      }
     `}
     {...props}
   />

@@ -28,9 +28,10 @@ const StyledButton = styled.button`
   font-size: 16px;
   transition: background-color 200ms ease, color 200ms ease,
     border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.15);
 
   .supports-hover &:hover {
-    background-color: rgba(0, 0, 0, 0.07);
+    background-color: rgba(0, 0, 0, 0.05);
   }
 
   &:active {
@@ -63,6 +64,7 @@ const StyledButton = styled.button`
       color: white;
       background-color: #ff6f6f; /* bgc-coral */
       border: none;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
       &[disabled],
       .supports-hover &[disabled]:hover {
