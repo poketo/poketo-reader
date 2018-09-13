@@ -130,7 +130,7 @@ export default class CollectionHeader extends Component<Props, State> {
       <StyledHeader className="z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
           <Link to="/">
-            <Icon name="poketo" className="c-lightCoral" />
+            <Icon name="poketo" className="c-lightCoral va-top" />
           </Link>
         </div>
         <Panel
