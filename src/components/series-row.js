@@ -52,7 +52,18 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
           <CoverImage series={item.series} />
         </CoverImageContainer> */}
         <div>
-          <div className="fs-14 fs-18-m lh-1d25">{item.series.title}</div>
+          <div
+            className={cx('fs-14 fs-18-m lh-1d25', {
+              'x xa-center c-coral fw-semibold': item.hasNewRelease,
+            })}>
+            {item.hasNewRelease && (
+              <div
+                className="x p-relative br-round bgc-coral mr-2"
+                css="top: -1px; width: 6px; height: 6px;"
+              />
+            )}
+            {item.series.title}
+          </div>
           <div className="fs-12 fs-14-m o-50p">
             {item.series.site.name}
             {isExternalLink && <Icon name="new-tab" iconSize={12} size={12} />}

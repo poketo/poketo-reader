@@ -46,9 +46,15 @@ class Feed extends Component<Props, State> {
 
     return (
       <div className="pt-5 ph-3 pb-6 mw-600 mh-auto">
-        <header className="mb-3 ph-2">
-          <h1 className="fs-20 fw-semibold x xa-center">
-            <Icon name="book" className="c-lightGreen mr-3" /> Reading
+        <header className="mb-4 mb-5-m ph-2">
+          <h1 className="fs-20 fs-24-m fw-semibold x xa-center">
+            <Icon
+              name="bookmark"
+              className="c-lightGreen mr-2"
+              iconSize={28}
+              size={32}
+            />{' '}
+            Reading
           </h1>
         </header>
         <div className="mb-4">
@@ -100,6 +106,7 @@ const mapStateToProps = (state, ownProps) => {
         series,
         chapters,
         isCaughtUp: chapters.length > 0 && chapters[0].id === lastReadChapterId,
+        // hasNewRelease: series.id === 'mangadex:7645',
         lastReadChapterId,
         linkTo,
       };
