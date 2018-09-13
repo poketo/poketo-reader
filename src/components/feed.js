@@ -1,14 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
-import { css, cx } from 'react-emotion';
 import { connect } from 'react-redux';
-import Button from './button';
 import Icon from './icon';
 import SeriesRow from './series-row';
 import type { Bookmark, FeedItem } from '../types';
 
 const TextLink = props => (
+  // eslint-disable-next-line jsx-a11y/anchor-has-content
   <a
     className="fs-14 c-gray3 c-pointer hover-bg "
     css={`
@@ -48,7 +47,7 @@ class Feed extends Component<Props, State> {
     return (
       <div className="pt-5 ph-3 pb-6 mw-600 mh-auto">
         <header className="mb-3 ph-2">
-          <h1 className="c-green fs-20 fs-24-m fw-semibold x xa-center">
+          <h1 className="fs-20 fw-semibold x xa-center">
             <Icon name="book" className="c-lightGreen mr-3" /> Reading
           </h1>
         </header>
@@ -64,8 +63,8 @@ class Feed extends Component<Props, State> {
         <div className="mb-4">
           <TextLink onClick={() => this.setState({ showAll: !showAll })}>
             {showAll
-              ? `Hide read series`
-              : `Show ${readFeedItems.length} read series`}
+              ? `Hide caught-up series`
+              : `Show ${readFeedItems.length} caught-up series`}
           </TextLink>
         </div>
         {showAll && (

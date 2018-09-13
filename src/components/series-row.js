@@ -59,7 +59,7 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
           </div>
         </div>
       </Component>
-      {nextChapter && (
+      {nextChapter ? (
         <Link
           to={chapterTo}
           className="x xa-center fs-12 fs-14-m ph-3 pv-2 hover-bg">
@@ -69,6 +69,8 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
             {mostRecentChapter.chapterNumber}
           </span>
         </Link>
+      ) : (
+        <div className="o-50p pl-4 pr-3 pv-2">&mdash;</div>
       )}
     </div>
   );
