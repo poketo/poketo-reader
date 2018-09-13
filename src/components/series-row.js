@@ -70,7 +70,9 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
           </span>
         </Link>
       ) : (
-        <div className="o-50p pl-4 pr-3 pv-2">&mdash;</div>
+        <div className="x xa-center us-none pe-none o-50p pl-4 pr-3 pv-2">
+          &mdash;
+        </div>
       )}
     </div>
   );
