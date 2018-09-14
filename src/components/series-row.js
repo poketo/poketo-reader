@@ -51,7 +51,7 @@ const NextChapterRow = ({ chapter, isNewRelease }: NextChapterRowProps) => {
         </div>
         {chapterTitle && <div className="fs-12 o-50p">{chapterTitle}</div>}
       </div>
-      <span className="pl-1 ml-auto fs-12 o-50p ta-right">
+      <span className="pl-1 ml-auto fs-12 o-50p ta-right x">
         <Icon name="arrow-right" iconSize={16} />
       </span>
     </Link>
@@ -107,17 +107,14 @@ const SeriesRow = ({
           </div>
         </div>
       </Component>
-      {showChapters && (
-        <Fragment>
-          {nextChapter && (
-            <NextChapterRow
-              chapter={nextChapter}
-              isNewRelease={item.newReleases.includes(nextChapter.id)}
-              isRead={false}
-            />
-          )}
-        </Fragment>
-      )}
+      {showChapters &&
+        (nextChapter && (
+          <NextChapterRow
+            chapter={nextChapter}
+            isNewRelease={item.newReleases.includes(nextChapter.id)}
+            isRead={false}
+          />
+        ))}
     </div>
   );
 };
