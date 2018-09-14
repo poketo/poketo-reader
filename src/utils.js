@@ -19,9 +19,12 @@ const utils = {
   formatTimestamp: (timestamp: number): string => {
     const date = toDate(timestamp);
     const absoluteDateCutOff = subMonths(new Date(), 2);
+    const yearsInDateCutOff = subMonths(new Date(), 12);
 
-    if (date < absoluteDateCutOff) {
+    if (date < yearsInDateCutOff) {
       return format(date, 'MMM D, YYYY');
+    } else if (date < absoluteDateCutOff) {
+      return format(date, 'MMM D');
     }
 
     const distanceString = distanceInWordsToNow(date);
