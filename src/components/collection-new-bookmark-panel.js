@@ -332,7 +332,7 @@ class NewBookmarkPanel extends Component<Props, State> {
               </Fragment>
             )}
           <Button
-            primary
+            variant="primary"
             disabled={bookmarkFetchState !== 'READY' || errorCode !== null}
             type="submit">
             {buttonLabelValues[bookmarkFetchState]}

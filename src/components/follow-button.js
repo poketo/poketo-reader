@@ -31,14 +31,12 @@ const StyledButton = styled(Button)`
           }
         `
       : css`
-          border: 1px #cfccc8 solid;
+          border: 1px #f2f2f2 solid;
           color: #292723;
 
           .supports-hover &:hover,
           &:active {
-            background-color: transparent;
-            border-color: #f2f2f2;
-            color: #888786;
+            border-color: transparent;
           }
         `};
 `;
@@ -136,7 +134,7 @@ class FollowButton extends Component<Props, State> {
           <Fragment>
             <Icon
               className={followClassName}
-              name="check"
+              name="bookmark"
               iconSize={18}
               size={32}
             />
@@ -144,7 +142,10 @@ class FollowButton extends Component<Props, State> {
             <span className={unfollowClassName}>Unfollow</span>
           </Fragment>
         ) : (
-          <Fragment>Follow</Fragment>
+          <Fragment>
+            <Icon name="bookmark" iconSize={18} size={32} />
+            Follow
+          </Fragment>
         )}
       </StyledButton>
     );

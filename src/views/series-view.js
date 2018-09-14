@@ -87,10 +87,10 @@ const SeriesPage = ({
   markAsRead,
   unreadChapterCount,
 }: Props) => {
-  const firstChapter = chapters[0];
-  const lastReadChapter =
+  const firstChapter = chapters[chapters.length - 1];
+  const nextChapter =
     unreadChapterCount > 0 && lastReadChapterId
-      ? chapters.find(c => c.id === lastReadChapterId)
+      ? utils.nextChapterToRead(chapters, lastReadChapterId)
       : null;
   const supportsReading = series.supportsReading;
   const hasChapters = chapters.length > 0;
@@ -153,7 +153,7 @@ const SeriesPage = ({
               <CoverImage series={series} />
             </a>
           </div>
-          <div>
+          <div className="x xd-column">
             <h1 className="fs-20 fs-24-m fw-semibold lh-1d25 mb-1">
               {series.title}
             </h1>
@@ -165,14 +165,27 @@ const SeriesPage = ({
               {series.site.name}
               <Icon name="new-tab" size={16} iconSize={16} />
             </a>
+            {collectionSlug && (
+              <div css="margin-top: auto;">
+                <FollowButton inline seriesId={series.id} />
+              </div>
+            )}
           </div>
         </header>
+        {hasChapters && (
+          <div className="ph-3 mb-4">
+            {nextChapter ? (
+              <Link to={utils.getReaderUrl(nextChapter.id)}>
+                <Button variant="primary">Continue Reading</Button>
+              </Link>
+            ) : (
+              <Link to={utils.getReaderUrl(firstChapter.id)}>
+                <Button variant="border">Start Reading</Button>
+              </Link>
+            )}
+          </div>
+        )}
         <div className="ph-3 mb-4">
-          {collectionSlug && (
-            <div className="mb-4">
-              <FollowButton seriesId={series.id} />
-            </div>
-          )}
           <div className="mb-3">
             <Label>Author</Label>
             <div>{series.author}</div>
@@ -182,19 +195,6 @@ const SeriesPage = ({
             <div>{series.description}</div>
           </div>
         </div>
-        {hasChapters && (
-          <div className="ph-3 mb-4">
-            {lastReadChapter ? (
-              <Link to={utils.getReaderUrl(lastReadChapter.id)}>
-                <Button>Continue Reading</Button>
-              </Link>
-            ) : (
-              <Link to={utils.getReaderUrl(firstChapter.id)}>
-                <Button>Read</Button>
-              </Link>
-            )}
-          </div>
-        )}
         <div>
           {hasChapters ? (
             chapters.map(chapter => (
