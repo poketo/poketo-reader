@@ -61,62 +61,6 @@ export default class CollectionHeader extends Component<Props, State> {
     });
   };
 
-  renderAddButton(inline: boolean = false) {
-    const label = 'Follow new series';
-    const icon = <Icon name="add" {...iconProps} />;
-
-    if (inline) {
-      return (
-        <Button
-          inline
-          noPadding
-          onClick={this.openAddBookmarkPanel}
-          title={label}>
-          {icon}
-        </Button>
-      );
-    }
-
-    return (
-      <Popover.Item
-        label={label}
-        onClick={this.openAddBookmarkPanel}
-        iconBefore={icon}
-      />
-    );
-  }
-
-  renderClearCacheButton() {
-    return (
-      <Popover.Item
-        label="Clear cache"
-        onClick={this.handleClearCacheClick}
-        iconBefore={<Icon name="refresh" {...iconProps} />}
-      />
-    );
-  }
-
-  renderFeedbackButton(inline: boolean = false) {
-    const label = 'Send feedback';
-    const icon = <Icon name="message" {...iconProps} />;
-
-    if (inline) {
-      return (
-        <Button inline noPadding onClick={this.openFeedbackPanel} title={label}>
-          {icon}
-        </Button>
-      );
-    }
-
-    return (
-      <Popover.Item
-        onClick={this.openFeedbackPanel}
-        label={label}
-        iconBefore={icon}
-      />
-    );
-  }
-
   render() {
     return (
       <header className="x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
@@ -146,13 +90,25 @@ export default class CollectionHeader extends Component<Props, State> {
             />
           )}
         </Panel>
-        <div className="d-none d-block-m">{this.renderAddButton(true)}</div>
         <Popover
           content={
             <div className="pa-2" style={{ maxWidth: '80vw' }}>
-              {this.renderAddButton()}
-              {this.renderClearCacheButton()}
-              {this.renderFeedbackButton()}
+              <Popover.Item
+                label="Follow new series"
+                onClick={this.openAddBookmarkPanel}
+                iconBefore={<Icon name="add" {...iconProps} />}
+              />
+              <Popover.Divider />
+              <Popover.Item
+                label="Clear cache"
+                onClick={this.handleClearCacheClick}
+                iconBefore={<Icon name="refresh" {...iconProps} />}
+              />
+              <Popover.Item
+                onClick={this.openFeedbackPanel}
+                label="Send feedback"
+                iconBefore={<Icon name="message" {...iconProps} />}
+              />
               <Popover.Item
                 iconBefore={<Icon name="new-tab" {...iconProps} />}
                 label="Open Poketo site"
@@ -161,11 +117,9 @@ export default class CollectionHeader extends Component<Props, State> {
             </div>
           }
           position={Popover.Position.BOTTOM_RIGHT}>
-          <div className="d-none-m">
-            <Button inline noPadding>
-              <Icon name="more-vertical" size={44} iconSize={20} />
-            </Button>
-          </div>
+          <Button inline noPadding>
+            <Icon name="more-vertical" size={44} iconSize={20} />
+          </Button>
         </Popover>
       </header>
     );
