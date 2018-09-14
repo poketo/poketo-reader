@@ -4,21 +4,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from './icon';
 import SeriesRow from './series-row';
+import PassiveButton from './passive-button';
 import type { Bookmark, FeedItem } from '../types';
-
-const TextLink = props => (
-  // eslint-disable-next-line jsx-a11y/anchor-has-content
-  <a
-    className="fs-14 c-gray3 c-pointer hover-bg "
-    css={`
-      border: 1px transparent solid;
-      border-radius: 3px;
-      padding: 4px 6px 3px;
-      user-select: none;
-    `}
-    {...props}
-  />
-);
 
 type Props = {
   collectionSlug: string,
@@ -45,33 +32,24 @@ class Feed extends Component<Props, State> {
     const readFeedItems = feedItems.filter(item => item.isCaughtUp === true);
 
     return (
-      <div className="pt-5 ph-3 pb-6 mw-600 mh-auto">
-        <header className="mb-4 mb-5-m ph-2">
-          <h1 className="fs-20 fs-24-m fw-semibold x xa-center">
-            <Icon
-              name="bookmark"
-              className="c-lightGreen mr-2"
-              iconSize={28}
-              size={32}
-            />{' '}
-            Reading
-          </h1>
-        </header>
+      <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
         <div className="mb-4">
           {unreadFeedItems.map(item => (
-            <SeriesRow
-              key={item.series.id}
-              collectionSlug={collectionSlug}
-              feedItem={item}
-            />
+            <div key={item.series.id} className="mb-3">
+              <SeriesRow
+                collectionSlug={collectionSlug}
+                feedItem={item}
+                showChapters
+              />
+            </div>
           ))}
         </div>
         <div className="mb-4">
-          <TextLink onClick={() => this.setState({ showAll: !showAll })}>
+          <PassiveButton onClick={() => this.setState({ showAll: !showAll })}>
             {showAll
               ? `Hide caught-up series`
               : `Show ${readFeedItems.length} caught-up series`}
-          </TextLink>
+          </PassiveButton>
         </div>
         {showAll && (
           <div>
@@ -106,7 +84,7 @@ const mapStateToProps = (state, ownProps) => {
         series,
         chapters,
         isCaughtUp: chapters.length > 0 && chapters[0].id === lastReadChapterId,
-        // hasNewRelease: series.id === 'mangadex:7645',
+        newReleases: ['mangadex:15553:447577', 'mangadex:7645:445924'],
         lastReadChapterId,
         linkTo,
       };

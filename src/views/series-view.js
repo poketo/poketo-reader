@@ -99,7 +99,7 @@ const SeriesPage = ({
     <div className="pb-5">
       <ScrollReset />
       <div className="mw-600 w-100p mh-auto p-relative">
-        <header className="x xa-center xj-spaceBetween pv-3 mb-3 c-white p-absolute t-0 w-100p z-3">
+        <header className="bgc-black x xa-center xj-spaceBetween pa-2 mb-3 c-white">
           <Link to="/" className="x hover">
             <Icon name="arrow-left" {...iconProps} />
           </Link>
@@ -142,9 +142,8 @@ const SeriesPage = ({
           </Popover>
         </header>
       </div>
-      <div className="bgc-black w-100p" style={{ height: 140 }} />
       <div className="mw-600 mh-auto p-relative">
-        <header className="x xa-end mb-4 ph-3" css="margin-top: -60px;">
+        <header className="x mb-4 pt-3 ph-3">
           <div className="mr-3 w-50p" css="max-width: 140px;">
             <a
               href={series.coverImageUrl}
@@ -154,7 +153,7 @@ const SeriesPage = ({
             </a>
           </div>
           <div>
-            <h1 className="fs-24 fs-32-m fw-semibold lh-1d25">
+            <h1 className="fs-20 fs-24-m fw-semibold lh-1d25 mb-1">
               {series.title}
             </h1>
             <a

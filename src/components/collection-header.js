@@ -19,13 +19,6 @@ const LoadableFeedbackForm = Loadable({
 
 const iconProps = { iconSize: 18, size: 44 };
 
-const StyledHeader = styled.header`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-`;
-
 type Props = {
   collectionSlug: string,
 };
@@ -127,7 +120,7 @@ export default class CollectionHeader extends Component<Props, State> {
 
   render() {
     return (
-      <StyledHeader className="z-9 x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
+      <header className="x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
           <Link to="/">
             <Icon name="poketo" className="c-lightCoral va-top" />
@@ -175,7 +168,7 @@ export default class CollectionHeader extends Component<Props, State> {
             </Button>
           </div>
         </Popover>
-      </StyledHeader>
+      </header>
     );
   }
 }

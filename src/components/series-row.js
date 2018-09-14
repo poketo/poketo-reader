@@ -1,15 +1,16 @@
 // @flow
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled, { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import CoverImage from './series-cover-image';
+import Button from './button';
 import Icon from './icon';
 import utils from '../utils';
 import type { FeedItem } from '../types';
 
 const CoverImageContainer = styled.div`
-  max-width: 50px;
+  max-width: 60px;
   flex: 1 0 50px;
 
   @media only screen and (min-width: 768px) {
@@ -17,13 +18,58 @@ const CoverImageContainer = styled.div`
   }
 `;
 
+const NewReleaseIndicator = () => (
+  <div
+    className="p-relative br-round bgc-coral mr-2"
+    css="top: -1px; width: 6px; height: 6px; flex-basis: 6px; flex-shrink: 0;"
+  />
+);
+
+type ChapterRowProps = {
+  chapter: ChapterMetadata,
+  isNewRelease: boolean,
+  isRead: boolean,
+};
+
+const ChapterRow = ({ chapter, isNewRelease, isRead }: ChapterRowProps) => {
+  const chapterLabel = utils.getChapterLabel(chapter);
+  const chapterTitle = utils.getChapterTitle(chapter);
+  const to = utils.getReaderUrl(chapter.id);
+
+  return (
+    <Link
+      to={to}
+      className={cx('fs-14 x xa-center pa-2 hover-bg ws-noWrap', {
+        'o-50p': isRead,
+      })}
+      css="min-height: 44px">
+      {isNewRelease && <NewReleaseIndicator />}
+      <div className="xs-1 of-hidden to-ellipsis">
+        <span className={cx('fw-semibold mr-2', { 'c-coral': isNewRelease })}>
+          {chapterLabel}
+        </span>
+        {chapterTitle && `${chapterTitle}`}
+      </div>
+      <span className="pl-1 ml-auto fs-12 o-50p ta-right">
+        {utils.formatTimestamp(chapter.createdAt)}
+      </span>
+    </Link>
+  );
+};
+
 type Props = {
   className?: string,
   collectionSlug: string,
   feedItem: FeedItem,
+  showChapters?: boolean,
 };
 
-const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
+const SeriesRow = ({
+  className,
+  collectionSlug,
+  feedItem: item,
+  showChapters = false,
+}: Props) => {
   const seriesTo = utils.getSeriesUrl(item.series.id);
 
   const mostRecentChapter = item.chapters[0];
@@ -44,46 +90,44 @@ const SeriesRow = ({ className, collectionSlug, feedItem: item }: Props) => {
     : { to: seriesTo };
 
   return (
-    <div className={cx('x xa-stretch', className)}>
+    <div className={cx(className)}>
       <Component
         {...linkProps}
-        className="c-pointer x x-1 xa-center ph-2 pv-2 hover-bg">
-        {/* <CoverImageContainer className="mr-2 mr-3-m">
+        className="c-pointer x xa-center pa-2 pv-3 hover-bg">
+        <CoverImageContainer className="mr-2 mr-3-m">
           <CoverImage series={item.series} />
-        </CoverImageContainer> */}
-        <div>
-          <div
-            className={cx('fs-14 fs-18-m lh-1d25', {
-              'x xa-center c-coral fw-semibold': item.hasNewRelease,
-            })}>
-            {item.hasNewRelease && (
-              <div
-                className="x p-relative br-round bgc-coral mr-2"
-                css="top: -1px; width: 6px; height: 6px;"
-              />
-            )}
+        </CoverImageContainer>
+        <div className="xs-1 w-100p of-hidden">
+          <div className="fs-16 fs-20-m fw-semibold lh-1d25 of-hidden to-ellipsis ws-noWrap">
             {item.series.title}
           </div>
-          <div className="fs-12 fs-14-m o-50p">
+          <div className="fs-12 o-50p">
             {item.series.site.name}
             {isExternalLink && <Icon name="new-tab" iconSize={12} size={12} />}
           </div>
         </div>
       </Component>
-      {nextChapter ? (
-        <Link
-          to={chapterTo}
-          className="x xa-center fs-12 fs-14-m ph-3 pv-2 hover-bg">
-          {lastChapter.chapterNumber}
-          <span className="o-50p">
-            <span className="ph-1">/</span>
-            {mostRecentChapter.chapterNumber}
-          </span>
-        </Link>
-      ) : (
-        <div className="x xa-center us-none pe-none o-50p pl-4 pr-3 pv-2">
-          &mdash;
-        </div>
+      {showChapters && (
+        <Fragment>
+          {nextChapter && (
+            <div className="bt-1 bb-1 bc-gray1">
+              <ChapterRow
+                chapter={nextChapter}
+                isNewRelease={item.newReleases.includes(nextChapter.id)}
+                isRead={false}
+              />
+            </div>
+          )}
+          {lastChapter && (
+            <div className="bb-1 bc-gray1">
+              <ChapterRow
+                chapter={lastChapter}
+                isNewRelease={item.newReleases.includes(lastChapter.id)}
+                isRead={true}
+              />
+            </div>
+          )}
+        </Fragment>
       )}
     </div>
   );
