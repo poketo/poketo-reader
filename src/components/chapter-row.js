@@ -34,8 +34,8 @@ const ChapterRow = ({
         />
       )}
       <div className="of-hidden to-ellipsis ws-noWrap">
-        {chapterLabel}
-        {chapterTitle && `: ${chapterTitle}`}
+        <span className="fw-semibold">{chapterLabel}</span>
+        {chapterTitle && <span className="ml-2">{chapterTitle}</span>}
       </div>
       <div className="ml-auto pl-4 xs-0 fs-12 o-50p">
         {utils.formatTimestamp(chapter.createdAt)}
