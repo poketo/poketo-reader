@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { cx } from 'react-emotion';
+import NextChapterRow from './next-chapter-row';
 import SeriesRow from './series-row';
 import PassiveButton from './passive-button';
 import type { Bookmark, FeedItem } from '../types';
@@ -37,14 +38,10 @@ class Feed extends Component<Props, State> {
           {unreadFeedItems.map((item, index) => (
             <div
               key={item.series.id}
-              className={cx('pb-3 mb-3', {
+              className={cx('pb-2 mb-2', {
                 'bb-1 bc-gray1': index !== unreadFeedItems.length - 1,
               })}>
-              <SeriesRow
-                collectionSlug={collectionSlug}
-                feedItem={item}
-                showChapters
-              />
+              <NextChapterRow collectionSlug={collectionSlug} feedItem={item} />
             </div>
           ))}
         </div>
@@ -75,6 +72,7 @@ const mapStateToProps = (state, ownProps) => {
   const { series: seriesById, chapters: chaptersById } = state;
   const { bookmarks } = ownProps;
 
+  const newReleases = ['mangadex:15941:8998', 'mangadex:7645:445924'];
   const seriesIds = Object.keys(bookmarks);
   const feedItems: FeedItem[] = seriesIds
     .map(seriesId => {
@@ -89,7 +87,7 @@ const mapStateToProps = (state, ownProps) => {
         chapters,
         isCaughtUp:
           chapters.length > 0 ? chapters[0].id === lastReadChapterId : true,
-        newReleases: ['mangadex:15941:8998', 'mangadex:7645:445924'],
+        isNewRelease: chapterIds.some(id => newReleases.includes(id)),
         lastReadChapterId,
         linkTo,
       };
@@ -99,6 +97,9 @@ const mapStateToProps = (state, ownProps) => {
     .sort((a, b) => {
       if (a.isCaughtUp !== b.isCaughtUp) {
         return Number(a.isCaughtUp) - Number(b.isCaughtUp);
+      }
+      if (a.isNewRelease !== b.isNewRelease) {
+        return Number(b.isNewRelease) - Number(a.isNewRelease);
       }
       return a.series.title.localeCompare(b.series.title);
     });

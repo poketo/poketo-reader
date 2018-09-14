@@ -90,7 +90,7 @@ class HomeView extends Component<Props> {
               target="_blank"
               rel="noopener noreferrer"
               href="mailto:hello@poketo.app?subject=Poketo+Invite&body=Hi%2C%20I%27d%20like%20a%20Poketo%20invite.%0A%0A(write%20a%20few%20series%20you%20follow%20here)">
-              <Button primary inline>
+              <Button variant="primary" inline>
                 Request an invite
               </Button>
             </a>

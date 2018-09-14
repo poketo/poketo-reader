@@ -5,7 +5,6 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
 import Feed from '../components/feed';
-import Releases from '../components/collection-releases';
 import CollectionHeader from '../components/collection-header';
 import Toast from './toast';
 import { fetchSeriesForCollection } from '../store/reducers/collections';

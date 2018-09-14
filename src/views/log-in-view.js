@@ -67,7 +67,7 @@ class LogInView extends Component<Props, State> {
             <div className="mb-2">
               <Input type="text" onChange={this.handleCodeChange} />
             </div>
-            <Button type="submit" primary disabled={!isSubmittable}>
+            <Button type="submit" variant="primary" disabled={!isSubmittable}>
               Go
             </Button>
           </form>

@@ -1,16 +1,40 @@
 // @flow
 
 import React from 'react';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 
 type Props = {
   className?: string,
-  compact?: boolean,
   series: {
     coverImageUrl: ?string,
     title: string,
   },
+  variant?: 'small' | 'medium' | 'large',
 };
+
+const StyledContainerContainer = styled.div`
+  ${props => {
+    switch (props.variant) {
+      case 'small':
+        return css`
+          max-width: 60px;
+          @media only screen and (min-width: 768px) {
+            max-width: 80px;
+          }
+        `;
+      case 'medium':
+        return css`
+          max-width: 80px;
+          @media only screen and (min-width: 768px) {
+            max-width: 120px;
+          }
+        `;
+      case 'large':
+        return '';
+    }
+  }};
+  flex: 1 0 50%;
+`;
 
 const StyledContainer = styled.div`
   background-color: #f2f2f2;
@@ -20,7 +44,7 @@ const StyledContainer = styled.div`
   border-radius: 3px;
   position: relative;
   height: 0;
-  padding-bottom: ${props => (props.compact ? '120%' : '140%')};
+  padding-bottom: 140%;
   overflow: hidden;
 `;
 
@@ -30,27 +54,21 @@ const StyledImage = styled.div`
   background-size: cover;
 `;
 
-const SeriesCoverImage = ({ series, compact, ...props }: Props) => (
-  <StyledContainer
-    role="img"
-    aria-label={series.title}
-    compact={compact}
-    {...props}>
-    {series.coverImageUrl && (
-      <StyledImage
+const SeriesCoverImage = ({ series, ...props }: Props) => (
+  <StyledContainerContainer {...props}>
+    <StyledContainer role="img" aria-label={series.title}>
+      {series.coverImageUrl && (
+        <StyledImage
+          className="p-fill"
+          style={{ backgroundImage: `url(${series.coverImageUrl})` }}
+        />
+      )}
+      <div
         className="p-fill"
-        style={{ backgroundImage: `url(${series.coverImageUrl})` }}
+        css="box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);"
       />
-    )}
-    <div
-      className="p-fill"
-      css="box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);"
-    />
-  </StyledContainer>
+    </StyledContainer>
+  </StyledContainerContainer>
 );
-
-SeriesCoverImage.defaultProps = {
-  compact: false,
-};
 
 export default SeriesCoverImage;

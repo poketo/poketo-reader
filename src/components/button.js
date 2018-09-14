@@ -4,10 +4,12 @@ import React, { type Node } from 'react';
 import styled, { css } from 'react-emotion';
 import CircleLoader from './loader-circle';
 
+type ButtonVariant = 'primary' | 'border' | 'ghost';
+
 type Props = {
   children?: Node,
   className?: string,
-  primary?: boolean,
+  variant?: ButtonVariant,
   inline?: boolean,
   iconBefore?: Node,
   loading?: boolean,
@@ -59,7 +61,7 @@ const StyledButton = styled.button`
     `};
 
   ${props =>
-    props.primary === true &&
+    props.variant === 'primary' &&
     css`
       color: white;
       background-color: #ff6f6f; /* bgc-coral */
@@ -78,32 +80,32 @@ const StyledButton = styled.button`
         background-color: #eb6e6e;
       }
     `};
+
+  ${props =>
+    props.variant === 'border' &&
+    css`
+      border-width: 1px;
+      border-style: solid;
+      border-color: #ebeae8;
+
+      .supports-hover &:hover {
+        border-color: transparent;
+      }
+    `};
 `;
 
 // $FlowFixMe: Flow doesn't yet support React 16.3 features
 const Button = React.forwardRef(
-  (
-    {
-      children,
-      primary,
-      inline,
-      iconBefore,
-      loading,
-      noPadding,
-      ...props
-    }: Props,
-    ref,
-  ) => (
-    <StyledButton
-      noPadding={noPadding}
-      primary={primary}
-      inline={inline}
-      innerRef={ref}
-      {...props}>
+  ({ children, iconBefore, loading, ...props }: Props, ref) => (
+    <StyledButton innerRef={ref} {...props}>
       {loading ? <CircleLoader small /> : iconBefore}
       {!loading && children}
     </StyledButton>
   ),
 );
+
+Button.defaultProps = {
+  variant: 'ghost',
+};
 
 export default Button;
