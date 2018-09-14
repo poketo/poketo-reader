@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Icon from './icon';
 import SeriesRow from './series-row';
 import PassiveButton from './passive-button';
 import type { Bookmark, FeedItem } from '../types';

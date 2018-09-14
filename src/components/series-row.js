@@ -3,8 +3,8 @@
 import React, { Fragment } from 'react';
 import styled, { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
+import type { ChapterMetadata } from 'poketo';
 import CoverImage from './series-cover-image';
-import Button from './button';
 import Icon from './icon';
 import utils from '../utils';
 import type { FeedItem } from '../types';
@@ -31,7 +31,7 @@ type ChapterRowProps = {
   isRead: boolean,
 };
 
-const ChapterRow = ({ chapter, isNewRelease, isRead }: ChapterRowProps) => {
+const ChapterRow = ({ chapter, isNewRelease }: ChapterRowProps) => {
   const chapterLabel = utils.getChapterLabel(chapter);
   const chapterTitle = utils.getChapterTitle(chapter);
   const to = utils.getReaderUrl(chapter.id);
@@ -39,9 +39,7 @@ const ChapterRow = ({ chapter, isNewRelease, isRead }: ChapterRowProps) => {
   return (
     <Link
       to={to}
-      className={cx('fs-14 x xa-center pa-2 hover-bg ws-noWrap', {
-        'o-50p': isRead,
-      })}
+      className="fs-14 x xa-center pa-2 hover-bg ws-noWrap"
       css="min-height: 44px">
       {isNewRelease && <NewReleaseIndicator />}
       <div className="xs-1 of-hidden to-ellipsis">
@@ -81,7 +79,6 @@ const SeriesRow = ({
     item.chapters,
     item.lastReadChapterId,
   );
-  const chapterTo = nextChapter ? utils.getReaderUrl(nextChapter.id) : '/';
 
   const isExternalLink = seriesTo.startsWith('http');
   const Component = isExternalLink ? 'a' : Link;
@@ -115,15 +112,6 @@ const SeriesRow = ({
                 chapter={nextChapter}
                 isNewRelease={item.newReleases.includes(nextChapter.id)}
                 isRead={false}
-              />
-            </div>
-          )}
-          {lastChapter && (
-            <div className="bb-1 bc-gray1">
-              <ChapterRow
-                chapter={lastChapter}
-                isNewRelease={item.newReleases.includes(lastChapter.id)}
-                isRead={true}
               />
             </div>
           )}

@@ -99,7 +99,7 @@ const SeriesPage = ({
     <div className="pb-5">
       <ScrollReset />
       <div className="mw-600 w-100p mh-auto p-relative">
-        <header className="bgc-black x xa-center xj-spaceBetween pa-2 mb-3 c-white">
+        <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
           <Link to="/" className="x hover">
             <Icon name="arrow-left" {...iconProps} />
           </Link>
@@ -142,6 +142,7 @@ const SeriesPage = ({
           </Popover>
         </header>
       </div>
+      <div className="bgc-black p-absolute l-0 r-0 t-0" css="height: 61px" />
       <div className="mw-600 mh-auto p-relative">
         <header className="x mb-4 pt-3 ph-3">
           <div className="mr-3 w-50p" css="max-width: 140px;">
@@ -188,7 +189,7 @@ const SeriesPage = ({
                 <Button>Continue Reading</Button>
               </Link>
             ) : (
-              <Link to={utils.getReaderUrl(firstChapter)}>
+              <Link to={utils.getReaderUrl(firstChapter.id)}>
                 <Button>Read</Button>
               </Link>
             )}
