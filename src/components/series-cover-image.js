@@ -30,6 +30,7 @@ const StyledContainerContainer = styled.div`
           }
         `;
       case 'large':
+      default:
         return '';
     }
   }};
@@ -70,5 +71,9 @@ const SeriesCoverImage = ({ series, ...props }: Props) => (
     </StyledContainer>
   </StyledContainerContainer>
 );
+
+SeriesCoverImage.defaultProps = {
+  variant: 'large',
+};
 
 export default SeriesCoverImage;
