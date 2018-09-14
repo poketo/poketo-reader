@@ -56,10 +56,10 @@ const ChapterRow = (props: Props) => {
           'o-50p': isActive,
         })}>
         <span className="fw-semibold">{chapterLabel}</span>
-        {chapterTitle && <span className="ml-2">{chapter.title}</span>}
+        {chapterTitle && <span className="ml-2">{chapterTitle}</span>}
       </div>
       <span className="xg-1 xs-0 fs-12 o-50p pl-2 pl-4-m ta-right">
-        {utils.formatAbsoluteTimestamp(chapter.createdAt)}
+        {utils.formatTimestamp(chapter.createdAt)}
       </span>
     </StyledContainer>
   );
