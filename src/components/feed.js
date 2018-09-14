@@ -25,44 +25,59 @@ class Feed extends Component<Props, State> {
     showAll: false,
   };
 
+  handleTabClick = showAllState => () => {
+    this.setState({ showAll: showAllState });
+  };
+
   render() {
     const { collectionSlug, feedItems } = this.props;
     const { showAll } = this.state;
 
-    const unreadFeedItems = feedItems.filter(item => item.isCaughtUp === false);
-    const readFeedItems = feedItems.filter(item => item.isCaughtUp === true);
+    const unreadFeedItems = feedItems
+      .filter(item => item.isCaughtUp === false)
+      .sort((a, b) => {
+        if (a.isCaughtUp !== b.isCaughtUp) {
+          return Number(a.isCaughtUp) - Number(b.isCaughtUp);
+        }
+        if (a.isNewRelease !== b.isNewRelease) {
+          return Number(b.isNewRelease) - Number(a.isNewRelease);
+        }
+
+        return 0;
+      });
 
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
+        <header className="x ph-2 mb-4">
+          <h1
+            onClick={this.handleTabClick(false)}
+            className={cx('fs-20 fs-24-m fw-semibold', {
+              'c-coral': !showAll,
+            })}>
+            Reading
+          </h1>
+          <h1
+            onClick={this.handleTabClick(true)}
+            className={cx('fs-20 fs-24-m fw-semibold ml-3', {
+              'c-coral': showAll,
+            })}>
+            Library
+          </h1>
+        </header>
         <div className="mb-4">
-          {unreadFeedItems.map((item, index) => (
-            <div
-              key={item.series.id}
-              className={cx('pb-2 mb-2', {
-                'bb-1 bc-gray1': index !== unreadFeedItems.length - 1,
-              })}>
-              <NextChapterRow collectionSlug={collectionSlug} feedItem={item} />
-            </div>
-          ))}
+          {showAll
+            ? feedItems.map(item => (
+                <SeriesRow key={item.series.id} feedItem={item} />
+              ))
+            : unreadFeedItems.map((item, index) => (
+                <div key={item.series.id} className="pb-2 mb-2">
+                  <NextChapterRow
+                    collectionSlug={collectionSlug}
+                    feedItem={item}
+                  />
+                </div>
+              ))}
         </div>
-        <div className="mb-4">
-          <PassiveButton onClick={() => this.setState({ showAll: !showAll })}>
-            {showAll
-              ? `Hide caught-up series`
-              : `Show ${readFeedItems.length} caught-up series`}
-          </PassiveButton>
-        </div>
-        {showAll && (
-          <div>
-            {readFeedItems.map(item => (
-              <SeriesRow
-                key={item.series.id}
-                collectionSlug={collectionSlug}
-                feedItem={item}
-              />
-            ))}
-          </div>
-        )}
       </div>
     );
   }
@@ -95,12 +110,6 @@ const mapStateToProps = (state, ownProps) => {
     // Ignore bookmarks where the series hasn't loaded
     .filter(item => item.series)
     .sort((a, b) => {
-      if (a.isCaughtUp !== b.isCaughtUp) {
-        return Number(a.isCaughtUp) - Number(b.isCaughtUp);
-      }
-      if (a.isNewRelease !== b.isNewRelease) {
-        return Number(b.isNewRelease) - Number(a.isNewRelease);
-      }
       return a.series.title.localeCompare(b.series.title);
     });
 
