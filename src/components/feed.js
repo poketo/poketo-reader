@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { cx } from 'react-emotion';
 import SeriesRow from './series-row';
 import PassiveButton from './passive-button';
 import type { Bookmark, FeedItem } from '../types';
@@ -33,8 +34,12 @@ class Feed extends Component<Props, State> {
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
         <div className="mb-4">
-          {unreadFeedItems.map(item => (
-            <div key={item.series.id} className="mb-3">
+          {unreadFeedItems.map((item, index) => (
+            <div
+              key={item.series.id}
+              className={cx('pb-3 mb-3', {
+                'bb-1 bc-gray1': index !== unreadFeedItems.length - 1,
+              })}>
               <SeriesRow
                 collectionSlug={collectionSlug}
                 feedItem={item}
@@ -82,8 +87,9 @@ const mapStateToProps = (state, ownProps) => {
       return {
         series,
         chapters,
-        isCaughtUp: chapters.length > 0 && chapters[0].id === lastReadChapterId,
-        newReleases: ['mangadex:15553:447577', 'mangadex:7645:445924'],
+        isCaughtUp:
+          chapters.length > 0 ? chapters[0].id === lastReadChapterId : true,
+        newReleases: ['mangadex:15941:8998', 'mangadex:7645:445924'],
         lastReadChapterId,
         linkTo,
       };

@@ -5,6 +5,7 @@ import styled from 'react-emotion';
 
 type Props = {
   className?: string,
+  compact?: boolean,
   series: {
     coverImageUrl: ?string,
     title: string,
@@ -19,7 +20,7 @@ const StyledContainer = styled.div`
   border-radius: 3px;
   position: relative;
   height: 0;
-  padding-bottom: 150%;
+  padding-bottom: ${props => (props.compact ? '120%' : '140%')};
   overflow: hidden;
 `;
 
@@ -29,8 +30,12 @@ const StyledImage = styled.div`
   background-size: cover;
 `;
 
-const SeriesCoverImage = ({ series, ...props }: Props) => (
-  <StyledContainer role="img" aria-label={series.title} {...props}>
+const SeriesCoverImage = ({ series, compact, ...props }: Props) => (
+  <StyledContainer
+    role="img"
+    aria-label={series.title}
+    compact={compact}
+    {...props}>
     {series.coverImageUrl && (
       <StyledImage
         className="p-fill"
@@ -43,5 +48,9 @@ const SeriesCoverImage = ({ series, ...props }: Props) => (
     />
   </StyledContainer>
 );
+
+SeriesCoverImage.defaultProps = {
+  compact: false,
+};
 
 export default SeriesCoverImage;

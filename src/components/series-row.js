@@ -10,29 +10,29 @@ import utils from '../utils';
 import type { FeedItem } from '../types';
 
 const CoverImageContainer = styled.div`
-  max-width: 60px;
-  flex: 1 0 50px;
+  max-width: ${props => (props.compact ? '60px' : '80px')};
+  flex: 1 0 50%;
 
   @media only screen and (min-width: 768px) {
-    max-width: 80px;
+    max-width: ${props => (props.compact ? '80px' : '120px')};
   }
 `;
 
-const NewReleaseIndicator = () => (
-  <div
-    className="p-relative br-round bgc-coral mr-2"
+const NewReleaseIndicator = ({ className }: { className?: string }) => (
+  <span
+    className={cx(className, 'p-relative d-inlineBlock br-round bgc-coral')}
     css="top: -1px; width: 6px; height: 6px; flex-basis: 6px; flex-shrink: 0;"
   />
 );
 
-type ChapterRowProps = {
+type NextChapterRowProps = {
   chapter: ChapterMetadata,
   isNewRelease: boolean,
   isRead: boolean,
 };
 
-const ChapterRow = ({ chapter, isNewRelease }: ChapterRowProps) => {
-  const chapterLabel = utils.getChapterLabel(chapter);
+const NextChapterRow = ({ chapter, isNewRelease }: NextChapterRowProps) => {
+  const chapterLabel = utils.getChapterLabel(chapter, true);
   const chapterTitle = utils.getChapterTitle(chapter);
   const to = utils.getReaderUrl(chapter.id);
 
@@ -41,15 +41,18 @@ const ChapterRow = ({ chapter, isNewRelease }: ChapterRowProps) => {
       to={to}
       className="fs-14 x xa-center pa-2 hover-bg ws-noWrap"
       css="min-height: 44px">
-      {isNewRelease && <NewReleaseIndicator />}
       <div className="xs-1 of-hidden to-ellipsis">
-        <span className={cx('fw-semibold mr-2', { 'c-coral': isNewRelease })}>
+        <div
+          className={cx('fw-semibold lh-1d25', {
+            'c-coral': isNewRelease,
+          })}>
+          {isNewRelease && <NewReleaseIndicator css="margin-right: 6px;" />}
           {chapterLabel}
-        </span>
-        {chapterTitle && `${chapterTitle}`}
+        </div>
+        {chapterTitle && <div className="fs-12 o-50p">{chapterTitle}</div>}
       </div>
       <span className="pl-1 ml-auto fs-12 o-50p ta-right">
-        {utils.formatTimestamp(chapter.createdAt)}
+        <Icon name="arrow-right" iconSize={16} />
       </span>
     </Link>
   );
@@ -90,9 +93,9 @@ const SeriesRow = ({
     <div className={cx(className)}>
       <Component
         {...linkProps}
-        className="c-pointer x xa-center pa-2 pv-3 hover-bg">
-        <CoverImageContainer className="mr-2 mr-3-m">
-          <CoverImage series={item.series} />
+        className="c-pointer x xa-center pa-2 pv-2 hover-bg">
+        <CoverImageContainer className="mr-2 mr-3-m" compact={showChapters}>
+          <CoverImage series={item.series} compact={showChapters} />
         </CoverImageContainer>
         <div className="xs-1 w-100p of-hidden">
           <div className="fs-16 fs-20-m fw-semibold lh-1d25 of-hidden to-ellipsis ws-noWrap">
@@ -107,13 +110,11 @@ const SeriesRow = ({
       {showChapters && (
         <Fragment>
           {nextChapter && (
-            <div className="bt-1 bb-1 bc-gray1">
-              <ChapterRow
-                chapter={nextChapter}
-                isNewRelease={item.newReleases.includes(nextChapter.id)}
-                isRead={false}
-              />
-            </div>
+            <NextChapterRow
+              chapter={nextChapter}
+              isNewRelease={item.newReleases.includes(nextChapter.id)}
+              isRead={false}
+            />
           )}
         </Fragment>
       )}
