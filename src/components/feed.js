@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { cx } from 'react-emotion';
 import NextChapterRow from './next-chapter-row';
 import SeriesRow from './series-row';
-import PassiveButton from './passive-button';
 import type { Bookmark, FeedItem } from '../types';
 
 type Props = {

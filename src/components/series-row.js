@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import CoverImage from './series-cover-image';
 import utils from '../utils';
