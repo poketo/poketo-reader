@@ -3,5 +3,7 @@
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
 # Aggressively cache static assets since they have cache-busting URLs
+/service-worker.js
+  Cache-Control: max-age=0,no-cache,no-store,must-revalidate
 /static/*
   Cache-Control: max-age=31536000
