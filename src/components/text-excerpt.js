@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import type { Node } from 'react';
 
 type Props = {
   trimAfterLength: number,
