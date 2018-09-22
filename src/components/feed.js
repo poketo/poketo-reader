@@ -48,20 +48,22 @@ class Feed extends Component<Props, State> {
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
         <header className="x ph-2 mb-4">
-          <h1
+          <a
+            href="#"
             onClick={this.handleTabClick(false)}
             className={cx('fs-20 fs-24-m fw-semibold', {
               'c-coral': !showAll,
             })}>
-            Reading
-          </h1>
-          <h1
+            Now Reading
+          </a>
+          <a
+            href="#"
             onClick={this.handleTabClick(true)}
             className={cx('fs-20 fs-24-m fw-semibold ml-3', {
               'c-coral': showAll,
             })}>
             Library
-          </h1>
+          </a>
         </header>
         <div className="mb-4">
           {showAll

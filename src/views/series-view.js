@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
+import Head from 'react-helmet';
 import { cx } from 'react-emotion';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -98,6 +99,9 @@ const SeriesPage = ({
   return (
     <div className="pb-5">
       <ScrollReset />
+      <Head>
+        <title>{series.title}</title>
+      </Head>
       <div className="mw-600 w-100p mh-auto p-relative">
         <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
           <Link to="/" className="x hover">
