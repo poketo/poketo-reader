@@ -63,7 +63,7 @@ export default class CollectionHeader extends Component<Props, State> {
 
   render() {
     return (
-      <header className="x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m bgc-fadedOffWhite status-bar-ios-offset">
+      <header className="x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
           <Link to="/">
             <Icon name="poketo" className="c-coral va-top" />

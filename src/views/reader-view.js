@@ -245,7 +245,7 @@ class ReaderView extends Component<Props> {
             <Fragment>
               <div className="pv-4 mh-auto w-90p-m ta-center mw-900">
                 {chapter.pages.map(page => (
-                  <div key={page.id} className="mb-3 mb-4-m">
+                  <div key={page.id} className="mb-2 mb-3-m">
                     <ReaderPageImage page={page} />
                   </div>
                 ))}
