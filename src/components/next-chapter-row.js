@@ -1,11 +1,9 @@
 // @flow
 
 import React from 'react';
-import { css, cx } from 'react-emotion';
+import { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import type { FeedItem } from '../types';
-import CoverImage from './series-cover-image';
-import Icon from './icon';
 import utils from '../utils';
 
 const NewReleaseIndicator = ({ className }: { className?: string }) => (
