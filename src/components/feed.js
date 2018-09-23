@@ -1,11 +1,18 @@
 // @flow
 
 import React, { Component } from 'react';
+import { cx, css } from 'react-emotion';
 import { connect } from 'react-redux';
-import { cx } from 'react-emotion';
+import { Route, NavLink, withRouter } from 'react-router-dom';
 import NextChapterRow from './next-chapter-row';
 import SeriesRow from './series-row';
 import type { Bookmark, FeedItem } from '../types';
+
+const nextChapterDivider = css`
+  & + & {
+    border-top: 1px #f2f2f2 solid;
+  }
+`;
 
 type Props = {
   collectionSlug: string,
@@ -13,24 +20,9 @@ type Props = {
   feedItems: FeedItem[],
 };
 
-type State = {
-  currentSeriesActionPanelId: ?string,
-  showAll: boolean,
-};
-
-class Feed extends Component<Props, State> {
-  state = {
-    currentSeriesActionPanelId: null,
-    showAll: false,
-  };
-
-  handleTabClick = showAllState => () => {
-    this.setState({ showAll: showAllState });
-  };
-
+class Feed extends Component<Props> {
   render() {
     const { collectionSlug, feedItems } = this.props;
-    const { showAll } = this.state;
 
     const unreadFeedItems = feedItems
       .filter(item => item.isCaughtUp === false)
@@ -48,36 +40,47 @@ class Feed extends Component<Props, State> {
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
         <header className="x ph-2 mb-4">
-          <a
-            href="#"
-            onClick={this.handleTabClick(false)}
-            className={cx('fs-20 fs-24-m fw-semibold', {
-              'c-coral': !showAll,
-            })}>
+          <NavLink
+            to={`/c/${collectionSlug}`}
+            exact
+            className="fs-20 fs-24-m fw-semibold"
+            activeClassName="c-coral">
             Now Reading
-          </a>
-          <a
-            href="#"
-            onClick={this.handleTabClick(true)}
-            className={cx('fs-20 fs-24-m fw-semibold ml-3', {
-              'c-coral': showAll,
-            })}>
+          </NavLink>
+          <NavLink
+            to={`/c/${collectionSlug}/library`}
+            exact
+            className="fs-20 fs-24-m fw-semibold ml-3"
+            activeClassName="c-coral">
             Library
-          </a>
+          </NavLink>
         </header>
         <div className="mb-4">
-          {showAll
-            ? feedItems.map(item => (
-                <SeriesRow key={item.series.id} feedItem={item} />
-              ))
-            : unreadFeedItems.map((item, index) => (
-                <div key={item.series.id} className="pb-2 mb-2">
+          <Route
+            path={`/c/${collectionSlug}/`}
+            exact
+            render={() =>
+              unreadFeedItems.map(item => (
+                <div
+                  key={item.series.id}
+                  className={cx('pt-2 mt-2', nextChapterDivider)}>
                   <NextChapterRow
                     collectionSlug={collectionSlug}
                     feedItem={item}
                   />
                 </div>
-              ))}
+              ))
+            }
+          />
+          <Route
+            path={`/c/${collectionSlug}/library`}
+            exact
+            render={() =>
+              feedItems.map(item => (
+                <SeriesRow key={item.series.id} feedItem={item} />
+              ))
+            }
+          />
         </div>
       </div>
     );
@@ -117,4 +120,4 @@ const mapStateToProps = (state, ownProps) => {
   return { feedItems };
 };
 
-export default connect(mapStateToProps)(Feed);
+export default withRouter(connect(mapStateToProps)(Feed));

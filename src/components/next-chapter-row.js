@@ -10,33 +10,13 @@ import utils from '../utils';
 
 const NewReleaseIndicator = ({ className }: { className?: string }) => (
   <span
-    className={cx(className, 'p-relative d-inlineBlock br-round bgc-coral')}
-    css="top: -2px; width: 6px; height: 6px; flex-basis: 6px; flex-shrink: 0;"
-  />
-);
-
-const grayBadge = css`
-  border: 1px solid rgba(0, 0, 0, 0.09);
-  color: #444443;
-`;
-
-const greenBadge = css`
-  background-color: rgba(71, 228, 165, 0.15);
-  color: rgba(73, 117, 99, 1);
-`;
-
-const SeriesTitleBadge = ({ isNewRelease, ...props }) => (
-  <div
-    className={cx('d-inlineBlock br-3 fs-12 fs-14-m fw-semibold mb-2', {
-      'c-coral bgc-extraFadedLightCoral': isNewRelease,
-      [grayBadge]: !isNewRelease,
-      // [greenBadge]: !isNewRelease,
-    })}
-    css={`
-      padding: 2px 6px 0;
-    `}
-    {...props}
-  />
+    className={cx(
+      className,
+      'p-relative d-inlineBlock br-pill c-white bgc-coral ta-center tt-uppercase us-none',
+    )}
+    css="top: -3px; font-size: 8px; letter-spacing: 2px; padding: 2px 3px 0 6px;">
+    New
+  </span>
 );
 
 type Props = {
@@ -54,35 +34,29 @@ const NextChapterRow = ({ feedItem: item }: Props) => {
   const to = utils.getReaderUrl(chapter.id);
 
   return (
-    <Link to={to} className="x xa-center pa-2 hover-bg ws-noWrap">
-      <CoverImage
-        className="mr-2 mr-3-m"
-        series={item.series}
-        variant="small"
-      />
-      <div className="xs-1 of-hidden to-ellipsis">
-        <SeriesTitleBadge isNewRelease={item.isNewRelease}>
+    <div>
+      <Link to={utils.getSeriesUrl(item.series.id)}>
+        <span className="d-inlineBlock c-gray3 fs-14 fs-16-m ph-2 pv-1 mb-1 hover-bg">
           {item.series.title}
-        </SeriesTitleBadge>
-        <div
-          className={cx('fs-16 fs-18-m fw-semibold lh-1d25', {
-            'c-coral': item.isNewRelease,
-          })}>
-          {item.isNewRelease && (
-            <NewReleaseIndicator css="margin-right: 6px; margin-left: 4px;" />
-          )}
-          {chapterLabel}
-        </div>
-        {chapterTitle && (
-          <div className="fs-14 c-gray3 of-hidden to-ellipsis">
-            {chapterTitle}
+        </span>
+      </Link>
+      <Link to={to} className="x xa-center pa-2 hover-bg ws-noWrap">
+        <div className="xs-1 of-hidden to-ellipsis">
+          <div
+            className={cx('fs-16 fs-18-m fw-semibold lh-1d25', {
+              'c-coral': item.isNewRelease,
+            })}>
+            {chapterLabel}
+            {item.isNewRelease && <NewReleaseIndicator className="ml-2" />}
           </div>
-        )}
-      </div>
-      <span className="pl-1 ml-auto fs-12 c-gray4 ta-right x">
-        <Icon name="arrow-right" iconSize={18} />
-      </span>
-    </Link>
+          {chapterTitle && (
+            <div className="fs-14 fs-16-m of-hidden to-ellipsis">
+              {chapterTitle}
+            </div>
+          )}
+        </div>
+      </Link>
+    </div>
   );
 };
 
