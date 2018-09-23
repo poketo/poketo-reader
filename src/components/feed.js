@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Route, NavLink, withRouter } from 'react-router-dom';
 import NextChapterRow from './next-chapter-row';
 import SeriesRow from './series-row';
+import Icon from './icon';
 import type { Bookmark, FeedItem } from '../types';
 
 const nextChapterDivider = css`
@@ -13,6 +14,29 @@ const nextChapterDivider = css`
     border-top: 1px #f2f2f2 solid;
   }
 `;
+
+const CollectionNavigation = ({ collectionSlug }) => (
+  <header className="x ph-2 mb-4 fw-semibold ta-center ta-left-m">
+    <NavLink
+      to={`/c/${collectionSlug}`}
+      exact
+      className="x xd-row-m  br-4 pv-2 xa-center xj-center"
+      css="flex-basis: 100%;"
+      activeClassName="bgc-extraFadedLightCoral c-coral">
+      <Icon name="bookmark" className="mr-2" />
+      Now Reading
+    </NavLink>
+    <NavLink
+      to={`/c/${collectionSlug}/library`}
+      css="flex-basis: 100%;"
+      exact
+      className="x br-4 xd-row-m pv-2 xa-center xj-center"
+      activeClassName="bgc-extraFadedLightCoral c-coral">
+      <Icon name="book" className="mr-2" />
+      Library
+    </NavLink>
+  </header>
+);
 
 type Props = {
   collectionSlug: string,
@@ -39,22 +63,7 @@ class Feed extends Component<Props> {
 
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
-        <header className="x ph-2 mb-4">
-          <NavLink
-            to={`/c/${collectionSlug}`}
-            exact
-            className="fs-20 fs-24-m fw-semibold"
-            activeClassName="c-coral">
-            Now Reading
-          </NavLink>
-          <NavLink
-            to={`/c/${collectionSlug}/library`}
-            exact
-            className="fs-20 fs-24-m fw-semibold ml-3"
-            activeClassName="c-coral">
-            Library
-          </NavLink>
-        </header>
+        <CollectionNavigation collectionSlug={collectionSlug} />
         <div className="mb-4">
           <Route
             path={`/c/${collectionSlug}/`}

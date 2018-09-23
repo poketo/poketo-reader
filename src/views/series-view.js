@@ -198,7 +198,7 @@ const SeriesPage = ({
           <div>
             <Label>Description</Label>
             <div>
-              <TextExcerpt trimAfterLength={300}>
+              <TextExcerpt trimAfterLength={200}>
                 {series.description}
               </TextExcerpt>
             </div>
