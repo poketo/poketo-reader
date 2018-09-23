@@ -12,6 +12,7 @@ import CircleLoader from '../components/loader-circle';
 import ChapterRow from '../components/chapter-row';
 import FollowButton from '../components/follow-button';
 import ScrollReset from '../components/scroll-reset';
+import TextExcerpt from '../components/text-excerpt';
 import Icon from '../components/icon';
 import Popover from '../components/popover';
 import utils from '../utils';
@@ -196,7 +197,11 @@ const SeriesPage = ({
           </div>
           <div>
             <Label>Description</Label>
-            <div>{series.description}</div>
+            <div>
+              <TextExcerpt trimAfterLength={300}>
+                {series.description}
+              </TextExcerpt>
+            </div>
           </div>
         </div>
         <div>

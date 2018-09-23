@@ -42,7 +42,7 @@ const StyledButton = styled(Button)`
 `;
 
 const followClassName = css`
-  ${StyledButton}:hover & {
+  .supports-hover ${StyledButton}:hover & {
     display: none;
   }
 `;
@@ -50,7 +50,7 @@ const followClassName = css`
 const unfollowClassName = css`
   display: none;
 
-  ${StyledButton}:hover & {
+  .supports-hover ${StyledButton}:hover & {
     display: inline;
   }
 `;
