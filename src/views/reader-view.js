@@ -117,7 +117,12 @@ class ReaderView extends Component<Props> {
       return;
     }
 
-    dispatch(markSeriesAsRead(collection.slug, series.id, chapter.id));
+    dispatch(
+      markSeriesAsRead(collection.slug, series.id, {
+        lastReadChapterId: chapter.id,
+        lastReadAt: chapter.createdAt,
+      }),
+    );
   };
 
   markSeriesAsRead = () => {
@@ -147,7 +152,12 @@ class ReaderView extends Component<Props> {
       return;
     }
 
-    dispatch(markSeriesAsRead(collection.slug, series.id, chapter.id));
+    dispatch(
+      markSeriesAsRead(collection.slug, series.id, {
+        lastReadAt: chapter.createdAt,
+        lastReadChapterId: chapter.id,
+      }),
+    );
   };
 
   handleChapterChange = nextChapter => {

@@ -32,10 +32,14 @@ const api = {
   fetchMarkAsRead: (
     collectionSlug: string,
     seriesId: string,
-    lastReadChapterId: BookmarkLastReadChapterId,
+    options: {
+      lastReadChapterId: BookmarkLastReadChapterId,
+      lastReadAt: number,
+    },
   ) =>
     instance.post(`/collection/${collectionSlug}/bookmark/${seriesId}/read`, {
-      lastReadChapterId,
+      lastReadChapterId: options.lastReadChapterId,
+      lastReadAt: options.lastReadAt,
     }),
   fetchAddBookmarkToCollection: (
     collectionSlug: string,
