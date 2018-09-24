@@ -188,6 +188,7 @@ export default class Popover extends Component<Props, State> {
   };
 
   handleOpenComplete = () => {
+    console.log('yooo');
     this.bringFocusInside();
     this.props.onOpenComplete();
   };
@@ -232,15 +233,11 @@ export default class Popover extends Component<Props, State> {
         isShown={shown}
         onOpenComplete={this.handleOpenComplete}
         onCloseComplete={onCloseComplete}>
-        {({ className, style, state, ref }) => {
+        {({ className, style, ref }) => {
           this.popoverRef = ref;
 
           return (
-            <PopoverStateless
-              ref={ref}
-              data-state={state}
-              className={className}
-              style={style}>
+            <PopoverStateless ref={ref} className={className} style={style}>
               {typeof content === 'function'
                 ? content({ close: this.close })
                 : content}
