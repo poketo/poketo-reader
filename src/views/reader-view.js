@@ -96,7 +96,7 @@ class ReaderView extends Component<Props> {
 
     if (collectionSlug) {
       dispatch(fetchCollectionIfNeeded(collectionSlug));
-      this.markSeriesAsRead();
+      this.markCurrentChapterAsRead();
     }
   };
 
@@ -105,57 +105,44 @@ class ReaderView extends Component<Props> {
   };
 
   handleMarkAsRead = () => {
-    const { collection, series, chapter, dispatch } = this.props;
-
-    if (!collection || !series || !chapter) {
-      return;
-    }
-
-    const bookmark = collection.bookmarks[series.id];
-
-    if (!bookmark) {
-      return;
-    }
-
-    dispatch(
-      markSeriesAsRead(collection.slug, series.id, {
-        lastReadChapterId: chapter.id,
-        lastReadAt: chapter.createdAt,
-      }),
-    );
+    this.markCurrentChapterAsRead({ allowOlderChapters: true });
   };
 
-  markSeriesAsRead = () => {
+  markCurrentChapterAsRead = (
+    options: { allowOlderChapters?: boolean } = {},
+  ) => {
     const {
       collection,
       series,
       seriesChapters,
-      chapter,
+      chapter: currentChapter,
       dispatch,
     } = this.props;
 
-    if (!collection || !series || !chapter) {
+    if (!collection || !series || !currentChapter) {
       return;
     }
 
-    const bookmark = collection.bookmarks[series.id];
+    if (options.allowOlderChapters !== true) {
+      const bookmark = collection.bookmarks[series.id];
 
-    if (!bookmark) {
-      return;
-    }
+      if (bookmark) {
+        const lastReadChapter = seriesChapters.find(
+          c => c.id === bookmark.lastReadChapterId,
+        );
+        const isOlderChapter =
+          lastReadChapter && currentChapter.order <= lastReadChapter.order;
 
-    const lastReadChapter = seriesChapters.find(
-      c => c.id === bookmark.lastReadChapterId,
-    );
-
-    if (lastReadChapter && chapter.order <= lastReadChapter.order) {
-      return;
+        if (isOlderChapter) {
+          return;
+        }
+      }
     }
 
     dispatch(
       markSeriesAsRead(collection.slug, series.id, {
-        lastReadAt: chapter.createdAt,
-        lastReadChapterId: chapter.id,
+        lastReadAt: utils.getTimestamp(),
+        lastReadChapterId: currentChapter.id,
       }),
     );
   };
