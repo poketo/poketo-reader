@@ -100,11 +100,10 @@ const mapStateToProps = (state, ownProps) => {
   const { series: seriesById, chapters: chaptersById } = state;
   const { bookmarks } = ownProps;
 
-  const newReleases = ['mangadex:15941:8998', 'mangadex:7645:445924'];
   const seriesIds = Object.keys(bookmarks);
   const feedItems: FeedItem[] = seriesIds
     .map(seriesId => {
-      const { lastReadChapterId, linkTo } = bookmarks[seriesId];
+      const { lastReadAt, lastReadChapterId, linkTo } = bookmarks[seriesId];
 
       const series = seriesById[seriesId];
       const chapterIds = series ? series.chapters || [] : [];
@@ -115,7 +114,7 @@ const mapStateToProps = (state, ownProps) => {
         chapters,
         isCaughtUp:
           chapters.length > 0 ? chapters[0].id === lastReadChapterId : true,
-        isNewRelease: chapterIds.some(id => newReleases.includes(id)),
+        isNewRelease: chapters.some(chapter => chapter.createdAt > lastReadAt),
         lastReadChapterId,
         linkTo,
       };
