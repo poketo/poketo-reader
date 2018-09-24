@@ -1,11 +1,10 @@
 // @flow
 
 import React from 'react';
-import { css, cx } from 'react-emotion';
+import { cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import type { FeedItem } from '../types';
-import CoverImage from './series-cover-image';
-import Icon from './icon';
+import Icon from '../components/icon';
 import utils from '../utils';
 
 const NewReleaseIndicator = ({ className }: { className?: string }) => (
@@ -40,7 +39,9 @@ const NextChapterRow = ({ feedItem: item }: Props) => {
           {item.series.title}
         </span>
       </Link>
-      <Link to={to} className="x xa-center pa-2 hover-bg ws-noWrap">
+      <Link
+        to={to}
+        className="x xa-center xj-spaceBetween pa-2 hover-bg ws-noWrap">
         <div className="xs-1 of-hidden to-ellipsis">
           <div
             className={cx('fs-16 fs-18-m fw-semibold lh-1d25', {
@@ -55,6 +56,7 @@ const NextChapterRow = ({ feedItem: item }: Props) => {
             </div>
           )}
         </div>
+        <Icon name="direct-right" iconSize={20} />
       </Link>
     </div>
   );
