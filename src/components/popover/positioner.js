@@ -1,31 +1,28 @@
 // @flow
 
 import React, { Fragment, PureComponent, type Node } from 'react';
-import { css } from 'react-emotion';
-import Transition from 'react-transition-group/Transition';
+import { css, keyframes } from 'react-emotion';
 import Portal from '../portal';
 import getPosition from './get-position';
 import Position from './position';
 
 import type { ReactObjRef } from './types';
 
+const appear = keyframes`
+  from {
+    opacity: 0.0;
+    transform: scale(0.9) translateY(-1px);
+  }
+
+  to {
+    opacity: 1.0;
+    transform: scale(1.0) translateY(0);
+  }
+`;
+
 const className = css`
   position: fixed;
-  opacity: 0;
-  transition-property: opacity, transform;
-  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.175);
-
-  &[data-state='entering'],
-  &[data-state='entered'] {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: scale(1) !important;
-  }
-
-  &[data-state='exiting'] {
-    opacity: 0 !important;
-    transform: scale(1) !important;
-  }
+  animation: ${appear} 150ms cubic-bezier(0.175, 0.885, 0.32, 1.175) forwards;
 `;
 
 type Props = {
@@ -39,8 +36,6 @@ type Props = {
     isShown: boolean,
   }) => Node,
   zIndex: number,
-  initialScale: number,
-  animationDuration: number,
   onCloseComplete: () => void,
   onOpenComplete: () => void,
 };
@@ -63,8 +58,6 @@ export default class Positioner extends PureComponent<Props, State> {
     zIndex: 40,
     bodyOffset: 6,
     targetOffset: 6,
-    initialScale: 0.9,
-    animationDuration: 300,
     onOpenComplete: () => {},
     onCloseComplete: () => {},
   };
@@ -74,6 +67,14 @@ export default class Positioner extends PureComponent<Props, State> {
   targetRef: RefObject = React.createRef();
   // $FlowFixMe
   positionerRef: RefObject = React.createRef();
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.isShown === false && this.props.isShown === true) {
+      this.handleEnter();
+    } else if (prevProps.isShown === true && this.props.isShown === false) {
+      this.handleExited();
+    }
+  }
 
   handleEnter = () => {
     this.update();
@@ -87,7 +88,6 @@ export default class Positioner extends PureComponent<Props, State> {
 
   update = () => {
     const { positionerRef, targetRef } = this;
-
     if (
       !this.props.isShown ||
       !targetRef.current ||
@@ -150,44 +150,24 @@ export default class Positioner extends PureComponent<Props, State> {
   };
 
   render() {
-    const {
-      zIndex,
-      target,
-      isShown,
-      children,
-      initialScale,
-      animationDuration,
-    } = this.props;
-
+    const { zIndex, target, isShown, children } = this.props;
     const { left, top, transformOrigin } = this.state;
 
     return (
       <Fragment>
         {target({ ref: this.targetRef, isShown })}
         <Portal>
-          <Transition
-            in={isShown}
-            timeout={animationDuration}
-            onEnter={this.handleEnter}
-            onEntered={this.props.onOpenComplete}
-            onExited={this.handleExited}
-            unmountOnExit>
-            {state =>
-              children({
-                className,
-                state,
-                style: {
-                  transitionDuration: `${animationDuration}ms`,
-                  transformOrigin,
-                  transform: `scale(${initialScale}) translateY(-1px)`,
-                  left,
-                  top,
-                  zIndex,
-                },
-                ref: this.positionerRef,
-              })
-            }
-          </Transition>
+          {isShown &&
+            children({
+              className,
+              style: {
+                transformOrigin,
+                left,
+                top,
+                zIndex,
+              },
+              ref: this.positionerRef,
+            })}
         </Portal>
       </Fragment>
     );

@@ -57,7 +57,10 @@ export type MarkBookmarkAsReadAction = ActionType<
   {
     collectionSlug: string,
     seriesId: string,
-    lastReadChapterId: BookmarkLastReadChapterId,
+    options: {
+      lastReadAt: number,
+      lastReadChapterId: BookmarkLastReadChapterId,
+    },
   },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;

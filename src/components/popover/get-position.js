@@ -51,9 +51,9 @@ const getFitsOnTop = (rect, viewportOffset) => {
 const getTransformOrigin = ({ rect, position, targetCenter }) => {
   const center = Math.round(targetCenter - rect.left);
   if (isAlignedOnTop(position)) {
-    return `bottom ${center}px`;
+    return `${center}px bottom`;
   }
-  return `top ${center}px`;
+  return `${center}px top`;
 };
 
 export default function getFittedPosition({

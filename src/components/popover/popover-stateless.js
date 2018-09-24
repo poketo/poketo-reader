@@ -5,7 +5,6 @@ import styled, { cx } from 'react-emotion';
 
 const StyledPopover = styled.div`
   min-width: 100px;
-  z-index: 99;
 `;
 
 type Props = {
