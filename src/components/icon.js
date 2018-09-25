@@ -9,6 +9,7 @@ const Icons = {
   'arrow-right': require('./icon-arrow-right').default,
   book: require('./icon-book').default,
   bookmark: require('./icon-bookmark').default,
+  'bookmark-filled': require('./icon-bookmark-filled').default,
   'check-circle': require('./icon-check-circle').default,
   check: require('./icon-check').default,
   'direct-down': require('./icon-direct-down').default,
