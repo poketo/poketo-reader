@@ -181,7 +181,7 @@ const SeriesPage = ({
           <div className="ph-3 mb-4">
             {nextChapter ? (
               <Link to={utils.getReaderUrl(nextChapter.id)}>
-                <Button variant="primary">Continue Reading</Button>
+                <Button variant="border">Continue Reading</Button>
               </Link>
             ) : (
               <Link to={utils.getReaderUrl(firstChapter.id)}>
