@@ -13,7 +13,6 @@ import type { BookmarkLastReadChapterId, Collection } from '../types';
 type Props = {
   chapter: ChapterMetadata,
   collection: ?Collection,
-  onChapterSelectChange: (chapter: ChapterMetadata) => void,
   lastReadChapterId: BookmarkLastReadChapterId,
   seriesChapters: ChapterMetadata[],
 };
@@ -52,8 +51,7 @@ export default class ReaderNavigation extends Component<Props, State> {
     this.setState({ showingPanel: false });
   };
 
-  handleChapterClick = (chapter: ChapterMetadata) => {
-    this.props.onChapterSelectChange(chapter);
+  handleChapterClick = () => {
     this.handlePickerPanelClose();
   };
 

@@ -12,7 +12,7 @@ type Props = {
   activeChapterRef?: ElementRef<*>,
   seriesChapters: ChapterMetadata[],
   lastReadChapterId: BookmarkLastReadChapterId,
-  onChapterClick: (chapter: ChapterMetadata) => void,
+  onChapterClick: () => void,
 };
 
 const shouldGroupByVolume = (seriesChapters: ChapterMetadata[]) => {
@@ -50,10 +50,17 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     onChapterClick: () => {},
   };
 
-  handleChapterClick = (chapter: ChapterMetadata) => (
-    e: SyntheticMouseEvent<HTMLDivElement>,
-  ) => {
-    this.props.onChapterClick(chapter);
+  handleChapterClick = (e: SyntheticMouseEvent<HTMLDivElement>) => {
+    if (
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.metaKey ||
+      (e.button && e.button == 1) // middle click, >IE9 + everyone else
+    ) {
+      return;
+    }
+
+    this.props.onChapterClick();
   };
 
   renderChapters(chapters: ChapterMetadata[], lastReadOrder: number) {
@@ -72,7 +79,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
               innerRef={isActive ? activeChapterRef : undefined}
               isActive={isActive}
               isUnread={isUnread}
-              onClick={this.handleChapterClick(c)}
+              onClick={this.handleChapterClick}
             />
           );
         })}

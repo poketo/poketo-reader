@@ -140,18 +140,6 @@ class ReaderViewContainer extends Component<ContainerProps> {
     );
   };
 
-  handleChapterChange = nextChapter => {
-    const { chapterId: currentChapterId, history } = this.props;
-
-    if (nextChapter.id === currentChapterId) {
-      return;
-    }
-
-    const url = utils.getReaderUrl(nextChapter.id);
-
-    history.push(url);
-  };
-
   render() {
     const {
       collection,
@@ -176,7 +164,6 @@ class ReaderViewContainer extends Component<ContainerProps> {
         collection={collection}
         chapter={chapter}
         lastReadChapterId={unreadMap[series.id]}
-        onChapterSelectChange={this.handleChapterChange}
         seriesChapters={seriesChapters}
       />
     ) : null;
