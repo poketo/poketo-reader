@@ -166,6 +166,7 @@ class ReaderView extends Component<Props> {
       chapter,
       chapterStatus,
       series,
+      seriesId,
       seriesChapters,
     } = this.props;
     const { isFetching, errorCode } = chapterStatus;
@@ -187,9 +188,8 @@ class ReaderView extends Component<Props> {
         <BodyClassName className="ff-sans bgc-black" />
         <ReaderHeader
           collectionSlug={collectionSlug}
-          seriesTitle={series && series.title}
-          seriesSiteName={series && series.site.name}
-          seriesUrl={series && series.url}
+          seriesId={seriesId}
+          series={series}
           chapterUrl={chapter && chapter.url}
           onMarkAsReadClick={this.handleMarkAsRead}
         />
