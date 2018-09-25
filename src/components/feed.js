@@ -20,19 +20,19 @@ const CollectionNavigation = ({ collectionSlug }) => (
     <NavLink
       to={`/c/${collectionSlug}`}
       exact
-      className="x xd-row-m  br-4 pv-2 xa-center xj-center"
+      className="x xd-row-m  br-4 pv-2 ph-1 xa-center xj-center"
       css="flex-basis: 100%;"
       activeClassName="bgc-extraFadedLightCoral c-coral">
-      <Icon name="bookmark" className="mr-2" />
+      <Icon name="bookmark" className="mr-1 mr-2-m" />
       Now Reading
     </NavLink>
     <NavLink
       to={`/c/${collectionSlug}/library`}
       css="flex-basis: 100%;"
       exact
-      className="x br-4 xd-row-m pv-2 xa-center xj-center"
+      className="x br-4 xd-row-m pv-2 ph-1 xa-center xj-center"
       activeClassName="bgc-extraFadedLightCoral c-coral">
-      <Icon name="book" className="mr-2" />
+      <Icon name="book" className="mr-1 mr-2-m" />
       Library
     </NavLink>
   </header>

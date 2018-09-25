@@ -11,7 +11,7 @@ import {
 import groupBy from 'lodash.groupby';
 
 import type { ChapterMetadata } from 'poketo';
-import type { Bookmark, BookmarkLastReadChapterId, Collection } from './types';
+import type { BookmarkLastReadChapterId } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
@@ -85,20 +85,6 @@ const utils = {
   getSeriesUrl: (seriesId: string) => `/series/${utils.encodeId(seriesId)}`,
   getReaderUrl: (chapterId: string) => `/read/${utils.encodeId(chapterId)}`,
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
-
-  /**
-   * Collection Helpers
-   */
-  getUnreadMap: (
-    collection: Collection,
-  ): { [string]: BookmarkLastReadChapterId } => {
-    const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
-
-    return bookmarks.reduce((acc, bookmark) => {
-      acc[bookmark.id] = bookmark.lastReadChapterId || null;
-      return acc;
-    }, {});
-  },
 
   /**
    * Chapter Helpers
@@ -219,9 +205,11 @@ const utils = {
 export default utils;
 
 export function invariant(condition: boolean, error: string | Error): void {
-  if (Boolean(condition) === true) {
-    return;
-  }
+  if (process.env.NODE_ENV !== 'production') {
+    if (Boolean(condition) === true) {
+      return;
+    }
 
-  throw new Error(error);
+    throw new Error(error);
+  }
 }
