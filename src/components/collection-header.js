@@ -91,31 +91,41 @@ export default class CollectionHeader extends Component<Props, State> {
           )}
         </Panel>
         <Popover
-          content={
+          content={({ close }) => (
             <div className="pa-2" style={{ maxWidth: '80vw' }}>
               <Popover.Item
                 label="Follow new series"
-                onClick={this.openAddBookmarkPanel}
+                onClick={() => {
+                  this.openAddBookmarkPanel();
+                  close();
+                }}
                 iconBefore={<Icon name="add" {...iconProps} />}
               />
               <Popover.Divider />
               <Popover.Item
                 label="Clear cache"
-                onClick={this.handleClearCacheClick}
+                onClick={() => {
+                  this.handleClearCacheClick();
+                  close();
+                }}
                 iconBefore={<Icon name="refresh" {...iconProps} />}
               />
               <Popover.Item
-                onClick={this.openFeedbackPanel}
+                onClick={() => {
+                  this.openFeedbackPanel();
+                  close();
+                }}
                 label="Send feedback"
                 iconBefore={<Icon name="message" {...iconProps} />}
               />
               <Popover.Item
+                onClick={close}
                 iconBefore={<Icon name="new-tab" {...iconProps} />}
                 label="Open Poketo site"
                 href="/home"
               />
             </div>
-          }
+          )}
           position={Popover.Position.BOTTOM_RIGHT}>
           <Button inline noPadding>
             <Icon name="more-vertical" size={44} iconSize={20} />

@@ -120,7 +120,7 @@ export default class Popover extends Component<Props, State> {
     });
   };
 
-  handleBodyClick = (e: MouseEvent) => {
+  handleBodyClick = (e: MouseEvent | TouchEvent) => {
     const { targetRef, popoverRef } = this;
 
     if (!hasRef(targetRef) || !hasRef(popoverRef)) {
@@ -137,6 +137,7 @@ export default class Popover extends Component<Props, State> {
       return;
     }
 
+    e.preventDefault();
     this.close();
   };
 
@@ -164,6 +165,7 @@ export default class Popover extends Component<Props, State> {
     const body = document.body;
     if (body) {
       body.addEventListener('click', this.handleBodyClick, false);
+      body.addEventListener('touchend', this.handleBodyClick, false);
       body.addEventListener('keydown', this.handleEscKey, false);
     }
 
@@ -180,6 +182,7 @@ export default class Popover extends Component<Props, State> {
     const body = document.body;
     if (body) {
       body.removeEventListener('click', this.handleBodyClick, false);
+      body.removeEventListener('touchend', this.handleBodyClick, false);
       body.removeEventListener('keydown', this.handleEscKey, false);
     }
 
@@ -188,7 +191,6 @@ export default class Popover extends Component<Props, State> {
   };
 
   handleOpenComplete = () => {
-    console.log('yooo');
     this.bringFocusInside();
     this.props.onOpenComplete();
   };
