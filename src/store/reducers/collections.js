@@ -114,6 +114,35 @@ export function fetchSeriesForCollection(collectionSlug: string): Thunk {
 }
 
 /**
+ * Add a bookmark to a collection.
+ */
+export function addBookmark(
+  collectionSlug: string,
+  seriesId: string,
+  seriesUrl: string,
+): Thunk {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: 'ADD_BOOKMARK',
+      payload: { collectionSlug, seriesId, seriesUrl },
+    });
+
+    api
+      .fetchAddBookmarkToCollection(collectionSlug, seriesUrl)
+      .then(response => {
+        const normalized = normalize(response.data, {
+          collection: schema.collection,
+          series: schema.series,
+        });
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
+      })
+      .catch(err => {
+        // TODO: handle errors
+      });
+  };
+}
+
+/**
  * Delete a bookmark from a collection.
  */
 export function removeBookmark(
@@ -196,6 +225,16 @@ export default function reducer(
       );
 
       return withTimestamp;
+    }
+    case 'ADD_BOOKMARK': {
+      const { collectionSlug, seriesId, seriesUrl } = action.payload;
+
+      return utils.set(state, `${collectionSlug}.bookmarks.${seriesId}`, {
+        id: seriesId,
+        url: seriesUrl,
+        lastReadChapterId: null,
+        lastReadAt: utils.getTimestamp(),
+      });
     }
     case 'REMOVE_BOOKMARK': {
       const nextState = { ...state };

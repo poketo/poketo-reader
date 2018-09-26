@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { cx, css } from 'react-emotion';
 import { connect } from 'react-redux';
 import { Route, NavLink, withRouter } from 'react-router-dom';
-import NextChapterRow from './next-chapter-row';
+import FeedItemRow from './feed-item-row';
 import SeriesRow from './series-row';
 import Icon from './icon';
 import type { Bookmark, FeedItem } from '../types';
@@ -73,10 +73,7 @@ class Feed extends Component<Props> {
                 <div
                   key={item.series.id}
                   className={cx('pt-2 mt-2', nextChapterDivider)}>
-                  <NextChapterRow
-                    collectionSlug={collectionSlug}
-                    feedItem={item}
-                  />
+                  <FeedItemRow feedItem={item} />
                 </div>
               ))
             }

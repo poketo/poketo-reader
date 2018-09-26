@@ -52,6 +52,10 @@ export type RemoveBookmarkAction = ActionType<
   'REMOVE_BOOKMARK',
   { collectionSlug: string, seriesId: string },
 >;
+export type AddBookmarkAction = ActionType<
+  'ADD_BOOKMARK',
+  { collectionSlug: string, seriesId: string, seriesUrl: string },
+>;
 export type MarkBookmarkAsReadAction = ActionType<
   'MARK_BOOKMARK_AS_READ',
   {
@@ -90,6 +94,7 @@ export type CollectionAction =
   | SetCollectionAction
   | SetCollectionEntityStatusAction
   | MarkBookmarkAsReadAction
+  | AddBookmarkAction
   | RemoveBookmarkAction;
 
 export type SeriesAction =

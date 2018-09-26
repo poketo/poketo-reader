@@ -55,7 +55,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
       e.ctrlKey ||
       e.shiftKey ||
       e.metaKey ||
-      (e.button && e.button == 1) // middle click, >IE9 + everyone else
+      (e.button && e.button === 1) // middle click, >IE9 + everyone else
     ) {
       return;
     }
