@@ -41,8 +41,8 @@ export default class TextExcerpt extends Component<Props, State> {
     return (
       <Fragment>
         {trimmedChildren}
-        &hellip;{' '}
-        <button className="ml-2 fs-14 Link" onClick={this.handleMoreClick}>
+        <span className="mr-2">&hellip;</span>
+        <button className="fs-14 Link" onClick={this.handleMoreClick}>
           Read More
         </button>
       </Fragment>
