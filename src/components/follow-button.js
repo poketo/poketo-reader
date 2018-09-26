@@ -1,58 +1,43 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-import styled, { css, cx } from 'react-emotion';
+import React, { Component } from 'react';
+import styled, { css } from 'react-emotion';
 import { connect } from 'react-redux';
-import { normalize } from 'normalizr';
 import type { Series } from 'poketo';
 import api from '../api';
 import { type Dispatch } from '../store/types';
 import { getCollectionSlug } from '../store/reducers/auth';
-import schema from '../store/schema';
+import { addBookmark } from '../store/reducers/collections';
 import Icon from '../components/icon';
-import Button from '../components/button';
 
-const StyledButton = styled(Button)`
-  min-width: 140px;
+const StyledFollowButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  width: 44px;
+  height: 44px;
+
+  transition: background-color 200ms ease, color 200ms ease;
+
+  .supports-hover &:hover {
+    background: rgba(19, 207, 131, 0.15);
+    color: #13cf83;
+  }
+
+  > span {
+    transition: transform 200ms ease;
+  }
+
+  &:active > span {
+    transform: scale(0.85);
+  }
+
   ${props =>
-    props.isFollowing === true && props.loading !== true
-      ? css`
-          background: #13cf83;
-          color: white;
-
-          .supports-hover &:hover,
-          &:active {
-            background: #ff6f6f;
-          }
-
-          .supports-hover &[disabled]:hover,
-          &[disabled]:active {
-            background: #ff6f6f;
-          }
-        `
-      : css`
-          border: 1px #f2f2f2 solid;
-          color: #292723;
-
-          .supports-hover &:hover,
-          &:active {
-            border-color: transparent;
-          }
-        `};
-`;
-
-const followClassName = css`
-  .supports-hover ${StyledButton}:hover & {
-    display: none;
-  }
-`;
-
-const unfollowClassName = css`
-  display: none;
-
-  .supports-hover ${StyledButton}:hover & {
-    display: inline;
-  }
+    props.isFollowing &&
+    css`
+      color: #13cf83;
+    `};
 `;
 
 type Props = {
@@ -79,17 +64,19 @@ class FollowButton extends Component<Props, State> {
       return;
     }
 
+    const { id: seriesId, url: seriesUrl } = series;
+
     if (isFollowing) {
       if (window.confirm(`Do you want to unfollow ${series.title}?`)) {
         this.setState({ isFetching: true });
         api
           .fetchRemoveBookmarkFromCollection(collectionSlug, series.id)
           .then(response => {
+            this.setState({ isFetching: false });
             dispatch({
               type: 'REMOVE_BOOKMARK',
-              payload: { collectionSlug, seriesId: series.id },
+              payload: { collectionSlug, seriesId },
             });
-            this.setState({ isFetching: false });
           })
           .catch(err => {
             this.setState({ isFetching: false });
@@ -99,20 +86,7 @@ class FollowButton extends Component<Props, State> {
       return;
     }
 
-    this.setState({ isFetching: true });
-    api
-      .fetchAddBookmarkToCollection(collectionSlug, series.url)
-      .then(response => {
-        const normalized = normalize(response.data, {
-          collection: schema.collection,
-          series: schema.series,
-        });
-        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
-        this.setState({ isFetching: false });
-      })
-      .catch(err => {
-        // TODO: handle errors
-      });
+    dispatch(addBookmark(collectionSlug, seriesId, seriesUrl));
   };
 
   render() {
@@ -124,30 +98,18 @@ class FollowButton extends Component<Props, State> {
     }
 
     return (
-      <StyledButton
+      <StyledFollowButton
         disabled={isFetching}
         loading={isFetching}
         isFollowing={isFollowing}
         onClick={this.handleClick}
         {...props}>
         {isFollowing ? (
-          <Fragment>
-            <Icon
-              className={followClassName}
-              name="bookmark"
-              iconSize={18}
-              size={32}
-            />
-            <span className={cx(followClassName, 'pr-2')}>Following</span>
-            <span className={unfollowClassName}>Unfollow</span>
-          </Fragment>
+          <Icon name="bookmark-filled" iconSize={24} size={32} />
         ) : (
-          <Fragment>
-            <Icon name="bookmark" iconSize={18} size={32} />
-            Follow
-          </Fragment>
+          <Icon name="bookmark" iconSize={24} size={32} />
         )}
-      </StyledButton>
+      </StyledFollowButton>
     );
   }
 }
