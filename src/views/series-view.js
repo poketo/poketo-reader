@@ -5,6 +5,7 @@ import Head from 'react-helmet';
 import { cx } from 'react-emotion';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import type { Series, ChapterMetadata } from 'poketo';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
 import Button from '../components/button';
 import CoverImage from '../components/series-cover-image';
@@ -18,7 +19,7 @@ import Popover from '../components/popover';
 import utils from '../utils';
 import { markSeriesAsRead } from '../store/reducers/collections';
 import type { Dispatch } from '../store/types';
-import type { Series, Chapter } from '../types';
+import type { Bookmark } from '../types';
 
 type ContainerProps = {
   dispatch: Dispatch,
@@ -70,9 +71,9 @@ const iconProps = {
 
 type Props = {
   series: Series,
-  chapters: Chapter[],
+  bookmark: ?Bookmark,
+  chapters: ChapterMetadata[],
   collectionSlug: ?string,
-  lastReadChapterId: ?string,
   markAsRead: (
     collectionSlug: string,
     seriesId: string,
@@ -85,14 +86,14 @@ const SeriesPage = ({
   series,
   chapters,
   collectionSlug,
-  lastReadChapterId,
+  bookmark,
   markAsRead,
   unreadChapterCount,
 }: Props) => {
   const firstChapter = chapters[chapters.length - 1];
   const nextChapter =
-    unreadChapterCount > 0 && lastReadChapterId
-      ? utils.nextChapterToRead(chapters, lastReadChapterId)
+    unreadChapterCount > 0 && bookmark && bookmark.lastReadChapterId
+      ? utils.nextChapterToRead(chapters, bookmark.lastReadChapterId)
       : null;
   const supportsReading = series.supportsReading;
   const hasChapters = chapters.length > 0;
@@ -119,7 +120,8 @@ const SeriesPage = ({
                   target="_blank"
                   rel="noreferrer noopener"
                 />
-                {collectionSlug &&
+                {bookmark &&
+                  collectionSlug &&
                   unreadChapterCount > 0 && (
                     <Fragment>
                       <Popover.Divider />
@@ -207,11 +209,8 @@ const SeriesPage = ({
         <div>
           {hasChapters ? (
             chapters.map(chapter => (
-              <div className="bb-1 bc-gray1 ph-3" key={chapter.id}>
-                <ChapterRow
-                  chapter={chapter}
-                  isLastReadChapter={chapter.id === lastReadChapterId}
-                />
+              <div className="bb-1 bc-gray1" key={chapter.id}>
+                <ChapterRow chapter={chapter} bookmark={bookmark} />
               </div>
             ))
           ) : (
@@ -248,16 +247,17 @@ const mapStateToProps = (state, ownProps) => {
   const collection = state.collections[collectionSlug];
 
   const bookmark = collection ? collection.bookmarks[seriesId] : null;
-  const lastReadChapterId = bookmark ? bookmark.lastReadChapterId : null;
-  const unreadChapterCount = lastReadChapterId
-    ? utils.getUnreadChapters(chapters, lastReadChapterId).length
+  const unreadChapterCount = bookmark
+    ? bookmark.lastReadChapterId
+      ? utils.getUnreadChapters(chapters, bookmark.lastReadChapterId).length
+      : 0
     : 0;
 
   return {
     series,
     chapters,
     collectionSlug,
-    lastReadChapterId,
+    bookmark,
     unreadChapterCount,
   };
 };
