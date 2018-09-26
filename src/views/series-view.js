@@ -164,7 +164,7 @@ const SeriesPage = ({
             </h1>
             <a
               href={series.url}
-              className="fs-14 c-gray3"
+              className="fs-14 fs-16-m c-gray3"
               target="_blank"
               rel="noopener noreferrer">
               {series.site.name}
