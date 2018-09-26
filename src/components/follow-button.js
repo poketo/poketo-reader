@@ -67,7 +67,13 @@ class FollowButton extends Component<Props, State> {
     const { id: seriesId, url: seriesUrl } = series;
 
     if (isFollowing) {
-      if (window.confirm(`Do you want to unfollow ${series.title}?`)) {
+      if (
+        window.confirm(
+          `Do you want to unfollow ${
+            series.title
+          }? You will lose your bookmark.`,
+        )
+      ) {
         this.setState({ isFetching: true });
         api
           .fetchRemoveBookmarkFromCollection(collectionSlug, series.id)
