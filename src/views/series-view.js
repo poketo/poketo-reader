@@ -12,6 +12,7 @@ import CoverImage from '../components/series-cover-image';
 import CircleLoader from '../components/loader-circle';
 import ChapterRow from '../components/chapter-row';
 import FollowButton from '../components/follow-button';
+import NextChapterRow from '../components/next-chapter-row';
 import ScrollReset from '../components/scroll-reset';
 import TextExcerpt from '../components/text-excerpt';
 import Icon from '../components/icon';
@@ -94,7 +95,7 @@ const SeriesPage = ({
   const nextChapter =
     unreadChapterCount > 0 && bookmark && bookmark.lastReadChapterId
       ? utils.nextChapterToRead(chapters, bookmark.lastReadChapterId)
-      : null;
+      : firstChapter;
   const supportsReading = series.supportsReading;
   const hasChapters = chapters.length > 0;
 
@@ -180,16 +181,11 @@ const SeriesPage = ({
           </div>
         </header>
         {hasChapters && (
-          <div className="ph-3 mb-4">
-            {nextChapter ? (
-              <Link to={utils.getReaderUrl(nextChapter.id)}>
-                <Button variant="border">Continue Reading</Button>
-              </Link>
-            ) : (
-              <Link to={utils.getReaderUrl(firstChapter.id)}>
-                <Button variant="border">Start Reading</Button>
-              </Link>
-            )}
+          <div
+            className="mb-4 pt-3 pb-2 ph-2 br-3"
+            css="background-color: rgba(0, 0, 0, 0.03);">
+            <Label className="ph-2">Next Chapter</Label>
+            {nextChapter && <NextChapterRow chapter={nextChapter} />}
           </div>
         )}
         <div className="ph-3 mb-4">
