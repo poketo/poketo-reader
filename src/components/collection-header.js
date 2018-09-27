@@ -92,7 +92,7 @@ export default class CollectionHeader extends Component<Props, State> {
         </Panel>
         <Popover
           content={({ close }) => (
-            <div className="pa-2" style={{ maxWidth: '80vw' }}>
+            <div className="pa-2" css="max-width: 80vw;">
               <Popover.Item
                 label="Follow new series"
                 onClick={() => {

@@ -3,15 +3,15 @@
 import React, { PureComponent, type ElementRef } from 'react';
 import { cx } from 'react-emotion';
 import type { ChapterMetadata } from 'poketo';
-import type { BookmarkLastReadChapterId } from '../types';
+import type { Bookmark } from '../types';
 import utils from '../utils';
-import ChapterRow from '../components/reader-chapter-row';
+import ChapterRow from '../components/chapter-row';
 
 type Props = {
   activeChapterId?: string,
   activeChapterRef?: ElementRef<*>,
   seriesChapters: ChapterMetadata[],
-  lastReadChapterId: BookmarkLastReadChapterId,
+  bookmark: ?Bookmark,
   onChapterClick: () => void,
 };
 
@@ -63,22 +63,21 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     this.props.onChapterClick();
   };
 
-  renderChapters(chapters: ChapterMetadata[], lastReadOrder: number) {
-    const { activeChapterId, activeChapterRef } = this.props;
+  renderChapters(chapters: ChapterMetadata[]) {
+    const { activeChapterId, activeChapterRef, bookmark } = this.props;
 
     return (
       <div>
         {chapters.map((c: ChapterMetadata) => {
           const isActive = c.id === activeChapterId;
-          const isUnread = c.order > lastReadOrder;
 
           return (
             <ChapterRow
               key={c.id}
               chapter={c}
+              bookmark={bookmark}
               innerRef={isActive ? activeChapterRef : undefined}
               isActive={isActive}
-              isUnread={isUnread}
               onClick={this.handleChapterClick}
             />
           );
@@ -88,13 +87,10 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   }
 
   render() {
-    const { seriesChapters, lastReadChapterId } = this.props;
-
-    const lastRead = seriesChapters.find(c => c.id === lastReadChapterId);
-    const lastReadOrder = lastRead ? lastRead.order : 0;
+    const { seriesChapters } = this.props;
 
     if (!shouldGroupByVolume(seriesChapters)) {
-      return this.renderChapters(seriesChapters, lastReadOrder);
+      return this.renderChapters(seriesChapters);
     }
 
     const groupedChapters = utils.groupBy(seriesChapters, 'volumeNumber');
@@ -109,7 +105,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
                 Volume {key}
               </div>
             )}
-            {this.renderChapters(groupedChapters[key], lastReadOrder)}
+            {this.renderChapters(groupedChapters[key])}
           </div>
         ))}
       </div>

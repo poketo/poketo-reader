@@ -1,33 +1,37 @@
 // @flow
 
 import React from 'react';
-import styled, { css } from 'react-emotion';
+import { css, cx } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import type { ChapterMetadata } from 'poketo';
 import type { Bookmark } from '../types';
 import Icon from './icon';
 import utils from '../utils';
 
-const StyledLink = styled(Link)`
-  border-radius: 3px;
-  min-height: 44px;
-  transition: background-color 100ms ease;
+const NewReleaseIndicator = () => (
+  <div
+    className="p-relative mr-2 br-round bgc-coral"
+    css="width: 8px; height: 8px; left: -2px;"
+  />
+);
 
-  ${props =>
-    props.isLastRead
-      ? css`
-          background-color: rgba(19, 207, 131, 0.07);
+const styles = {
+  base: css`
+    border-radius: 3px;
+    min-height: 44px;
+    transition: background-color 100ms ease;
 
-          .supports-hover &:hover {
-            background-color: rgba(19, 207, 131, 0.15);
-          }
-        `
-      : css`
-          .supports-hover &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-          }
-        `};
-`;
+    .supports-hover &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  `,
+  isActive: css`
+    background-color: #f2f2f2; /* gray0 */
+  `,
+  isLastRead: css`
+    background-color: rgba(19, 207, 131, 0.07);
+  `,
+};
 
 type Props = {
   chapter: ChapterMetadata,
@@ -42,6 +46,8 @@ const ChapterRow = ({
   chapter,
   collectionSlug,
   extendedLabel,
+  isActive,
+  ...rest
 }: Props) => {
   const chapterLabel = utils.getChapterLabel(chapter, extendedLabel);
   const chapterTitle = utils.getChapterTitle(chapter);
@@ -55,11 +61,21 @@ const ChapterRow = ({
     : false;
 
   return (
-    <StyledLink
-      className="x xa-center xj-start pv-2 ph-3"
+    <Link
+      className={cx('x xa-center xj-start pv-2 ph-3', styles.base, {
+        [styles.isActive]: isActive,
+        [styles.isLastRead]: isLastRead && !isActive,
+      })}
       to={to}
-      isLastRead={isLastRead}>
-      {isLastRead ? (
+      {...rest}>
+      {isActive ? (
+        <Icon
+          name="check"
+          className="p-relative mr-2 c-gray3"
+          size={18}
+          iconSize={24}
+        />
+      ) : isLastRead ? (
         <Icon
           name="bookmark-filled"
           className="p-relative mr-2 c-green"
@@ -68,10 +84,7 @@ const ChapterRow = ({
           iconSize={24}
         />
       ) : isNewRelease ? (
-        <div
-          className="p-relative mr-2 br-round bgc-coral"
-          css="width: 8px; height: 8px; left: -2px;"
-        />
+        <NewReleaseIndicator />
       ) : null}
       <div className="of-hidden to-ellipsis ws-noWrap">
         <span className="fw-semibold">{chapterLabel}</span>
@@ -80,7 +93,7 @@ const ChapterRow = ({
       <span className="ml-auto pl-4 xs-0 fs-12 o-50p">
         {utils.formatTimestamp(chapter.createdAt)}
       </span>
-    </StyledLink>
+    </Link>
   );
 };
 

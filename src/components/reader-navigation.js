@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { css } from 'react-emotion';
 import Icon from '../components/icon';
 import Panel from '../components/panel';
 import ReaderChapterPicker from '../components/reader-chapter-picker';
@@ -8,18 +9,28 @@ import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
 import type { ChapterMetadata } from 'poketo';
-import type { BookmarkLastReadChapterId, Collection } from '../types';
+import type { Bookmark, Collection } from '../types';
 
 type Props = {
   chapter: ChapterMetadata,
   collection: ?Collection,
-  lastReadChapterId: BookmarkLastReadChapterId,
+  bookmark: ?Bookmark,
   seriesChapters: ChapterMetadata[],
 };
 
 type State = {
   showingPanel: boolean,
 };
+
+const contentClassName = css`
+  overflow-y: scroll;
+  max-height: 60vh;
+  -webkit-overflow-scrolling: touch;
+
+  @media only screen and (orientation: landscape) {
+    max-height: 80vh;
+  }
+`;
 
 const scrollElementIntoView = (el, parent) => {
   const top = el.offsetTop;
@@ -56,14 +67,17 @@ export default class ReaderNavigation extends Component<Props, State> {
   };
 
   scrollRef = React.createRef();
-  activeChapterRef = React.createRef();
+  activeChapterRef = (el: HTMLElement) => {
+    this.activeChapterEl = el;
+  };
+  activeChapterEl: HTMLElement;
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (
       prevState.showingPanel !== this.state.showingPanel &&
       this.state.showingPanel === true
     ) {
-      const activeChapterEl = this.activeChapterRef.current;
+      const activeChapterEl = this.activeChapterEl;
       const scrollEl = this.scrollRef.current;
 
       if (scrollEl && activeChapterEl) {
@@ -73,7 +87,7 @@ export default class ReaderNavigation extends Component<Props, State> {
   }
 
   renderPickerPanel() {
-    const { chapter, lastReadChapterId, seriesChapters } = this.props;
+    const { chapter, bookmark, seriesChapters } = this.props;
     const { showingPanel } = this.state;
 
     return (
@@ -82,19 +96,13 @@ export default class ReaderNavigation extends Component<Props, State> {
         onRequestClose={this.handlePickerPanelClose}
         scrollRef={this.scrollRef}>
         {() => (
-          <div
-            ref={this.scrollRef}
-            style={{
-              overflowY: 'scroll',
-              WebkitOverflowScrolling: 'touch',
-              maxHeight: '60vh',
-            }}>
+          <div ref={this.scrollRef} className={contentClassName}>
             <div className="pt-2 pb-3">
               <ReaderChapterPicker
                 activeChapterRef={this.activeChapterRef}
                 activeChapterId={chapter.id}
                 seriesChapters={seriesChapters}
-                lastReadChapterId={lastReadChapterId}
+                bookmark={bookmark}
                 onChapterClick={this.handleChapterClick}
               />
             </div>
@@ -125,10 +133,9 @@ export default class ReaderNavigation extends Component<Props, State> {
           {this.renderPickerPanel()}
         </div>
         <a
-          className="PillLink pv-2 ph-3 d-inlineBlock c-white c-pointer ta-center"
-          style={{ lineHeight: '1.25' }}
+          className="PillLink pv-2 ph-3 d-inlineBlock c-white c-pointer ta-center lh-1d25"
           onClick={this.handlePickerClick}>
-          <div className="x xa-center xj-center" style={{ lineHeight: '24px' }}>
+          <div className="x xa-center xj-center" css="line-height: 24px;">
             <span className="ml-1 mr-2">{chapterLabel}</span>
             <Icon name="direct-down" size={18} iconSize={18} />
           </div>
