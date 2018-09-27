@@ -5,6 +5,7 @@ import Loadable from 'react-loadable';
 import { Link } from 'react-router-dom';
 import type { Series } from 'poketo';
 
+import BackButtonContainer from '../components/back-button-container';
 import ComponentLoader from '../components/loader-component';
 import Icon from '../components/icon';
 import Panel from '../components/panel';
@@ -64,11 +65,14 @@ export default class ReaderHeader extends PureComponent<Props, State> {
           )}
         </Panel>
         <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
-          <Link
-            className="x xa-center o-50p z-2"
-            to={collectionSlug ? utils.getCollectionUrl(collectionSlug) : '/'}>
-            <Icon name="arrow-left" iconSize={20} />
-          </Link>
+          <BackButtonContainer>
+            {({ to }) => (
+              <Link className="x xa-center o-50p z-2" to={to}>
+                <Icon name="arrow-left" iconSize={20} />
+              </Link>
+            )}
+          </BackButtonContainer>
+
           {series && (
             <div className="p-absolute p-fill ph-5 x xa-center xj-center">
               <span className="of-hidden to-ellipsis ws-noWrap">

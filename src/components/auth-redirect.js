@@ -3,7 +3,7 @@
 import { Component } from 'react';
 import { type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import { getCollectionSlug } from '../store/reducers/navigation';
 import utils from '../utils';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 
 class AuthRedirect extends Component<Props> {
   static mapStateToProps = state => ({
-    defaultCollection: state.auth.collectionSlug,
+    defaultCollection: getCollectionSlug(state),
   });
 
   componentDidMount() {
