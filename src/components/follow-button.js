@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import type { Series } from 'poketo';
 import api from '../api';
 import { type Dispatch } from '../store/types';
-import { getCollectionSlug } from '../store/reducers/auth';
+import { getCollectionSlug } from '../store/reducers/navigation';
 import { addBookmark } from '../store/reducers/collections';
 import Icon from '../components/icon';
 

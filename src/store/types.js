@@ -116,13 +116,13 @@ export type ChapterAction =
   | SetChapterAction
   | SetChapterStatusAction;
 
-export type AuthAction =
+export type NavigationAction =
   | SetDefaultCollectionAction
   | ClearDefaultCollectionAction
   | SetLastSeenTabAction;
 
 export type Action =
-  | AuthAction
+  | NavigationAction
   | CollectionAction
   | SeriesAction
   | ChapterAction;

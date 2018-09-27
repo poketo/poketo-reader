@@ -8,7 +8,7 @@ import Feed from '../components/feed';
 import CollectionHeader from '../components/collection-header';
 import Toast from './toast';
 import { fetchSeriesForCollection } from '../store/reducers/collections';
-import { setDefaultCollection } from '../store/reducers/auth';
+import { setDefaultCollection } from '../store/reducers/navigation';
 import type { Collection } from '../types';
 import type { Dispatch } from '../store/types';
 

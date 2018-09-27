@@ -7,7 +7,7 @@ import { Route, NavLink, withRouter } from 'react-router-dom';
 import FeedItemRow from './feed-item-row';
 import SeriesRow from './series-row';
 import Icon from './icon';
-import { setLastSeenTab } from '../store/reducers/auth';
+import { setLastSeenTab } from '../store/reducers/navigation';
 import type { Bookmark, FeedItem } from '../types';
 
 const nextChapterDivider = css`

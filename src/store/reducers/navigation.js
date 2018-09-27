@@ -1,10 +1,10 @@
 // @flow
 
 import localStorage from '../local-storage';
-import type { AuthAction } from '../types';
+import type { NavigationAction } from '../types';
 import type { HomeTabId } from '../../types';
 
-type Action = AuthAction;
+type Action = NavigationAction;
 type State = {
   collectionSlug: ?string,
   lastSeenTab: HomeTabId,
@@ -18,8 +18,8 @@ const initialState = {
   lastSeenTab: localStorage.getItem(STORAGE_LAST_SEEN_TAB_KEY) || 'now-reading',
 };
 
-export const getCollectionSlug = (state: { auth: State }) =>
-  state.auth.collectionSlug;
+export const getCollectionSlug = (state: { navigation: State }) =>
+  state.navigation.collectionSlug;
 
 export function setDefaultCollection(slug: string): Action {
   localStorage.setItem(STORAGE_DEFAULT_COLLECTION_KEY, slug);
@@ -40,8 +40,8 @@ export function clearDefaultCollection(): Action {
   return { type: 'CLEAR_DEFAULT_COLLECTION' };
 }
 
-export function getLastSeenTab(state: { auth: State }) {
-  return state.auth.lastSeenTab;
+export function getLastSeenTab(state: { navigation: State }) {
+  return state.navigation.lastSeenTab;
 }
 
 export function setLastSeenTab(tabId: HomeTabId) {

@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import type { Series, ChapterMetadata } from 'poketo';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
+import { getCollectionSlug } from '../store/reducers/navigation';
 import BackButtonContainer from '../components/back-button-container';
 import Button from '../components/button';
 import CoverImage from '../components/series-cover-image';
@@ -253,7 +254,7 @@ const mapStateToProps = (state, ownProps) => {
     ? series.chapters.map(chapterId => chaptersById[chapterId])
     : [];
 
-  const collectionSlug = state.auth.collectionSlug;
+  const collectionSlug = getCollectionSlug(state);
   const collection = state.collections[collectionSlug];
 
   const bookmark = collection ? collection.bookmarks[seriesId] : null;
