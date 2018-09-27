@@ -24,23 +24,8 @@ import {
 } from '../store/reducers/collections';
 
 import type { Chapter, ChapterMetadata, Series } from 'poketo';
-import type { Bookmark, BookmarkLastReadChapterId, Collection } from '../types';
+import type { Collection } from '../types';
 import type { Dispatch, FetchStatusState } from '../store/types';
-
-const getUnreadMap = (
-  collection: ?Collection,
-): { [string]: BookmarkLastReadChapterId } => {
-  if (!collection) {
-    return {};
-  }
-
-  const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
-
-  return bookmarks.reduce((acc, bookmark) => {
-    acc[bookmark.id] = bookmark.lastReadChapterId || null;
-    return acc;
-  }, {});
-};
 
 type ContainerProps = {
   chapter: Chapter,
@@ -153,7 +138,10 @@ class ReaderViewContainer extends Component<ContainerProps> {
     } = this.props;
     const { isFetching, errorCode } = chapterStatus;
 
-    const unreadMap = getUnreadMap(collection);
+    const bookmark =
+      collection && series
+        ? collection.bookmarks && collection.bookmarks[series.id]
+        : null;
     const isLoading = isFetching || !chapter || !chapter.pages || !series;
 
     const showNavigation = chapter && series && seriesChapters;
@@ -164,7 +152,7 @@ class ReaderViewContainer extends Component<ContainerProps> {
       <ReaderNavigation
         collection={collection}
         chapter={chapter}
-        lastReadChapterId={unreadMap[series.id]}
+        bookmark={bookmark}
         seriesChapters={seriesChapters}
       />
     ) : null;

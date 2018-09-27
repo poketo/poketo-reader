@@ -9,12 +9,12 @@ import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
 import type { ChapterMetadata } from 'poketo';
-import type { BookmarkLastReadChapterId, Collection } from '../types';
+import type { Bookmark, Collection } from '../types';
 
 type Props = {
   chapter: ChapterMetadata,
   collection: ?Collection,
-  lastReadChapterId: BookmarkLastReadChapterId,
+  bookmark: ?Bookmark,
   seriesChapters: ChapterMetadata[],
 };
 
@@ -87,7 +87,7 @@ export default class ReaderNavigation extends Component<Props, State> {
   }
 
   renderPickerPanel() {
-    const { chapter, lastReadChapterId, seriesChapters } = this.props;
+    const { chapter, bookmark, seriesChapters } = this.props;
     const { showingPanel } = this.state;
 
     return (
@@ -102,7 +102,7 @@ export default class ReaderNavigation extends Component<Props, State> {
                 activeChapterRef={this.activeChapterRef}
                 activeChapterId={chapter.id}
                 seriesChapters={seriesChapters}
-                lastReadChapterId={lastReadChapterId}
+                bookmark={bookmark}
                 onChapterClick={this.handleChapterClick}
               />
             </div>
