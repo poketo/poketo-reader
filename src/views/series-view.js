@@ -92,10 +92,13 @@ const SeriesPage = ({
   unreadChapterCount,
 }: Props) => {
   const firstChapter = chapters[chapters.length - 1];
+  const mostRecentChapter = chapters[0];
+
   const nextChapter =
-    unreadChapterCount > 0 && bookmark && bookmark.lastReadChapterId
+    bookmark && bookmark.lastReadChapterId
       ? utils.nextChapterToRead(chapters, bookmark.lastReadChapterId)
       : firstChapter;
+
   const supportsReading = series.supportsReading;
   const hasChapters = chapters.length > 0;
 
@@ -183,8 +186,12 @@ const SeriesPage = ({
         {hasChapters && (
           <div
             className="mb-4 pt-3 pb-2 ph-2 br-3"
-            css="background-color: rgba(0, 0, 0, 0.03);">
-            <Label className="ph-2">Next Chapter</Label>
+            css="background-color: rgba(235, 233, 231, 0.4);">
+            <Label className="ph-2">
+              {bookmark && bookmark.lastReadChapterId === mostRecentChapter.id
+                ? 'Newest Chapter'
+                : 'Next Chapter'}
+            </Label>
             {nextChapter && <NextChapterRow chapter={nextChapter} />}
           </div>
         )}
@@ -193,14 +200,16 @@ const SeriesPage = ({
             <Label>Author</Label>
             <div>{series.author}</div>
           </div>
-          <div>
-            <Label>Description</Label>
+          {series.description && (
             <div>
-              <TextExcerpt trimAfterLength={200}>
-                {series.description}
-              </TextExcerpt>
+              <Label>Description</Label>
+              <div>
+                <TextExcerpt trimAfterLength={200}>
+                  {series.description}
+                </TextExcerpt>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div>
           {hasChapters ? (
