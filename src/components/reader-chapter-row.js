@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type ElementRef } from 'react';
-import styled, { css, cx } from 'react-emotion';
+import { css, cx } from 'react-emotion';
 import { Link, Route } from 'react-router-dom';
 import Icon from '../components/icon';
 import utils from '../utils';
@@ -15,18 +15,16 @@ type Props = {
   onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void,
 };
 
-const StyledContainer = styled(Link)`
+const className = css`
   min-height: 44px;
 
   .supports-hover &:hover {
     background-color: #f2f2f2; /* gray0 */
   }
+`;
 
-  ${props =>
-    props.isActive &&
-    css`
-      background-color: #f2f2f2; /* gray0 */
-    `};
+const activeClassName = css`
+  background-color: #f2f2f2; /* gray0 */
 `;
 
 const ChapterRow = (props: Props) => {
@@ -40,10 +38,15 @@ const ChapterRow = (props: Props) => {
     <Route
       path={to}
       children={({ match }) => (
-        <StyledContainer
-          className="x xa-center xj-spaceBetween pv-2 ph-3 c-pointer"
+        <Link
+          className={cx(
+            'x xa-center xj-spaceBetween pv-2 ph-3 c-pointer',
+            className,
+            {
+              [activeClassName]: isActive,
+            },
+          )}
           to={to}
-          isActive={isActive}
           innerRef={innerRef}
           onClick={onClick}>
           {isActive ? (
@@ -67,7 +70,7 @@ const ChapterRow = (props: Props) => {
           <span className="xg-1 xs-0 fs-12 o-50p pl-2 pl-4-m ta-right">
             {utils.formatTimestamp(chapter.createdAt)}
           </span>
-        </StyledContainer>
+        </Link>
       )}
     />
   );
