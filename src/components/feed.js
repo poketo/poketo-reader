@@ -7,6 +7,7 @@ import { Route, NavLink, withRouter } from 'react-router-dom';
 import FeedItemRow from './feed-item-row';
 import SeriesRow from './series-row';
 import Icon from './icon';
+import { setLastSeenTab } from '../store/reducers/auth';
 import type { Bookmark, FeedItem } from '../types';
 
 const nextChapterDivider = css`
@@ -44,9 +45,41 @@ type Props = {
   feedItems: FeedItem[],
 };
 
+class NowReadingFeed extends Component<{
+  dispatch: Function,
+  feedItems: FeedItem[],
+}> {
+  componentDidMount() {
+    this.props.dispatch(setLastSeenTab('now-reading'));
+  }
+
+  render() {
+    return this.props.feedItems.map(item => (
+      <div key={item.series.id} className={cx('pt-2 mt-2', nextChapterDivider)}>
+        <FeedItemRow feedItem={item} />
+      </div>
+    ));
+  }
+}
+
+class LibraryFeed extends Component<{
+  dispatch: Function,
+  feedItems: FeedItem[],
+}> {
+  componentDidMount() {
+    this.props.dispatch(setLastSeenTab('library'));
+  }
+
+  render() {
+    return this.props.feedItems.map(item => (
+      <SeriesRow key={item.series.id} feedItem={item} />
+    ));
+  }
+}
+
 class Feed extends Component<Props> {
   render() {
-    const { collectionSlug, feedItems } = this.props;
+    const { collectionSlug, feedItems, dispatch } = this.props;
 
     const unreadFeedItems = feedItems
       .filter(item => item.isCaughtUp === false)
@@ -68,24 +101,16 @@ class Feed extends Component<Props> {
           <Route
             path={`/c/${collectionSlug}/`}
             exact
-            render={() =>
-              unreadFeedItems.map(item => (
-                <div
-                  key={item.series.id}
-                  className={cx('pt-2 mt-2', nextChapterDivider)}>
-                  <FeedItemRow feedItem={item} />
-                </div>
-              ))
-            }
+            render={() => (
+              <NowReadingFeed dispatch={dispatch} feedItems={unreadFeedItems} />
+            )}
           />
           <Route
             path={`/c/${collectionSlug}/library`}
             exact
-            render={() =>
-              feedItems.map(item => (
-                <SeriesRow key={item.series.id} feedItem={item} />
-              ))
-            }
+            render={() => (
+              <LibraryFeed dispatch={dispatch} feedItems={feedItems} />
+            )}
           />
         </div>
       </div>

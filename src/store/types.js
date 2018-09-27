@@ -3,7 +3,11 @@
 import api from '../api';
 import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
 import type { Chapter, ChapterMetadata, Series } from 'poketo';
-import type { BookmarkLastReadChapterId, Collection } from '../types';
+import type {
+  BookmarkLastReadChapterId,
+  Collection,
+  HomeTabId,
+} from '../types';
 
 type ActionType<A, B> = { +type: A, +payload: B };
 type ActionWithoutPayloadType<A> = { +type: A };
@@ -89,6 +93,11 @@ export type ClearDefaultCollectionAction = ActionWithoutPayloadType<
   'CLEAR_DEFAULT_COLLECTION',
 >;
 
+export type SetLastSeenTabAction = ActionType<
+  'SET_LAST_SEEN_TAB',
+  { tabId: HomeTabId },
+>;
+
 export type CollectionAction =
   | AddEntitiesAction
   | SetCollectionAction
@@ -109,7 +118,8 @@ export type ChapterAction =
 
 export type AuthAction =
   | SetDefaultCollectionAction
-  | ClearDefaultCollectionAction;
+  | ClearDefaultCollectionAction
+  | SetLastSeenTabAction;
 
 export type Action =
   | AuthAction

@@ -2,16 +2,20 @@
 
 import localStorage from '../local-storage';
 import type { AuthAction } from '../types';
+import type { HomeTabId } from '../../types';
 
 type Action = AuthAction;
 type State = {
   collectionSlug: ?string,
+  lastSeenTab: HomeTabId,
 };
 
 const STORAGE_DEFAULT_COLLECTION_KEY = 'defaultCollection';
+const STORAGE_LAST_SEEN_TAB_KEY = 'lastSeenTab';
 
 const initialState = {
   collectionSlug: localStorage.getItem(STORAGE_DEFAULT_COLLECTION_KEY),
+  lastSeenTab: localStorage.getItem(STORAGE_LAST_SEEN_TAB_KEY) || 'now-reading',
 };
 
 export const getCollectionSlug = (state: { auth: State }) =>
@@ -36,6 +40,15 @@ export function clearDefaultCollection(): Action {
   return { type: 'CLEAR_DEFAULT_COLLECTION' };
 }
 
+export function getLastSeenTab(state: { auth: State }) {
+  return state.auth.lastSeenTab;
+}
+
+export function setLastSeenTab(tabId: HomeTabId) {
+  localStorage.setItem(STORAGE_LAST_SEEN_TAB_KEY, tabId);
+  return { type: 'SET_LAST_SEEN_TAB', payload: { tabId } };
+}
+
 export default function reducer(
   state: State = initialState,
   action: Action,
@@ -45,6 +58,8 @@ export default function reducer(
       return { ...state, collectionSlug: action.payload };
     case 'CLEAR_DEFAULT_COLLECTION':
       return { ...state, collectionSlug: null };
+    case 'SET_LAST_SEEN_TAB':
+      return { ...state, lastSeenTab: action.payload.tabId };
     default:
       return state;
   }

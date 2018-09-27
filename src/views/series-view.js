@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import type { Series, ChapterMetadata } from 'poketo';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
+import BackButtonContainer from '../components/back-button-container';
 import Button from '../components/button';
 import CoverImage from '../components/series-cover-image';
 import CircleLoader from '../components/loader-circle';
@@ -110,9 +111,13 @@ const SeriesPage = ({
       </Head>
       <div className="mw-600 w-100p mh-auto p-relative">
         <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
-          <Link to="/" className="x hover">
-            <Icon name="arrow-left" {...iconProps} />
-          </Link>
+          <BackButtonContainer>
+            {({ to }) => (
+              <Link to={to} className="x hover">
+                <Icon name="arrow-left" {...iconProps} />
+              </Link>
+            )}
+          </BackButtonContainer>
           <Popover
             content={({ close }) => (
               <div className="pa-2">
