@@ -15,6 +15,7 @@ import ReaderNavigation from '../components/reader-navigation';
 import ReaderFooter from '../components/reader-footer';
 import utils, { invariant } from '../utils';
 
+import { getCollectionSlug } from '../store/reducers/navigation';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
 import { fetchChapterIfNeeded } from '../store/reducers/chapters';
 import {
@@ -226,7 +227,7 @@ function mapStateToProps(state, ownProps: ContainerProps) {
   const { match } = ownProps;
   const { chapterId: rawChapterId } = match.params;
 
-  const collectionSlug = state.auth.collectionSlug;
+  const collectionSlug = getCollectionSlug(state);
   const collection = collectionSlug ? state.collections[collectionSlug] : null;
   const chapterId = decodeURIComponent(rawChapterId);
   const seriesId = utils.toSeriesId(chapterId);

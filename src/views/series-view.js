@@ -7,6 +7,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import type { Series, ChapterMetadata } from 'poketo';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
+import { getCollectionSlug } from '../store/reducers/navigation';
+import BackButtonContainer from '../components/back-button-container';
 import Button from '../components/button';
 import CoverImage from '../components/series-cover-image';
 import CircleLoader from '../components/loader-circle';
@@ -92,10 +94,13 @@ const SeriesPage = ({
   unreadChapterCount,
 }: Props) => {
   const firstChapter = chapters[chapters.length - 1];
+  const mostRecentChapter = chapters[0];
+
   const nextChapter =
-    unreadChapterCount > 0 && bookmark && bookmark.lastReadChapterId
+    bookmark && bookmark.lastReadChapterId
       ? utils.nextChapterToRead(chapters, bookmark.lastReadChapterId)
       : firstChapter;
+
   const supportsReading = series.supportsReading;
   const hasChapters = chapters.length > 0;
 
@@ -107,9 +112,13 @@ const SeriesPage = ({
       </Head>
       <div className="mw-600 w-100p mh-auto p-relative">
         <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
-          <Link to="/" className="x hover">
-            <Icon name="arrow-left" {...iconProps} />
-          </Link>
+          <BackButtonContainer>
+            {({ to }) => (
+              <Link to={to} className="x hover">
+                <Icon name="arrow-left" {...iconProps} />
+              </Link>
+            )}
+          </BackButtonContainer>
           <Popover
             content={({ close }) => (
               <div className="pa-2">
@@ -183,8 +192,12 @@ const SeriesPage = ({
         {hasChapters && (
           <div
             className="mb-4 pt-3 pb-2 ph-2 br-3"
-            css="background-color: rgba(0, 0, 0, 0.03);">
-            <Label className="ph-2">Next Chapter</Label>
+            css="background-color: rgba(235, 233, 231, 0.4);">
+            <Label className="ph-2">
+              {bookmark && bookmark.lastReadChapterId === mostRecentChapter.id
+                ? 'Newest Chapter'
+                : 'Next Chapter'}
+            </Label>
             {nextChapter && <NextChapterRow chapter={nextChapter} />}
           </div>
         )}
@@ -193,14 +206,16 @@ const SeriesPage = ({
             <Label>Author</Label>
             <div>{series.author}</div>
           </div>
-          <div>
-            <Label>Description</Label>
+          {series.description && (
             <div>
-              <TextExcerpt trimAfterLength={200}>
-                {series.description}
-              </TextExcerpt>
+              <Label>Description</Label>
+              <div>
+                <TextExcerpt trimAfterLength={200}>
+                  {series.description}
+                </TextExcerpt>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div>
           {hasChapters ? (
@@ -239,7 +254,7 @@ const mapStateToProps = (state, ownProps) => {
     ? series.chapters.map(chapterId => chaptersById[chapterId])
     : [];
 
-  const collectionSlug = state.auth.collectionSlug;
+  const collectionSlug = getCollectionSlug(state);
   const collection = state.collections[collectionSlug];
 
   const bookmark = collection ? collection.bookmarks[seriesId] : null;
