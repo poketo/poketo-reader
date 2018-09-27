@@ -20,11 +20,8 @@ const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   return (
     <Link
       to={to}
-      className={cx('PillLink x pa-2', { 'o-50p': disabled })}
-      style={{
-        pointerEvents: disabled ? 'none' : 'auto',
-        lineHeight: '1.0',
-      }}>
+      className={cx('PillLink x pa-2', { 'o-50p pe-none': disabled })}
+      css="line-height: 1.0;">
       {children}
     </Link>
   );

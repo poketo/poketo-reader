@@ -51,6 +51,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledImage = styled.div`
+  background-image: url(${props => props.imageUrl});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -60,10 +61,7 @@ const SeriesCoverImage = ({ series, ...props }: Props) => (
   <StyledContainerContainer {...props}>
     <StyledContainer role="img" aria-label={series.title}>
       {series.coverImageUrl && (
-        <StyledImage
-          className="p-fill"
-          style={{ backgroundImage: `url(${series.coverImageUrl})` }}
-        />
+        <StyledImage className="p-fill" imageUrl={series.coverImageUrl} />
       )}
       <div
         className="p-fill"

@@ -27,7 +27,7 @@ const PopoverItem = ({ iconBefore, onClick, label, ...props }: Props) => {
           'pl-3': !Boolean(iconBefore),
         },
       )}
-      style={{ height: 44 }}
+      css="height: 44px;"
       onClick={onClick}
       title={label}
       {...props}>

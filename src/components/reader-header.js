@@ -82,7 +82,7 @@ export default class ReaderHeader extends PureComponent<Props, State> {
           )}
           <Popover
             content={({ close }) => (
-              <div className="pa-2" style={{ maxWidth: '80vw' }}>
+              <div className="pa-2" css="max-width: 80vw;">
                 {series && (
                   <Fragment>
                     <Link
