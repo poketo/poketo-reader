@@ -130,6 +130,14 @@ const SeriesPage = ({
                   target="_blank"
                   rel="noreferrer noopener"
                 />
+                <Popover.Item
+                  iconBefore={<Icon name="new-tab" {...iconProps} />}
+                  label={`Open on /r/manga`}
+                  href={utils.getRedditUrl(series.title)}
+                  onClick={close}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                />
                 {bookmark &&
                   collectionSlug &&
                   unreadChapterCount > 0 && (
