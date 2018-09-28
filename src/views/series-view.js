@@ -130,6 +130,14 @@ const SeriesPage = ({
                   target="_blank"
                   rel="noreferrer noopener"
                 />
+                <Popover.Item
+                  iconBefore={<Icon name="new-tab" {...iconProps} />}
+                  label={`Open on /r/manga`}
+                  href={utils.getRedditUrl(series.title)}
+                  onClick={close}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                />
                 {bookmark &&
                   collectionSlug &&
                   unreadChapterCount > 0 && (
@@ -189,18 +197,22 @@ const SeriesPage = ({
             )}
           </div>
         </header>
-        {hasChapters && (
-          <div
-            className="mb-4 pt-3 pb-2 ph-2 br-3"
-            css="background-color: rgba(235, 233, 231, 0.4);">
-            <Label className="ph-2">
-              {bookmark && bookmark.lastReadChapterId === mostRecentChapter.id
-                ? 'Newest Chapter'
-                : 'Next Chapter'}
-            </Label>
-            {nextChapter && <NextChapterRow chapter={nextChapter} />}
-          </div>
-        )}
+        {hasChapters &&
+          nextChapter && (
+            <div className="mb-4 ph-3">
+              <div
+                className="pt-3 pb-2 ph-2 br-3"
+                css="background-color: rgba(235, 233, 231, 0.4);">
+                <Label className="ph-2">
+                  {bookmark &&
+                  bookmark.lastReadChapterId === mostRecentChapter.id
+                    ? 'Newest Chapter'
+                    : 'Next Chapter'}
+                </Label>
+                <NextChapterRow chapter={nextChapter} />
+              </div>
+            </div>
+          )}
         <div className="ph-3 mb-4">
           <div className="mb-3">
             <Label>Author</Label>

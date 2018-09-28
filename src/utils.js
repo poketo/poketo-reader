@@ -85,6 +85,10 @@ const utils = {
   getSeriesUrl: (seriesId: string) => `/series/${utils.encodeId(seriesId)}`,
   getReaderUrl: (chapterId: string) => `/read/${utils.encodeId(chapterId)}`,
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
+  getRedditUrl: (seriesTitle: string) =>
+    `https://www.reddit.com/r/manga/search?q=${encodeURIComponent(
+      seriesTitle,
+    ).replace(/%20/g, '+')}&restrict_sr=on`,
 
   /**
    * Chapter Helpers
