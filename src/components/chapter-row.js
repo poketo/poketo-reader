@@ -10,7 +10,7 @@ import utils from '../utils';
 
 const NewReleaseIndicator = () => (
   <div
-    className="p-relative mr-2 br-round bgc-coral"
+    className="p-relative ml-2 mr-3 br-round bgc-coral"
     css="width: 8px; height: 8px; left: -2px;"
   />
 );

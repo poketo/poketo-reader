@@ -71,7 +71,7 @@ class FollowButton extends Component<Props, State> {
         window.confirm(
           `Do you want to unfollow ${
             series.title
-          }? You will lose your bookmark.`,
+          }? Your reading progress will be lost.`,
         )
       ) {
         this.setState({ isFetching: true });
