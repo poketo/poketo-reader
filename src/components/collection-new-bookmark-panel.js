@@ -27,7 +27,11 @@ type NewSeriesErrorCode =
   | 'SERIES_ALREADY_EXISTS'
   | 'UNKNOWN_ERROR';
 
-type BookmarkFetchState = 'ADDED' | 'READY' | 'SUBMITTING' | 'UNREADY';
+type BookmarkFetchState =
+  | 'READY' // Valid input, ready to submit
+  | 'SUBMITTING' // Valid input, submission in-progress
+  | 'SUBMITTED' // Valid input, submission completed
+  | 'UNREADY'; // Invalid input, not ready to submit
 
 type Props = {
   addEntities: (entities: EntitiesPayload) => void,
@@ -39,32 +43,129 @@ type State = {
   bookmarkFetchState: BookmarkFetchState,
   errorCode: ?NewSeriesErrorCode,
   isFetchingPreview: boolean,
-  isPreviewing: boolean,
   linkToUrl: ?string,
-  seriesUrl: ?string,
+  seriesUrl: string,
   seriesPreview: ?Series,
 };
 
-const LINK_TO_SITES = /mangaupdates/i;
+const seriesSupportsReading = (seriesUrl: string) => {
+  return !/mangaupdates/i.test(seriesUrl);
+};
+
+const buttonLabelValues = {
+  SUBMITTING: 'Adding...',
+  READY: 'Add',
+  UNREADY: 'Add',
+  SUBMITTED: <span>✓ Added</span>,
+};
+
+const shouldValidateUrl = (url: string) => {
+  if (url.length < 5) {
+    return false;
+  }
+
+  return true;
+};
+
+const isValidUrl = (url: string) => {
+  if (!shouldValidateUrl(url)) {
+    return false;
+  }
+
+  const normalizedUrl = utils.normalizeUrl(url);
+
+  return utils.isUrl(normalizedUrl) && isSupportedUrl(normalizedUrl);
+};
+
+const getUrlErrorCode = (url: string): NewSeriesErrorCode | null => {
+  const normalizedUrl = utils.normalizeUrl(url);
+
+  if (!utils.isUrl(normalizedUrl)) {
+    return 'INVALID_URL';
+  }
+
+  if (!isSupportedUrl(normalizedUrl)) {
+    return 'UNSUPPORTED_SITE';
+  }
+
+  return null;
+};
+
+const getHttpErrorCode = (err: AxiosError): NewSeriesErrorCode => {
+  if (!err.response) {
+    return 'REQUEST_FAILED';
+  }
+
+  if (err.response.status === 404) {
+    return 'SERIES_NOT_FOUND';
+  }
+
+  if (err.response.status === 400) {
+    switch (err.response.data.code) {
+      case undefined:
+        return /already exists/i.test(err.response.data.message)
+          ? 'SERIES_ALREADY_EXISTS'
+          : 'INVALID_SERIES';
+      default:
+        return 'INVALID_SERIES';
+    }
+  }
+
+  return 'UNKNOWN_ERROR';
+};
+
+const getErrorMessage = (errorCode: NewSeriesErrorCode, url: string): Node => {
+  switch (errorCode) {
+    case 'REQUEST_FAILED':
+      return `There was an error reaching the server.`;
+    case 'INVALID_URL':
+      return `Hmm, this doesn't look like a URL.`;
+    case 'UNSUPPORTED_SITE':
+      const domain = utils.isUrl(url) ? utils.getDomainName(url) : null;
+      return (
+        <span>
+          Sorry,{' '}
+          {domain && domain.length > 0 ? <strong>{domain}</strong> : 'that'}{' '}
+          isn't a supported site. Here's{' '}
+          <a
+            className="Link"
+            href={`${config.githubLibraryUrl}#supported-sites`}
+            rel="noopener noreferrer"
+            target="_blank">
+            a full list of supported sites
+          </a>
+          . Make an issue{' '}
+          <a
+            className="Link"
+            href={`${config.githubLibraryUrl}/issues/new`}
+            rel="noopener noreferrer"
+            target="_blank">
+            on the Github repo
+          </a>{' '}
+          to request a new one.
+        </span>
+      );
+    case 'INVALID_SERIES':
+    case 'SERIES_NOT_FOUND':
+      return `We couldn't find a series at that URL.`;
+    case 'SERIES_ALREADY_EXISTS':
+      return `That series is already in your collection!`;
+    case 'UNKNOWN_ERROR':
+      return `Something went wrong fetching the series. Try again later.`;
+    default:
+      return `Something went wrong.`;
+  }
+};
 
 class NewBookmarkPanel extends Component<Props, State> {
   state = {
     bookmarkFetchState: 'UNREADY',
     errorCode: null,
     isFetchingPreview: false,
-    isPreviewing: false,
     linkToUrl: undefined,
-    seriesUrl: null,
+    seriesUrl: '',
     seriesPreview: null,
   };
-
-  static mapStateToProps = state => ({});
-
-  static mapDispatchToProps = (dispatch: Dispatch) => ({
-    addEntities(payload) {
-      dispatch({ type: 'ADD_ENTITIES', payload });
-    },
-  });
 
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,7 +199,7 @@ class NewBookmarkPanel extends Component<Props, State> {
         });
 
         addEntities(normalized.entities);
-        this.setState({ bookmarkFetchState: 'ADDED' });
+        this.setState({ bookmarkFetchState: 'SUBMITTED' });
         setTimeout(() => {
           onRequestClose();
         }, 1000);
@@ -107,46 +208,40 @@ class NewBookmarkPanel extends Component<Props, State> {
   };
 
   handleSubmitError = (err: AxiosError) => {
-    const errorCode = this.getErrorCode(err);
+    const errorCode = getHttpErrorCode(err);
     this.setState({ bookmarkFetchState: 'UNREADY', errorCode });
   };
 
   handleSeriesUrlValidation = () => {
-    const { bookmarkFetchState, isFetchingPreview, seriesUrl } = this.state;
+    const { seriesUrl } = this.state;
 
-    if (bookmarkFetchState === 'SUBMITTING') {
+    if (!seriesUrl || !shouldValidateUrl(seriesUrl)) {
+      this.setState({ errorCode: null, bookmarkFetchState: 'UNREADY' });
       return;
     }
 
-    if (!seriesUrl || seriesUrl.length < 5) {
-      this.setState({ errorCode: null });
-      return;
-    }
+    const errorCode = getUrlErrorCode(seriesUrl);
 
-    const normalizedUrl = utils.normalizeUrl(seriesUrl);
+    this.setState({
+      errorCode,
+      bookmarkFetchState: errorCode === null ? 'READY' : 'UNREADY',
+    });
+  };
 
-    if (!utils.isUrl(normalizedUrl)) {
-      this.setState({ errorCode: 'INVALID_URL' });
-      return;
-    }
-
-    const supportedSite = isSupportedUrl(normalizedUrl);
-
-    if (!supportedSite) {
-      this.setState({ errorCode: 'UNSUPPORTED_SITE' });
-      return;
-    }
-
-    if (isFetchingPreview) {
+  fetchPreview = (seriesUrl: string) => {
+    if (this.state.isFetchingPreview) {
       // If we're fetching, that means we're already checking and don't have
       // anything new to share.
+      return;
+    }
+
+    if (!isValidUrl(seriesUrl)) {
       return;
     }
 
     this.setState({
       errorCode: null,
       isFetchingPreview: true,
-      bookmarkFetchState: 'READY',
     });
 
     api
@@ -161,95 +256,25 @@ class NewBookmarkPanel extends Component<Props, State> {
         this.setState({
           isFetchingPreview: false,
           seriesPreview: null,
-          errorCode: 'INVALID_SERIES',
         });
       });
   };
 
   debouncedSeriesUrlValidation = debounce(500, this.handleSeriesUrlValidation);
+  debouncedFetchSeriesPreview = debounce(550, this.fetchPreview);
 
   handleSeriesUrlChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    this.setState({ seriesUrl: e.currentTarget.value });
+    const seriesUrl = e.currentTarget.value;
+    this.setState({ seriesUrl });
     this.debouncedSeriesUrlValidation();
+    if (seriesUrl !== this.state.seriesUrl) {
+      this.debouncedFetchSeriesPreview(seriesUrl);
+    }
   };
 
   handleLinkToUrlChange = (e: SyntheticEvent<HTMLInputElement>) => {
     this.setState({ linkToUrl: e.currentTarget.value });
     // TODO: add validation that this is a valid URL
-  };
-
-  seriesSupportsReading = (seriesUrl: string) => {
-    return !LINK_TO_SITES.test(seriesUrl);
-  };
-
-  getErrorCode = (err: AxiosError): NewSeriesErrorCode => {
-    if (!err.response) {
-      return 'REQUEST_FAILED';
-    }
-
-    switch (err.response.status) {
-      case 404:
-        return 'SERIES_NOT_FOUND';
-      case 400:
-        return /already exists/i.test(err.response.data)
-          ? 'SERIES_ALREADY_EXISTS'
-          : 'INVALID_SERIES';
-      default:
-        return 'UNKNOWN_ERROR';
-    }
-  };
-
-  getErrorMessage = (
-    errorCode: ?NewSeriesErrorCode,
-    seriesUrl: ?string,
-  ): Node => {
-    if (!errorCode) {
-      return;
-    }
-
-    switch (errorCode) {
-      case 'REQUEST_FAILED':
-        return `There was an error reaching the server.`;
-      case 'INVALID_URL':
-        return `Hmm, this doesn't look like a URL.`;
-      case 'UNSUPPORTED_SITE':
-        const domain =
-          seriesUrl && utils.isUrl(seriesUrl)
-            ? utils.getDomainName(seriesUrl)
-            : null;
-        return (
-          <span>
-            Sorry,{' '}
-            {domain && domain.length > 0 ? <strong>{domain}</strong> : 'that'}{' '}
-            isn't a supported site. Here's{' '}
-            <a
-              className="Link"
-              href={`${config.githubLibraryUrl}#supported-sites`}
-              rel="noopener noreferrer"
-              target="_blank">
-              a full list of supported sites
-            </a>
-            . Make an issue{' '}
-            <a
-              className="Link"
-              href={`${config.githubLibraryUrl}/issues/new`}
-              rel="noopener noreferrer"
-              target="_blank">
-              on the Github repo
-            </a>{' '}
-            to request a new one.
-          </span>
-        );
-      case 'INVALID_SERIES':
-      case 'SERIES_NOT_FOUND':
-        return `We couldn't find a series at that URL.`;
-      case 'SERIES_ALREADY_EXISTS':
-        return `That series is already in your collection!`;
-      case 'UNKNOWN_ERROR':
-        return 'Something went wrong fetching the series. Try again later.';
-      default:
-        return `Something went wrong.`;
-    }
   };
 
   render() {
@@ -262,19 +287,12 @@ class NewBookmarkPanel extends Component<Props, State> {
       seriesUrl,
     } = this.state;
 
-    const buttonLabelValues = {
-      SUBMITTING: 'Adding...',
-      READY: 'Add',
-      UNREADY: 'Add',
-      ADDED: <span>✓ Added</span>,
-    };
-
     const disableFormFields =
-      bookmarkFetchState === 'SUBMITTING' || bookmarkFetchState === 'ADDED';
+      bookmarkFetchState === 'SUBMITTING' || bookmarkFetchState === 'SUBMITTED';
     const showLinkToForm =
       seriesUrl &&
       utils.isUrl(seriesUrl) &&
-      this.seriesSupportsReading(seriesUrl) === false;
+      seriesSupportsReading(seriesUrl) === false;
 
     return (
       <Panel.Content title="Follow new series">
@@ -304,13 +322,13 @@ class NewBookmarkPanel extends Component<Props, State> {
               name="seriesUrl"
               readOnly={disableFormFields}
               onChange={this.handleSeriesUrlChange}
-              placeholder="http://example.com/manga/..."
-              value={seriesUrl || ''}
+              placeholder="http://example.com/manga/"
+              value={seriesUrl}
             />
           </div>
           {errorCode && (
             <p className="c-red fs-12 mb-2">
-              {this.getErrorMessage(errorCode, seriesUrl)}
+              {getErrorMessage(errorCode, seriesUrl)}
             </p>
           )}
           {seriesUrl &&
@@ -343,7 +361,17 @@ class NewBookmarkPanel extends Component<Props, State> {
   }
 }
 
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addEntities(payload) {
+    dispatch({ type: 'ADD_ENTITIES', payload });
+  },
+});
+
 export default connect(
-  NewBookmarkPanel.mapStateToProps,
-  NewBookmarkPanel.mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(NewBookmarkPanel);
