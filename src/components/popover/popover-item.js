@@ -1,11 +1,12 @@
 // @flow
 
 import React, { type Node } from 'react';
-import { css, cx } from 'react-emotion';
+import { css, cx } from 'react-emotion/macro';
 
 const className = css`
   min-width: 120px;
   max-width: 80vw;
+  height: 44px;
 `;
 
 type Props = {
@@ -27,7 +28,6 @@ const PopoverItem = ({ iconBefore, onClick, label, ...props }: Props) => {
           'pl-3': !Boolean(iconBefore),
         },
       )}
-      css="height: 44px;"
       onClick={onClick}
       title={label}
       {...props}>

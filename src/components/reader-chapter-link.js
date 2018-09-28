@@ -2,7 +2,7 @@
 
 import React, { type Node } from 'react';
 import type { ChapterMetadata } from 'poketo';
-import { cx } from 'react-emotion';
+import { cx } from 'react-emotion/macro';
 import { Link } from 'react-router-dom';
 
 import utils from '../utils';
@@ -20,8 +20,7 @@ const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
   return (
     <Link
       to={to}
-      className={cx('PillLink x pa-2', { 'o-50p pe-none': disabled })}
-      css="line-height: 1.0;">
+      className={cx('PillLink x pa-2 lh-1d0', { 'o-50p pe-none': disabled })}>
       {children}
     </Link>
   );

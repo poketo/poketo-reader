@@ -2,7 +2,7 @@
 
 import React, { Component, Fragment } from 'react';
 import Head from 'react-helmet';
-import { cx } from 'react-emotion';
+import { css, cx } from 'react-emotion/macro';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import type { Series, ChapterMetadata } from 'poketo';
@@ -23,6 +23,22 @@ import utils from '../utils';
 import { markSeriesAsRead } from '../store/reducers/collections';
 import type { Dispatch } from '../store/types';
 import type { Bookmark } from '../types';
+
+const headerClassName = css`
+  height: 61px;
+`;
+
+const seriesCoverClassName = css`
+  max-width: 140px;
+`;
+
+const nextChapterClassName = css`
+  background-color: rgba(235, 233, 231, 0.4);
+`;
+
+const followButtonClassName = css`
+  margin-top: auto;
+`;
 
 type ContainerProps = {
   dispatch: Dispatch,
@@ -167,10 +183,12 @@ const SeriesPage = ({
           </Popover>
         </header>
       </div>
-      <div className="bgc-black p-absolute l-0 r-0 t-0" css="height: 61px" />
+      <div
+        className={cx('bgc-black p-absolute l-0 r-0 t-0', headerClassName)}
+      />
       <div className="mw-600 mh-auto p-relative">
         <header className="x mb-4 pt-3 ph-3">
-          <div className="mr-3 w-50p" css="max-width: 140px;">
+          <div className={cx('mr-3 w-50p', seriesCoverClassName)}>
             <a
               href={series.coverImageUrl}
               target="_blank"
@@ -191,7 +209,7 @@ const SeriesPage = ({
               <Icon name="new-tab" size={16} iconSize={16} />
             </a>
             {collectionSlug && (
-              <div css="margin-top: auto;">
+              <div className={followButtonClassName}>
                 <FollowButton inline seriesId={series.id} />
               </div>
             )}
@@ -200,9 +218,7 @@ const SeriesPage = ({
         {hasChapters &&
           nextChapter && (
             <div className="mb-4 ph-3">
-              <div
-                className="pt-3 pb-2 ph-2 br-3"
-                css="background-color: rgba(235, 233, 231, 0.4);">
+              <div className={cx('pt-3 pb-2 ph-2 br-3', nextChapterClassName)}>
                 <Label className="ph-2">
                   {bookmark &&
                   bookmark.lastReadChapterId === mostRecentChapter.id

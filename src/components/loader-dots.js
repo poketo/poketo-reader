@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import styled, { keyframes } from 'react-emotion';
+import styled, { keyframes } from 'react-emotion/macro';
 
 const pulse = keyframes`
   0%,

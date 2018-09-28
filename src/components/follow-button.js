@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import styled, { css } from 'react-emotion';
+import styled, { css } from 'react-emotion/macro';
 import { connect } from 'react-redux';
 import type { Series } from 'poketo';
 import api from '../api';

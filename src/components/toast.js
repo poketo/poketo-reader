@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent, type Node } from 'react';
-import styled, { keyframes } from 'react-emotion';
+import styled, { keyframes } from 'react-emotion/macro';
 import { Transition } from 'react-transition-group';
 
 const toastOpen = keyframes`

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment, PureComponent, type Node } from 'react';
-import { css, keyframes } from 'react-emotion';
+import { css, keyframes } from 'react-emotion/macro';
 import Portal from '../portal';
 import getPosition from './get-position';
 import Position from './position';

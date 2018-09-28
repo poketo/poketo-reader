@@ -1,10 +1,32 @@
 // @flow
 
 import React, { Component, type Node, type ElementRef } from 'react';
-import { css, cx } from 'react-emotion';
+import { css, cx } from 'react-emotion/macro';
 import ScrollLock from 'react-scrolllock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Portal from './portal';
+
+type PanelTitleProps = {
+  className?: string,
+  children?: Node,
+};
+
+type PanelContentProps = {
+  children?: Node,
+  title?: string,
+};
+
+type PanelButtonProps = {
+  icon: Node,
+  label: Node,
+  onClick: (e: SyntheticEvent<HTMLButtonElement>) => void,
+};
+
+type PanelLinkProps = {
+  href: string,
+  icon: Node,
+  label: Node,
+};
 
 type PanelChildrenProps = {
   isShown: boolean,
@@ -196,21 +218,11 @@ class Panel extends Component<PanelProps, PanelState> {
   }
 }
 
-type PanelTitleProps = {
-  className?: string,
-  children?: Node,
-};
-
 Panel.Title = ({ className, children, ...props }: PanelTitleProps) => (
   <h3 className={cx(className, 'fs-18 fw-semibold mb-2')} {...props}>
     {children}
   </h3>
 );
-
-type PanelContentProps = {
-  children?: Node,
-  title?: string,
-};
 
 Panel.Content = ({ title, children }: PanelContentProps) => (
   <div className="pa-3 pa-4-m pb-4">
@@ -219,24 +231,12 @@ Panel.Content = ({ title, children }: PanelContentProps) => (
   </div>
 );
 
-type PanelButtonProps = {
-  icon: Node,
-  label: Node,
-  onClick: (e: SyntheticEvent<HTMLButtonElement>) => void,
-};
-
 Panel.Button = ({ icon, label, ...props }: PanelButtonProps) => (
   <button className="x w-100p xa-stretch" {...props}>
     <div className="pa-3 x xa-center">{icon}</div>
     <div className="pa-3 pl-2 x xa-center">{label}</div>
   </button>
 );
-
-type PanelLinkProps = {
-  href: string,
-  icon: Node,
-  label: Node,
-};
 
 Panel.Link = ({ icon, label, ...props }: PanelLinkProps) => (
   <a className="x w-100p xa-stretch" {...props}>

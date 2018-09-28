@@ -3,6 +3,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import Loadable from 'react-loadable';
 import { Link } from 'react-router-dom';
+import { css, cx } from 'react-emotion/macro';
 import type { Series } from 'poketo';
 
 import BackButtonContainer from '../components/back-button-container';
@@ -33,6 +34,10 @@ const iconProps = {
   iconSize: 20,
   size: 44,
 };
+
+const popoverContentClassName = css`
+  max-width: 80vw;
+`;
 
 export default class ReaderHeader extends PureComponent<Props, State> {
   state = {
@@ -82,7 +87,7 @@ export default class ReaderHeader extends PureComponent<Props, State> {
           )}
           <Popover
             content={({ close }) => (
-              <div className="pa-2" css="max-width: 80vw;">
+              <div className={cx('pa-2', popoverContentClassName)}>
                 {series && (
                   <Fragment>
                     <Link

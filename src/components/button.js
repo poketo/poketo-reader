@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import styled, { css } from 'react-emotion';
+import styled, { css } from 'react-emotion/macro';
 import CircleLoader from './loader-circle';
 
 type ButtonVariant = 'primary' | 'border' | 'ghost';

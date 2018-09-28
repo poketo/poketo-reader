@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { css } from 'react-emotion';
+import { css, cx } from 'react-emotion/macro';
 import Icon from '../components/icon';
 import Panel from '../components/panel';
 import ReaderChapterPicker from '../components/reader-chapter-picker';
@@ -21,6 +21,10 @@ type Props = {
 type State = {
   showingPanel: boolean,
 };
+
+const pickerClassName = css`
+  line-height: 24px;
+`;
 
 const contentClassName = css`
   overflow-y: scroll;
@@ -132,10 +136,11 @@ export default class ReaderNavigation extends Component<Props, State> {
           </ReaderChapterLink>
           {this.renderPickerPanel()}
         </div>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           className="PillLink pv-2 ph-3 d-inlineBlock c-white c-pointer ta-center lh-1d25"
           onClick={this.handlePickerClick}>
-          <div className="x xa-center xj-center" css="line-height: 24px;">
+          <div className={cx('x xa-center xj-center', pickerClassName)}>
             <span className="ml-1 mr-2">{chapterLabel}</span>
             <Icon name="direct-down" size={18} iconSize={18} />
           </div>

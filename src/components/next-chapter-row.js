@@ -1,19 +1,26 @@
 // @flow
 
 import React from 'react';
-import { cx } from 'react-emotion';
+import { css, cx } from 'react-emotion/macro';
 import { Link } from 'react-router-dom';
 import type { ChapterMetadata } from 'poketo';
 import Icon from '../components/icon';
 import utils from '../utils';
 
+const newReleaseIndicatorClassName = css`
+  top: -3px;
+  font-size: 8px;
+  letter-spacing: 2px;
+  padding: 2px 3px 0 6px;
+`;
+
 const NewReleaseIndicator = ({ className }: { className?: string }) => (
   <span
     className={cx(
       className,
+      newReleaseIndicatorClassName,
       'p-relative d-inlineBlock br-pill c-white bgc-coral ta-center tt-uppercase us-none',
-    )}
-    css="top: -3px; font-size: 8px; letter-spacing: 2px; padding: 2px 3px 0 6px;">
+    )}>
     New
   </span>
 );

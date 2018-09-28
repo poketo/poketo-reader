@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import styled, { cx } from 'react-emotion';
+import styled, { cx } from 'react-emotion/macro';
 
 const StyledPopover = styled.div`
   min-width: 100px;

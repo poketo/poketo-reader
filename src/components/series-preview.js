@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Fragment } from 'react';
+import { css, cx } from 'react-emotion/macro';
 import type { Series } from 'poketo';
 import CoverImage from './series-cover-image';
 import DotLoader from './loader-dots';
@@ -9,6 +10,11 @@ type Props = {
   series: ?Series,
   isFetching: boolean,
 };
+
+const previewClassName = css`
+  flex: 1 0 50%;
+  max-width: 80px;
+`;
 
 const SeriesPreview = ({ series, isFetching }: Props) => (
   <div className="x xa-center pa-3 ba-1 bc-gray1 e-1 br-4">
@@ -23,7 +29,7 @@ const SeriesPreview = ({ series, isFetching }: Props) => (
     {!isFetching &&
       series && (
         <Fragment>
-          <div className="mr-3" css="flex: 1 0 50%; max-width: 80px;">
+          <div className={cx('mr-3', previewClassName)}>
             <CoverImage series={series} />
           </div>
           <div>

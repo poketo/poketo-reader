@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { cx } from 'react-emotion';
+import { cx } from 'react-emotion/macro';
 import { Link, NavLink, Route } from 'react-router-dom';
 
 import IconPoketo from '../components/icon-poketo';

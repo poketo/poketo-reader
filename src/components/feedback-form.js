@@ -31,7 +31,7 @@ export default class FeedbackForm extends Component<Props, State> {
           className="Link"
           href={`mailto:${config.email}`}
           target="_blank"
-          rel="noopener noreferer">
+          rel="noopener noreferrer">
           email if you'd prefer
         </a>
         .

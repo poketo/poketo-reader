@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent, type ElementRef } from 'react';
-import { cx } from 'react-emotion';
+import { cx } from 'react-emotion/macro';
 import type { ChapterMetadata } from 'poketo';
 import type { Bookmark } from '../types';
 import utils from '../utils';
