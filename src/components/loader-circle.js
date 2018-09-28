@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import styled, { cx, keyframes } from 'react-emotion';
+import styled, { cx, keyframes } from 'react-emotion/macro';
 
 const spin = keyframes`
   0% {

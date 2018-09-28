@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { cx, css } from 'react-emotion';
+import { cx, css } from 'react-emotion/macro';
 import Button from './button';
 import Icon from './icon';
 

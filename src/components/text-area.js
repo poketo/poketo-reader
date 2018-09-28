@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import styled, { cx } from 'react-emotion';
+import styled, { cx } from 'react-emotion/macro';
 import AutosizeTextArea from 'react-textarea-autosize';
 
 type Props = {

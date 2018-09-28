@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { Link } from 'react-router-dom';
+import { css, cx } from 'react-emotion/macro';
 import Button from './button';
 import ComponentLoader from './loader-component';
 import Icon from './icon';
@@ -17,6 +18,9 @@ const LoadableFeedbackForm = Loadable({
 });
 
 const iconProps = { iconSize: 18, size: 44 };
+const contentClassName = css`
+  max-width: 80vw;
+`;
 
 type Props = {
   collectionSlug: string,
@@ -92,7 +96,7 @@ export default class CollectionHeader extends Component<Props, State> {
         </Panel>
         <Popover
           content={({ close }) => (
-            <div className="pa-2" css="max-width: 80vw;">
+            <div className={cx('pa-2', contentClassName)}>
               <Popover.Item
                 label="Follow new series"
                 onClick={() => {

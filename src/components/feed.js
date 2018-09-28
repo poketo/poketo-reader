@@ -1,15 +1,19 @@
 // @flow
 
 import React, { Component } from 'react';
-import { cx, css } from 'react-emotion';
+import { cx, css } from 'react-emotion/macro';
 import { connect } from 'react-redux';
 import { Route, NavLink, withRouter } from 'react-router-dom';
 import FeedItemRow from './feed-item-row';
 import SeriesRow from './series-row';
 import Icon from './icon';
 import { setLastSeenTab } from '../store/reducers/navigation';
+import type { Dispatch } from '../store/types';
 import type { Bookmark, FeedItem } from '../types';
 
+const fullWidthClassName = css`
+  flex-basis: 100%;
+`;
 const nextChapterDivider = css`
   & + & {
     border-top: 1px #f2f2f2 solid;
@@ -21,17 +25,21 @@ const CollectionNavigation = ({ collectionSlug }) => (
     <NavLink
       to={`/c/${collectionSlug}`}
       exact
-      className="x xd-row-m  br-4 pv-2 ph-1 xa-center xj-center"
-      css="flex-basis: 100%;"
+      className={cx(
+        'x xd-row-m  br-4 pv-2 ph-1 xa-center xj-center',
+        fullWidthClassName,
+      )}
       activeClassName="bgc-extraFadedLightCoral c-coral">
       <Icon name="bookmark" className="mr-1 mr-2-m" />
       Now Reading
     </NavLink>
     <NavLink
       to={`/c/${collectionSlug}/library`}
-      css="flex-basis: 100%;"
       exact
-      className="x br-4 xd-row-m pv-2 ph-1 xa-center xj-center"
+      className={cx(
+        'x br-4 xd-row-m pv-2 ph-1 xa-center xj-center',
+        fullWidthClassName,
+      )}
       activeClassName="bgc-extraFadedLightCoral c-coral">
       <Icon name="book" className="mr-1 mr-2-m" />
       Library
@@ -41,12 +49,13 @@ const CollectionNavigation = ({ collectionSlug }) => (
 
 type Props = {
   collectionSlug: string,
+  dispatch: Dispatch,
   bookmarks: { [id: string]: Bookmark },
   feedItems: FeedItem[],
 };
 
 class NowReadingFeed extends Component<{
-  dispatch: Function,
+  dispatch: Dispatch,
   feedItems: FeedItem[],
 }> {
   componentDidMount() {
@@ -63,7 +72,7 @@ class NowReadingFeed extends Component<{
 }
 
 class LibraryFeed extends Component<{
-  dispatch: Function,
+  dispatch: Dispatch,
   feedItems: FeedItem[],
 }> {
   componentDidMount() {

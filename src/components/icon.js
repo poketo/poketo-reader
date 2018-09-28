@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { cx } from 'react-emotion';
+import styled, { cx } from 'react-emotion/macro';
 
 const Icons = {
   add: require('./icon-add').default,
@@ -29,6 +29,12 @@ const Icons = {
   warning: require('./icon-warning').default,
 };
 
+const IconContainer = styled.span`
+  display: inline-flex;
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+`;
+
 type IconKey = $Keys<typeof Icons>;
 
 type Props = {
@@ -49,15 +55,11 @@ export default class Icon extends PureComponent<Props> {
     const Component = Icons[name];
 
     return (
-      <span
+      <IconContainer
         className={cx('xj-center xa-center', className)}
-        css={`
-          display: inline-flex;
-          width: ${size}px;
-          height: ${size}px;
-        `}>
+        size={size}>
         <Component width={iconSize} height={iconSize} />
-      </span>
+      </IconContainer>
     );
   }
 }

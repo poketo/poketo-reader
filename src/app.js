@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
-import { cx } from 'react-emotion';
+import { cx } from 'react-emotion/macro';
 import { Switch, Redirect, Route } from 'react-router-dom';
 
 import Analytics from './components/analytics';

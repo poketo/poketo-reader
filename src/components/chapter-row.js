@@ -1,17 +1,29 @@
 // @flow
 
 import React from 'react';
-import { css, cx } from 'react-emotion';
+import { css, cx } from 'react-emotion/macro';
 import { Link } from 'react-router-dom';
 import type { ChapterMetadata } from 'poketo';
 import type { Bookmark } from '../types';
 import Icon from './icon';
 import utils from '../utils';
 
+const offsetLeftClassName = css`
+  left: -2px;
+`;
+
+const newReleaseIndicatorClassName = css`
+  width: 8px;
+  height: 8px;
+`;
+
 const NewReleaseIndicator = () => (
   <div
-    className="p-relative ml-2 mr-3 br-round bgc-coral"
-    css="width: 8px; height: 8px; left: -2px;"
+    className={cx(
+      'p-relative ml-2 mr-3 br-round bgc-coral',
+      newReleaseIndicatorClassName,
+      offsetLeftClassName,
+    )}
   />
 );
 
@@ -78,8 +90,7 @@ const ChapterRow = ({
       ) : isLastRead ? (
         <Icon
           name="bookmark-filled"
-          className="p-relative mr-2 c-green"
-          css="left: -2px;"
+          className={cx('p-relative mr-2 c-green', offsetLeftClassName)}
           size={24}
           iconSize={24}
         />

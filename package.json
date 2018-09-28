@@ -4,13 +4,13 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "REACT_APP_COMMIT_REF=$COMMIT_REF react-app-rewired build",
+    "start": "react-scripts start",
+    "build": "REACT_APP_COMMIT_REF=$COMMIT_REF react-scripts build",
     "build:css": "bin/build-css",
     "build:icons": "bin/build-icons",
     "prebuild": "yarn run build:css && yarn run build:icons",
     "format": "prettier --write 'src/**/*.js'",
-    "test": "react-app-rewired test --env=jsdom",
+    "test": "react-scripts test",
     "deploy": "netlify deploy",
     "predeploy": "yarn run build"
   },
@@ -49,9 +49,7 @@
     "hibiscss": "0.0.9",
     "mz": "^2.7.0",
     "prettier": "^1.14.2",
-    "react-app-rewire-emotion": "^4.0.0",
-    "react-app-rewired": "^1.5.2",
-    "react-scripts": "^1.1.5",
+    "react-scripts": "^2.0.1",
     "redux-logger": "^3.0.6",
     "svgr": "^1.9.0"
   },
@@ -59,5 +57,11 @@
     "jsxBracketSameLine": true,
     "singleQuote": true,
     "trailingComma": "all"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

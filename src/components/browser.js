@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import { cx } from 'react-emotion';
+import { cx } from 'react-emotion/macro';
 
 type Props = {
   children: Node,
