@@ -45,13 +45,13 @@
     "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {
+    "@svgr/core": "^2.4.1",
     "flow-bin": "^0.79.1",
     "hibiscss": "0.0.9",
     "mz": "^2.7.0",
     "prettier": "^1.14.2",
     "react-scripts": "^2.0.1",
-    "redux-logger": "^3.0.6",
-    "svgr": "^1.9.0"
+    "redux-logger": "^3.0.6"
   },
   "prettier": {
     "jsxBracketSameLine": true,
