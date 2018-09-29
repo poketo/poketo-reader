@@ -29,6 +29,7 @@ async function buildIcons() {
     const pathname = path.join(ICON_PATH, svg);
     const svgCode = await fs.readFile(pathname, 'utf8');
     const componentCode = await svgr(svgCode, {
+      icon: true,
       title: false,
       singleQuote: true,
       trailingCommas: 'all',
