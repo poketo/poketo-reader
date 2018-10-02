@@ -63,11 +63,23 @@ class SeriesPageContainer extends Component<ContainerProps> {
   }
 
   render() {
-    if (this.props.errorCode) {
-      return this.props.errorCode;
+    const { errorCode, isFetching, match } = this.props;
+    const { seriesId } = match.params;
+
+    if (errorCode) {
+      switch (errorCode) {
+        default:
+          return (
+            <div className="pa-3">
+              <strong>An unknown error occurred.</strong>
+              <br />
+              Try refreshing to page to fix it.
+            </div>
+          );
+      }
     }
 
-    if (this.props.isFetching) {
+    if (isFetching) {
       return (
         <div className="x xj-center xa-center mh-100vh">
           <CircleLoader />
@@ -75,7 +87,7 @@ class SeriesPageContainer extends Component<ContainerProps> {
       );
     }
 
-    return <ConnectedSeriesPage seriesId={this.props.match.params.seriesId} />;
+    return <ConnectedSeriesPage seriesId={seriesId} />;
   }
 }
 
@@ -208,13 +220,13 @@ const SeriesPage = ({
               {series.site.name}
               <Icon name="new-tab" size={16} iconSize={16} />
             </a>
-            {collectionSlug && (
-              <div className={followButtonClassName}>
-                <FollowButton inline seriesId={series.id} />
-              </div>
-            )}
           </div>
         </header>
+        {collectionSlug && (
+          <div className={followButtonClassName}>
+            <FollowButton seriesId={series.id} />
+          </div>
+        )}
         {hasChapters &&
           nextChapter && (
             <div className="mb-4 ph-3">
@@ -229,22 +241,26 @@ const SeriesPage = ({
               </div>
             </div>
           )}
-        <div className="ph-3 mb-4">
-          <div className="mb-3">
-            <Label>Author</Label>
-            <div>{series.author}</div>
-          </div>
-          {series.description && (
-            <div>
-              <Label>Description</Label>
-              <div>
-                <TextExcerpt trimAfterLength={200}>
-                  {series.description}
-                </TextExcerpt>
+        {(series.author || series.description) && (
+          <div className="ph-3 mb-4">
+            {series.description && (
+              <div className="mb-3">
+                <Label>Author</Label>
+                <div>{series.author}</div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+            {series.description && (
+              <div>
+                <Label>Description</Label>
+                <div>
+                  <TextExcerpt trimAfterLength={200}>
+                    {series.description}
+                  </TextExcerpt>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         <div>
           {hasChapters ? (
             chapters.map(chapter => (

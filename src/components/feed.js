@@ -63,6 +63,15 @@ class NowReadingFeed extends Component<{
   }
 
   render() {
+    if (this.props.feedItems.length < 1) {
+      return (
+        <div className="ta-center pt-4">
+          <h3 className="fs-18 fw-semibold">You're all caught up!</h3>
+          <p>Check back later for more updates.</p>
+        </div>
+      );
+    }
+
     return this.props.feedItems.map(item => (
       <div key={item.series.id} className={cx('pt-2 mt-2', nextChapterDivider)}>
         <FeedItemRow feedItem={item} />

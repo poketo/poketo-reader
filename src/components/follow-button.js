@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled, { css } from 'react-emotion/macro';
 import { connect } from 'react-redux';
 import type { Series } from 'poketo';
@@ -111,9 +111,15 @@ class FollowButton extends Component<Props, State> {
         onClick={this.handleClick}
         {...props}>
         {isFollowing ? (
-          <Icon name="bookmark-filled" iconSize={24} size={32} />
+          <Fragment>
+            <Icon name="bookmark-filled" iconSize={24} size={32} />
+            Following
+          </Fragment>
         ) : (
-          <Icon name="bookmark" iconSize={24} size={32} />
+          <Fragment>
+            <Icon name="bookmark" iconSize={24} size={32} />
+            Follow
+          </Fragment>
         )}
       </StyledFollowButton>
     );
