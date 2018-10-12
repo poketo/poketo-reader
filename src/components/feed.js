@@ -7,6 +7,7 @@ import { Route, NavLink, withRouter } from 'react-router-dom';
 import FeedItemRow from './feed-item-row';
 import SeriesRow from './series-row';
 import Icon from './icon';
+import utils from '../utils';
 import { setLastSeenTab } from '../store/reducers/navigation';
 import type { Dispatch } from '../store/types';
 import type { Bookmark, FeedItem } from '../types';
@@ -47,22 +48,26 @@ const CollectionNavigation = ({ collectionSlug }) => (
   </header>
 );
 
-type Props = {
-  collectionSlug: string,
+type NowReadingProps = {
   dispatch: Dispatch,
-  bookmarks: { [id: string]: Bookmark },
   feedItems: FeedItem[],
 };
 
-class NowReadingFeed extends Component<{
-  dispatch: Dispatch,
-  feedItems: FeedItem[],
-}> {
+class NowReadingFeed extends Component<NowReadingProps> {
   componentDidMount() {
     this.props.dispatch(setLastSeenTab('now-reading'));
   }
 
   render() {
+    if (this.props.feedItems.length < 1) {
+      return (
+        <div className="ta-center pt-4">
+          <h3 className="fs-18 fw-semibold">You're all caught up!</h3>
+          <p>Check back later for more updates.</p>
+        </div>
+      );
+    }
+
     return this.props.feedItems.map(item => (
       <div key={item.series.id} className={cx('pt-2 mt-2', nextChapterDivider)}>
         <FeedItemRow feedItem={item} />
@@ -71,10 +76,12 @@ class NowReadingFeed extends Component<{
   }
 }
 
-class LibraryFeed extends Component<{
+type LibraryProps = {
   dispatch: Dispatch,
   feedItems: FeedItem[],
-}> {
+};
+
+class LibraryFeed extends Component<LibraryProps> {
   componentDidMount() {
     this.props.dispatch(setLastSeenTab('library'));
   }
@@ -85,6 +92,13 @@ class LibraryFeed extends Component<{
     ));
   }
 }
+
+type Props = {
+  collectionSlug: string,
+  dispatch: Dispatch,
+  bookmarks: { [id: string]: Bookmark },
+  feedItems: FeedItem[],
+};
 
 class Feed extends Component<Props> {
   render() {
@@ -140,12 +154,23 @@ const mapStateToProps = (state, ownProps) => {
       const chapterIds = series ? series.chapters || [] : [];
       const chapters = chapterIds.map(id => chaptersById[id]);
 
+      const isCaughtUp =
+        chapters.length > 0 ? chapters[0].id === lastReadChapterId : true;
+
+      const nextChapter =
+        isCaughtUp === false
+          ? utils.nextChapterToRead(chapters, lastReadChapterId)
+          : null;
+
+      const hasNewRelease = nextChapter
+        ? nextChapter.createdAt > lastReadAt
+        : false;
+
       return {
         series,
         chapters,
-        isCaughtUp:
-          chapters.length > 0 ? chapters[0].id === lastReadChapterId : true,
-        isNewRelease: chapters.some(chapter => chapter.createdAt > lastReadAt),
+        isCaughtUp,
+        isNewRelease: hasNewRelease,
         lastReadChapterId,
         linkTo,
       };
