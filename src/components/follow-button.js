@@ -15,12 +15,17 @@ const StyledFollowButton = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 3px;
-  width: 44px;
+  width: 100%;
   height: 44px;
+  line-height: 44px;
+  font-weight: 500;
 
-  transition: background-color 200ms ease, color 200ms ease;
+  border: 1px #f2f2f2 solid;
+  transition: background-color 200ms ease,
+    color 200ms ease border-color 200ms ease;
 
   .supports-hover &:hover {
+    border-color: transparent;
     background: rgba(19, 207, 131, 0.15);
     color: #13cf83;
   }
@@ -36,6 +41,8 @@ const StyledFollowButton = styled.button`
   ${props =>
     props.isFollowing &&
     css`
+      border-color: transparent;
+      background: rgba(19, 207, 131, 0.15);
       color: #13cf83;
     `};
 `;
@@ -112,12 +119,12 @@ class FollowButton extends Component<Props, State> {
         {...props}>
         {isFollowing ? (
           <Fragment>
-            <Icon name="bookmark-filled" iconSize={24} size={32} />
+            <Icon name="bookmark-filled" iconSize={20} size={32} />
             Following
           </Fragment>
         ) : (
           <Fragment>
-            <Icon name="bookmark" iconSize={24} size={32} />
+            <Icon name="bookmark" iconSize={20} size={32} />
             Follow
           </Fragment>
         )}

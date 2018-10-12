@@ -36,10 +36,6 @@ const nextChapterClassName = css`
   background-color: rgba(235, 233, 231, 0.4);
 `;
 
-const followButtonClassName = css`
-  margin-top: auto;
-`;
-
 type ContainerProps = {
   dispatch: Dispatch,
   isFetching: boolean,
@@ -199,8 +195,8 @@ const SeriesPage = ({
         className={cx('bgc-black p-absolute l-0 r-0 t-0', headerClassName)}
       />
       <div className="mw-600 mh-auto p-relative">
-        <header className="x mb-4 pt-3 ph-3">
-          <div className={cx('mr-3 w-50p', seriesCoverClassName)}>
+        <header className="mb-4 pt-3 ph-3 ta-center">
+          <div className={cx('mb-4 w-50p mh-auto', seriesCoverClassName)}>
             <a
               href={series.coverImageUrl}
               target="_blank"
@@ -208,10 +204,8 @@ const SeriesPage = ({
               <CoverImage series={series} />
             </a>
           </div>
-          <div className="x xd-column">
-            <h1 className="fs-20 fs-24-m fw-semibold lh-1d25 mb-1">
-              {series.title}
-            </h1>
+          <div>
+            <h1 className="fs-24 fw-semibold lh-1d25 mb-1">{series.title}</h1>
             <a
               href={series.url}
               className="fs-14 fs-16-m c-gray3"
@@ -223,7 +217,7 @@ const SeriesPage = ({
           </div>
         </header>
         {collectionSlug && (
-          <div className={followButtonClassName}>
+          <div className="ph-3 mb-3">
             <FollowButton seriesId={series.id} />
           </div>
         )}
@@ -232,10 +226,11 @@ const SeriesPage = ({
             <div className="mb-4 ph-3">
               <div className={cx('pt-3 pb-2 ph-2 br-3', nextChapterClassName)}>
                 <Label className="ph-2">
-                  {bookmark &&
-                  bookmark.lastReadChapterId === mostRecentChapter.id
-                    ? 'Newest Chapter'
-                    : 'Next Chapter'}
+                  {bookmark
+                    ? bookmark.lastReadChapterId === mostRecentChapter.id
+                      ? 'Newest Chapter'
+                      : 'Next Chapter'
+                    : 'First Chapter'}
                 </Label>
                 <NextChapterRow chapter={nextChapter} />
               </div>
