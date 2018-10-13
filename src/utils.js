@@ -90,6 +90,11 @@ const utils = {
       seriesTitle,
     ).replace(/%20/g, '+')}${sortByNew ? '&sort=new' : ''}&restrict_sr=on`,
 
+  getUnfollowMessage: (series: { title: string }) =>
+    `Do you want to unfollow ${
+      series.title
+    }? Your reading progress will be lost.`,
+
   /**
    * Chapter Helpers
    */
