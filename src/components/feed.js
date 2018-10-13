@@ -5,7 +5,9 @@ import { cx, css } from 'react-emotion/macro';
 import { connect } from 'react-redux';
 import { Route, NavLink, withRouter } from 'react-router-dom';
 import FeedItemRow from './feed-item-row';
+import Panel from './panel';
 import SeriesRow from './series-row';
+import SeriesActionPanel from './collection-series-actions-panel';
 import Icon from './icon';
 import utils from '../utils';
 import { setLastSeenTab } from '../store/reducers/navigation';
@@ -79,6 +81,7 @@ class NowReadingFeed extends Component<NowReadingProps> {
 type LibraryProps = {
   dispatch: Dispatch,
   feedItems: FeedItem[],
+  onMoreClick: (seriesId: string) => void,
 };
 
 class LibraryFeed extends Component<LibraryProps> {
@@ -88,7 +91,11 @@ class LibraryFeed extends Component<LibraryProps> {
 
   render() {
     return this.props.feedItems.map(item => (
-      <SeriesRow key={item.series.id} feedItem={item} />
+      <SeriesRow
+        key={item.series.id}
+        feedItem={item}
+        onMoreClick={this.props.onMoreClick}
+      />
     ));
   }
 }
@@ -100,7 +107,23 @@ type Props = {
   feedItems: FeedItem[],
 };
 
-class Feed extends Component<Props> {
+type State = {
+  seriesActionPanelId: string | null,
+};
+
+class Feed extends Component<Props, State> {
+  state = {
+    seriesActionPanelId: null,
+  };
+
+  handleMoreClick = seriesId => {
+    this.setState({ seriesActionPanelId: seriesId });
+  };
+
+  closePanel = () => {
+    this.setState({ seriesActionPanelId: null });
+  };
+
   render() {
     const { collectionSlug, feedItems, dispatch } = this.props;
 
@@ -120,6 +143,17 @@ class Feed extends Component<Props> {
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
         <CollectionNavigation collectionSlug={collectionSlug} />
+        <Panel
+          isShown={Boolean(this.state.seriesActionPanelId)}
+          onRequestClose={this.closePanel}>
+          {() => (
+            <SeriesActionPanel
+              // $FlowFixMe: The `isShown` conditional ensures this is always true.
+              seriesId={this.state.seriesActionPanelId}
+              onRequestClose={this.closePanel}
+            />
+          )}
+        </Panel>
         <div className="mb-4">
           <Route
             path={`/c/${collectionSlug}/`}
@@ -132,7 +166,11 @@ class Feed extends Component<Props> {
             path={`/c/${collectionSlug}/library`}
             exact
             render={() => (
-              <LibraryFeed dispatch={dispatch} feedItems={feedItems} />
+              <LibraryFeed
+                dispatch={dispatch}
+                feedItems={feedItems}
+                onMoreClick={this.handleMoreClick}
+              />
             )}
           />
         </div>

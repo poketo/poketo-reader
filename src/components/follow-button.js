@@ -5,6 +5,7 @@ import styled, { css } from 'react-emotion/macro';
 import { connect } from 'react-redux';
 import type { Series } from 'poketo';
 import api from '../api';
+import utils from '../utils';
 import { type Dispatch } from '../store/types';
 import { getCollectionSlug } from '../store/reducers/navigation';
 import { addBookmark } from '../store/reducers/collections';
@@ -74,13 +75,7 @@ class FollowButton extends Component<Props, State> {
     const { id: seriesId, url: seriesUrl } = series;
 
     if (isFollowing) {
-      if (
-        window.confirm(
-          `Do you want to unfollow ${
-            series.title
-          }? Your reading progress will be lost.`,
-        )
-      ) {
+      if (window.confirm(utils.getUnfollowMessage(series))) {
         this.setState({ isFetching: true });
         api
           .fetchRemoveBookmarkFromCollection(collectionSlug, series.id)
