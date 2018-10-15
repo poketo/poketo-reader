@@ -3,17 +3,18 @@
 import React, { Component } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
-import classNames from 'classnames';
-import { Switch, Route } from 'react-router-dom';
+import { cx } from 'react-emotion/macro';
+import { Switch, Redirect, Route } from 'react-router-dom';
 
 import Analytics from './components/analytics';
 import ErrorBoundary from './components/error-boundary';
-import StandaloneStatusBar from './containers/standalone-status-bar';
+import StandaloneStatusBar from './components/standalone-status-bar';
 
 import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
 import HomeView from './views/home-view';
 import LogInView from './views/log-in-view';
+import SeriesView from './views/series-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
 import utils from './utils';
@@ -31,7 +32,7 @@ export default class App extends Component<{}> {
           <meta name="description" content="Light and fun manga reader." />
         </Head>
         <BodyClassName
-          className={classNames('ff-sans c-gray5 bgc-offwhite', {
+          className={cx('ff-sans c-gray5 bgc-offwhite', {
             'supports-hover': !utils.isTouchDevice(),
           })}
         />
@@ -39,13 +40,13 @@ export default class App extends Component<{}> {
         <StandaloneStatusBar />
         <ErrorBoundary>
           <Switch>
+            <Route path="/series/:seriesId" exact component={SeriesView} />
             <Route path="/read/:chapterId" exact component={ReaderView} />
-            <Route
-              path="/c/:collectionSlug/read/:chapterId"
-              component={ReaderView}
-              exact
+            <Redirect
+              from="/c/:collectionSlug/read/:chapterId"
+              to="/read/:chapterId"
             />
-            <Route path="/c/:collectionSlug" exact component={FeedView} />
+            <Route path="/c/:collectionSlug" component={FeedView} />
             <Route path="/login" component={LogInView} />
             <Route path="/about" component={AboutView} />
             <Route path="/home" component={HomeView} />

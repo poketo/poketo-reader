@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
+import styled, { cx } from 'react-emotion/macro';
 
 const Icons = {
   add: require('./icon-add').default,
@@ -9,6 +9,7 @@ const Icons = {
   'arrow-right': require('./icon-arrow-right').default,
   book: require('./icon-book').default,
   bookmark: require('./icon-bookmark').default,
+  'bookmark-filled': require('./icon-bookmark-filled').default,
   'check-circle': require('./icon-check-circle').default,
   check: require('./icon-check').default,
   'direct-down': require('./icon-direct-down').default,
@@ -17,6 +18,7 @@ const Icons = {
   edit: require('./icon-edit').default,
   feed: require('./icon-feed').default,
   flag: require('./icon-flag').default,
+  image: require('./icon-image').default,
   message: require('./icon-message').default,
   'more-horizontal': require('./icon-more-horizontal').default,
   'more-vertical': require('./icon-more-vertical').default,
@@ -26,6 +28,12 @@ const Icons = {
   trash: require('./icon-trash').default,
   warning: require('./icon-warning').default,
 };
+
+const IconContainer = styled.span`
+  display: inline-flex;
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+`;
 
 type IconKey = $Keys<typeof Icons>;
 
@@ -47,11 +55,11 @@ export default class Icon extends PureComponent<Props> {
     const Component = Icons[name];
 
     return (
-      <span
-        className={classNames('xj-center xa-center', className)}
-        style={{ display: 'inline-flex', width: size, height: size }}>
+      <IconContainer
+        className={cx('xj-center xa-center', className)}
+        size={size}>
         <Component width={iconSize} height={iconSize} />
-      </span>
+      </IconContainer>
     );
   }
 }

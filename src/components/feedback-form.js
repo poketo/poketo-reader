@@ -31,7 +31,7 @@ export default class FeedbackForm extends Component<Props, State> {
           className="Link"
           href={`mailto:${config.email}`}
           target="_blank"
-          rel="noopener noreferer">
+          rel="noopener noreferrer">
           email if you'd prefer
         </a>
         .
@@ -93,7 +93,7 @@ export default class FeedbackForm extends Component<Props, State> {
           type="Submit"
           disabled={status !== 'idle' || feedback.trim().length < 5}
           loading={status === 'fetching'}
-          primary>
+          variant="primary">
           {status === 'success' ? 'Sent! Thanks!' : 'Send'}
         </Button>
       </form>

@@ -1,59 +1,116 @@
 // @flow
 
-import React, { type ElementRef } from 'react';
+import React from 'react';
+import { css, cx } from 'react-emotion/macro';
+import { Link } from 'react-router-dom';
 import type { ChapterMetadata } from 'poketo';
-import classNames from 'classnames';
-import Icon from '../components/icon';
+import type { Bookmark } from '../types';
+import Icon from './icon';
 import utils from '../utils';
-import './chapter-row.css';
+
+const offsetLeftClassName = css`
+  left: -2px;
+`;
+
+const newReleaseIndicatorClassName = css`
+  width: 8px;
+  height: 8px;
+`;
+
+const NewReleaseIndicator = () => (
+  <div
+    className={cx(
+      'p-relative ml-2 mr-3 br-round bgc-coral',
+      newReleaseIndicatorClassName,
+      offsetLeftClassName,
+    )}
+  />
+);
+
+const styles = {
+  base: css`
+    border-radius: 3px;
+    min-height: 44px;
+    transition: background-color 100ms ease;
+
+    .supports-hover &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  `,
+  isActive: css`
+    background-color: #f2f2f2; /* gray0 */
+  `,
+  isLastRead: css`
+    background-color: rgba(19, 207, 131, 0.07);
+  `,
+};
 
 type Props = {
   chapter: ChapterMetadata,
-  innerRef?: ElementRef<*>,
+  bookmark?: Bookmark,
+  collectionSlug?: string,
+  extendedLabel?: boolean,
   isActive?: boolean,
-  isUnread?: boolean,
-  onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void,
 };
 
-const ChapterRow = (props: Props) => {
-  const { chapter, innerRef, isActive, isUnread, onClick } = props;
-
-  const chapterLabel = utils.getChapterLabel(chapter);
+const ChapterRow = ({
+  bookmark,
+  chapter,
+  collectionSlug,
+  extendedLabel,
+  isActive,
+  ...rest
+}: Props) => {
+  const chapterLabel = utils.getChapterLabel(chapter, extendedLabel);
   const chapterTitle = utils.getChapterTitle(chapter);
+  const to = utils.getReaderUrl(chapter.id);
+
+  const isLastRead = bookmark
+    ? bookmark.lastReadChapterId === chapter.id
+    : false;
+  const isNewRelease = bookmark
+    ? bookmark.lastReadAt && chapter.createdAt > bookmark.lastReadAt
+    : false;
 
   return (
-    <div
-      className={classNames(
-        'ChapterRow x xa-center xj-spaceBetween pv-2 ph-3 c-pointer',
-        { 'ChapterRow--active': isActive },
-      )}
-      ref={innerRef}
-      onClick={onClick}>
+    <Link
+      className={cx('x xa-center xj-start pv-2 ph-3', styles.base, {
+        [styles.isActive]: isActive,
+        [styles.isLastRead]: isLastRead && !isActive,
+      })}
+      to={to}
+      {...rest}>
       {isActive ? (
-        <span className="ChapterRow-check p-relative x xa-center mr-2 t--1">
-          <Icon name="check" size={18} iconSize={18} />
-        </span>
-      ) : (
-        isUnread && (
-          <span className="p-relative t--2 mr-2">
-            <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
-          </span>
-        )
-      )}
-      <div className="ChapterRow-label xs-1">
+        <Icon
+          name="check"
+          className="p-relative mr-2 c-gray3"
+          size={18}
+          iconSize={24}
+        />
+      ) : isLastRead ? (
+        <Icon
+          name="bookmark-filled"
+          className={cx('p-relative mr-2 c-green', offsetLeftClassName)}
+          size={24}
+          iconSize={24}
+        />
+      ) : isNewRelease ? (
+        <NewReleaseIndicator />
+      ) : null}
+      <div className="of-hidden to-ellipsis ws-noWrap">
         <span className="fw-semibold">{chapterLabel}</span>
-        {chapterTitle && <span className="ml-2">{chapter.title}</span>}
+        {chapterTitle && <span className="ml-2">{chapterTitle}</span>}
       </div>
-      <span className="xg-1 xs-0 fs-12 o-50p pl-2 pl-4-m ta-right">
-        {utils.formatAbsoluteTimestamp(chapter.createdAt)}
+      <span className="ml-auto pl-4 xs-0 fs-12 o-50p">
+        {utils.formatTimestamp(chapter.createdAt)}
       </span>
-    </div>
+    </Link>
   );
 };
 
 ChapterRow.defaultProps = {
+  extendedLabel: false,
   isActive: false,
-  isUnread: false,
 };
 
 export default ChapterRow;

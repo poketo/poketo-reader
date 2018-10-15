@@ -1,17 +1,38 @@
 // @flow
 
-import ago from 's-ago';
 import set from 'clean-set';
-import { format, isToday, isYesterday } from 'date-fns';
+import {
+  format,
+  distanceInWordsToNow,
+  subMonths,
+  isToday,
+  isYesterday,
+} from 'date-fns';
 import groupBy from 'lodash.groupby';
 
 import type { ChapterMetadata } from 'poketo';
-import type { Bookmark, BookmarkLastReadChapterId, Collection } from './types';
+import type { BookmarkLastReadChapterId } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
 const utils = {
-  formatTimestamp: (n: number): string => ago(toDate(n)),
+  formatTimestamp: (timestamp: number): string => {
+    const date = toDate(timestamp);
+    const absoluteDateCutOff = subMonths(new Date(), 2);
+    const yearsInDateCutOff = subMonths(new Date(), 12);
+
+    if (date < yearsInDateCutOff) {
+      return format(date, 'MMM D, YYYY');
+    } else if (date < absoluteDateCutOff) {
+      return format(date, 'MMM D');
+    }
+
+    const distanceString = distanceInWordsToNow(date);
+    const formattedDistance = distanceString.replace(/about /i, '') + ' ago';
+
+    return formattedDistance;
+  },
+
   formatAbsoluteTimestamp: (n: number) => {
     const date = toDate(n);
 
@@ -60,28 +81,19 @@ const utils = {
     }
     return /^https?:\/\/[^ "]+$/.test(url);
   },
-  getReaderUrl: (collectionSlug: ?string, chapterId: string) =>
-    '/' +
-    utils.constructUrl(
-      collectionSlug ? `c/${collectionSlug}` : null,
-      'read',
-      encodeURIComponent(chapterId).replace(/%3A/g, ':'),
-    ),
+  encodeId: (id: string) => encodeURIComponent(id).replace(/%3A/g, ':'),
+  getSeriesUrl: (seriesId: string) => `/series/${utils.encodeId(seriesId)}`,
+  getReaderUrl: (chapterId: string) => `/read/${utils.encodeId(chapterId)}`,
   getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
+  getRedditUrl: (seriesTitle: string, sortByNew: boolean = true) =>
+    `https://www.reddit.com/r/manga/search?q=${encodeURIComponent(
+      seriesTitle,
+    ).replace(/%20/g, '+')}${sortByNew ? '&sort=new' : ''}&restrict_sr=on`,
 
-  /**
-   * Collection Helpers
-   */
-  getUnreadMap: (
-    collection: Collection,
-  ): { [string]: BookmarkLastReadChapterId } => {
-    const bookmarks: Bookmark[] = Object.values(collection.bookmarks);
-
-    return bookmarks.reduce((acc, bookmark) => {
-      acc[bookmark.id] = bookmark.lastReadChapterId || null;
-      return acc;
-    }, {});
-  },
+  getUnfollowMessage: (series: { title: string }) =>
+    `Do you want to unfollow ${
+      series.title
+    }? Your reading progress will be lost.`,
 
   /**
    * Chapter Helpers
@@ -151,6 +163,22 @@ const utils = {
     return readChapters;
   },
 
+  lastReadChapter: (
+    chapters: ChapterMetadata[],
+    lastReadId: BookmarkLastReadChapterId = null,
+  ): ChapterMetadata => {
+    const sortedChapters = utils.sortChapters(chapters);
+    const readChapters = utils.getReadChapters(sortedChapters, lastReadId);
+
+    // If there are read chapters, get the last one.
+    if (readChapters.length > 0) {
+      return readChapters.shift();
+    }
+
+    // Otherwise, return the first chapter;
+    return sortedChapters.pop();
+  },
+
   nextChapterToRead: (
     chapters: ChapterMetadata[],
     lastReadId: BookmarkLastReadChapterId = null,
@@ -186,9 +214,11 @@ const utils = {
 export default utils;
 
 export function invariant(condition: boolean, error: string | Error): void {
-  if (Boolean(condition) === true) {
-    return;
-  }
+  if (process.env.NODE_ENV !== 'production') {
+    if (Boolean(condition) === true) {
+      return;
+    }
 
-  throw new Error(error);
+    throw new Error(error);
+  }
 }

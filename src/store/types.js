@@ -3,7 +3,11 @@
 import api from '../api';
 import type { Store as ReduxStore, Dispatch as ReduxDispatch } from 'redux';
 import type { Chapter, ChapterMetadata, Series } from 'poketo';
-import type { BookmarkLastReadChapterId, Collection } from '../types';
+import type {
+  BookmarkLastReadChapterId,
+  Collection,
+  HomeTabId,
+} from '../types';
 
 type ActionType<A, B> = { +type: A, +payload: B };
 type ActionWithoutPayloadType<A> = { +type: A };
@@ -52,12 +56,19 @@ export type RemoveBookmarkAction = ActionType<
   'REMOVE_BOOKMARK',
   { collectionSlug: string, seriesId: string },
 >;
+export type AddBookmarkAction = ActionType<
+  'ADD_BOOKMARK',
+  { collectionSlug: string, seriesId: string, seriesUrl: string },
+>;
 export type MarkBookmarkAsReadAction = ActionType<
   'MARK_BOOKMARK_AS_READ',
   {
     collectionSlug: string,
     seriesId: string,
-    lastReadChapterId: BookmarkLastReadChapterId,
+    options: {
+      lastReadAt: number,
+      lastReadChapterId: BookmarkLastReadChapterId,
+    },
   },
 >;
 export type SetSeriesAction = ActionType<'SET_SERIES', Series>;
@@ -82,11 +93,17 @@ export type ClearDefaultCollectionAction = ActionWithoutPayloadType<
   'CLEAR_DEFAULT_COLLECTION',
 >;
 
+export type SetLastSeenTabAction = ActionType<
+  'SET_LAST_SEEN_TAB',
+  { tabId: HomeTabId },
+>;
+
 export type CollectionAction =
   | AddEntitiesAction
   | SetCollectionAction
   | SetCollectionEntityStatusAction
   | MarkBookmarkAsReadAction
+  | AddBookmarkAction
   | RemoveBookmarkAction;
 
 export type SeriesAction =
@@ -99,12 +116,13 @@ export type ChapterAction =
   | SetChapterAction
   | SetChapterStatusAction;
 
-export type AuthAction =
+export type NavigationAction =
   | SetDefaultCollectionAction
-  | ClearDefaultCollectionAction;
+  | ClearDefaultCollectionAction
+  | SetLastSeenTabAction;
 
 export type Action =
-  | AuthAction
+  | NavigationAction
   | CollectionAction
   | SeriesAction
   | ChapterAction;

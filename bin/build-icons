@@ -2,7 +2,7 @@
 
 const fs = require('mz/fs');
 const path = require('path');
-const svgr = require('svgr').default;
+const svgr = require('@svgr/core').default;
 
 const ICON_PATH = './src/assets/icons/';
 const BUILD_PATH = './src/components/';
@@ -13,7 +13,7 @@ function toPascalCase(input) {
   return input.replace(
     /\w+/g,
     w => w[0].toUpperCase() + w.slice(1).toLowerCase(),
-  );
+  ).replace(/-/g, '');
 }
 
 function getComponentName(filename) {
@@ -29,12 +29,14 @@ async function buildIcons() {
     const pathname = path.join(ICON_PATH, svg);
     const svgCode = await fs.readFile(pathname, 'utf8');
     const componentCode = await svgr(svgCode, {
-      componentName: getComponentName(filename),
+      icon: true,
       title: false,
       singleQuote: true,
       trailingCommas: 'all',
-      replaceAttrValues: [['#000', 'currentColor']],
-    });
+      replaceAttrValues: {
+        '#000': 'currentColor'
+      },
+    }, { componentName: getComponentName(filename) });
     const buildPath = path.join(BUILD_PATH, `icon-${filename}.js`);
     await fs.writeFile(buildPath, componentCode);
     console.log(`${pathname} → ${buildPath}`);

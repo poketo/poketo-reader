@@ -1,72 +1,57 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import classNames from 'classnames';
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Button from './button';
 import Icon from './icon';
+import CoverImage from './series-cover-image';
 import utils from '../utils';
+import type { FeedItem } from '../types';
 
 type Props = {
-  series: {
-    id: string,
-    url: string,
-    title: string,
-    supportsReading: boolean,
-    updatedAt: number,
-  },
-  isUnread: boolean,
-  linkTo: ?string,
-  onOptionsClick: (i: string) => (e: SyntheticEvent<HTMLAnchorElement>) => void,
-  onSeriesClick: (i: string) => (e: SyntheticEvent<HTMLButtonElement>) => void,
+  feedItem: FeedItem,
+  onMoreClick: (seriesId: string) => void,
 };
 
-const SeriesRow = ({
-  series,
-  isUnread,
-  linkTo,
-  onOptionsClick,
-  onSeriesClick,
-}: Props) => {
-  const readingUrl = linkTo ? linkTo : series.url;
-  const usesExternalReader = linkTo || series.supportsReading === false;
+const SeriesRow = ({ feedItem: item, onMoreClick, ...props }: Props) => {
+  const seriesTo = utils.getSeriesUrl(item.series.id);
+
+  const isExternalLink = seriesTo.startsWith('http');
+  const Component = isExternalLink ? 'a' : Link;
+  const linkProps = isExternalLink
+    ? { href: seriesTo, target: '_blank' }
+    : { to: seriesTo };
 
   return (
-    <div className="SeriesRow x bb-1 bc-lightGray bc-transparent-m">
-      <a
-        href={readingUrl}
-        onClick={onSeriesClick(series.id)}
-        target="_blank"
-        className="c-pointer hover x-1 x xd-column ph-3 pv-3">
-        <span className="fs-24-m">
-          {isUnread && (
-            <span className="p-relative t--2 mr-2">
-              <span className="d-inlineBlock w-8 h-8 br-round bgc-coral" />
-            </span>
-          )}
-          <span className={classNames({ 'fw-semibold': isUnread })}>
-            {series.title}
-          </span>
-        </span>
-        <span className="fs-12 o-50p">
-          {usesExternalReader && (
-            <Fragment>
-              {utils.getDomainName(readingUrl)}
-              <span className="fs-9 ph-1 p-relative t--1">&bull;</span>
-            </Fragment>
-          )}
-          {utils.formatTimestamp(series.updatedAt)}
-        </span>
-      </a>
-      <button className="pa-3" onClick={onOptionsClick(series.id)}>
-        <Icon
-          name="more-horizontal"
-          className="c-gray3"
-          iconSize={18}
-          size={18}
+    <div className="x xa-stretch" {...props}>
+      <Component
+        {...linkProps}
+        className="c-pointer x xa-center x-1 pa-2 pv-2 hover-bg">
+        <CoverImage
+          className="mr-2 mr-3-m"
+          series={item.series}
+          variant="small"
         />
-      </button>
+        <div className="xs-1 w-100p of-hidden">
+          <div className="fs-16 fs-20-m fw-semibold lh-1d25 of-hidden to-ellipsis ws-noWrap">
+            {item.series.title}
+          </div>
+          <div className="fs-12 fs-14-m o-50p">{item.series.site.name}</div>
+        </div>
+      </Component>
+      <Button
+        inline
+        className="ph-2"
+        style={{ height: 'auto', minWidth: '44px' }}
+        onClick={() => onMoreClick(item.series.id)}>
+        <Icon name="more-horizontal" size={20} iconSize={32} />
+      </Button>
     </div>
   );
+};
+
+SeriesRow.defaultProps = {
+  onMoreClick: () => {},
 };
 
 export default SeriesRow;

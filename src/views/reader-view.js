@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment, type Node } from 'react';
+import React, { Component, Fragment } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
 import { withRouter, type RouterHistory } from 'react-router-dom';
@@ -13,8 +13,9 @@ import ReaderHeader from '../components/reader-header';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import ReaderFooter from '../components/reader-footer';
-import utils from '../utils';
+import utils, { invariant } from '../utils';
 
+import { getCollectionSlug } from '../store/reducers/navigation';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
 import { fetchChapterIfNeeded } from '../store/reducers/chapters';
 import {
@@ -26,7 +27,7 @@ import type { Chapter, ChapterMetadata, Series } from 'poketo';
 import type { Collection } from '../types';
 import type { Dispatch, FetchStatusState } from '../store/types';
 
-type Props = {
+type ContainerProps = {
   chapter: Chapter,
   chapterId: string,
   chapterStatus: FetchStatusState,
@@ -45,30 +46,7 @@ type Props = {
   |},
 };
 
-class ReaderView extends Component<Props> {
-  static mapStateToProps = (state, ownProps: Props) => {
-    const { match } = ownProps;
-    const { collectionSlug, chapterId: rawChapterId } = match.params;
-
-    const chapterId = decodeURIComponent(rawChapterId);
-    const seriesId = utils.toSeriesId(chapterId);
-    const series: ?Series = state.series[seriesId];
-
-    return {
-      chapter: state.chapters[chapterId],
-      chapterId,
-      chapterStatus: state.chapters._status,
-      collection: state.collections[ownProps.match.params.collectionSlug],
-      collectionSlug,
-      series,
-      seriesChapters:
-        series && series.chapters
-          ? series.chapters.map(id => state.chapters[id])
-          : null,
-      seriesId,
-    };
-  };
-
+class ReaderViewContainer extends Component<ContainerProps> {
   componentDidMount() {
     this.loadData(this.props);
     window.scrollTo(0, 0);
@@ -92,7 +70,6 @@ class ReaderView extends Component<Props> {
 
     if (collectionSlug) {
       dispatch(fetchCollectionIfNeeded(collectionSlug));
-      this.markSeriesAsRead();
     }
   };
 
@@ -100,46 +77,53 @@ class ReaderView extends Component<Props> {
     this.loadData(this.props);
   };
 
-  markSeriesAsRead = () => {
+  handleMarkAsReadPassive = () => {
+    this.markCurrentChapterAsRead();
+  };
+
+  handleMarkAsReadClick = () => {
+    this.markCurrentChapterAsRead({ allowOlderChapters: true });
+  };
+
+  markCurrentChapterAsRead = (
+    options: { allowOlderChapters?: boolean } = {},
+  ) => {
     const {
       collection,
       series,
       seriesChapters,
-      chapter,
+      chapter: currentChapter,
       dispatch,
     } = this.props;
 
-    if (!collection || !series || !chapter) {
+    if (!collection || !series || !currentChapter) {
       return;
     }
 
-    const bookmark = collection.bookmarks[series.id];
+    if (options.allowOlderChapters !== true) {
+      const bookmark = collection.bookmarks[series.id];
 
-    if (!bookmark) {
-      return;
+      if (!bookmark) {
+        return;
+      }
+
+      const lastReadChapter = seriesChapters.find(
+        c => c.id === bookmark.lastReadChapterId,
+      );
+      const isOlderChapter =
+        lastReadChapter && currentChapter.order <= lastReadChapter.order;
+
+      if (isOlderChapter) {
+        return;
+      }
     }
 
-    const lastReadChapter = seriesChapters.find(
-      c => c.id === bookmark.lastReadChapterId,
+    dispatch(
+      markSeriesAsRead(collection.slug, series.id, {
+        lastReadAt: utils.getTimestamp(),
+        lastReadChapterId: currentChapter.id,
+      }),
     );
-
-    if (lastReadChapter && chapter.order <= lastReadChapter.order) {
-      return;
-    }
-
-    dispatch(markSeriesAsRead(collection.slug, series.id, chapter.id));
-  };
-
-  handleChapterChange = nextChapter => {
-    const { chapterId: currentChapterId, collectionSlug, history } = this.props;
-
-    if (nextChapter.id === currentChapterId) {
-      return;
-    }
-
-    const url = utils.getReaderUrl(collectionSlug, nextChapter.id);
-
-    history.push(url);
   };
 
   render() {
@@ -149,106 +133,153 @@ class ReaderView extends Component<Props> {
       chapter,
       chapterStatus,
       series,
+      seriesId,
       seriesChapters,
     } = this.props;
     const { isFetching, errorCode } = chapterStatus;
 
-    const unreadMap = collection ? utils.getUnreadMap(collection) : {};
-    const isLoading = isFetching || !chapter || !chapter.pages;
+    const bookmark =
+      collection && series
+        ? collection.bookmarks && collection.bookmarks[series.id]
+        : null;
+    const isLoading = isFetching || !chapter || !chapter.pages || !series;
+
+    const showNavigation = chapter && series && seriesChapters;
+
+    invariant(showNavigation && series, 'Cannot happen');
+
+    const navigation = showNavigation ? (
+      <ReaderNavigation
+        collection={collection}
+        chapter={chapter}
+        bookmark={bookmark}
+        seriesChapters={seriesChapters}
+      />
+    ) : null;
 
     return (
       <div className="mh-100vh bgc-gray4">
-        {series &&
-          chapter && (
-            <Head>
-              <title>{`${series.title} – ${utils.getChapterLabel(
-                chapter,
-                true,
-              )}`}</title>
-            </Head>
-          )}
         <BodyClassName className="ff-sans bgc-black" />
         <ReaderHeader
           collectionSlug={collectionSlug}
-          seriesTitle={series && series.title}
-          seriesSiteName={series && series.site.name}
-          seriesUrl={series && series.url}
+          seriesId={seriesId}
+          series={series}
           chapterUrl={chapter && chapter.url}
+          onMarkAsReadClick={this.handleMarkAsReadClick}
         />
-        {chapter &&
-          series &&
-          seriesChapters && (
-            <div className="pt-3">
-              <ReaderNavigation
-                collection={collection}
-                chapter={chapter}
-                lastReadChapterId={unreadMap[series.id]}
-                onChapterSelectChange={this.handleChapterChange}
-                seriesChapters={seriesChapters}
-              />
-            </div>
-          )}
-        {((): Node => {
-          if (isLoading || errorCode) {
-            return (
-              <div className="x xa-center xj-center ta-center pv-6 c-white">
-                {errorCode ? (
-                  <div>
-                    <div className="mb-2 c-white o-50p">
-                      <Icon name="warning" />
-                    </div>
-                    <div className="mb-3 o-50p">
-                      Error loading
-                      {series ? ` from ${series.site.name}` : ''}
-                    </div>
-                    <Button inline onClick={this.handleRetryButtonClick}>
-                      <span className="ph-3">Try again</span>
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="mb-4">
-                      <DotLoader />
-                    </div>
-                    <div className="fs-12 o-50p">
-                      Loading
-                      {series ? ` from ${series.site.name}` : ''}
-                    </div>
-                  </div>
-                )}
+        {showNavigation && <div className="pt-3">{navigation}</div>}
+        {isLoading || errorCode ? (
+          <div className="x xa-center xj-center h-100p ta-center pv-6 c-white">
+            {errorCode ? (
+              <div>
+                <div className="mb-2 c-white o-50p">
+                  <Icon name="warning" />
+                </div>
+                <div className="mb-3 o-50p">
+                  Error loading
+                  {series ? ` from ${series.site.name}` : ''}
+                </div>
+                <Button inline onClick={this.handleRetryButtonClick}>
+                  <span className="ph-3">Try again</span>
+                </Button>
               </div>
-            );
-          }
-
-          return (
-            <Fragment>
-              <div className="pv-4 mh-auto w-90p-m ta-center mw-900">
-                {chapter.pages.map(page => (
-                  <div key={page.id} className="mb-3 mb-4-m">
-                    <ReaderPageImage page={page} />
-                  </div>
-                ))}
+            ) : (
+              <div>
+                <div className="mb-4">
+                  <DotLoader />
+                </div>
+                <div className="fs-12 o-50p">
+                  Loading
+                  {series ? ` from ${series.site.name}` : ''}
+                </div>
               </div>
-              {chapter &&
-                series &&
-                seriesChapters && (
-                  <div className="pb-3">
-                    <ReaderNavigation
-                      chapter={chapter}
-                      collection={collection}
-                      lastReadChapterId={unreadMap[series.id]}
-                      onChapterSelectChange={this.handleChapterChange}
-                      seriesChapters={seriesChapters}
-                    />
-                  </div>
-                )}
-              <ReaderFooter collectionSlug={collection && collection.slug} />
-            </Fragment>
-          );
-        })()}
+            )}
+          </div>
+        ) : (
+          <Fragment>
+            <ReaderView
+              chapter={chapter}
+              series={series}
+              onMarkAsRead={this.handleMarkAsReadPassive}
+            />
+            {showNavigation && <div className="pb-3">{navigation}</div>}
+            <ReaderFooter collectionSlug={collection && collection.slug} />
+          </Fragment>
+        )}
       </div>
     );
   }
 }
 
-export default withRouter(connect(ReaderView.mapStateToProps)(ReaderView));
+function mapStateToProps(state, ownProps: ContainerProps) {
+  const { match } = ownProps;
+  const { chapterId: rawChapterId } = match.params;
+
+  const collectionSlug = getCollectionSlug(state);
+  const collection = collectionSlug ? state.collections[collectionSlug] : null;
+  const chapterId = decodeURIComponent(rawChapterId);
+  const seriesId = utils.toSeriesId(chapterId);
+  const series: ?Series = state.series[seriesId];
+
+  return {
+    chapter: state.chapters[chapterId],
+    chapterId,
+    chapterStatus: state.chapters._status,
+    collection,
+    collectionSlug,
+    series,
+    seriesChapters:
+      series && series.chapters
+        ? series.chapters.map(id => state.chapters[id])
+        : null,
+    seriesId,
+  };
+}
+
+type Props = {
+  chapter: Chapter,
+  series: Series,
+  onMarkAsRead: () => void,
+};
+
+class ReaderView extends Component<Props> {
+  timerId: ?TimeoutID = null;
+  timeout = 5000;
+
+  componentDidMount() {
+    this.timerId = setTimeout(this.handleMarkAsReadTimeout, this.timeout);
+  }
+
+  componentWillUnmount() {
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+    }
+  }
+
+  handleMarkAsReadTimeout = () => {
+    this.props.onMarkAsRead();
+  };
+
+  render() {
+    const { chapter, series } = this.props;
+
+    const chapterLabel = utils.getChapterLabel(chapter, true);
+
+    return (
+      <Fragment>
+        <Head>
+          <title>{`${series.title} – ${chapterLabel}`}</title>
+        </Head>
+        <div className="pv-4 mh-auto w-90p-m ta-center mw-900">
+          {chapter.pages.map(page => (
+            <div key={page.id} className="mb-2 mb-3-m">
+              <ReaderPageImage page={page} />
+            </div>
+          ))}
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+export default withRouter(connect(mapStateToProps)(ReaderViewContainer));

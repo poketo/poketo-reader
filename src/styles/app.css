@@ -24,6 +24,7 @@
 
 html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -36,6 +37,7 @@ body {
 
 html,
 body,
+#root,
 #app {
   height: 100%;
 }
@@ -125,60 +127,4 @@ code {
 
 .Markdown a {
   color: #ff6f6f;
-}
-
-.CircleLoader {
-  display: inline-block;
-  border-color: transparent;
-  border-top-color: currentColor;
-  border-left-color: currentColor;
-  animation: spinner 500ms linear infinite;
-  vertical-align: middle;
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.DotLoader {
-  display: inline-block;
-  text-align: center;
-}
-
-.DotLoader > .DotLoader-dot {
-  background-color: #666;
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  animation: pulse 1000ms infinite ease-out both;
-}
-
-.DotLoader > .DotLoader-dot + .DotLoader-dot {
-  margin-left: 6px;
-}
-
-.DotLoader > .DotLoader-dotA {
-  animation-delay: -320ms;
-}
-.DotLoader > .DotLoader-dotB {
-  animation-delay: -160ms;
-}
-
-@keyframes pulse {
-  0%,
-  80%,
-  100% {
-    background-color: #ccc;
-    transform: translateY(-4px);
-  }
-  40% {
-    background-color: #666;
-    transform: translateY(0);
-  }
 }

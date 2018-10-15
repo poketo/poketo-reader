@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { type RouterHistory } from 'react-router-dom';
 import Head from 'react-helmet';
 
-import AuthRedirect from '../containers/auth-redirect';
+import AuthRedirect from '../components/auth-redirect';
 import Button from '../components/button';
 import HomeHeader from '../components/home-header';
 import Input from '../components/input';
@@ -67,7 +67,7 @@ class LogInView extends Component<Props, State> {
             <div className="mb-2">
               <Input type="text" onChange={this.handleCodeChange} />
             </div>
-            <Button type="submit" primary disabled={!isSubmittable}>
+            <Button type="submit" variant="primary" disabled={!isSubmittable}>
               Go
             </Button>
           </form>

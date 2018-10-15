@@ -1,8 +1,8 @@
 // @flow
 
 import { normalize } from 'normalizr';
-import schema from '../schema';
 import { fetchSeriesIfNeeded } from './series';
+import schema from '../schema';
 import utils from '../../utils';
 
 import type { BookmarkLastReadChapterId, Collection } from '../../types';
@@ -114,6 +114,35 @@ export function fetchSeriesForCollection(collectionSlug: string): Thunk {
 }
 
 /**
+ * Add a bookmark to a collection.
+ */
+export function addBookmark(
+  collectionSlug: string,
+  seriesId: string,
+  seriesUrl: string,
+): Thunk {
+  return (dispatch, getState, api) => {
+    dispatch({
+      type: 'ADD_BOOKMARK',
+      payload: { collectionSlug, seriesId, seriesUrl },
+    });
+
+    api
+      .fetchAddBookmarkToCollection(collectionSlug, seriesUrl)
+      .then(response => {
+        const normalized = normalize(response.data, {
+          collection: schema.collection,
+          series: schema.series,
+        });
+        dispatch({ type: 'ADD_ENTITIES', payload: normalized.entities });
+      })
+      .catch(err => {
+        // TODO: handle errors
+      });
+  };
+}
+
+/**
  * Delete a bookmark from a collection.
  */
 export function removeBookmark(
@@ -137,19 +166,17 @@ export function removeBookmark(
 export function markSeriesAsRead(
   collectionSlug: string,
   seriesId: string,
-  lastReadChapterId: BookmarkLastReadChapterId,
+  options: { lastReadChapterId: BookmarkLastReadChapterId, lastReadAt: number },
 ): Thunk {
   return (dispatch, getState, api) => {
     dispatch({
       type: 'MARK_BOOKMARK_AS_READ',
-      payload: { collectionSlug, seriesId, lastReadChapterId },
+      payload: { collectionSlug, seriesId, options },
     });
 
-    api
-      .fetchMarkAsRead(collectionSlug, seriesId, lastReadChapterId)
-      .catch(err => {
-        // swallow errors
-      });
+    api.fetchMarkAsRead(collectionSlug, seriesId, options).catch(err => {
+      // swallow errors
+    });
   };
 }
 
@@ -183,13 +210,31 @@ export default function reducer(
       }));
     }
     case 'MARK_BOOKMARK_AS_READ': {
-      const { collectionSlug, seriesId, lastReadChapterId } = action.payload;
+      const { collectionSlug, seriesId, options } = action.payload;
+      const { lastReadAt, lastReadChapterId } = options;
 
-      return utils.set(
+      const withChapterId = utils.set(
         state,
         `${collectionSlug}.bookmarks.${seriesId}.lastReadChapterId`,
         lastReadChapterId,
       );
+      const withTimestamp = utils.set(
+        withChapterId,
+        `${collectionSlug}.bookmarks.${seriesId}.lastReadAt`,
+        lastReadAt,
+      );
+
+      return withTimestamp;
+    }
+    case 'ADD_BOOKMARK': {
+      const { collectionSlug, seriesId, seriesUrl } = action.payload;
+
+      return utils.set(state, `${collectionSlug}.bookmarks.${seriesId}`, {
+        id: seriesId,
+        url: seriesUrl,
+        lastReadChapterId: null,
+        lastReadAt: utils.getTimestamp(),
+      });
     }
     case 'REMOVE_BOOKMARK': {
       const nextState = { ...state };

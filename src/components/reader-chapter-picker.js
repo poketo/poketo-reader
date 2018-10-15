@@ -1,9 +1,9 @@
 // @flow
 
 import React, { PureComponent, type ElementRef } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion/macro';
 import type { ChapterMetadata } from 'poketo';
-import type { BookmarkLastReadChapterId } from '../types';
+import type { Bookmark } from '../types';
 import utils from '../utils';
 import ChapterRow from '../components/chapter-row';
 
@@ -11,8 +11,8 @@ type Props = {
   activeChapterId?: string,
   activeChapterRef?: ElementRef<*>,
   seriesChapters: ChapterMetadata[],
-  lastReadChapterId: BookmarkLastReadChapterId,
-  onChapterClick: (chapter: ChapterMetadata) => void,
+  bookmark: ?Bookmark,
+  onChapterClick: () => void,
 };
 
 const shouldGroupByVolume = (seriesChapters: ChapterMetadata[]) => {
@@ -50,29 +50,35 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     onChapterClick: () => {},
   };
 
-  handleChapterClick = (chapter: ChapterMetadata) => (
-    e: SyntheticMouseEvent<HTMLDivElement>,
-  ) => {
-    this.props.onChapterClick(chapter);
+  handleChapterClick = (e: SyntheticMouseEvent<HTMLDivElement>) => {
+    if (
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.metaKey ||
+      (e.button && e.button === 1) // middle click, >IE9 + everyone else
+    ) {
+      return;
+    }
+
+    this.props.onChapterClick();
   };
 
-  renderChapters(chapters: ChapterMetadata[], lastReadOrder: number) {
-    const { activeChapterId, activeChapterRef } = this.props;
+  renderChapters(chapters: ChapterMetadata[]) {
+    const { activeChapterId, activeChapterRef, bookmark } = this.props;
 
     return (
       <div>
         {chapters.map((c: ChapterMetadata) => {
           const isActive = c.id === activeChapterId;
-          const isUnread = c.order > lastReadOrder;
 
           return (
             <ChapterRow
               key={c.id}
               chapter={c}
+              bookmark={bookmark}
               innerRef={isActive ? activeChapterRef : undefined}
               isActive={isActive}
-              isUnread={isUnread}
-              onClick={this.handleChapterClick(c)}
+              onClick={this.handleChapterClick}
             />
           );
         })}
@@ -81,13 +87,10 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   }
 
   render() {
-    const { seriesChapters, lastReadChapterId } = this.props;
-
-    const lastRead = seriesChapters.find(c => c.id === lastReadChapterId);
-    const lastReadOrder = lastRead ? lastRead.order : 0;
+    const { seriesChapters } = this.props;
 
     if (!shouldGroupByVolume(seriesChapters)) {
-      return this.renderChapters(seriesChapters, lastReadOrder);
+      return this.renderChapters(seriesChapters);
     }
 
     const groupedChapters = utils.groupBy(seriesChapters, 'volumeNumber');
@@ -96,13 +99,13 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
     return (
       <div>
         {groups.map((key, index) => (
-          <div key={key} className={classNames({ 'mt-4': index !== 0 })}>
+          <div key={key} className={cx({ 'mt-4': index !== 0 })}>
             {!isEmptyVolume(key) && (
               <div className="p-sticky t-0 z-3 fs-14 fs-16-m c-gray3 pt-2 pb-1 pb-2-m ph-3 bgc-white bb-1 bc-gray1">
                 Volume {key}
               </div>
             )}
-            {this.renderChapters(groupedChapters[key], lastReadOrder)}
+            {this.renderChapters(groupedChapters[key])}
           </div>
         ))}
       </div>

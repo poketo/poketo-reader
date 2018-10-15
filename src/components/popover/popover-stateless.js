@@ -1,8 +1,11 @@
 // @flow
 
 import React, { type Node } from 'react';
-import classNames from 'classnames';
-import './popover.css';
+import styled, { cx } from 'react-emotion/macro';
+
+const StyledPopover = styled.div`
+  min-width: 100px;
+`;
 
 type Props = {
   className?: string,
@@ -12,17 +15,16 @@ type Props = {
 // $FlowFixMe
 const PopoverStateless = React.forwardRef(
   ({ className, children, ...props }: Props, ref) => (
-    <div
+    <StyledPopover
       role="dialog"
-      className={classNames(
-        'Popover',
+      className={cx(
         'bgc-white e-2 br-4 x xa-center xj-center of-hidden',
         className,
       )}
-      ref={ref}
+      innerRef={ref}
       {...props}>
       {children}
-    </div>
+    </StyledPopover>
   ),
 );
 

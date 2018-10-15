@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import classNames from 'classnames';
+import { cx } from 'react-emotion/macro';
 import { Link, NavLink, Route } from 'react-router-dom';
 
 import IconPoketo from '../components/icon-poketo';
@@ -26,7 +26,7 @@ export default class Header extends Component<Props, State> {
 
     return (
       <header
-        className={classNames({
+        className={cx({
           'p-absolute l-0 r-0 z-4 c-black': overlay,
         })}>
         <div className="x xj-spaceBetween pa-3">
@@ -50,9 +50,7 @@ export default class Header extends Component<Props, State> {
               <Route
                 path="/login"
                 children={({ match }) => (
-                  <Link
-                    to="/login"
-                    className={classNames('ml-3', { 'o-50p': match })}>
+                  <Link to="/login" className={cx('ml-3', { 'o-50p': match })}>
                     Log In
                   </Link>
                 )}

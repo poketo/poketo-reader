@@ -1,3 +1,7 @@
+import type { ChapterMetadata } from 'poketo';
+
+export type HomeTabId = 'now-reading' | 'library';
+
 export type BookmarkLastReadChapterId = string | null;
 
 export type Bookmark = {
@@ -5,6 +9,13 @@ export type Bookmark = {
   lastReadChapterId: BookmarkLastReadChapterId,
   url: string,
   linkTo: ?string,
+};
+
+export type FeedItem = {
+  linkTo?: string,
+  lastReadChapterId: BookmarkLastReadChapterId,
+  chapters: ChapterMetadata[],
+  series: Series,
 };
 
 export type Collection = {
