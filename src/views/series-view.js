@@ -315,7 +315,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     markAsRead: (collectionSlug, seriesId, chapterId) => {
-      dispatch(markSeriesAsRead(collectionSlug, seriesId, chapterId));
+      dispatch(
+        markSeriesAsRead(collectionSlug, seriesId, {
+          lastReadAt: utils.getTimestamp(),
+          lastReadChapterId: chapterId,
+        }),
+      );
     },
   };
 };
