@@ -1,0 +1,3 @@
+{
+  "presets": ["backpack-core/babel", "flow"]
+}

@@ -46,6 +46,7 @@ declare module 'poketo' {
   };
 
   declare export default {
+    constructUrl: (id: string) => string,
     getType: (idOrUrl: string) => 'series' | 'chapter',
     getSeries: (idOrUrl: string) => Promise<Series>,
     getChapter: (idOrUrl: string) => Promise<Chapter>,

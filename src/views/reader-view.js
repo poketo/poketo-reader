@@ -141,7 +141,7 @@ class ReaderViewContainer extends Component<ContainerProps> {
     const bookmark =
       collection && series
         ? collection.bookmarks && collection.bookmarks[series.id]
-        : null;
+        : undefined;
     const isLoading = isFetching || !chapter || !chapter.pages || !series;
 
     const showNavigation = chapter && series && seriesChapters;
