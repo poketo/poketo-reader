@@ -22,7 +22,7 @@ import Popover from '../components/popover';
 import utils from '../utils';
 import { markSeriesAsRead } from '../store/reducers/collections';
 import type { Dispatch } from '../store/types';
-import type { Bookmark } from '../types';
+import type { Bookmark } from '../../shared/types';
 
 const headerClassName = css`
   height: 61px;
@@ -40,7 +40,11 @@ type ContainerProps = {
   dispatch: Dispatch,
   isFetching: boolean,
   errorCode: string,
-  match: Object,
+  match: {
+    params: {
+      seriesId: string,
+    },
+  },
 };
 
 class SeriesPageContainer extends Component<ContainerProps> {
@@ -98,7 +102,7 @@ const iconProps = {
 
 type Props = {
   series: Series,
-  bookmark: ?Bookmark,
+  bookmark?: Bookmark,
   chapters: ChapterMetadata[],
   collectionSlug: ?string,
   markAsRead: (
@@ -137,7 +141,7 @@ const SeriesPage = ({
       <div className="mw-600 w-100p mh-auto p-relative">
         <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
           <BackButtonContainer>
-            {({ to }) => (
+            {({ to }: { to: string }) => (
               <Link to={to} className="x hover">
                 <Icon name="arrow-left" {...iconProps} />
               </Link>

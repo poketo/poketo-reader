@@ -1,7 +1,8 @@
 // @flow
 
 import { Database, Model } from 'mongorito';
-import type { Bookmark, Series } from 'poketo';
+import type { Series } from 'poketo';
+import type { Bookmark } from '../../shared/types';
 import utils from './utils';
 
 if (process.env.MONGO_URL === undefined && process.env.NOW !== 'true') {
@@ -16,7 +17,7 @@ const extendCollection = Collection => {
   Collection.prototype.addBookmark = function(
     series: Series,
     linkToUrl: ?string = null,
-    lastReadChapterId: ?string = null,
+    lastReadChapterId: string | null = null,
   ) {
     const bookmarks = this.get('bookmarks');
     const existingBookmark = bookmarks.find(
@@ -35,6 +36,7 @@ const extendCollection = Collection => {
       id: series.id,
       url: series.url,
       lastReadChapterId,
+      lastReadAt: utils.timestamp(),
     };
 
     if (linkToUrl) {

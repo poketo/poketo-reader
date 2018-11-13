@@ -3,7 +3,7 @@
 import React, { PureComponent, type ElementRef } from 'react';
 import { cx } from 'react-emotion/macro';
 import type { ChapterMetadata } from 'poketo';
-import type { Bookmark } from '../types';
+import type { Bookmark } from '../../shared/types';
 import utils from '../utils';
 import ChapterRow from '../components/chapter-row';
 
@@ -11,7 +11,7 @@ type Props = {
   activeChapterId?: string,
   activeChapterRef?: ElementRef<*>,
   seriesChapters: ChapterMetadata[],
-  bookmark: ?Bookmark,
+  bookmark?: Bookmark,
   onChapterClick: () => void,
 };
 

@@ -12,7 +12,8 @@ import Icon from './icon';
 import utils from '../utils';
 import { setLastSeenTab } from '../store/reducers/navigation';
 import type { Dispatch } from '../store/types';
-import type { Bookmark, FeedItem } from '../types';
+import type { Bookmark } from '../../shared/types';
+import type { FeedItem } from '../types';
 
 const fullWidthClassName = css`
   flex-basis: 100%;

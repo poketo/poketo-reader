@@ -4,7 +4,7 @@ import React from 'react';
 import { css, cx } from 'react-emotion/macro';
 import { Link } from 'react-router-dom';
 import type { ChapterMetadata } from 'poketo';
-import type { Bookmark } from '../types';
+import type { Bookmark } from '../../shared/types';
 import Icon from './icon';
 import utils from '../utils';
 

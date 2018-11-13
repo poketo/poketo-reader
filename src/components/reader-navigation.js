@@ -9,12 +9,13 @@ import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
 import type { ChapterMetadata } from 'poketo';
-import type { Bookmark, Collection } from '../types';
+import type { Bookmark } from '../../shared/types';
+import type { Collection } from '../types';
 
 type Props = {
   chapter: ChapterMetadata,
-  collection: ?Collection,
-  bookmark: ?Bookmark,
+  collection?: Collection,
+  bookmark?: Bookmark,
   seriesChapters: ChapterMetadata[],
 };
 
