@@ -1,4 +1,4 @@
-# poketo-service
+# Poketo API
 
 A microservice for scraping manga sites. Also includes endpoints to store minimal data about collections, as a stop-gap for cross-browser syncing without accounts. Used in the [Poketo manga reader](https://poketo.app).
 

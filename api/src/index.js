@@ -9,6 +9,7 @@ import cors from '@koa/cors';
 import pmap from 'p-map';
 import shortid from 'shortid';
 
+import pkg from '../package';
 import poketo from 'poketo';
 import { Collection } from './db';
 import utils from './utils';
@@ -17,7 +18,7 @@ const app = new Koa();
 
 app.use(cors());
 app.use(bodyparser());
-app.use(logger({ name: 'poketo-service' }));
+app.use(logger({ name: pkg.name }));
 
 const getErrorStatus = (err): number => {
   switch (err.code) {
@@ -88,7 +89,7 @@ app.use(
     ctx.assert(
       false,
       404,
-      `Welcome to the Poketo API! If you're looking for documentation, check out https://github.com/poketo/service`,
+      `Welcome to the Poketo API! If you're looking for documentation, check out https://github.com/poketo/poketo-reader/tree/master/api`,
     );
   }),
 );

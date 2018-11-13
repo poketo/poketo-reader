@@ -18,12 +18,12 @@ For an invite, check out [poketo.app →](https://poketo.app)
 
 ### Features
 
-* **simple**: no accounts, no downloads, no ads
-* **track series**: fetches updates from [14+ manga sites](https://github.com/poketo/node#supported-sites)
-* **inline reader**: read new chapters with just a tap
-* **web-based**: use on a phone, computer, tablet, wherever!
-* **open-source**: anyone can contribute or build features on top
-* _coming soon:_ **offline-ready**: save chapters for offline reading
+- **simple**: no accounts, no downloads, no ads
+- **track series**: fetches updates from [14+ manga sites](https://github.com/poketo/node#supported-sites)
+- **inline reader**: read new chapters with just a tap
+- **web-based**: use on a phone, computer, tablet, wherever!
+- **open-source**: anyone can contribute or build features on top
+- _coming soon:_ **offline-ready**: save chapters for offline reading
 
 :construction: Poketo is still in beta. It's usable, but watch your step! You might run into some bugs.
 
@@ -33,11 +33,11 @@ For an invite, check out [poketo.app →](https://poketo.app)
 
 People should be able to read content on the web in the way that works for them. Manga reader sites are a special brand of bad. Each page in a chapter is a new page load, ads everywhere, yuck!
 
-Poketo provides a nice experience to follow and read series across the web. It's also built using an [extensible node library](https://github.com/poketo/node) and [api](https://github.com/poketo/service) so anyone else can build their own reader and share the work behind Poketo! Be free, internet content!
+Poketo provides a nice experience to follow and read series across the web. It's also built using an [extensible node library](https://github.com/poketo/node) and [api](https://github.com/poketo/poketo-reader/tree/master/api) so anyone else can build their own reader and share the work behind Poketo! Be free, internet content!
 
 ## Contributing
 
-Issues and PR's are welcome! Feel free to drop a note on this repo, the [microservice repo](https://github.com/poketo/service), or [the node library repo](https://github.com/poketo/node).
+Issues and PR's are welcome! Feel free to drop a note on this repo or [the node library repo](https://github.com/poketo/node).
 
 ## Colophon
 

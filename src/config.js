@@ -11,7 +11,6 @@ const config: { [string]: string } = {
   githubUrl: 'https://github.com/poketo',
   githubSiteUrl: 'https://github.com/poketo/site',
   githubSiteIssueUrl: 'https://github.com/poketo/site/issues/new',
-  githubServiceUrl: 'https://github.com/poketo/service',
   githubLibraryUrl: 'https://github.com/poketo/poketo',
   githubSupportedSites:
     'https://github.com/poketo/poketo/blob/master/README.md#supported-sites',

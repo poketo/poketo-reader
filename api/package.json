@@ -1,5 +1,5 @@
 {
-  "name": "poketo-api",
+  "name": "poketo-service",
   "version": "0.0.2",
   "private": true,
   "main": "build/main.js",
