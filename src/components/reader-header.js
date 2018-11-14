@@ -4,22 +4,29 @@
 import React, { Fragment, PureComponent, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'react-emotion/macro';
-import type { Series } from 'poketo';
+import type { ChapterMetadata, Series } from 'poketo';
 
 import BackButtonContainer from '../components/back-button-container';
 import ComponentLoader from '../components/loader-component';
+import ReaderNavigation from '../components/reader-navigation';
+import withScrollHide from '../components/with-scroll-hide';
 import Icon from '../components/icon';
 import Panel from '../components/panel';
 import Popover from '../components/popover';
+import type { Collection } from '../types';
+import type { Bookmark } from '../../shared/types';
 import utils from '../utils';
 
 const LazyFeedbackForm = lazy(() => import('../components/feedback-form'));
 
 type Props = {
-  collectionSlug: ?string,
+  bookmark?: Bookmark,
+  collection?: Collection,
+  isActive: boolean,
   seriesId: string,
-  series: ?Series,
-  chapterUrl: ?string,
+  series?: Series,
+  chapter: ChapterMetadata,
+  seriesChapters: ChapterMetadata[],
   onMarkAsReadClick: () => void,
 };
 
@@ -36,7 +43,15 @@ const popoverContentClassName = css`
   max-width: 80vw;
 `;
 
-export default class ReaderHeader extends PureComponent<Props, State> {
+const headerClassName = css`
+  transition: transform 200ms ease;
+`;
+
+const isHeaderHidden = css`
+  transform: translateY(-100%);
+`;
+
+class ReaderHeader extends PureComponent<Props, State> {
   state = {
     isFeedbackPanelOpen: false,
   };
@@ -50,7 +65,15 @@ export default class ReaderHeader extends PureComponent<Props, State> {
   };
 
   render() {
-    const { collectionSlug, series, seriesId, chapterUrl } = this.props;
+    const {
+      bookmark,
+      collection,
+      chapter,
+      series,
+      seriesId,
+      seriesChapters,
+      isActive,
+    } = this.props;
 
     return (
       <Fragment>
@@ -68,7 +91,14 @@ export default class ReaderHeader extends PureComponent<Props, State> {
             </Panel.Content>
           )}
         </Panel>
-        <div className="p-relative x xj-spaceBetween bgc-black c-white pv-3 ph-3">
+        <div
+          className={cx(
+            'p-fixed t-0 w-100p z-3 x xj-spaceBetween bgc-black c-white pv-3 ph-3',
+            headerClassName,
+            {
+              [isHeaderHidden]: !isActive,
+            },
+          )}>
           <BackButtonContainer>
             {({ to }) => (
               <Link className="x xa-center o-50p z-2" to={to}>
@@ -79,9 +109,12 @@ export default class ReaderHeader extends PureComponent<Props, State> {
 
           {series && (
             <div className="p-absolute p-fill ph-5 x xa-center xj-center">
-              <span className="of-hidden to-ellipsis ws-noWrap">
-                {series.title}
-              </span>
+              <ReaderNavigation
+                chapter={chapter}
+                collection={collection}
+                bookmark={bookmark}
+                seriesChapters={seriesChapters}
+              />
             </div>
           )}
           <Popover
@@ -90,25 +123,25 @@ export default class ReaderHeader extends PureComponent<Props, State> {
                 {series && (
                   <Fragment>
                     <Link
-                      className="br-3 x xa-center ta-left ph-3 pv-1 hover-bg"
+                      className="br-3 x xa-center ta-left ph-3 pv-2 hover-bg lh-1d25"
                       to={utils.getSeriesUrl(seriesId)}>
                       <div>
-                        <div>{series.title}</div>
+                        <div className="fw-semibold">{series.title}</div>
                         <div className="fs-14 c-gray3">{series.site.name}</div>
                       </div>
                     </Link>
                     <Popover.Divider />
-                    {chapterUrl && (
+                    {chapter && (
                       <Popover.Item
                         iconBefore={<Icon name="new-tab" {...iconProps} />}
                         label={`Open on ${series.site.name}`}
-                        href={chapterUrl}
+                        href={chapter.url}
                         onClick={close}
                         target="_blank"
                         rel="noreferrer noopener"
                       />
                     )}
-                    {collectionSlug && (
+                    {collection && (
                       <Popover.Item
                         iconBefore={<Icon name="bookmark" {...iconProps} />}
                         label="Mark read at this chapter"
@@ -141,3 +174,5 @@ export default class ReaderHeader extends PureComponent<Props, State> {
     );
   }
 }
+
+export default withScrollHide()(ReaderHeader);

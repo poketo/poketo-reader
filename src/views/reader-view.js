@@ -129,7 +129,6 @@ class ReaderViewContainer extends Component<ContainerProps> {
   render() {
     const {
       collection,
-      collectionSlug,
       chapter,
       chapterStatus,
       series,
@@ -148,26 +147,18 @@ class ReaderViewContainer extends Component<ContainerProps> {
 
     invariant(showNavigation && series, 'Cannot happen');
 
-    const navigation = showNavigation ? (
-      <ReaderNavigation
-        collection={collection}
-        chapter={chapter}
-        bookmark={bookmark}
-        seriesChapters={seriesChapters}
-      />
-    ) : null;
-
     return (
       <div className="mh-100vh bgc-gray4">
         <BodyClassName className="ff-sans bgc-black" />
         <ReaderHeader
-          collectionSlug={collectionSlug}
-          seriesId={seriesId}
+          collection={collection}
+          chapter={chapter}
+          bookmark={bookmark}
           series={series}
-          chapterUrl={chapter && chapter.url}
+          seriesId={seriesId}
+          seriesChapters={seriesChapters}
           onMarkAsReadClick={this.handleMarkAsReadClick}
         />
-        {showNavigation && <div className="pt-3">{navigation}</div>}
         {isLoading || errorCode ? (
           <div className="x xa-center xj-center h-100p ta-center pv-6 c-white">
             {errorCode ? (
@@ -202,7 +193,17 @@ class ReaderViewContainer extends Component<ContainerProps> {
               series={series}
               onMarkAsRead={this.handleMarkAsReadPassive}
             />
-            {showNavigation && <div className="pb-3">{navigation}</div>}
+            {showNavigation && (
+              <div className="pb-3">
+                <ReaderNavigation
+                  collection={collection}
+                  chapter={chapter}
+                  bookmark={bookmark}
+                  seriesChapters={seriesChapters}
+                  showNextPreviousLinks
+                />
+              </div>
+            )}
             <ReaderFooter collectionSlug={collection && collection.slug} />
           </Fragment>
         )}
@@ -270,12 +271,14 @@ class ReaderView extends Component<Props> {
         <Head>
           <title>{`${series.title} – ${chapterLabel}`}</title>
         </Head>
-        <div className="pv-4 mh-auto w-90p-m ta-center mw-900">
-          {chapter.pages.map(page => (
-            <div key={page.id} className="mb-2 mb-3-m">
-              <ReaderPageImage page={page} />
-            </div>
-          ))}
+        <div className="pt-5 pb-4 mh-auto w-90p-m ta-center mw-900">
+          <div className="pt-4">
+            {chapter.pages.map(page => (
+              <div key={page.id} className="mb-2 mb-3-m">
+                <ReaderPageImage page={page} />
+              </div>
+            ))}
+          </div>
         </div>
       </Fragment>
     );
