@@ -1,7 +1,7 @@
 // @flow
 
-import React, { Fragment, PureComponent } from 'react';
-import Loadable from 'react-loadable';
+// $FlowFixMe: Flow doesn't support React 16.6 features
+import React, { Fragment, PureComponent, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'react-emotion/macro';
 import type { Series } from 'poketo';
@@ -13,10 +13,7 @@ import Panel from '../components/panel';
 import Popover from '../components/popover';
 import utils from '../utils';
 
-const LoadableFeedbackForm = Loadable({
-  loader: () => import('../components/feedback-form'),
-  loading: ComponentLoader,
-});
+const LazyFeedbackForm = lazy(() => import('../components/feedback-form'));
 
 type Props = {
   collectionSlug: ?string,
@@ -62,10 +59,12 @@ export default class ReaderHeader extends PureComponent<Props, State> {
           onRequestClose={this.handleFeedbackPanelRequestClose}>
           {() => (
             <Panel.Content title="Report an issue">
-              <LoadableFeedbackForm
-                onSubmitSuccess={this.handleFeedbackPanelRequestClose}>
-                <p>Something look off with this chapter? Let us know.</p>
-              </LoadableFeedbackForm>
+              <Suspense fallback={<ComponentLoader />}>
+                <LazyFeedbackForm
+                  onSubmitSuccess={this.handleFeedbackPanelRequestClose}>
+                  <p>Something look off with this chapter? Let us know.</p>
+                </LazyFeedbackForm>
+              </Suspense>
             </Panel.Content>
           )}
         </Panel>

@@ -1,7 +1,7 @@
 // @flow
 
-import React, { Component } from 'react';
-import Loadable from 'react-loadable';
+// $FlowFixMe: Flow doesn't support React 16.6 features
+import React, { Component, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'react-emotion/macro';
 import Button from './button';
@@ -12,10 +12,7 @@ import NewBookmarkPanel from './collection-new-bookmark-panel';
 import Popover from './popover/index';
 import cache from '../store/cache';
 
-const LoadableFeedbackForm = Loadable({
-  loader: () => import('../components/feedback-form'),
-  loading: ComponentLoader,
-});
+const LazyFeedbackForm = lazy(() => import('../components/feedback-form'));
 
 const iconProps = { iconSize: 18, size: 44 };
 const contentClassName = css`
@@ -78,9 +75,11 @@ export default class CollectionHeader extends Component<Props, State> {
           onRequestClose={this.closeFeedbackPanel}>
           {() => (
             <Panel.Content title="Feedback">
-              <LoadableFeedbackForm
-                onSubmitSuccess={this.handleFeedbackSubmitSuccess}
-              />
+              <Suspense fallback={<ComponentLoader />}>
+                <LazyFeedbackForm
+                  onSubmitSuccess={this.handleFeedbackSubmitSuccess}
+                />
+              </Suspense>
             </Panel.Content>
           )}
         </Panel>

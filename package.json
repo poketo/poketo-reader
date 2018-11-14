@@ -30,12 +30,11 @@
     "noisejs": "^2.1.0",
     "normalizr": "^3.2.4",
     "poketo": "^0.2.5",
-    "react": "^16.3.0",
+    "react": "^16.6.3",
     "react-body-classname": "^1.2.0",
-    "react-dom": "^16.3.0",
+    "react-dom": "^16.6.3",
     "react-emotion": "^9.2.8",
     "react-helmet": "^5.2.0",
-    "react-loadable": "^5.4.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scrolllock": "^2.0.1",
@@ -47,11 +46,11 @@
   },
   "devDependencies": {
     "@svgr/core": "^2.4.1",
-    "flow-bin": "^0.79.1",
+    "flow-bin": "^0.86.0",
     "hibiscss": "0.0.9",
     "mz": "^2.7.0",
     "prettier": "^1.14.2",
-    "react-scripts": "^2.0.3",
+    "react-scripts": "^2.1.1",
     "redux-logger": "^3.0.6"
   },
   "prettier": {

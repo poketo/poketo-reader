@@ -3,15 +3,12 @@
 import React from 'react';
 import CircleLoader from '../components/loader-circle';
 
-type Props = {
-  pastDelay: boolean,
-};
+type Props = {};
 
-const LoadingView = (props: Props) =>
-  props.pastDelay ? (
-    <div className="x xj-center xa-center mh-100vh">
-      <CircleLoader />
-    </div>
-  ) : null;
+const LoadingView = (props: Props) => (
+  <div className="x xj-center xa-center">
+    <CircleLoader />
+  </div>
+);
 
 export default LoadingView;
