@@ -85,7 +85,9 @@ export default (options: Options = {}) => (
 
     render() {
       const { isActive, isTop } = this.state;
-      return <WrappedComponent {...this.props} isActive={isActive || isTop} />;
+      const isVisible = isActive || isTop;
+
+      return <WrappedComponent {...this.props} isActive={isVisible} />;
     }
   };
 };
