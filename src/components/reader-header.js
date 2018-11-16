@@ -51,8 +51,6 @@ const isHeaderHidden = css`
 `;
 
 export default class ReaderHeader extends Component<Props, State> {
-  closeRef: ?() => void;
-
   state = {
     isFeedbackPanelOpen: false,
   };
@@ -63,14 +61,6 @@ export default class ReaderHeader extends Component<Props, State> {
 
   handleFeedbackPanelRequestClose = () => {
     this.setState({ isFeedbackPanelOpen: false });
-  };
-
-  handleScrollActiveChange = () => {
-    // Find a way to close the popover
-    console.log('changed');
-    if (this.closeRef) {
-      this.closeRef();
-    }
   };
 
   render() {
@@ -84,7 +74,7 @@ export default class ReaderHeader extends Component<Props, State> {
     } = this.props;
 
     return (
-      <ScrollHide onActiveChange={this.handleScrollActiveChange}>
+      <ScrollHide>
         {({ isActive }) => (
           <Fragment>
             <Panel
@@ -129,61 +119,54 @@ export default class ReaderHeader extends Component<Props, State> {
                 </div>
               )}
               <Popover
-                content={({ close }) => {
-                  this.closeRef = close;
-                  return (
-                    <div className={cx('pa-2', popoverContentClassName)}>
-                      {series && (
-                        <Fragment>
-                          <Link
-                            className="br-3 x xa-center ta-left ph-3 pv-2 hover-bg lh-1d25"
-                            to={utils.getSeriesUrl(seriesId)}>
-                            <div>
-                              <div className="fw-semibold">{series.title}</div>
-                              <div className="fs-14 c-gray3">
-                                {series.site.name}
-                              </div>
+                content={({ close }) => (
+                  <div className={cx('pa-2', popoverContentClassName)}>
+                    {series && (
+                      <Fragment>
+                        <Link
+                          className="br-3 x xa-center ta-left ph-3 pv-2 hover-bg lh-1d25"
+                          to={utils.getSeriesUrl(seriesId)}>
+                          <div>
+                            <div className="fw-semibold">{series.title}</div>
+                            <div className="fs-14 c-gray3">
+                              {series.site.name}
                             </div>
-                          </Link>
-                          <Popover.Divider />
-                          {chapter && (
-                            <Popover.Item
-                              iconBefore={
-                                <Icon name="new-tab" {...iconProps} />
-                              }
-                              label={`Open on ${series.site.name}`}
-                              href={chapter.url}
-                              onClick={close}
-                              target="_blank"
-                              rel="noreferrer noopener"
-                            />
-                          )}
-                          {collection && (
-                            <Popover.Item
-                              iconBefore={
-                                <Icon name="bookmark" {...iconProps} />
-                              }
-                              label="Mark read at this chapter"
-                              onClick={() => {
-                                close();
-                                this.props.onMarkAsReadClick();
-                              }}
-                            />
-                          )}
-                          <Popover.Divider />
+                          </div>
+                        </Link>
+                        <Popover.Divider />
+                        {chapter && (
                           <Popover.Item
-                            iconBefore={<Icon name="flag" {...iconProps} />}
-                            label="Report an issue"
+                            iconBefore={<Icon name="new-tab" {...iconProps} />}
+                            label={`Open on ${series.site.name}`}
+                            href={chapter.url}
+                            onClick={close}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                          />
+                        )}
+                        {collection && (
+                          <Popover.Item
+                            iconBefore={<Icon name="bookmark" {...iconProps} />}
+                            label="Mark read at this chapter"
                             onClick={() => {
                               close();
-                              this.handleOpenFeedbackPanelClick();
+                              this.props.onMarkAsReadClick();
                             }}
                           />
-                        </Fragment>
-                      )}
-                    </div>
-                  );
-                }}
+                        )}
+                        <Popover.Divider />
+                        <Popover.Item
+                          iconBefore={<Icon name="flag" {...iconProps} />}
+                          label="Report an issue"
+                          onClick={() => {
+                            close();
+                            this.handleOpenFeedbackPanelClick();
+                          }}
+                        />
+                      </Fragment>
+                    )}
+                  </div>
+                )}
                 position={Popover.Position.BOTTOM_RIGHT}>
                 <button className="x xa-center o-50p z-2">
                   <Icon name="more-vertical" iconSize={20} />

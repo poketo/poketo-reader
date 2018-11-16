@@ -4,7 +4,6 @@ import { Component, type Node } from 'react';
 
 type Props = {
   children: ({ isActive: boolean }) => Node,
-  onActiveChange: (isActive: boolean) => void,
   threshold: number,
   topThreshold: number,
 };
@@ -25,7 +24,6 @@ export default class ScrollHide extends Component<Props, State> {
   };
 
   static defaultProps = {
-    onActiveChange: () => {},
     threshold: 12,
     topThreshold: 60,
   };
@@ -37,12 +35,6 @@ export default class ScrollHide extends Component<Props, State> {
     this.tickId = requestAnimationFrame(this.tick);
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (this.state.isActive !== prevState.isActive) {
-      this.handleActiveChange();
-    }
-  }
-
   componentWillUnmount() {
     if (this.tickId) {
       cancelAnimationFrame(this.tickId);
@@ -51,10 +43,6 @@ export default class ScrollHide extends Component<Props, State> {
 
   isThresholdExceeded() {
     return Math.abs(this.scrollY - this.lastScrollY) > this.props.threshold;
-  }
-
-  handleActiveChange() {
-    this.props.onActiveChange(this.state.isActive);
   }
 
   tick = () => {
