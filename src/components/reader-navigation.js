@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { css, cx } from 'react-emotion/macro';
 import Icon from '../components/icon';
 import Panel from '../components/panel';
@@ -8,7 +8,7 @@ import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
-import type { ChapterMetadata } from 'poketo';
+import type { ChapterMetadata, Series } from 'poketo';
 import type { Bookmark } from '../../shared/types';
 import type { Collection } from '../types';
 
@@ -16,6 +16,7 @@ type Props = {
   chapter: ChapterMetadata,
   collection?: Collection,
   bookmark?: Bookmark,
+  series: ?Series,
   seriesChapters: ChapterMetadata[],
   showNextPreviousLinks?: boolean,
 };
@@ -25,7 +26,7 @@ type State = {
 };
 
 const pickerClassName = css`
-  line-height: 24px;
+  max-width: 400px;
 `;
 
 const contentClassName = css`
@@ -124,6 +125,7 @@ export default class ReaderNavigation extends Component<Props, State> {
 
   render() {
     const {
+      series,
       chapter,
       collection,
       seriesChapters,
@@ -152,13 +154,24 @@ export default class ReaderNavigation extends Component<Props, State> {
 
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
-          className="PillLink pv-2 ph-3 d-inlineBlock c-white c-pointer ta-center lh-1d25"
+          className={cx(
+            'PillLink pv-2 ph-3 d-inlineBlock ta-center c-white c-pointer lh-1d25',
+            pickerClassName,
+          )}
           onClick={this.handlePickerClick}>
-          <div className={cx('x xa-center xj-center', pickerClassName)}>
-            <span className="mh-1">{chapterLabel}</span>
-            <Icon name="direct-down" size={16} iconSize={16} />
+          {series && <div className="fs-12 o-50p">{series.title}</div>}
+          <div className="fs-16 x xa-center xj-center w-100p">
+            <span className="mh-1 of-hidden to-ellipsis ws-noWrap">
+              {chapterLabel}
+              {chapterTitle && (
+                <Fragment>
+                  {': '}
+                  {chapterTitle}
+                </Fragment>
+              )}
+            </span>
+            <Icon name="direct-down" size={14} iconSize={14} />
           </div>
-          {chapterTitle && <div className="fs-12 o-50p">{chapterTitle}</div>}
         </a>
         {showNextPreviousLinks && (
           <div className="z-2">

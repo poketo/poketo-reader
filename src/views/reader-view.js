@@ -196,6 +196,7 @@ class ReaderViewContainer extends Component<ContainerProps> {
             {showNavigation && (
               <div className="pb-3">
                 <ReaderNavigation
+                  series={series}
                   collection={collection}
                   chapter={chapter}
                   bookmark={bookmark}

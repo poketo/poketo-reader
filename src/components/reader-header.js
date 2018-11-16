@@ -110,6 +110,7 @@ class ReaderHeader extends PureComponent<Props, State> {
           {series && (
             <div className="p-absolute p-fill ph-5 x xa-center xj-center">
               <ReaderNavigation
+                series={series}
                 chapter={chapter}
                 collection={collection}
                 bookmark={bookmark}
