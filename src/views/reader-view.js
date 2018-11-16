@@ -13,7 +13,7 @@ import ReaderHeader from '../components/reader-header';
 import ReaderPageImage from '../components/reader-page-image';
 import ReaderNavigation from '../components/reader-navigation';
 import ReaderFooter from '../components/reader-footer';
-import utils, { invariant } from '../utils';
+import utils from '../utils';
 
 import { getCollectionSlug } from '../store/reducers/navigation';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
