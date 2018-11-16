@@ -145,8 +145,6 @@ class ReaderViewContainer extends Component<ContainerProps> {
 
     const showNavigation = chapter && series && seriesChapters;
 
-    invariant(showNavigation && series, 'Cannot happen');
-
     return (
       <div className="mh-100vh bgc-gray4">
         <BodyClassName className="ff-sans bgc-black" />
@@ -188,11 +186,13 @@ class ReaderViewContainer extends Component<ContainerProps> {
           </div>
         ) : (
           <Fragment>
-            <ReaderView
-              chapter={chapter}
-              series={series}
-              onMarkAsRead={this.handleMarkAsReadPassive}
-            />
+            {series && (
+              <ReaderView
+                chapter={chapter}
+                series={series}
+                onMarkAsRead={this.handleMarkAsReadPassive}
+              />
+            )}
             {showNavigation && (
               <div className="pb-3">
                 <ReaderNavigation
