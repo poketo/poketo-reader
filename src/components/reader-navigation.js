@@ -26,7 +26,8 @@ type State = {
 };
 
 const pickerClassName = css`
-  max-width: 400px;
+  max-width: 75vw;
+  line-height: 1.5;
 `;
 
 const contentClassName = css`
@@ -155,12 +156,12 @@ export default class ReaderNavigation extends Component<Props, State> {
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
           className={cx(
-            'PillLink pv-2 ph-3 d-inlineBlock ta-center c-white c-pointer lh-1d25',
+            'PillLink pv-2 ph-3 d-inlineBlock ta-center c-white c-pointer',
             pickerClassName,
           )}
           onClick={this.handlePickerClick}>
           {series && <div className="fs-12 o-50p">{series.title}</div>}
-          <div className="fs-16 x xa-center xj-center w-100p">
+          <div className="fs-14 x xa-center xj-center w-100p">
             <span className="mh-1 of-hidden to-ellipsis ws-noWrap">
               {chapterLabel}
               {chapterTitle && (
