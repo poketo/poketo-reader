@@ -1,6 +1,7 @@
 // @flow
 
-import React, { Component } from 'react';
+// $FlowFixMe: Flow doesn't support React 16.6 features yet
+import React, { Component, Suspense, lazy } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
 import { cx } from 'react-emotion/macro';
@@ -9,11 +10,10 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import Analytics from './components/analytics';
 import ErrorBoundary from './components/error-boundary';
 import StandaloneStatusBar from './components/standalone-status-bar';
+import CircleLoader from './components/loader-circle';
 
-import AboutView from './views/about-view';
 import FeedView from './views/feed-view';
 import HomeView from './views/home-view';
-import LogInView from './views/log-in-view';
 import SeriesView from './views/series-view';
 import ReaderView from './views/reader-view';
 import NotFoundView from './views/not-found-view';
@@ -23,6 +23,9 @@ import '@rosszurowski/vanilla/lib/vanilla.css';
 import './styles/hibiscss.css';
 import './styles/base.css';
 import './styles/app.css';
+
+const LazyLogInView = lazy(() => import('./views/log-in-view'));
+const LazyAboutView = lazy(() => import('./views/about-view'));
 
 export default class App extends Component<{}> {
   render() {
@@ -38,22 +41,29 @@ export default class App extends Component<{}> {
         />
         <Analytics />
         <StandaloneStatusBar />
-        <ErrorBoundary>
-          <Switch>
-            <Route path="/series/:seriesId" exact component={SeriesView} />
-            <Route path="/read/:chapterId" exact component={ReaderView} />
-            <Redirect
-              from="/c/:collectionSlug/read/:chapterId"
-              to="/read/:chapterId"
-            />
-            <Route path="/c/:collectionSlug" component={FeedView} />
-            <Route path="/login" component={LogInView} />
-            <Route path="/about" component={AboutView} />
-            <Route path="/home" component={HomeView} />
-            <Route path="/" exact component={HomeView} />
-            <Route component={NotFoundView} />
-          </Switch>
-        </ErrorBoundary>
+        <Suspense
+          fallback={
+            <div>
+              <CircleLoader />
+            </div>
+          }>
+          <ErrorBoundary>
+            <Switch>
+              <Route path="/series/:seriesId" exact component={SeriesView} />
+              <Route path="/read/:chapterId" exact component={ReaderView} />
+              <Redirect
+                from="/c/:collectionSlug/read/:chapterId"
+                to="/read/:chapterId"
+              />
+              <Route path="/c/:collectionSlug" component={FeedView} />
+              <Route path="/login" component={LazyLogInView} />
+              <Route path="/about" component={LazyAboutView} />
+              <Route path="/home" component={HomeView} />
+              <Route path="/" exact component={HomeView} />
+              <Route component={NotFoundView} />
+            </Switch>
+          </ErrorBoundary>
+        </Suspense>
       </div>
     );
   }

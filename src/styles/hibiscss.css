@@ -91,6 +91,10 @@
   text-overflow: ellipsis;
 }
 
+.ws-preWrap {
+  white-space: pre-wrap;
+}
+
 .ws-noWrap {
   white-space: nowrap;
 }
