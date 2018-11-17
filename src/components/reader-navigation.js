@@ -19,7 +19,6 @@ type Props = {
   series: ?Series,
   seriesChapters: ChapterMetadata[],
   showNextPreviousLinks?: boolean,
-  showSeriesTitle?: boolean,
 };
 
 type State = {
@@ -61,7 +60,6 @@ const scrollElementIntoView = (el, parent) => {
 export default class ReaderNavigation extends Component<Props, State> {
   static defaultProps = {
     showNextPreviousLinks: false,
-    showSeriesTitle: false,
   };
 
   state = {
@@ -133,7 +131,6 @@ export default class ReaderNavigation extends Component<Props, State> {
       collection,
       seriesChapters,
       showNextPreviousLinks,
-      showSeriesTitle,
     } = this.props;
 
     const chapterIndex = seriesChapters.findIndex(c => c.id === chapter.id);
@@ -163,14 +160,8 @@ export default class ReaderNavigation extends Component<Props, State> {
             pickerClassName,
           )}
           onClick={this.handlePickerClick}>
-          {series &&
-            showSeriesTitle && (
-              <div className="fs-12 o-50p">{series.title}</div>
-            )}
-          <div
-            className={cx('x xa-center xj-center w-100p', {
-              'fs-14': showSeriesTitle,
-            })}>
+          {series && <div className="fs-12 o-50p">{series.title}</div>}
+          <div className="x xa-center xj-center w-100p fs-14">
             <span className="mh-1 of-hidden to-ellipsis ws-noWrap">
               {chapterLabel}
               {chapterTitle && (

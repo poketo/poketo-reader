@@ -115,7 +115,6 @@ export default class ReaderHeader extends Component<Props, State> {
                     bookmark={bookmark}
                     series={series}
                     seriesChapters={seriesChapters}
-                    showSeriesTitle
                   />
                 </div>
               )}
