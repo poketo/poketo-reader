@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { css, cx } from 'react-emotion/macro';
 import Icon from '../components/icon';
 import Panel from '../components/panel';
@@ -8,7 +8,7 @@ import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
 import utils from '../utils';
 
-import type { ChapterMetadata } from 'poketo';
+import type { ChapterMetadata, Series } from 'poketo';
 import type { Bookmark } from '../../shared/types';
 import type { Collection } from '../types';
 
@@ -16,7 +16,9 @@ type Props = {
   chapter: ChapterMetadata,
   collection?: Collection,
   bookmark?: Bookmark,
+  series: ?Series,
   seriesChapters: ChapterMetadata[],
+  showNextPreviousLinks?: boolean,
 };
 
 type State = {
@@ -24,7 +26,8 @@ type State = {
 };
 
 const pickerClassName = css`
-  line-height: 24px;
+  max-width: 75vw;
+  line-height: 1.5;
 `;
 
 const contentClassName = css`
@@ -55,6 +58,10 @@ const scrollElementIntoView = (el, parent) => {
 };
 
 export default class ReaderNavigation extends Component<Props, State> {
+  static defaultProps = {
+    showNextPreviousLinks: false,
+  };
+
   state = {
     showingPanel: false,
   };
@@ -118,7 +125,13 @@ export default class ReaderNavigation extends Component<Props, State> {
   }
 
   render() {
-    const { chapter, collection, seriesChapters } = this.props;
+    const {
+      series,
+      chapter,
+      collection,
+      seriesChapters,
+      showNextPreviousLinks,
+    } = this.props;
 
     const chapterIndex = seriesChapters.findIndex(c => c.id === chapter.id);
     const previousChapter = seriesChapters[chapterIndex + 1] || null;
@@ -130,32 +143,46 @@ export default class ReaderNavigation extends Component<Props, State> {
     return (
       <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-2">
         <div className="z-2">
-          <ReaderChapterLink
-            collectionSlug={collection && collection.slug}
-            chapter={previousChapter}>
-            <Icon name="direct-left" />
-          </ReaderChapterLink>
+          {showNextPreviousLinks && (
+            <ReaderChapterLink
+              collectionSlug={collection && collection.slug}
+              chapter={previousChapter}>
+              <Icon name="direct-left" />
+            </ReaderChapterLink>
+          )}
           {this.renderPickerPanel()}
         </div>
+
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a
-          className="PillLink pv-2 ph-3 d-inlineBlock c-white c-pointer ta-center lh-1d25"
-          onClick={this.handlePickerClick}>
-          <div className={cx('x xa-center xj-center', pickerClassName)}>
-            <span className="ml-1 mr-2">{chapterLabel}</span>
-            <Icon name="direct-down" size={18} iconSize={18} />
-          </div>
-          {chapterTitle && (
-            <div className="mt-1 fs-12 o-50p">{chapterTitle}</div>
+          className={cx(
+            'PillLink pv-2 ph-3 d-inlineBlock ta-center c-white c-pointer',
+            pickerClassName,
           )}
+          onClick={this.handlePickerClick}>
+          {series && <div className="fs-12 o-50p">{series.title}</div>}
+          <div className="x xa-center xj-center w-100p fs-14">
+            <span className="mh-1 of-hidden to-ellipsis ws-noWrap">
+              {chapterLabel}
+              {chapterTitle && (
+                <Fragment>
+                  {': '}
+                  {chapterTitle}
+                </Fragment>
+              )}
+            </span>
+            <Icon name="direct-down" size={14} iconSize={14} />
+          </div>
         </a>
-        <div className="z-2">
-          <ReaderChapterLink
-            collectionSlug={collection && collection.slug}
-            chapter={nextChapter}>
-            <Icon name="direct-right" />
-          </ReaderChapterLink>
-        </div>
+        {showNextPreviousLinks && (
+          <div className="z-2">
+            <ReaderChapterLink
+              collectionSlug={collection && collection.slug}
+              chapter={nextChapter}>
+              <Icon name="direct-right" />
+            </ReaderChapterLink>
+          </div>
+        )}
       </nav>
     );
   }

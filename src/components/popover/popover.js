@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, type Node, type Element } from 'react';
+import ScrollLock from 'react-scrolllock';
 import Positioner from './positioner';
 import PopoverStateless from './popover-stateless';
 import PopoverItem from './popover-item';
@@ -240,6 +241,7 @@ export default class Popover extends Component<Props, State> {
 
           return (
             <PopoverStateless ref={ref} className={className} style={style}>
+              <ScrollLock />
               {typeof content === 'function'
                 ? content({ close: this.close })
                 : content}
