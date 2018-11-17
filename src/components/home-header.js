@@ -32,7 +32,7 @@ export default class Header extends Component<Props, State> {
         <div className="x xj-spaceBetween pa-3">
           <Link to="/">
             <div className="x xa-center c-coral">
-              <IconPoketo height={32} />
+              <IconPoketo width={24} height={24} />
               {overlay === false && (
                 <IconPoketoWordmark
                   className="c-black ml-2"

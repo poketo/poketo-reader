@@ -67,20 +67,6 @@ export default () => (
             </p>
           </QuestionContainer>
           <QuestionContainer
-            id="scanlators"
-            question="How does reading on Poketo affect scanlators?">
-            <p>
-              Not sure. Lots of effort goes into scanlating series, and we don't
-              want Poketo to take away from traffic, ad revenue or other ways
-              scanlators support their work.
-            </p>
-            <p>
-              We're open to figuring something out though. If you're a scanlator
-              and have opinions about how Poketo can help,{' '}
-              <a href={`mailto:${config.email}`}>reach out!</a>
-            </p>
-          </QuestionContainer>
-          <QuestionContainer
             id="mobile-desktop"
             question="Is this a mobile app?">
             <p>
@@ -94,14 +80,42 @@ export default () => (
             question="Can I use Poketo without an invite?">
             <p>
               You can! Poketo also provides a standalone reader. The simplest
-              way to use it is to drag the link below to your bookmarks. Using
-              it on any supported site will open the chapter you're reading on
-              Poketo:
+              way to use it is via this bookmarklet. Using it on any supported
+              site will open the chapter you're reading on Poketo:
+            </p>
+            <ul>
+              <li>
+                On a <strong>desktop computer</strong>, drag the following link
+                to your bookmark bar:{' '}
+                <a href={config.bookmarkletCode} title="Read on Poketo">
+                  Read on Poketo
+                </a>
+              </li>
+              <li>
+                On <strong>mobile</strong>, it is a little more complicated.
+                Follow this guide:{' '}
+                <a
+                  href={`${
+                    config.githubWikiUrl
+                  }/Adding-the-"Read-on-Poketo"-bookmarklet`}>
+                  Adding the "Read on Poketo" bookmarklet
+                </a>
+                .
+              </li>
+            </ul>
+          </QuestionContainer>
+          <QuestionContainer
+            id="scanlators"
+            question="How does reading on Poketo affect scanlators?">
+            <p>
+              Not sure. Lots of effort goes into scanlating series, and we don't
+              want Poketo to take away from traffic, ad revenue or other ways
+              scanlators support their work.
             </p>
             <p>
-              <a href={config.bookmarkletCode} title="Read on Poketo">
-                Read on Poketo
-              </a>
+              We're open to figuring something out though. If you're a scanlator
+              and have opinions about how Poketo can help,{' '}
+              <a href={`mailto:${config.email}`}>reach out!</a>
             </p>
           </QuestionContainer>
           <h2 id="help" className="mt-5 mb-3 fs-36 fw-semibold">
@@ -110,13 +124,13 @@ export default () => (
           <p>
             Some guides are available{' '}
             <a
-              href="https://github.com/poketo/site/wiki"
+              href={config.githubWikiUrl}
               target="_blank"
               rel="noreferrer noopener">
               on our wiki
             </a>
             . If you're having trouble with something, feel free to drop a note
-            to <a href={`mailto:${config.email}`}>{config.email}</a>
+            to <a href={`mailto:${config.email}`}>{config.email}</a>.
           </p>
         </div>
         <Footer />
