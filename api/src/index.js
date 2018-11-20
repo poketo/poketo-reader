@@ -1,5 +1,3 @@
-// @flow
-
 import Koa from 'koa';
 import route from 'koa-route';
 import bodyparser from 'koa-bodyparser';
@@ -8,9 +6,9 @@ import cors from '@koa/cors';
 
 import pmap from 'p-map';
 import shortid from 'shortid';
+import poketo from 'poketo';
 
 import pkg from '../package';
-import poketo from 'poketo';
 import { Collection } from './db';
 import utils from './utils';
 
@@ -20,7 +18,7 @@ app.use(cors());
 app.use(bodyparser());
 app.use(logger({ name: pkg.name }));
 
-const getErrorStatus = (err): number => {
+const getErrorStatus = err => {
   switch (err.code) {
     case 'INVALID_URL':
     case 'UNSUPPORTED_SITE':
@@ -44,7 +42,7 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
-    const body: { message: string, code?: string } = {
+    const body = {
       message: err.message,
     };
 
@@ -302,13 +300,17 @@ app.use(route.get('/chapter', fetch));
  * Server
  */
 
-const PORT = process.env.PORT || '3001';
+if (process.env.BACKPACK === 'true') {
+  const PORT = process.env.PORT || '3001';
 
-app.listen(PORT, err => {
-  if (err) {
-    console.error(err);
-    return;
-  }
+  app.listen(PORT, err => {
+    if (err) {
+      console.error(err);
+      return;
+    }
 
-  console.log(`> Listening on http://localhost:${PORT}`);
-});
+    console.log(`> Listening on http://localhost:${PORT}`);
+  });
+}
+
+export default app.callback();

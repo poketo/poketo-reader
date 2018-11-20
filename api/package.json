@@ -2,9 +2,8 @@
   "name": "poketo-service",
   "version": "0.0.2",
   "private": true,
-  "main": "build/main.js",
   "scripts": {
-    "start": "backpack dev | bunyan -o short",
+    "start": "BACKPACK=true backpack dev | bunyan -o short",
     "build": "backpack build",
     "lint": "xo && flow",
     "test": "jest"
