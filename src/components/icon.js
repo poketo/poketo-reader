@@ -5,6 +5,7 @@ import styled, { cx } from 'react-emotion/macro';
 
 const Icons = {
   add: require('./icon-add').default,
+  archive: require('./icon-archive').default,
   'arrow-left': require('./icon-arrow-left').default,
   'arrow-right': require('./icon-arrow-right').default,
   book: require('./icon-book').default,

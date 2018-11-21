@@ -26,6 +26,7 @@ import './styles/app.css';
 
 const LazyLogInView = lazy(() => import('./views/log-in-view'));
 const LazyAboutView = lazy(() => import('./views/about-view'));
+const LazyExportView = lazy(() => import('./views/export-view'));
 
 export default class App extends Component<{}> {
   render() {
@@ -43,7 +44,7 @@ export default class App extends Component<{}> {
         <StandaloneStatusBar />
         <Suspense
           fallback={
-            <div>
+            <div className="x xa-center xj-center w-100p h-100p">
               <CircleLoader />
             </div>
           }>
@@ -55,7 +56,12 @@ export default class App extends Component<{}> {
                 from="/c/:collectionSlug/read/:chapterId"
                 to="/read/:chapterId"
               />
-              <Route path="/c/:collectionSlug" component={FeedView} />
+              <Route path="/c/:collectionSlug" exact component={FeedView} />
+              <Route
+                exact
+                path="/c/:collectionSlug/export"
+                component={LazyExportView}
+              />
               <Route path="/login" component={LazyLogInView} />
               <Route path="/about" component={LazyAboutView} />
               <Route path="/home" component={HomeView} />
