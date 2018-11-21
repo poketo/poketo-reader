@@ -60,6 +60,5 @@ declare module 'poketo' {
  */
 
 declare module 'poketo/supports' {
-  declare function supportsUrl(url: string): boolean;
-  declare export default supportsUrl;
+  declare export default (url: string) => boolean;
 }
