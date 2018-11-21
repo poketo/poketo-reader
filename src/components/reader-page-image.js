@@ -81,13 +81,13 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
 
     const target = e.currentTarget;
     const isPlaceholder =
-      target.width === PLACEHOLDER_SIZE_IN_PX &&
-      target.height === PLACEHOLDER_SIZE_IN_PX;
+      target.naturalWidth === PLACEHOLDER_SIZE_IN_PX &&
+      target.naturalHeight === PLACEHOLDER_SIZE_IN_PX;
 
     if (!isPlaceholder) {
       const dimensions: PageDimensions = {
-        width: target.width,
-        height: target.height,
+        width: target.naturalWidth,
+        height: target.naturalHeight,
       };
 
       this.props.onImageDimensionsLoad(dimensions);
