@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import { cx, css } from 'react-emotion/macro';
 import Button from './button';
 import Icon from './icon';
+import type { PageDimensions } from '../types';
 
 if (typeof global.window !== 'undefined') {
   global.window.lazySizesConfig = window.lazySizesConfig || {};
@@ -49,16 +50,24 @@ type Props = {
     width?: number,
     height?: number,
   },
+  defaultWidth: number,
+  defaultHeight: number,
+  onImageDimensionsLoad: PageDimensions => void,
 };
 
 type State = {
   hasError: boolean,
 };
 
-const DEFAULT_WIDTH = 800;
-const DEFAULT_HEIGHT = 1050;
+const PLACEHOLDER_SIZE_IN_PX = 1;
 
 export default class ReaderPageImage extends PureComponent<Props, State> {
+  static defaultProps = {
+    defaultWidth: 800,
+    defaultHeight: 1050,
+    onImageDimensionsLoad: () => {},
+  };
+
   state = {
     hasError: false,
   };
@@ -69,6 +78,20 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
 
   handleLoad = (e: SyntheticEvent<HTMLImageElement>) => {
     this.setState({ hasError: false });
+
+    const target = e.currentTarget;
+    const isPlaceholder =
+      target.width === PLACEHOLDER_SIZE_IN_PX &&
+      target.height === PLACEHOLDER_SIZE_IN_PX;
+
+    if (!isPlaceholder) {
+      const dimensions: PageDimensions = {
+        width: target.width,
+        height: target.height,
+      };
+
+      this.props.onImageDimensionsLoad(dimensions);
+    }
   };
 
   handleRetryClick = (e: SyntheticMouseEvent<HTMLButtonElement>) => {
@@ -76,9 +99,9 @@ export default class ReaderPageImage extends PureComponent<Props, State> {
   };
 
   render() {
-    const { page } = this.props;
+    const { page, defaultWidth, defaultHeight } = this.props;
     const { hasError } = this.state;
-    const { width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT } = page;
+    const { width = defaultWidth, height = defaultHeight } = page;
 
     return (
       <span className={styles.container}>
