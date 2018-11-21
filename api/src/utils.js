@@ -1,8 +1,10 @@
+// @flow
+
 import { URL } from 'url';
 import normalizeUrl from 'normalize-url';
 
 export default {
-  isUrl: input => {
+  isUrl: (input: string) => {
     try {
       // eslint-disable-next-line no-new
       new URL(normalizeUrl(input));
@@ -13,7 +15,7 @@ export default {
     return true;
   },
 
-  isPoketoId: input => {
+  isPoketoId: (input: string) => {
     const components = input.split(':');
     const isValidId = components.length > 1 && components.length < 4;
     return isValidId;
@@ -24,13 +26,13 @@ export default {
   /*
    * Returns an Object keyed by the given function.
    */
-  keyArrayBy: (arr, getKey) =>
+  keyArrayBy: (arr: Array<Object>, getKey: (obj: Object) => string) =>
     arr.reduce((a, b) => ({ ...a, [getKey(b)]: b }), {}),
 
   /*
    * Returns a new Array with the given index replaced with the new item.
    */
-  replaceItemAtIndex: (arr, index, item) => [
+  replaceItemAtIndex: (arr: Array<mixed>, index: number, item: mixed) => [
     ...arr.slice(0, index),
     item,
     ...arr.slice(index + 1),
@@ -39,7 +41,7 @@ export default {
   /*
    * Returns a new Array with the given index removed.
    */
-  deleteItemAtIndex: (arr, index) => [
+  deleteItemAtIndex: (arr: Array<mixed>, index: number) => [
     ...arr.slice(0, index),
     ...arr.slice(index + 1),
   ],

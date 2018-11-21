@@ -5,6 +5,7 @@
   "scripts": {
     "start": "BACKPACK=true backpack dev | bunyan -o short",
     "build": "backpack build",
+    "now-build": "mv src/ typed-src/ && yarn flow-remove-types typed-src/ -d src/",
     "lint": "xo && flow",
     "test": "jest"
   },
@@ -26,6 +27,7 @@
     "babel-preset-flow": "^6.23.0",
     "dotenv": "^5.0.0",
     "flow-bin": "^0.79.1",
+    "flow-remove-types": "^1.2.3",
     "got": "^9.3.2",
     "jest": "^22.2.1",
     "prettier": "^1.14.2",

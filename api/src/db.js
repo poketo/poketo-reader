@@ -1,6 +1,8 @@
+// @flow
+
 import { Database, Model } from 'mongorito';
-// import type { Series } from 'poketo';
-// import type { Bookmark } from '../../shared/types';
+import type { Series } from 'poketo';
+import type { Bookmark } from '../../shared/types';
 import utils from './utils';
 
 if (process.env.MONGO_URL === undefined && process.env.NOW !== 'true') {
@@ -13,9 +15,9 @@ export class Collection extends Model {}
 
 const extendCollection = Collection => {
   Collection.prototype.addBookmark = function(
-    series,
-    linkToUrl = null,
-    lastReadChapterId = null,
+    series: Series,
+    linkToUrl: ?string = null,
+    lastReadChapterId: string | null = null,
   ) {
     const bookmarks = this.get('bookmarks');
     const existingBookmark = bookmarks.find(
@@ -23,12 +25,14 @@ const extendCollection = Collection => {
     );
 
     if (existingBookmark) {
-      const err = new Error(`A bookmark for ${series.url} already exists!`);
+      const err: any = new Error(
+        `A bookmark for ${series.url} already exists!`,
+      );
       err.status = 400;
       throw err;
     }
 
-    const bookmark = {
+    const bookmark: Bookmark = {
       id: series.id,
       url: series.url,
       lastReadChapterId,
@@ -51,7 +55,7 @@ const extendCollection = Collection => {
     );
 
     if (bookmarkIndex === -1) {
-      const err = new Error(`Could not find bookmark with ID ${seriesId}`);
+      const err: any = new Error(`Could not find bookmark with ID ${seriesId}`);
       err.status = 404;
       throw err;
     }
@@ -59,7 +63,7 @@ const extendCollection = Collection => {
     const newBookmarks = utils.deleteItemAtIndex(bookmarks, bookmarkIndex);
 
     if (newBookmarks.length === 0) {
-      const err = new Error(
+      const err: any = new Error(
         `Cannot delete last bookmark in a collection. Delete the collection instead.`,
       );
       err.status = 400;

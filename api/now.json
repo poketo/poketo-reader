@@ -3,7 +3,7 @@
   "name": "poketo-service",
   "alias": "api.poketo.app",
   "public": true,
-  "builds": [{ "src": "src/index.js", "use": "@now/node" }],
+  "builds": [{ "src": "src/index.js", "use": "@now/node-server@canary" }],
   "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }],
   "env": {
     "MONGO_URL": "@poketo-mongo-url"

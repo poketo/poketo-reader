@@ -1,3 +1,5 @@
+// @flow
+
 import Koa from 'koa';
 import route from 'koa-route';
 import bodyparser from 'koa-bodyparser';
@@ -42,7 +44,7 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
-    const body = {
+    const body: { message: string, code?: string } = {
       message: err.message,
     };
 
@@ -260,7 +262,7 @@ const getUrl = ctx => {
   ctx.assert(
     Boolean(url) || Boolean(id),
     400,
-    `Please provider either 'id' or 'url' as a query parameter.`,
+    `Please provide either 'id' or 'url' as a query parameter.`,
   );
 
   return url ? url : poketo.constructUrl(id);
@@ -300,17 +302,13 @@ app.use(route.get('/chapter', fetch));
  * Server
  */
 
-if (process.env.BACKPACK === 'true') {
-  const PORT = process.env.PORT || '3001';
+const PORT = process.env.PORT || '3001';
 
-  app.listen(PORT, err => {
-    if (err) {
-      console.error(err);
-      return;
-    }
+app.listen(PORT, err => {
+  if (err) {
+    console.error(err);
+    return;
+  }
 
-    console.log(`> Listening on http://localhost:${PORT}`);
-  });
-}
-
-export default app.callback();
+  console.log(`> Listening on http://localhost:${PORT}`);
+});
