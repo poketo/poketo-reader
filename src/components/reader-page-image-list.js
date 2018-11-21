@@ -28,8 +28,8 @@ function getMostCommonPageDimensions(
   dimensions: PageDimensions[],
 ): PageDimensions {
   if (dimensions.length < 2) {
-    // If there's less than 3 pages, getting the most common dimensions is
-    // likely to be wrong, since the first few scans of a chapter often have
+    // If there's less than 2 pages loaded, getting the most common dimensions
+    // is likely to be wrong, since the first few pages of a chapter often have
     // title/introductory pages which are different ratios.
     return { width: undefined, height: undefined };
   }
