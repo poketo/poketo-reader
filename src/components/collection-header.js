@@ -63,6 +63,8 @@ export default class CollectionHeader extends Component<Props, State> {
   };
 
   render() {
+    const { collectionSlug } = this.props;
+
     return (
       <header className="x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
@@ -112,6 +114,12 @@ export default class CollectionHeader extends Component<Props, State> {
                   close();
                 }}
                 iconBefore={<Icon name="refresh" {...iconProps} />}
+              />
+              <Popover.Item
+                label="Export data"
+                href={`/c/${collectionSlug}/export`}
+                onClick={close}
+                iconBefore={<Icon name="archive" {...iconProps} />}
               />
               <Popover.Item
                 onClick={() => {

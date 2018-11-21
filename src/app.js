@@ -44,7 +44,7 @@ export default class App extends Component<{}> {
         <StandaloneStatusBar />
         <Suspense
           fallback={
-            <div>
+            <div className="x xa-center xj-center w-100p h-100p">
               <CircleLoader />
             </div>
           }>

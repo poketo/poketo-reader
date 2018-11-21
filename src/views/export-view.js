@@ -21,6 +21,16 @@ type State = {
   isLoading: boolean,
 };
 
+function downloadCollection(collectionSlug) {
+  return api.fetchCollection(collectionSlug).then(response => {
+    const filename = `poketo-archive-${utils.getTimestamp()}`;
+    const mimeType = 'application/json';
+    const collectionJson = JSON.stringify(response.data, null, 2);
+
+    download(filename, mimeType, collectionJson);
+  });
+}
+
 export default class ExportView extends Component<Props, State> {
   state = {
     isLoading: false,
@@ -32,15 +42,8 @@ export default class ExportView extends Component<Props, State> {
 
     this.setState({ isLoading: true });
 
-    api
-      .fetchCollection(collectionSlug)
-      .then(response => {
-        const filename = `poketo-archive-${utils.getTimestamp()}`;
-        const mimeType = 'application/json';
-        const collectionJson = JSON.stringify(response.data, null, 2);
-
-        download(filename, mimeType, collectionJson);
-
+    downloadCollection(collectionSlug)
+      .then(() => {
         this.setState({ isLoading: false });
       })
       .catch(err => {
@@ -55,9 +58,9 @@ export default class ExportView extends Component<Props, State> {
     const { isLoading } = this.state;
 
     return (
-      <div className="pb-6 h-100p">
+      <div className="h-100p">
         <CollectionHeader collectionSlug={collectionSlug} />
-        <div className="mw-500 mh-auto pt-4 pt-5-m ph-3 ph-0-m">
+        <div className="mw-500 mh-auto pt-4 pt-5-m ph-3 ph-0-m pb-6">
           <Markdown>
             <h1>Export Data</h1>
             <p>
