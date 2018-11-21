@@ -26,7 +26,7 @@ type State = {
 };
 
 const pickerClassName = css`
-  max-width: 75vw;
+  max-width: 70vw;
   line-height: 1.5;
 `;
 
