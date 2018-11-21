@@ -2,16 +2,27 @@
 
 import React, { Component } from 'react';
 import { type RouterHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Head from 'react-helmet';
 
 import AuthRedirect from '../components/auth-redirect';
 import Button from '../components/button';
 import HomeHeader from '../components/home-header';
 import Input from '../components/input';
-import utils from '../utils';
+import {
+  getCollectionSlug,
+  setDefaultCollection,
+} from '../store/reducers/navigation';
 
 type Props = {
   history: RouterHistory,
+  login: (slug: string) => void,
+  collectionSlug?: string,
+  match: {
+    params: {
+      collectionSlug?: string,
+    },
+  },
 };
 type State = {
   code: string,
@@ -22,17 +33,34 @@ class LogInView extends Component<Props, State> {
     code: '',
   };
 
+  componentDidMount() {
+    const { match, login, collectionSlug: localStorageSlug } = this.props;
+    const { collectionSlug: urlSlug } = match.params;
+
+    // `urlSlug` is first to give the URL priority (to make it easier to change
+    // between multiple collections.)
+    if (urlSlug) {
+      login(urlSlug);
+      return;
+    }
+
+    if (localStorageSlug) {
+      login(localStorageSlug);
+      return;
+    }
+  }
+
   handleCodeChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({ code: e.currentTarget.value });
   };
 
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
-    const { history } = this.props;
+    const { login } = this.props;
     const { code: slug } = this.state;
 
     e.preventDefault();
 
-    history.push(utils.getCollectionUrl(slug));
+    login(slug);
   };
 
   render() {
@@ -77,4 +105,21 @@ class LogInView extends Component<Props, State> {
   }
 }
 
-export default LogInView;
+function mapStateToProps(state) {
+  const collectionSlug = getCollectionSlug(state);
+  return { collectionSlug };
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    login(slug) {
+      dispatch(setDefaultCollection(slug));
+      ownProps.history.push('/feed');
+    },
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LogInView);

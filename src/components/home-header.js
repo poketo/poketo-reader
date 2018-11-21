@@ -46,16 +46,14 @@ export default class Header extends Component<Props, State> {
             <NavLink to="/about" activeClassName="o-50p">
               About
             </NavLink>
-            {utils.isStandalone() && (
-              <Route
-                path="/login"
-                children={({ match }) => (
-                  <Link to="/login" className={cx('ml-3', { 'o-50p': match })}>
-                    Log In
-                  </Link>
-                )}
-              />
-            )}
+            <Route
+              path="/login"
+              children={({ match }) => (
+                <Link to="/login" className={cx('ml-3', { 'o-50p': match })}>
+                  Log In
+                </Link>
+              )}
+            />
           </nav>
         </div>
       </header>

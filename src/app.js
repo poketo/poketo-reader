@@ -51,9 +51,6 @@ export default class App extends Component<{}> {
           }>
           <ErrorBoundary>
             <Switch>
-              <Route path="/series/:seriesId" exact component={SeriesView} />
-              <Route path="/read/:chapterId" exact component={ReaderView} />
-
               <AuthRoute path="/(feed|library)" component={FeedView} />
               <AuthRoute
                 exact
@@ -61,19 +58,22 @@ export default class App extends Component<{}> {
                 component={LazyExportView}
               />
 
+              {/* Public routes */}
+              <Route path="/series/:seriesId" exact component={SeriesView} />
+              <Route path="/read/:chapterId" exact component={ReaderView} />
+              <Route path="/login" component={LazyLogInView} />
+              <Route path="/login/:collectionSlug" component={LazyLogInView} />
+              <Route path="/c/:collectionSlug" component={LazyLogInView} />
+              <Route path="/about" component={LazyAboutView} />
+              <Route path="/home" component={HomeView} />
+              <Route path="/" exact component={HomeView} />
+
               {/* Redirect legacy urls */}
               <Redirect
                 from="/c/:collectionSlug/read/:chapterId"
                 to="/read/:chapterId"
               />
-              <Redirect from="/c/:collectionSlug/" to="/feed" />
-              <Redirect from="/c/:collectionSlug/library" to="/library" />
 
-              {/* Public routes */}
-              <Route path="/login" component={LazyLogInView} />
-              <Route path="/about" component={LazyAboutView} />
-              <Route path="/home" component={HomeView} />
-              <Route path="/" exact component={HomeView} />
               <Route component={NotFoundView} />
             </Switch>
           </ErrorBoundary>

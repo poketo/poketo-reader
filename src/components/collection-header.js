@@ -4,14 +4,19 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'react-emotion/macro';
+import { connect } from 'react-redux';
+
 import Button from './button';
 import ComponentLoader from './loader-component';
 import Icon from './icon';
 import Panel from './panel';
-import NewBookmarkPanel from './collection-new-bookmark-panel';
 import Popover from './popover/index';
 import cache from '../store/cache';
+import { clearDefaultCollection } from '../store/reducers/navigation';
 
+const LazyNewBookmarkPanel = lazy(() =>
+  import('../components/collection-new-bookmark-panel'),
+);
 const LazyFeedbackForm = lazy(() => import('../components/feedback-form'));
 
 const iconProps = { iconSize: 18, size: 44 };
@@ -26,7 +31,7 @@ type State = {
   isBookmarkPanelShown: boolean,
 };
 
-export default class CollectionHeader extends Component<Props, State> {
+class CollectionHeader extends Component<Props, State> {
   state = {
     isFeedbackPanelShown: false,
     isBookmarkPanelShown: false,
@@ -85,7 +90,11 @@ export default class CollectionHeader extends Component<Props, State> {
           isShown={this.state.isBookmarkPanelShown}
           onRequestClose={this.closeAddBookmarkPanel}>
           {() => (
-            <NewBookmarkPanel onRequestClose={this.closeAddBookmarkPanel} />
+            <Suspense fallback={<ComponentLoader />}>
+              <LazyNewBookmarkPanel
+                onRequestClose={this.closeAddBookmarkPanel}
+              />
+            </Suspense>
           )}
         </Panel>
         <Popover
@@ -125,6 +134,7 @@ export default class CollectionHeader extends Component<Props, State> {
               <Popover.Divider />
               <Popover.Item
                 onClick={() => {
+                  this.props.logout();
                   close();
                 }}
                 label="Log out"
@@ -141,3 +151,20 @@ export default class CollectionHeader extends Component<Props, State> {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    logout() {
+      dispatch(clearDefaultCollection());
+    },
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CollectionHeader);
