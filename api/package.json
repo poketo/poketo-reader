@@ -3,9 +3,9 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "start": "BACKPACK=true backpack dev | bunyan -o short",
+    "start": "backpack dev | bunyan -o short",
     "build": "backpack build",
-    "now-build": "mv src/ typed-src/ && yarn flow-remove-types typed-src/ -d src/",
+    "now-build": "[[ -v NOW ]] && mv src/ typed-src/ && yarn flow-remove-types typed-src/ -d src/",
     "lint": "xo && flow",
     "test": "jest"
   },
