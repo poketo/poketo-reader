@@ -5,7 +5,7 @@
   "scripts": {
     "start": "backpack dev | bunyan -o short",
     "build": "backpack build",
-    "now-build": "[[ -v NOW ]] && mv src/ typed-src/ && yarn flow-remove-types typed-src/ -d src/",
+    "now-build": "if [ -z ${NOW+x} ]; then echo 'now-build should not be run locally'; else mv src/ typed-src/ && yarn flow-remove-types typed-src/ -d src/; fi",
     "lint": "xo && flow",
     "test": "jest"
   },
