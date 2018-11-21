@@ -1,15 +1,14 @@
 // @flow
 
+import 'now-env';
 import { Database, Model } from 'mongorito';
 import type { Series } from 'poketo';
 import type { Bookmark } from '../../shared/types';
 import utils from './utils';
 
-if (process.env.MONGO_URL === undefined && process.env.NOW !== 'true') {
-  require('dotenv').config();
-}
-
-const db = new Database(process.env.MONGO_URL);
+const db = new Database(process.env.MONGO_URL, {
+  reconnectTries: 3,
+});
 
 export class Collection extends Model {}
 

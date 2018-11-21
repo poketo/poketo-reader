@@ -1,5 +1,6 @@
 # Ignore env variables
 .env
+now-secrets.json
 
 # Ignore npm/yarn scraps
 node_modules/
