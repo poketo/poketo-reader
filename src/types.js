@@ -2,6 +2,11 @@ import type { ChapterMetadata } from 'poketo';
 
 export type HomeTabId = 'now-reading' | 'library';
 
+export type PageDimensions = {
+  width: number,
+  height: number,
+};
+
 export type FeedItem = {
   linkTo?: string,
   lastReadChapterId: BookmarkLastReadChapterId,

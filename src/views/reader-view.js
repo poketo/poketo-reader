@@ -10,7 +10,7 @@ import Button from '../components/button';
 import DotLoader from '../components/loader-dots';
 import Icon from '../components/icon';
 import ReaderHeader from '../components/reader-header';
-import ReaderPageImage from '../components/reader-page-image';
+import ReaderPageImageList from '../components/reader-page-image-list';
 import ReaderNavigation from '../components/reader-navigation';
 import ReaderFooter from '../components/reader-footer';
 import utils from '../utils';
@@ -274,11 +274,7 @@ class ReaderView extends Component<Props> {
         </Head>
         <div className="pt-5 pb-4 mh-auto w-90p-m ta-center mw-900">
           <div className="pt-4">
-            {chapter.pages.map(page => (
-              <div key={page.id} className="mb-2 mb-3-m">
-                <ReaderPageImage page={page} />
-              </div>
-            ))}
+            <ReaderPageImageList pages={chapter.pages} />
           </div>
         </div>
       </Fragment>
