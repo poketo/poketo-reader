@@ -56,12 +56,12 @@ export default class App extends Component<{}> {
                 from="/c/:collectionSlug/read/:chapterId"
                 to="/read/:chapterId"
               />
-              <Route path="/c/:collectionSlug" exact component={FeedView} />
               <Route
                 exact
                 path="/c/:collectionSlug/export"
                 component={LazyExportView}
               />
+              <Route path="/c/:collectionSlug" component={FeedView} />
               <Route path="/login" component={LazyLogInView} />
               <Route path="/about" component={LazyAboutView} />
               <Route path="/home" component={HomeView} />
