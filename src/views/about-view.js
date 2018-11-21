@@ -7,6 +7,7 @@ import Header from '../components/home-header';
 import Footer from '../components/home-footer';
 import HomeLayout from '../components/home-layout';
 import ScrollReset from '../components/scroll-reset';
+import Markdown from '../components/markdown';
 import config from '../config';
 
 const QuestionContainer = ({ id, question, children }) => (
@@ -27,7 +28,7 @@ export default () => (
     <ScrollReset />
     <div className="mw-500 mh-auto pt-4 pt-5-m">
       <div className="pv-4 ph-3 ph-0-m">
-        <div className="Markdown">
+        <Markdown>
           <p className="fs-24 mb-3 fw-semibold">
             Poketo is a web manga reader.
           </p>
@@ -132,7 +133,7 @@ export default () => (
             . If you're having trouble with something, feel free to drop a note
             to <a href={`mailto:${config.email}`}>{config.email}</a>.
           </p>
-        </div>
+        </Markdown>
         <Footer />
       </div>
     </div>
