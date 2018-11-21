@@ -38,12 +38,12 @@ class CollectionPage extends Component<Props> {
 
     return (
       <div className="pb-6 h-100p">
-        <CollectionHeader collectionSlug={collection.slug} />
+        <CollectionHeader />
         <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3 pe-none">
           <Toast isShown={isFetching}>Syncing...</Toast>
         </div>
         {/* <Releases collectionSlug={collection.slug} bookmarks={bookmarks} /> */}
-        <Feed collectionSlug={collection.slug} bookmarks={bookmarks} />
+        <Feed bookmarks={bookmarks} />
       </div>
     );
   }

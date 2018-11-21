@@ -22,7 +22,7 @@ const mapStateToProps = state => {
   const lastSeenTab = getLastSeenTab(state);
 
   const backEnding = lastSeenTab === 'now-reading' ? '' : 'library';
-  const backTo = collectionSlug ? `/c/${collectionSlug}/${backEnding}` : '/';
+  const backTo = collectionSlug ? `/${backEnding}` : '/';
 
   return { backTabId: lastSeenTab, backTo };
 };

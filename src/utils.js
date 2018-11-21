@@ -84,7 +84,7 @@ const utils = {
   encodeId: (id: string) => encodeURIComponent(id).replace(/%3A/g, ':'),
   getSeriesUrl: (seriesId: string) => `/series/${utils.encodeId(seriesId)}`,
   getReaderUrl: (chapterId: string) => `/read/${utils.encodeId(chapterId)}`,
-  getCollectionUrl: (collectionSlug: string) => `/c/${collectionSlug}`,
+  getCollectionUrl: (collectionSlug: string) => `/feed`,
   getRedditUrl: (seriesTitle: string, sortByNew: boolean = true) =>
     `https://www.reddit.com/r/manga/search?q=${encodeURIComponent(
       seriesTitle,

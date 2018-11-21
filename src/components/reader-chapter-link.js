@@ -8,12 +8,11 @@ import { Link } from 'react-router-dom';
 import utils from '../utils';
 
 type Props = {
-  collectionSlug: ?string,
   chapter: ?ChapterMetadata,
   children: Node,
 };
 
-const ReaderChapterLink = ({ collectionSlug, chapter, children }: Props) => {
+const ReaderChapterLink = ({ chapter, children }: Props) => {
   const disabled = !chapter;
   const to = chapter ? utils.getReaderUrl(chapter.id) : '/';
 

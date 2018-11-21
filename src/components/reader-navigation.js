@@ -10,11 +10,9 @@ import utils from '../utils';
 
 import type { ChapterMetadata, Series } from 'poketo';
 import type { Bookmark } from '../../shared/types';
-import type { Collection } from '../types';
 
 type Props = {
   chapter: ChapterMetadata,
-  collection?: Collection,
   bookmark?: Bookmark,
   series: ?Series,
   seriesChapters: ChapterMetadata[],
@@ -128,7 +126,6 @@ export default class ReaderNavigation extends Component<Props, State> {
     const {
       series,
       chapter,
-      collection,
       seriesChapters,
       showNextPreviousLinks,
     } = this.props;
@@ -144,9 +141,7 @@ export default class ReaderNavigation extends Component<Props, State> {
       <nav className="p-relative c-white x xa-center xj-spaceBetween mw-500 mh-auto pv-2 ph-2">
         <div className="z-2">
           {showNextPreviousLinks && (
-            <ReaderChapterLink
-              collectionSlug={collection && collection.slug}
-              chapter={previousChapter}>
+            <ReaderChapterLink chapter={previousChapter}>
               <Icon name="direct-left" />
             </ReaderChapterLink>
           )}
@@ -176,9 +171,7 @@ export default class ReaderNavigation extends Component<Props, State> {
         </a>
         {showNextPreviousLinks && (
           <div className="z-2">
-            <ReaderChapterLink
-              collectionSlug={collection && collection.slug}
-              chapter={nextChapter}>
+            <ReaderChapterLink chapter={nextChapter}>
               <Icon name="direct-right" />
             </ReaderChapterLink>
           </div>

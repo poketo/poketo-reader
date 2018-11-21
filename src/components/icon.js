@@ -20,6 +20,7 @@ const Icons = {
   feed: require('./icon-feed').default,
   flag: require('./icon-flag').default,
   image: require('./icon-image').default,
+  'log-out': require('./icon-log-out').default,
   message: require('./icon-message').default,
   'more-horizontal': require('./icon-more-horizontal').default,
   'more-vertical': require('./icon-more-vertical').default,

@@ -8,6 +8,7 @@ import config from '../config';
 import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
 import CollectionPage from '../components/collection-page';
+import { getCollectionSlug } from '../store/reducers/navigation';
 import { fetchCollectionIfNeeded } from '../store/reducers/collections';
 
 import type { Dispatch, EntityStatus } from '../store/types';
@@ -18,13 +19,12 @@ type Props = {
   collectionSlug: string,
   dispatch: Dispatch,
   history: RouterHistory,
-  match: { params: { collectionSlug: string } },
   status: EntityStatus,
 };
 
 class FeedView extends Component<Props> {
   static mapStateToProps = (state, ownProps) => {
-    const slug = ownProps.match.params.collectionSlug;
+    const slug = getCollectionSlug(state);
 
     return {
       collection: state.collections[slug],

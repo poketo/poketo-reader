@@ -35,12 +35,11 @@ type ContainerProps = {
   collectionSlug: ?string,
   seriesChapters: Array<ChapterMetadata>,
   seriesId: string,
-  series: ?Series,
+  series?: Series,
   dispatch: Dispatch,
   history: RouterHistory,
   match: {|
     params: {|
-      collectionSlug: ?string,
       chapterId: string,
     |},
   |},
@@ -197,7 +196,6 @@ class ReaderViewContainer extends Component<ContainerProps> {
               <div className="pb-3">
                 <ReaderNavigation
                   series={series}
-                  collection={collection}
                   chapter={chapter}
                   bookmark={bookmark}
                   seriesChapters={seriesChapters}
@@ -205,7 +203,7 @@ class ReaderViewContainer extends Component<ContainerProps> {
                 />
               </div>
             )}
-            <ReaderFooter collectionSlug={collection && collection.slug} />
+            <ReaderFooter />
           </Fragment>
         )}
       </div>

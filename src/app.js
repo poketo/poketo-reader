@@ -8,6 +8,7 @@ import { cx } from 'react-emotion/macro';
 import { Switch, Redirect, Route } from 'react-router-dom';
 
 import Analytics from './components/analytics';
+import AuthRoute from './components/auth-route';
 import ErrorBoundary from './components/error-boundary';
 import StandaloneStatusBar from './components/standalone-status-bar';
 import CircleLoader from './components/loader-circle';
@@ -52,16 +53,23 @@ export default class App extends Component<{}> {
             <Switch>
               <Route path="/series/:seriesId" exact component={SeriesView} />
               <Route path="/read/:chapterId" exact component={ReaderView} />
+
+              <AuthRoute path="/(feed|library)" component={FeedView} />
+              <AuthRoute
+                exact
+                path="/settings/export"
+                component={LazyExportView}
+              />
+
+              {/* Redirect legacy urls */}
               <Redirect
                 from="/c/:collectionSlug/read/:chapterId"
                 to="/read/:chapterId"
               />
-              <Route
-                exact
-                path="/c/:collectionSlug/export"
-                component={LazyExportView}
-              />
-              <Route path="/c/:collectionSlug" component={FeedView} />
+              <Redirect from="/c/:collectionSlug/" to="/feed" />
+              <Redirect from="/c/:collectionSlug/library" to="/library" />
+
+              {/* Public routes */}
               <Route path="/login" component={LazyLogInView} />
               <Route path="/about" component={LazyAboutView} />
               <Route path="/home" component={HomeView} />

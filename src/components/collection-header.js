@@ -19,9 +19,7 @@ const contentClassName = css`
   max-width: 80vw;
 `;
 
-type Props = {
-  collectionSlug: string,
-};
+type Props = {};
 
 type State = {
   isFeedbackPanelShown: boolean,
@@ -63,8 +61,6 @@ export default class CollectionHeader extends Component<Props, State> {
   };
 
   render() {
-    const { collectionSlug } = this.props;
-
     return (
       <header className="x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
@@ -89,10 +85,7 @@ export default class CollectionHeader extends Component<Props, State> {
           isShown={this.state.isBookmarkPanelShown}
           onRequestClose={this.closeAddBookmarkPanel}>
           {() => (
-            <NewBookmarkPanel
-              collectionSlug={this.props.collectionSlug}
-              onRequestClose={this.closeAddBookmarkPanel}
-            />
+            <NewBookmarkPanel onRequestClose={this.closeAddBookmarkPanel} />
           )}
         </Panel>
         <Popover
@@ -117,7 +110,7 @@ export default class CollectionHeader extends Component<Props, State> {
               />
               <Popover.Item
                 label="Export data"
-                href={`/c/${collectionSlug}/export`}
+                href="/settings/export"
                 onClick={close}
                 iconBefore={<Icon name="archive" {...iconProps} />}
               />
@@ -129,11 +122,13 @@ export default class CollectionHeader extends Component<Props, State> {
                 label="Send feedback"
                 iconBefore={<Icon name="message" {...iconProps} />}
               />
+              <Popover.Divider />
               <Popover.Item
-                onClick={close}
-                iconBefore={<Icon name="new-tab" {...iconProps} />}
-                label="Open Poketo site"
-                href="/home"
+                onClick={() => {
+                  close();
+                }}
+                label="Log out"
+                iconBefore={<Icon name="log-out" {...iconProps} />}
               />
             </div>
           )}
