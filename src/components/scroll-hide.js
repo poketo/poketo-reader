@@ -31,7 +31,6 @@ export default class ScrollHide extends Component<Props, State> {
   componentDidMount() {
     this.scrollY = window.scrollY;
     this.lastScrollY = this.scrollY;
-    this.tick();
     this.tickId = requestAnimationFrame(this.tick);
   }
 
