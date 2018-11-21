@@ -8,9 +8,9 @@ import cors from '@koa/cors';
 
 import pmap from 'p-map';
 import shortid from 'shortid';
+import poketo from 'poketo';
 
 import pkg from '../package';
-import poketo from 'poketo';
 import { Collection } from './db';
 import utils from './utils';
 
@@ -20,7 +20,7 @@ app.use(cors());
 app.use(bodyparser());
 app.use(logger({ name: pkg.name }));
 
-const getErrorStatus = (err): number => {
+const getErrorStatus = err => {
   switch (err.code) {
     case 'INVALID_URL':
     case 'UNSUPPORTED_SITE':
@@ -262,7 +262,7 @@ const getUrl = ctx => {
   ctx.assert(
     Boolean(url) || Boolean(id),
     400,
-    `Please provider either 'id' or 'url' as a query parameter.`,
+    `Please provide either 'id' or 'url' as a query parameter.`,
   );
 
   return url ? url : poketo.constructUrl(id);
