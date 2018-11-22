@@ -1,7 +1,11 @@
 // @flow
 
 import React, { Component } from 'react';
-import { type RouterHistory } from 'react-router-dom';
+import {
+  type RouterHistory,
+  type Location,
+  type Match,
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 import Head from 'react-helmet';
 
@@ -18,18 +22,19 @@ type Props = {
   history: RouterHistory,
   login: (slug: string) => void,
   collectionSlug?: string,
-  location: { state: { fromPath?: string } },
-  match: {
-    params: {
-      collectionSlug?: string,
-    },
-  },
+  location: Location,
+  match: Match,
 };
 type State = {
   code: string,
 };
 
 const DEFAULT_REDIRECT = '/feed';
+
+function getRedirectParam(location: Location): string {
+  const query = new URLSearchParams(location.search);
+  return query.get('redirect') || DEFAULT_REDIRECT;
+}
 
 class LogInView extends Component<Props, State> {
   state = {
@@ -70,11 +75,10 @@ class LogInView extends Component<Props, State> {
     const { location } = this.props;
     const { code } = this.state;
 
-    const hasUniqueFromPath =
-      location.state &&
-      location.state.fromPath &&
-      location.state.fromPath !== '/feed' &&
-      location.state.fromPath !== '/library';
+    const redirectParam = getRedirectParam(location);
+    const hasUniqueRedirect =
+      redirectParam !== '/feed' && redirectParam !== '/library';
+
     const isSubmittable = code.length > 6;
 
     return (
@@ -84,7 +88,7 @@ class LogInView extends Component<Props, State> {
         </Head>
         <HomeHeader />
         <div className="pt-4 ph-3 mw-500 mh-auto ta-center">
-          {hasUniqueFromPath && (
+          {hasUniqueRedirect && (
             <Alert className="mb-4">
               You need to log in to access that page.
             </Alert>
@@ -93,7 +97,7 @@ class LogInView extends Component<Props, State> {
             <h2 className="fw-semibold mb-2">Log in to Poketo</h2>
             <p>Enter your Poketo code below.</p>
           </div>
-          <form onSubmit={this.handleSubmit} validate>
+          <form onSubmit={this.handleSubmit}>
             <div className="mb-2">
               <Input
                 type="text"
@@ -134,13 +138,10 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     login(slug) {
       const { location } = ownProps;
-      const nextPath =
-        location.state && location.state.fromPath
-          ? location.state.fromPath
-          : DEFAULT_REDIRECT;
+      const redirect = getRedirectParam(location);
 
       dispatch(setDefaultCollection(slug));
-      ownProps.history.push(nextPath);
+      ownProps.history.push(redirect);
     },
   };
 }

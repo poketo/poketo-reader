@@ -24,7 +24,7 @@ const AuthRoute = ({
         <Redirect
           to={{
             pathname: '/login',
-            state: { fromPath: props.location.pathname },
+            search: `?redirect=${encodeURIComponent(props.location.pathname)}`,
           }}
         />
       )
