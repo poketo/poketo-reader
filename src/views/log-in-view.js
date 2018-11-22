@@ -14,7 +14,6 @@ import Button from '../components/button';
 import HomeHeader from '../components/home-header';
 import Input from '../components/input';
 import api from '../api';
-import config from '../config';
 import {
   getCollectionSlug,
   setDefaultCollection,
