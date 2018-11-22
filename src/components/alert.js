@@ -12,7 +12,7 @@ const Alert = ({ children, className, ...rest }: Props) => (
   <div
     className={cx(
       className,
-      'd-inlineBlock pv-2 ph-3 bgc-extraFadedLightCoral c-coral fs-16 br-4',
+      'd-inlineBlock pv-2 ph-3 bgc-extraFadedLightCoral c-darkCoral fs-16 br-4',
     )}
     {...rest}>
     {children}
