@@ -17,6 +17,7 @@ import FeedView from './views/feed-view';
 import HomeView from './views/home-view';
 import SeriesView from './views/series-view';
 import ReaderView from './views/reader-view';
+import LogOutView from './views/log-out-view';
 import NotFoundView from './views/not-found-view';
 import utils from './utils';
 
@@ -61,6 +62,7 @@ export default class App extends Component<{}> {
               {/* Public routes */}
               <Route path="/series/:seriesId" exact component={SeriesView} />
               <Route path="/read/:chapterId" exact component={ReaderView} />
+              <Route path="/logout" component={LogOutView} />
               <Route path="/login" component={LazyLogInView} />
               <Route path="/login/:collectionSlug" component={LazyLogInView} />
               <Route path="/c/:collectionSlug" component={LazyLogInView} />

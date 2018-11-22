@@ -133,10 +133,7 @@ class CollectionHeader extends Component<Props, State> {
               />
               <Popover.Divider />
               <Popover.Item
-                onClick={() => {
-                  this.props.logout();
-                  close();
-                }}
+                href="/logout"
                 label="Log out"
                 iconBefore={<Icon name="log-out" {...iconProps} />}
               />
