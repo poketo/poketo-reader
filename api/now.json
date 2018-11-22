@@ -1,10 +1,12 @@
 {
-  "version": 2,
+  "version": 1,
   "name": "poketo-service",
   "alias": "api.poketo.app",
   "public": true,
-  "builds": [{ "src": "src/index.js", "use": "@now/node-server@canary" }],
-  "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }],
+  "type": "docker",
+  "features": {
+    "cloud": "v2"
+  },
   "env": {
     "MONGO_URL": "@poketo-mongo-url"
   }

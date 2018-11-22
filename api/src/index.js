@@ -9,6 +9,7 @@ import cors from '@koa/cors';
 import pmap from 'p-map';
 import shortid from 'shortid';
 import poketo from 'poketo';
+import poketoPkg from 'poketo/package';
 
 import pkg from '../package';
 import { Collection } from './db';
@@ -91,6 +92,15 @@ app.use(
       404,
       `Welcome to the Poketo API! If you're looking for documentation, check out https://github.com/poketo/poketo-reader/tree/master/api`,
     );
+  }),
+);
+
+app.use(
+  route.get('/_meta', async ctx => {
+    ctx.body = {
+      serverVersion: pkg.version,
+      poketoVersion: poketoPkg.version,
+    };
   }),
 );
 
