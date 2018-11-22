@@ -5,7 +5,7 @@ import { type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Head from 'react-helmet';
 
-import AuthRedirect from '../components/auth-redirect';
+import Alert from '../components/alert';
 import Button from '../components/button';
 import HomeHeader from '../components/home-header';
 import Input from '../components/input';
@@ -18,6 +18,7 @@ type Props = {
   history: RouterHistory,
   login: (slug: string) => void,
   collectionSlug?: string,
+  location: { state: { fromPath?: string } },
   match: {
     params: {
       collectionSlug?: string,
@@ -27,6 +28,8 @@ type Props = {
 type State = {
   code: string,
 };
+
+const DEFAULT_REDIRECT = '/feed';
 
 class LogInView extends Component<Props, State> {
   state = {
@@ -64,9 +67,14 @@ class LogInView extends Component<Props, State> {
   };
 
   render() {
-    const { history } = this.props;
+    const { location } = this.props;
     const { code } = this.state;
 
+    const hasUniqueFromPath =
+      location.state &&
+      location.state.fromPath &&
+      location.state.fromPath !== '/feed' &&
+      location.state.fromPath !== '/library';
     const isSubmittable = code.length > 6;
 
     return (
@@ -75,30 +83,42 @@ class LogInView extends Component<Props, State> {
           <title>Log In</title>
         </Head>
         <HomeHeader />
-        <AuthRedirect redirect history={history} />
         <div className="pt-4 ph-3 mw-500 mh-auto ta-center">
+          {hasUniqueFromPath && (
+            <Alert className="mb-4">
+              You need to log in to access that page.
+            </Alert>
+          )}
           <div className="mb-4">
-            <h3 className="fw-semibold mb-2">Enter your Poketo code</h3>
-            <p>
-              Your code is the last part of the link you got. <br />
-              <code className="fs-14">
-                poketo.app/c/
-                <span className="bgc-extraFadedLightCoral br-4 pa-1">
-                  {'<'}
-                  your code
-                  {'>'}
-                </span>
-              </code>
-            </p>
+            <h2 className="fw-semibold mb-2">Log in to Poketo</h2>
+            <p>Enter your Poketo code below.</p>
           </div>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} validate>
             <div className="mb-2">
-              <Input type="text" onChange={this.handleCodeChange} />
+              <Input
+                type="text"
+                title="Your nine character Poketo code"
+                placeholder="Poketo code…"
+                pattern="[A-Za-z0-9_-]{7,10}"
+                required
+                onChange={this.handleCodeChange}
+              />
             </div>
             <Button type="submit" variant="primary" disabled={!isSubmittable}>
               Go
             </Button>
           </form>
+          <p className="fs-14 mt-3">
+            Your code is the last part of your secret link:{' '}
+            <code className="bgc-gray0 br-4 fs-12 pa-1">
+              poketo.app/c/
+              <span className="fw-medium">
+                {'<'}
+                your code
+                {'>'}
+              </span>
+            </code>
+          </p>
         </div>
       </div>
     );
@@ -113,8 +133,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, ownProps) {
   return {
     login(slug) {
+      const { location } = ownProps;
+      const nextPath =
+        location.state && location.state.fromPath
+          ? location.state.fromPath
+          : DEFAULT_REDIRECT;
+
       dispatch(setDefaultCollection(slug));
-      ownProps.history.push('/feed');
+      ownProps.history.push(nextPath);
     },
   };
 }

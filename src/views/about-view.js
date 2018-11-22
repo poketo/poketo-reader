@@ -38,13 +38,13 @@ export default () => (
             <a href="https://en.wikipedia.org/wiki/RSS">RSS reader</a> but for
             manga.
           </p>
-          <p className="pa-3 bgc-extraFadedLightCoral br-4">
+          <blockquote>
             <span role="img" aria-label="Construction">
               🚧
             </span>{' '}
-            Poketo is still in development. It's usable now, but there's still
-            some rough parts. Watch your step!
-          </p>
+            Poketo is in development. It's usable, but there's still some rough
+            edges. Watch your step!
+          </blockquote>
           <h2 id="questions" className="mt-5 mb-3 fs-36 fw-semibold">
             Questions
           </h2>

@@ -79,7 +79,7 @@ export default class ExportView extends Component<Props> {
     return (
       <div className="h-100p">
         <CollectionHeader />
-        <div className="mw-500 mh-auto pt-4 ph-3 ph-0-m pb-6">
+        <div className="mw-500 mh-auto pt-3 ph-3 ph-0-m pb-6">
           <Markdown>
             <h1>Export Data</h1>
             <p>

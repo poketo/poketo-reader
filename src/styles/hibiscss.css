@@ -249,6 +249,9 @@
 .bc-coral {
   border-color: #ff7462;
 }
+.bc-fadedCoral {
+  border-color: rgba(255, 106, 106, 0.5);
+}
 
 .ba-1 {
   border-width: 1px;

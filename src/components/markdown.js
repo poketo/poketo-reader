@@ -18,7 +18,7 @@ const markdownClassName = css`
 
   & h1,
   & h2 {
-    margin-top: 1rem;
+    margin-top: 2rem;
     margin-bottom: 1rem;
   }
 
@@ -36,12 +36,20 @@ const markdownClassName = css`
 
   & p + p,
   & p + ul,
-  & ul + p {
+  & ul + p,
+  & p + blockquote,
+  & blockquote + p {
     margin-top: 16px;
   }
 
   & ul {
     padding-left: 1rem;
+  }
+
+  & blockquote {
+    padding-left: 1rem;
+    border-left: 4px #f0f0f0 solid;
+    color: #666;
   }
 
   & a {
