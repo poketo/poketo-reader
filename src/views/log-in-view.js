@@ -180,7 +180,11 @@ class LogInView extends Component<Props, State> {
             </p>
             <p>
               <span>Don't have a secret code?</span>{' '}
-              <a className="Link" href={config.inviteUrl} target="_blank">
+              <a
+                className="Link"
+                href={config.inviteUrl}
+                target="_blank"
+                rel="noopener noreferrer">
                 Request an invite.
               </a>
             </p>
