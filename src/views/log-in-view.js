@@ -14,6 +14,7 @@ import Button from '../components/button';
 import HomeHeader from '../components/home-header';
 import Input from '../components/input';
 import api from '../api';
+import config from '../config';
 import {
   getCollectionSlug,
   setDefaultCollection,
@@ -144,19 +145,25 @@ class LogInView extends Component<Props, State> {
             ) : (
               <Alert className="mb-4">An unknown error occurred.</Alert>
             ))}
-          <form onSubmit={this.handleSubmit}>
-            <div className="mb-2">
-              <Input
-                type="text"
-                title="Your nine character Poketo code"
-                placeholder="Poketo code…"
-                pattern="[A-Za-z0-9_-]{7,10}"
-                maxLength="10"
-                value={slug}
-                disabled={isFetching}
-                required
-                onChange={this.handleCodeChange}
-              />
+          <form onSubmit={this.handleSubmit} className="mb-4">
+            <div className="mb-3">
+              <div className="x">
+                <div className="x xa-center ph-2 ba-1 bc-gray1 c-gray4 pe-none br-3 br-flushRight bgc-gray0 ff-mono fs-14">
+                  <span className="pl-1">https://poketo.app/c/</span>
+                </div>
+                <Input
+                  type="text"
+                  className="br-flushLeft ff-mono fs-14"
+                  title="Your nine character Poketo code"
+                  pattern="[A-Za-z0-9_-]{7,10}"
+                  autoFocus
+                  maxLength="10"
+                  value={slug}
+                  disabled={isFetching}
+                  required
+                  onChange={this.handleCodeChange}
+                />
+              </div>
             </div>
             <Button
               type="submit"
@@ -166,17 +173,18 @@ class LogInView extends Component<Props, State> {
               Log In
             </Button>
           </form>
-          <p className="fs-14 mt-3">
-            Your code is the last part of your secret link:{' '}
-            <code className="bgc-gray0 br-4 fs-12 pa-1">
-              poketo.app/c/
-              <span className="fw-medium">
-                {'<'}
-                your code
-                {'>'}
-              </span>
-            </code>
-          </p>
+          <div className="fs-14 ph-2">
+            <p>
+              Your secret code is the nine characters at the end of your invite
+              link.
+            </p>
+            <p>
+              <span>Don't have a secret code?</span>{' '}
+              <a className="Link" href={config.inviteUrl} target="_blank">
+                Request an invite.
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     );

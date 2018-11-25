@@ -17,4 +17,18 @@ const config: { [string]: string } = {
     'https://github.com/poketo/poketo/blob/master/README.md#supported-sites',
 };
 
+const inviteUrlParams = new URLSearchParams();
+
+inviteUrlParams.append('subject', 'Poketo Invite');
+inviteUrlParams.append(
+  'body',
+  `
+Hi, I'd like a Poketo invite!
+
+(List a few series you follow here)
+`.trim(),
+);
+
+config.inviteUrl = `mailto:${config.email}?${inviteUrlParams.toString()}`;
+
 export default config;

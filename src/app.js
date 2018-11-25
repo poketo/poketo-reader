@@ -22,8 +22,9 @@ import NotFoundView from './views/not-found-view';
 import utils from './utils';
 
 import '@rosszurowski/vanilla/lib/vanilla.css';
-import './styles/hibiscss.css';
+import './styles/hibiscss.before.css';
 import './styles/base.css';
+import './styles/hibiscss.after.css';
 import './styles/app.css';
 
 const LazyLogInView = lazy(() => import('./views/log-in-view'));
