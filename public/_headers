@@ -2,8 +2,9 @@
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
-# Aggressively cache static assets since they have cache-busting URLs
+# Disable caching for the service worker script
 /service-worker.js
   Cache-Control: max-age=0,no-cache,no-store,must-revalidate
+# Aggressively cache static assets since they have cache-busting URLs
 /static/*
   Cache-Control: max-age=31536000
