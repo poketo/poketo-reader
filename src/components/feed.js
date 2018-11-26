@@ -24,10 +24,10 @@ const nextChapterDivider = css`
   }
 `;
 
-const CollectionNavigation = ({ collectionSlug }) => (
+const CollectionNavigation = () => (
   <header className="x ph-2 mb-4 fw-semibold ta-center ta-left-m">
     <NavLink
-      to={`/c/${collectionSlug}`}
+      to="/feed"
       exact
       className={cx(
         'x xd-row-m  br-4 pv-2 ph-1 xa-center xj-center',
@@ -38,7 +38,7 @@ const CollectionNavigation = ({ collectionSlug }) => (
       Now Reading
     </NavLink>
     <NavLink
-      to={`/c/${collectionSlug}/library`}
+      to="/library"
       exact
       className={cx(
         'x br-4 xd-row-m pv-2 ph-1 xa-center xj-center',
@@ -102,7 +102,6 @@ class LibraryFeed extends Component<LibraryProps> {
 }
 
 type Props = {
-  collectionSlug: string,
   dispatch: Dispatch,
   bookmarks: { [id: string]: Bookmark },
   feedItems: FeedItem[],
@@ -126,7 +125,7 @@ class Feed extends Component<Props, State> {
   };
 
   render() {
-    const { collectionSlug, feedItems, dispatch } = this.props;
+    const { feedItems, dispatch } = this.props;
 
     const unreadFeedItems = feedItems
       .filter(item => item.isCaughtUp === false)
@@ -143,7 +142,7 @@ class Feed extends Component<Props, State> {
 
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
-        <CollectionNavigation collectionSlug={collectionSlug} />
+        <CollectionNavigation />
         <Panel
           isShown={Boolean(this.state.seriesActionPanelId)}
           onRequestClose={this.closePanel}>
@@ -157,14 +156,14 @@ class Feed extends Component<Props, State> {
         </Panel>
         <div className="mb-4">
           <Route
-            path={`/c/${collectionSlug}/`}
+            path="/feed"
             exact
             render={() => (
               <NowReadingFeed dispatch={dispatch} feedItems={unreadFeedItems} />
             )}
           />
           <Route
-            path={`/c/${collectionSlug}/library`}
+            path="/library"
             exact
             render={() => (
               <LibraryFeed

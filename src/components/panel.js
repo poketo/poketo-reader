@@ -39,10 +39,6 @@ type PanelProps = {
   children: PanelChildrenProps => Node,
 };
 
-type PanelState = {
-  isMounted: boolean,
-};
-
 const styles = {
   container: css`
     position: fixed;
@@ -145,7 +141,7 @@ const styles = {
   `,
 };
 
-class Panel extends Component<PanelProps, PanelState> {
+class Panel extends Component<PanelProps> {
   static Button: (props: PanelButtonProps) => Node;
   static Content: (props: PanelContentProps) => Node;
   static Title: (props: PanelTitleProps) => Node;
@@ -156,19 +152,11 @@ class Panel extends Component<PanelProps, PanelState> {
     onRequestClose: () => {},
   };
 
-  state = {
-    isMounted: false,
-  };
-
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
-    requestAnimationFrame(() => {
-      this.setState({ isMounted: true });
-    });
   }
 
   componentWillUnmount() {
-    this.setState({ isMounted: false });
     document.removeEventListener('keydown', this.handleKeyDown);
   }
 
@@ -186,7 +174,6 @@ class Panel extends Component<PanelProps, PanelState> {
     const { children, scrollRef, isShown, onRequestClose } = this.props;
 
     const scrollEl = scrollRef && scrollRef.current;
-    const shouldLockScroll = this.state.isMounted && scrollEl;
 
     return (
       <Portal>
@@ -194,9 +181,7 @@ class Panel extends Component<PanelProps, PanelState> {
           {isShown && (
             <CSSTransition unmountOnExit timeout={400} classNames="panel">
               <div className={styles.container}>
-                {shouldLockScroll && (
-                  <ScrollLock touchScrollTarget={scrollEl} />
-                )}
+                <ScrollLock touchScrollTarget={scrollEl || undefined} />
                 <div
                   className={styles.background}
                   onClick={this.handleOverlayClick}

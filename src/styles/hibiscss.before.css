@@ -249,6 +249,9 @@
 .bc-coral {
   border-color: #ff7462;
 }
+.bc-fadedCoral {
+  border-color: rgba(255, 106, 106, 0.5);
+}
 
 .ba-1 {
   border-width: 1px;
@@ -325,18 +328,6 @@
   transform: scale(0.95);
 }
 
-.br-flushLeft {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-left: 0;
-}
-
-.br-flushRight {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: 0;
-}
-
 @media only screen and (min-width: 767px) {
   .w-90p-m {
     width: 90%;
@@ -398,17 +389,5 @@
 
   .bc-transparent-m {
     border-color: transparent;
-  }
-
-  .br-flushLeft-m {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left: 0;
-  }
-
-  .br-flushRight-m {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right: 0 !important;
   }
 }

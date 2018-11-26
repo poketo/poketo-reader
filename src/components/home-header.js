@@ -5,8 +5,6 @@ import { cx } from 'react-emotion/macro';
 import { Link, NavLink, Route } from 'react-router-dom';
 
 import IconPoketo from '../components/icon-poketo';
-import IconPoketoWordmark from '../components/icon-poketo-wordmark';
-import utils from '../utils';
 
 type Props = {
   overlay?: boolean,
@@ -33,29 +31,20 @@ export default class Header extends Component<Props, State> {
           <Link to="/">
             <div className="x xa-center c-coral">
               <IconPoketo width={24} height={24} />
-              {overlay === false && (
-                <IconPoketoWordmark
-                  className="c-black ml-2"
-                  width={100}
-                  height={32}
-                />
-              )}
             </div>
           </Link>
           <nav className="x xa-center">
             <NavLink to="/about" activeClassName="o-50p">
               About
             </NavLink>
-            {utils.isStandalone() && (
-              <Route
-                path="/login"
-                children={({ match }) => (
-                  <Link to="/login" className={cx('ml-3', { 'o-50p': match })}>
-                    Log In
-                  </Link>
-                )}
-              />
-            )}
+            <Route
+              path="/login"
+              children={({ match }) => (
+                <Link to="/login" className={cx('ml-3', { 'o-50p': match })}>
+                  Log In
+                </Link>
+              )}
+            />
           </nav>
         </div>
       </header>

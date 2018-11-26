@@ -1,23 +1,21 @@
 // @flow
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import download from 'datauri-download';
 
 import CollectionHeader from '../components/collection-header';
 import Button from '../components/button';
 import Markdown from '../components/markdown';
 import api from '../api';
+import { getCollectionSlug } from '../store/reducers/navigation';
 import utils from '../utils';
 
-type Props = {
-  match: {
-    params: {
-      collectionSlug: string,
-    },
-  },
+type ExportBlockProps = {
+  collectionSlug: string,
 };
 
-type State = {
+type ExportBlockState = {
   isLoading: boolean,
 };
 
@@ -31,14 +29,13 @@ function downloadCollection(collectionSlug) {
   });
 }
 
-export default class ExportView extends Component<Props, State> {
+class ExportBlock extends Component<ExportBlockProps, ExportBlockState> {
   state = {
     isLoading: false,
   };
 
   downloadArchive = () => {
-    const { match } = this.props;
-    const { collectionSlug } = match.params;
+    const { collectionSlug } = this.props;
 
     this.setState({ isLoading: true });
 
@@ -53,28 +50,43 @@ export default class ExportView extends Component<Props, State> {
   };
 
   render() {
-    const { match } = this.props;
-    const { collectionSlug } = match.params;
     const { isLoading } = this.state;
 
     return (
+      <div className="bgc-gray0 pa-4 mt-3 mb-4 br-3 ta-center">
+        <Button
+          variant="primary"
+          loading={isLoading}
+          onClick={this.downloadArchive}>
+          Download archive
+        </Button>
+      </div>
+    );
+  }
+}
+
+function mapStateToProps(state) {
+  const collectionSlug = getCollectionSlug(state);
+  return { collectionSlug };
+}
+
+const ConnectedExportBlock = connect(mapStateToProps)(ExportBlock);
+
+type Props = {};
+
+export default class ExportView extends Component<Props> {
+  render() {
+    return (
       <div className="h-100p">
-        <CollectionHeader collectionSlug={collectionSlug} />
-        <div className="mw-500 mh-auto pt-4 pt-5-m ph-3 ph-0-m pb-6">
+        <CollectionHeader />
+        <div className="mw-500 mh-auto pt-3 ph-3 ph-0-m pb-6">
           <Markdown>
             <h1>Export Data</h1>
             <p>
               Poketo cares that you stay in control of your data. You can export
               a full archive of your Poketo data from this page.
             </p>
-            <div className="bgc-gray0 pa-4 mt-3 mb-4 br-3 ta-center">
-              <Button
-                variant="primary"
-                loading={isLoading}
-                onClick={this.downloadArchive}>
-                Download archive
-              </Button>
-            </div>
+            <ConnectedExportBlock />
             <h3>About the archive</h3>
             <p>
               This exporter provides your data in a <code>.json</code> format,

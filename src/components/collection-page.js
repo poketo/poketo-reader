@@ -1,12 +1,11 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
 import Feed from '../components/feed';
-import CollectionHeader from '../components/collection-header';
-import Toast from './toast';
+import Toast from '../components/toast';
 import { fetchSeriesForCollection } from '../store/reducers/collections';
 import { setDefaultCollection } from '../store/reducers/navigation';
 import type { Collection } from '../types';
@@ -37,14 +36,12 @@ class CollectionPage extends Component<Props> {
     const { bookmarks } = collection;
 
     return (
-      <div className="pb-6 h-100p">
-        <CollectionHeader collectionSlug={collection.slug} />
+      <Fragment>
         <div className="p-fixed t-0 l-0 r-0 z-9 mt-4 pt-2 ph-3 pe-none">
           <Toast isShown={isFetching}>Syncing...</Toast>
         </div>
-        {/* <Releases collectionSlug={collection.slug} bookmarks={bookmarks} /> */}
-        <Feed collectionSlug={collection.slug} bookmarks={bookmarks} />
-      </div>
+        <Feed bookmarks={bookmarks} />
+      </Fragment>
     );
   }
 }

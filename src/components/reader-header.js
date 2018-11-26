@@ -111,7 +111,6 @@ export default class ReaderHeader extends Component<Props, State> {
                 <div className="p-absolute p-fill ph-5 x xa-center xj-center">
                   <ReaderNavigation
                     chapter={chapter}
-                    collection={collection}
                     bookmark={bookmark}
                     series={series}
                     seriesChapters={seriesChapters}

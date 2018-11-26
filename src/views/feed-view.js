@@ -1,13 +1,16 @@
 // @flow
 
-import React, { Component } from 'react';
-import { withRouter, type RouterHistory } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import { Link, withRouter, type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import config from '../config';
 import CircleLoader from '../components/loader-circle';
 import CodeBlock from '../components/code-block';
+import CollectionHeader from '../components/collection-header';
 import CollectionPage from '../components/collection-page';
+import Markdown from '../components/markdown';
+import { getCollectionSlug } from '../store/reducers/navigation';
 import { fetchCollectionIfNeeded } from '../store/reducers/collections';
 
 import type { Dispatch, EntityStatus } from '../store/types';
@@ -18,13 +21,12 @@ type Props = {
   collectionSlug: string,
   dispatch: Dispatch,
   history: RouterHistory,
-  match: { params: { collectionSlug: string } },
   status: EntityStatus,
 };
 
 class FeedView extends Component<Props> {
   static mapStateToProps = (state, ownProps) => {
-    const slug = ownProps.match.params.collectionSlug;
+    const slug = getCollectionSlug(state);
 
     return {
       collection: state.collections[slug],
@@ -57,28 +59,35 @@ class FeedView extends Component<Props> {
         );
       }
 
-      switch (fetchStatus) {
+      let children = null;
+
+      switch (errorCode) {
         case 'NOT_FOUND': {
-          return (
-            <div className="pa-3">
-              We couldn't find a collection with the code {collectionSlug}
-            </div>
+          children = (
+            <Fragment>
+              <p>
+                We couldn't find a collection with the code "{collectionSlug}"
+                <br />
+                <Link to="/logout">Log out</Link> and try again.
+              </p>
+            </Fragment>
           );
+          break;
         }
         case 'TIMED_OUT': {
-          return (
-            <div className="pa-3">
+          children = (
+            <Fragment>
               Loading your collection timed out.{' '}
               <button className="Link" onClick={this.handleRefreshClick}>
                 Refresh to try again.
               </button>
-            </div>
+            </Fragment>
           );
+          break;
         }
         default: {
-          return (
-            <div className="pa-3">
-              <p>Something went wrong while loading.</p>
+          children = (
+            <Fragment>
               <CodeBlock>{errorCode}</CodeBlock>
               <p>
                 If you have a minute, please{' '}
@@ -86,13 +95,30 @@ class FeedView extends Component<Props> {
                   report this as a bug.
                 </a>
               </p>
-            </div>
+            </Fragment>
           );
         }
       }
+      return (
+        <div className="pb-6 h-100p">
+          <CollectionHeader />
+
+          <div className="pt-4 ph-3 mw-500 mh-auto ta-center">
+            <Markdown>
+              <h2 className="fw-semibold mb-2">Something went wrong.</h2>
+              {children}
+            </Markdown>
+          </div>
+        </div>
+      );
     }
 
-    return <CollectionPage collection={collection} history={history} />;
+    return (
+      <div className="pb-6 h-100p">
+        <CollectionHeader />
+        <CollectionPage collection={collection} history={history} />
+      </div>
+    );
   }
 }
 

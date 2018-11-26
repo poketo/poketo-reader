@@ -14,6 +14,7 @@ import config from '../config';
 import utils from '../utils';
 
 import schema from '../store/schema';
+import { getCollectionSlug } from '../store/reducers/navigation';
 
 import type { Series } from 'poketo';
 import type { Dispatch, EntitiesPayload } from '../store/types';
@@ -362,7 +363,8 @@ class NewBookmarkPanel extends Component<Props, State> {
 }
 
 const mapStateToProps = state => {
-  return {};
+  const collectionSlug = getCollectionSlug(state);
+  return { collectionSlug };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

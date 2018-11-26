@@ -4,14 +4,19 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'react-emotion/macro';
+import { connect } from 'react-redux';
+
 import Button from './button';
 import ComponentLoader from './loader-component';
 import Icon from './icon';
 import Panel from './panel';
-import NewBookmarkPanel from './collection-new-bookmark-panel';
 import Popover from './popover/index';
 import cache from '../store/cache';
+import { clearDefaultCollection } from '../store/reducers/navigation';
 
+const LazyNewBookmarkPanel = lazy(() =>
+  import('../components/collection-new-bookmark-panel'),
+);
 const LazyFeedbackForm = lazy(() => import('../components/feedback-form'));
 
 const iconProps = { iconSize: 18, size: 44 };
@@ -19,16 +24,14 @@ const contentClassName = css`
   max-width: 80vw;
 `;
 
-type Props = {
-  collectionSlug: string,
-};
+type Props = {};
 
 type State = {
   isFeedbackPanelShown: boolean,
   isBookmarkPanelShown: boolean,
 };
 
-export default class CollectionHeader extends Component<Props, State> {
+class CollectionHeader extends Component<Props, State> {
   state = {
     isFeedbackPanelShown: false,
     isBookmarkPanelShown: false,
@@ -63,8 +66,6 @@ export default class CollectionHeader extends Component<Props, State> {
   };
 
   render() {
-    const { collectionSlug } = this.props;
-
     return (
       <header className="x xa-center xj-spaceBetween pr-2 fs-14 fs-16-m status-bar-ios-offset">
         <div className="x xa-center pv-3 ph-3">
@@ -89,10 +90,11 @@ export default class CollectionHeader extends Component<Props, State> {
           isShown={this.state.isBookmarkPanelShown}
           onRequestClose={this.closeAddBookmarkPanel}>
           {() => (
-            <NewBookmarkPanel
-              collectionSlug={this.props.collectionSlug}
-              onRequestClose={this.closeAddBookmarkPanel}
-            />
+            <Suspense fallback={<ComponentLoader />}>
+              <LazyNewBookmarkPanel
+                onRequestClose={this.closeAddBookmarkPanel}
+              />
+            </Suspense>
           )}
         </Panel>
         <Popover
@@ -117,7 +119,7 @@ export default class CollectionHeader extends Component<Props, State> {
               />
               <Popover.Item
                 label="Export data"
-                href={`/c/${collectionSlug}/export`}
+                href="/settings/export"
                 onClick={close}
                 iconBefore={<Icon name="archive" {...iconProps} />}
               />
@@ -129,11 +131,11 @@ export default class CollectionHeader extends Component<Props, State> {
                 label="Send feedback"
                 iconBefore={<Icon name="message" {...iconProps} />}
               />
+              <Popover.Divider />
               <Popover.Item
-                onClick={close}
-                iconBefore={<Icon name="new-tab" {...iconProps} />}
-                label="Open Poketo site"
-                href="/home"
+                href="/logout"
+                label="Log out"
+                iconBefore={<Icon name="log-out" {...iconProps} />}
               />
             </div>
           )}
@@ -146,3 +148,20 @@ export default class CollectionHeader extends Component<Props, State> {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    logout() {
+      dispatch(clearDefaultCollection());
+    },
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CollectionHeader);

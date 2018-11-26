@@ -24,6 +24,10 @@ export const getCollectionSlug = (state: { navigation: State }) =>
 export function setDefaultCollection(slug: string): Action {
   localStorage.setItem(STORAGE_DEFAULT_COLLECTION_KEY, slug);
 
+  if (window.analytics) {
+    window.analytics.identify(slug);
+  }
+
   if (window.Rollbar) {
     window.Rollbar.configure({
       person: {
