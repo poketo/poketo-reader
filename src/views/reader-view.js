@@ -268,7 +268,9 @@ class ReaderView extends Component<Props> {
     return (
       <Fragment>
         <Head>
-          <title>{`${series.title} – ${chapterLabel}`}</title>
+          <title>
+            {series.title} — {chapterLabel}
+          </title>
         </Head>
         <div className="pt-5 pb-4 mh-auto w-90p-m ta-center mw-900">
           <div className="pt-4">
