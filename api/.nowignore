@@ -1,6 +1,6 @@
-node_modules/
-dist/
-build/
-script/
-backups/
+/node_modules
+/dist
+/build
+/script
+/backups
 now-secrets.json

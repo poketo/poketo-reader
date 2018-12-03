@@ -10,7 +10,11 @@ const db = new Database(process.env.MONGO_URL, {
   reconnectTries: 3,
 });
 
-export class Collection extends Model {}
+export class Collection extends Model {
+  collection() {
+    return 'collections';
+  }
+}
 
 const extendCollection = Collection => {
   Collection.prototype.addBookmark = function(
@@ -80,7 +84,6 @@ const extendCollection = Collection => {
 Collection.use(extendCollection);
 
 db.register(Collection);
-db.connect();
 
 export default db;
 export { ObjectId } from 'mongorito';

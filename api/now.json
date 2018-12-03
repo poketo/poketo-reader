@@ -2,7 +2,6 @@
   "version": 1,
   "name": "poketo-service",
   "alias": "api.poketo.app",
-  "public": true,
   "type": "docker",
   "features": {
     "cloud": "v2"

@@ -12,8 +12,9 @@ import poketo from 'poketo';
 import poketoPkg from 'poketo/package';
 
 import pkg from '../package';
-import { Collection } from './db';
+import db, { Collection } from './db';
 import utils from './utils';
+import listen from './listen';
 
 const app = new Koa();
 
@@ -312,13 +313,15 @@ app.use(route.get('/chapter', fetch));
  * Server
  */
 
-const PORT = process.env.PORT || '3001';
+async function main() {
+  const PORT = process.env.PORT || '3001';
 
-app.listen(PORT, err => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
+  await db.connect();
+  await listen(app, PORT);
   console.log(`> Listening on http://localhost:${PORT}`);
+}
+
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
 });
