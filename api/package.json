@@ -24,8 +24,8 @@
     "shortid": "^2.2.8"
   },
   "devDependencies": {
+    "@babel/preset-flow": "^7.0.0",
     "babel-eslint": "^9.0.0",
-    "babel-preset-flow": "^6.23.0",
     "flow-bin": "^0.79.1",
     "flow-remove-types": "^1.2.3",
     "got": "^9.3.2",
