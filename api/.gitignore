@@ -1,0 +1,4 @@
+# Ignore api scripts and backups
+/build
+/script
+/backups

@@ -10,10 +10,5 @@ yarn-error.log
 
 # Ignore built files
 /build
-/api/build
 /src/components/icon-*.js
 /src/styles/base.css
-
-# Ignore api scripts and backups
-/api/script/migrations/
-/api/backups/
