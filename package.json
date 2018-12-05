@@ -37,13 +37,13 @@
     "react-dom": "^16.6.3",
     "react-emotion": "^9.2.8",
     "react-helmet": "^5.2.0",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.2.2",
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
     "react-scrolllock": "^2.0.1",
     "react-textarea-autosize": "^6.1.0",
     "react-transition-group": "^2.2.1",
-    "redux": "^4.0.0",
-    "redux-thunk": "^2.2.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {

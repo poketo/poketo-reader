@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import Head from 'react-helmet';
 import { css, cx } from 'react-emotion/macro';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import type { Series, ChapterMetadata } from 'poketo';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
@@ -334,20 +334,18 @@ const ConnectedSeriesPage = connect(
   mapDispatchToProps,
 )(SeriesPage);
 
-export default withRouter(
-  connect((state, ownProps) => {
-    const { series: seriesById } = state;
-    const { seriesId } = ownProps.match.params;
+export default connect((state, ownProps) => {
+  const { series: seriesById } = state;
+  const { seriesId } = ownProps.match.params;
 
-    const status = seriesById._status[seriesId];
+  const status = seriesById._status[seriesId];
 
-    if (status === undefined) {
-      return { isFetching: true };
-    }
+  if (status === undefined) {
+    return { isFetching: true };
+  }
 
-    const isFetching = status.fetchStatus === 'fetching';
-    const errorCode = status.errorCode || seriesById[seriesId] === undefined;
+  const isFetching = status.fetchStatus === 'fetching';
+  const errorCode = status.errorCode || seriesById[seriesId] === undefined;
 
-    return { isFetching, errorCode };
-  })(SeriesPageContainer),
-);
+  return { isFetching, errorCode };
+})(SeriesPageContainer);

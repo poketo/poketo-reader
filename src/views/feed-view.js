@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { Link, withRouter, type RouterHistory } from 'react-router-dom';
+import { Link, type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import config from '../config';
@@ -122,4 +122,4 @@ class FeedView extends Component<Props> {
   }
 }
 
-export default withRouter(connect(FeedView.mapStateToProps)(FeedView));
+export default connect(FeedView.mapStateToProps)(FeedView);

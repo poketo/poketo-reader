@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';
-import { withRouter, type RouterHistory } from 'react-router-dom';
+import { type RouterHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Button from '../components/button';
@@ -282,4 +282,4 @@ class ReaderView extends Component<Props> {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(ReaderViewContainer));
+export default connect(mapStateToProps)(ReaderViewContainer);
