@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import Head from 'react-helmet';
 import { connect } from 'react-redux';
-import { withRouter, type RouterHistory } from 'react-router-dom';
+import { type RouterHistory } from 'react-router-dom';
 
 import type { Dispatch } from '../store/types';
 import HomeLayout from '../components/home-layout';
@@ -46,9 +46,7 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps) {
   };
 }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(LogOutView),
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LogOutView);
