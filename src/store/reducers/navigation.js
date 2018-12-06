@@ -19,7 +19,7 @@ const initialState = {
 };
 
 export const getCollectionSlug = (state: { navigation: State }) =>
-  state.navigation.collectionSlug;
+  state.navigation.collectionSlug || null;
 
 export function setDefaultCollection(slug: string): Action {
   localStorage.setItem(STORAGE_DEFAULT_COLLECTION_KEY, slug);

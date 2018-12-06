@@ -15,6 +15,12 @@ type ActionWithoutPayloadType<A> = { +type: A };
 export type FetchStatus = 'fetching' | 'fetched' | 'error';
 export type ErrorCode = 'NOT_FOUND' | 'TIMED_OUT' | 'UNKNOWN_ERROR';
 
+export type EntityShorthand<T> = {
+  entity: T | null,
+  isFetching: boolean,
+  errorCode: ErrorCode | null,
+};
+
 export type EntityStatus = {
   +didInvalidate: boolean,
   +fetchStatus: FetchStatus,

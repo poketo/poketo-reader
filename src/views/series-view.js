@@ -5,7 +5,8 @@ import Head from 'react-helmet';
 import { css, cx } from 'react-emotion/macro';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import type { Series, ChapterMetadata } from 'poketo';
+import { getEntityShorthand } from '../store/utils';
+import { markSeriesAsRead } from '../store/reducers/collections';
 import { fetchSeriesIfNeeded } from '../store/reducers/series';
 import { getCollectionSlug } from '../store/reducers/navigation';
 import BackButtonContainer from '../components/back-button-container';
@@ -20,8 +21,9 @@ import TextExcerpt from '../components/text-excerpt';
 import Icon from '../components/icon';
 import Popover from '../components/popover';
 import utils from '../utils';
-import { markSeriesAsRead } from '../store/reducers/collections';
-import type { Dispatch } from '../store/types';
+
+import type { Series, ChapterMetadata } from 'poketo';
+import type { EntityShorthand, Dispatch } from '../store/types';
 import type { Bookmark } from '../../shared/types';
 
 const headerClassName = css`
@@ -38,8 +40,7 @@ const nextChapterClassName = css`
 
 type ContainerProps = {
   dispatch: Dispatch,
-  isFetching: boolean,
-  errorCode: string,
+  entity: EntityShorthand<Series>,
   match: {
     params: {
       seriesId: string,
@@ -63,23 +64,13 @@ class SeriesPageContainer extends Component<ContainerProps> {
   }
 
   render() {
-    const { errorCode, isFetching, match } = this.props;
-    const { seriesId } = match.params;
+    const { entity } = this.props;
 
-    if (errorCode) {
-      switch (errorCode) {
-        default:
-          return (
-            <div className="pa-3">
-              <strong>An unknown error occurred.</strong>
-              <br />
-              Try refreshing to page to fix it.
-            </div>
-          );
-      }
+    if (entity.entity) {
+      return <ConnectedSeriesPage seriesId={entity.entity.id} />;
     }
 
-    if (isFetching) {
+    if (entity.isFetching) {
       return (
         <div className="x xj-center xa-center mh-100vh">
           <CircleLoader />
@@ -87,7 +78,16 @@ class SeriesPageContainer extends Component<ContainerProps> {
       );
     }
 
-    return <ConnectedSeriesPage seriesId={seriesId} />;
+    switch (entity.errorCode) {
+      default:
+        return (
+          <div className="pa-3">
+            <strong>An unknown error occurred.</strong>
+            <br />
+            Try refreshing to page to fix it.
+          </div>
+        );
+    }
   }
 }
 
@@ -141,7 +141,7 @@ const SeriesPage = ({
       <div className="mw-600 w-100p mh-auto p-relative">
         <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
           <BackButtonContainer>
-            {({ to }: { to: string }) => (
+            {({ to }) => (
               <Link to={to} className="x hover">
                 <Icon name="arrow-left" {...iconProps} />
               </Link>
@@ -335,17 +335,10 @@ const ConnectedSeriesPage = connect(
 )(SeriesPage);
 
 export default connect((state, ownProps) => {
-  const { series: seriesById } = state;
   const { seriesId } = ownProps.match.params;
 
-  const status = seriesById._status[seriesId];
-
-  if (status === undefined) {
-    return { isFetching: true };
-  }
-
-  const isFetching = status.fetchStatus === 'fetching';
-  const errorCode = status.errorCode || seriesById[seriesId] === undefined;
+  const entity = getEntityShorthand(state.series, seriesId);
+  const { isFetching, errorCode } = entity;
 
   return { isFetching, errorCode };
 })(SeriesPageContainer);

@@ -3,20 +3,20 @@
 import { Component, type Node } from 'react';
 import { connect } from 'react-redux';
 
+import { getEntityShorthand } from '../store/utils';
 import { getCollectionSlug } from '../store/reducers/navigation';
 import { fetchCollectionIfNeeded } from '../store/reducers/collections';
-import type { Dispatch, EntityStatus, ErrorCode } from '../store/types';
+import type { Dispatch, EntityShorthand, ErrorCode } from '../store/types';
 import type { Collection } from '../types';
 
 type Props = {
-  collection?: Collection,
   collectionSlug: string,
   dispatch: Dispatch,
-  status: EntityStatus,
+  entity: EntityShorthand<Collection>,
   children: ({
+    collection: Collection | null,
     isFetching: boolean,
     errorCode: ErrorCode | null,
-    collection: Collection | null,
   }) => Node,
 };
 
@@ -27,24 +27,20 @@ class FetchCollection extends Component<Props> {
   }
 
   render() {
-    const { collection, status } = this.props;
-    const { fetchStatus, errorCode } = status;
+    const { entity } = this.props;
+    const { entity: collection, isFetching, errorCode } = entity;
 
-    return this.props.children({
-      collection: fetchStatus === 'fetched' ? collection : null,
-      isFetching: fetchStatus === 'fetching' || !fetchStatus,
-      errorCode: errorCode || null,
-    });
+    return this.props.children({ collection, isFetching, errorCode });
   }
 }
 
 function mapStateToProps(state) {
-  const slug = getCollectionSlug(state);
+  const slug = getCollectionSlug(state) || '';
+  const entity = getEntityShorthand(state.collections, slug);
 
   return {
-    collection: state.collections[slug],
     collectionSlug: slug,
-    status: state.collections._status[slug] || {},
+    entity,
   };
 }
 
