@@ -40,7 +40,7 @@ const nextChapterClassName = css`
 
 type ContainerProps = {
   dispatch: Dispatch,
-  entity: EntityShorthand<Series>,
+  data: EntityShorthand<Series>,
   match: {
     params: {
       seriesId: string,
@@ -64,13 +64,13 @@ class SeriesPageContainer extends Component<ContainerProps> {
   }
 
   render() {
-    const { entity } = this.props;
+    const { data } = this.props;
 
-    if (entity.entity) {
-      return <ConnectedSeriesPage seriesId={entity.entity.id} />;
+    if (data.entity) {
+      return <ConnectedSeriesPage seriesId={data.entity.id} />;
     }
 
-    if (entity.isFetching) {
+    if (data.isFetching) {
       return (
         <div className="x xj-center xa-center mh-100vh">
           <CircleLoader />
@@ -78,7 +78,7 @@ class SeriesPageContainer extends Component<ContainerProps> {
       );
     }
 
-    switch (entity.errorCode) {
+    switch (data.errorCode) {
       default:
         return (
           <div className="pa-3">
@@ -336,9 +336,7 @@ const ConnectedSeriesPage = connect(
 
 export default connect((state, ownProps) => {
   const { seriesId } = ownProps.match.params;
-
   const entity = getEntityShorthand(state.series, seriesId);
-  const { isFetching, errorCode } = entity;
 
-  return { isFetching, errorCode };
+  return { data: entity };
 })(SeriesPageContainer);
