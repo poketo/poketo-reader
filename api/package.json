@@ -38,7 +38,10 @@
     "extends": [
       "prettier",
       "prettier/flowtype"
-    ]
+    ],
+    "rules": {
+      "import/no-unassigned-import": 0
+    }
   },
   "prettier": {
     "singleQuote": true,
