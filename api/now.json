@@ -1,11 +1,9 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "poketo-service",
   "alias": "api.poketo.app",
-  "type": "docker",
-  "features": {
-    "cloud": "v2"
-  },
+  "builds": [{ "src": "src/index.js", "use": "@now/node-server" }],
+  "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }],
   "env": {
     "MONGO_URL": "@poketo-mongo-url"
   }
