@@ -84,6 +84,7 @@ const extendCollection = Collection => {
 Collection.use(extendCollection);
 
 db.register(Collection);
+db.connect();
 
 export default db;
 export { ObjectId } from 'mongorito';

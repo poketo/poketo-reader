@@ -12,9 +12,8 @@ import poketo from 'poketo';
 import poketoPkg from 'poketo/package';
 
 import pkg from '../package';
-import db, { Collection } from './db';
+import { Collection } from './db';
 import utils from './utils';
-import listen from './listen';
 
 const app = new Koa();
 
@@ -313,14 +312,13 @@ app.use(route.get('/chapter', fetch));
  * Server
  */
 
-async function main() {
-  const PORT = process.env.PORT || '3001';
+const PORT = process.env.PORT || '3001';
 
-  await db.connect();
-  await listen(app, PORT);
+app.listen(PORT, err => {
+  if (err) {
+    console.error('> Error occurred during server startup:');
+    console.error(err);
+    return;
+  }
   console.log(`> Listening on http://localhost:${PORT}`);
-}
-
-main().catch(err => {
-  console.error(err);
 });
