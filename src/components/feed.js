@@ -179,7 +179,7 @@ class Feed extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+function mapStateToProps(state, ownProps) {
   const { series: seriesById, chapters: chaptersById } = state;
   const { bookmarks } = ownProps;
 
@@ -189,7 +189,7 @@ const mapStateToProps = (state, ownProps) => {
       const { lastReadAt, lastReadChapterId, linkTo } = bookmarks[seriesId];
 
       const series = seriesById[seriesId];
-      const chapterIds = series ? series.chapters || [] : [];
+      const chapterIds = (series ? series.chapters : null) || [];
       const chapters = chapterIds.map(id => chaptersById[id]);
 
       const isCaughtUp =
@@ -220,6 +220,6 @@ const mapStateToProps = (state, ownProps) => {
     });
 
   return { feedItems };
-};
+}
 
 export default withRouter(connect(mapStateToProps)(Feed));

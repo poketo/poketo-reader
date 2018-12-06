@@ -46,7 +46,7 @@ class CollectionPage extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+function mapStateToProps(state, ownProps) {
   const { series: seriesById } = state;
   const { bookmarks } = ownProps.collection;
 
@@ -55,16 +55,16 @@ const mapStateToProps = (state, ownProps) => {
   const isFetching = statuses.some(status => status.fetchStatus === 'fetching');
 
   return { isFetching };
-};
+}
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+function mapDispatchToProps(dispatch: Dispatch) {
   return {
     loadData(collectionSlug) {
       dispatch(setDefaultCollection(collectionSlug));
       dispatch(fetchSeriesForCollection(collectionSlug));
     },
   };
-};
+}
 
 export default withRouter(
   connect(

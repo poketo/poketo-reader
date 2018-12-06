@@ -1,13 +1,14 @@
 // @flow
 
 // $FlowFixMe: Flow doesn't support React 16.6 features
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component, Fragment, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'react-emotion/macro';
 import { connect } from 'react-redux';
 
 import Button from './button';
 import ComponentLoader from './loader-component';
+import FetchCollection from './fetch-collection';
 import Icon from './icon';
 import Panel from './panel';
 import Popover from './popover/index';
@@ -100,15 +101,23 @@ class CollectionHeader extends Component<Props, State> {
         <Popover
           content={({ close }) => (
             <div className={cx('pa-2', contentClassName)}>
-              <Popover.Item
-                label="Follow new series"
-                onClick={() => {
-                  this.openAddBookmarkPanel();
-                  close();
-                }}
-                iconBefore={<Icon name="add" {...iconProps} />}
-              />
-              <Popover.Divider />
+              <FetchCollection>
+                {({ collection }) =>
+                  collection ? (
+                    <Fragment>
+                      <Popover.Item
+                        label="Follow new series"
+                        onClick={() => {
+                          this.openAddBookmarkPanel();
+                          close();
+                        }}
+                        iconBefore={<Icon name="add" {...iconProps} />}
+                      />
+                      <Popover.Divider />
+                    </Fragment>
+                  ) : null
+                }
+              </FetchCollection>
               <Popover.Item
                 label="Clear cache"
                 onClick={() => {

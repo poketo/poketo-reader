@@ -35,6 +35,8 @@ function shouldFetchCollection(state: Object, slug: string): boolean {
     case 'fetched':
       const isStale = utils.getTimestamp() - status.lastFetchedAt > STALE_AFTER;
       return status.didInvalidate || isStale;
+    case 'error':
+      return status.errorCode !== 'NOT_FOUND';
     default:
       return true;
   }
