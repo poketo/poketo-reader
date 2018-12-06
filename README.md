@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="900" src="https://cdn.rawgit.com/poketo/site/d15b0db8/.github/readme-header.svg" alt="Poketo" />
+  <img width="900" src="https://cdn.jsdelivr.net/gh/poketo/poketo-reader@d15b0db8bbaed5d600a90ef006912bda41df33be/.github/readme-header.svg" alt="Poketo" />
   <br />
   <br />
   <strong>Friendly web manga reader</strong>
