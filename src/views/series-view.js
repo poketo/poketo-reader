@@ -48,49 +48,6 @@ type ContainerProps = {
   },
 };
 
-class SeriesPageContainer extends Component<ContainerProps> {
-  componentDidMount() {
-    const { match, dispatch } = this.props;
-    dispatch(fetchSeriesIfNeeded(match.params.seriesId));
-  }
-
-  componentDidUpdate(prevProps) {
-    const { match: prevMatch } = prevProps;
-    const { match, dispatch } = this.props;
-
-    if (prevMatch.params.seriesId !== match.params.seriesId) {
-      dispatch(fetchSeriesIfNeeded(match.params.seriesId));
-    }
-  }
-
-  render() {
-    const { data } = this.props;
-
-    if (data.entity) {
-      return <ConnectedSeriesPage seriesId={data.entity.id} />;
-    }
-
-    if (data.isFetching) {
-      return (
-        <div className="x xj-center xa-center mh-100vh">
-          <CircleLoader />
-        </div>
-      );
-    }
-
-    switch (data.errorCode) {
-      default:
-        return (
-          <div className="pa-3">
-            <strong>An unknown error occurred.</strong>
-            <br />
-            Try refreshing to page to fix it.
-          </div>
-        );
-    }
-  }
-}
-
 const Label = ({ className, ...props }: { className?: string }) => (
   <div className={cx(className, 'fs-14 c-gray3 mb-1')} {...props} />
 );
@@ -334,9 +291,54 @@ const ConnectedSeriesPage = connect(
   mapDispatchToProps,
 )(SeriesPage);
 
-export default connect((state, ownProps) => {
+class SeriesPageContainer extends Component<ContainerProps> {
+  componentDidMount() {
+    const { match, dispatch } = this.props;
+    dispatch(fetchSeriesIfNeeded(match.params.seriesId));
+  }
+
+  componentDidUpdate(prevProps) {
+    const { match: prevMatch } = prevProps;
+    const { match, dispatch } = this.props;
+
+    if (prevMatch.params.seriesId !== match.params.seriesId) {
+      dispatch(fetchSeriesIfNeeded(match.params.seriesId));
+    }
+  }
+
+  render() {
+    const { data } = this.props;
+
+    if (data.entity) {
+      return <ConnectedSeriesPage seriesId={data.entity.id} />;
+    }
+
+    if (data.isFetching) {
+      return (
+        <div className="x xj-center xa-center mh-100vh">
+          <CircleLoader />
+        </div>
+      );
+    }
+
+    switch (data.errorCode) {
+      default:
+        return (
+          <div className="pa-3">
+            <strong>An unknown error occurred.</strong>
+            <br />
+            Try refreshing to page to fix it.
+          </div>
+        );
+    }
+  }
+}
+
+function mapStateToContainerProps(state, ownProps) {
   const { seriesId } = ownProps.match.params;
   const entity = getEntityShorthand(state.series, seriesId);
 
   return { data: entity };
-})(SeriesPageContainer);
+}
+
+export default connect(mapStateToContainerProps)(SeriesPageContainer);
