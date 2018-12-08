@@ -1,6 +1,6 @@
-node_modules/
-build/
-script/
-backups/
-now-secrets.defaults.json
-now-secrets.json
+*
+!.babelrc
+!package.json
+!yarn.lock
+!*/
+!src
