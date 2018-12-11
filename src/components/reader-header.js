@@ -143,6 +143,22 @@ export default class ReaderHeader extends Component<Props, State> {
                             rel="noreferrer noopener"
                           />
                         )}
+                        {series &&
+                          chapter && (
+                            <Popover.Item
+                              iconBefore={
+                                <Icon name="new-tab" {...iconProps} />
+                              }
+                              label={`Open on /r/manga`}
+                              href={utils.getRedditUrl(
+                                `${series.title} ${chapter.chapterNumber ||
+                                  ''}`,
+                              )}
+                              onClick={close}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                            />
+                          )}
                         {collection && (
                           <Popover.Item
                             iconBefore={<Icon name="bookmark" {...iconProps} />}

@@ -85,9 +85,9 @@ const utils = {
   getSeriesUrl: (seriesId: string) => `/series/${utils.encodeId(seriesId)}`,
   getReaderUrl: (chapterId: string) => `/read/${utils.encodeId(chapterId)}`,
   getCollectionUrl: (collectionSlug: string) => `/feed`,
-  getRedditUrl: (seriesTitle: string, sortByNew: boolean = true) =>
+  getRedditUrl: (searchString: string, sortByNew: boolean = true) =>
     `https://www.reddit.com/r/manga/search?q=${encodeURIComponent(
-      seriesTitle,
+      searchString,
     ).replace(/%20/g, '+')}${sortByNew ? '&sort=new' : ''}&restrict_sr=on`,
 
   getUnfollowMessage: (series: { title: string }) =>
