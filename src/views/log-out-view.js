@@ -22,9 +22,7 @@ class LogOutView extends Component<Props> {
   render() {
     return (
       <HomeLayout>
-        <Head>
-          <title>Logging out</title>
-        </Head>
+        <Head title="Logging out" />
         <div className="pa-3 x xd-column xa-center xj-center mh-100vh">
           <p>Logging out...</p>
         </div>

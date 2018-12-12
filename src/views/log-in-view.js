@@ -117,9 +117,7 @@ class LogInView extends Component<Props, State> {
 
     return (
       <div className="mh-100vh c-gray4 bgc-offwhite fs-16 fs-18-m">
-        <Head>
-          <title>Log In</title>
-        </Head>
+        <Head title="Log In" />
         <HomeHeader />
         <div className="pt-4 ph-3 mw-500 mh-auto ta-center">
           {hasUniqueRedirect &&

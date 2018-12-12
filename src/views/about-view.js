@@ -21,9 +21,7 @@ const QuestionContainer = ({ id, question, children }) => (
 
 export default () => (
   <HomeLayout>
-    <Head>
-      <title>About</title>
-    </Head>
+    <Head title="About" />
     <Header />
     <ScrollReset />
     <div className="mw-500 mh-auto pt-4 pt-5-m">

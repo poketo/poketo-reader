@@ -267,9 +267,7 @@ class ReaderView extends Component<Props> {
 
     return (
       <Fragment>
-        <Head>
-          <title>{`${series.title} – ${chapterLabel}`}</title>
-        </Head>
+        <Head title={`${series.title} – ${chapterLabel}`} />
         <div className="pt-5 pb-4 mh-auto w-90p-m ta-center mw-900">
           <div className="pt-4">
             <ReaderPageImageList pages={chapter.pages} />

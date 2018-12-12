@@ -8,9 +8,7 @@ import HomeLayout from '../components/home-layout';
 
 export default () => (
   <HomeLayout>
-    <Head>
-      <title>Not found</title>
-    </Head>
+    <Head title="Not Found" />
     <div className="pa-3 x xd-column xa-center xj-center mh-100vh">
       <div className="mb-4">
         <svg
