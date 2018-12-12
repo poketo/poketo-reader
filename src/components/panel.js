@@ -1,8 +1,9 @@
 // @flow
 
-import React, { Component, type Node, type ElementRef } from 'react';
+import React, { Component, type Node } from 'react';
 import { css, cx } from 'react-emotion/macro';
-import ScrollLock from 'react-scrolllock';
+import NodeResolver from 'react-node-resolver';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Portal from './portal';
 
@@ -30,7 +31,6 @@ type PanelLinkProps = {
 
 type PanelChildrenProps = {
   isShown: boolean,
-  scrollRef?: ElementRef<*>,
   onRequestClose: () => void,
 };
 
@@ -38,6 +38,8 @@ type PanelProps = {
   ...$Exact<PanelChildrenProps>,
   children: PanelChildrenProps => Node,
 };
+
+type Ref = HTMLElement | null;
 
 const styles = {
   container: css`
@@ -156,8 +158,19 @@ class Panel extends Component<PanelProps> {
     document.addEventListener('keydown', this.handleKeyDown);
   }
 
+  componentDidUpdate(prevProps: PanelProps) {
+    if (prevProps.isShown !== this.props.isShown) {
+      if (this.props.isShown === false) {
+        clearAllBodyScrollLocks();
+      } else if (this.scrollEl) {
+        disableBodyScroll(this.scrollEl);
+      }
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown);
+    clearAllBodyScrollLocks();
   }
 
   handleKeyDown = (e: KeyboardEvent) => {
@@ -170,10 +183,13 @@ class Panel extends Component<PanelProps> {
     this.props.onRequestClose();
   };
 
-  render() {
-    const { children, scrollRef, isShown, onRequestClose } = this.props;
+  scrollEl: Ref = null;
+  getScrollEl = (el: Ref) => {
+    this.scrollEl = el || null;
+  };
 
-    const scrollEl = scrollRef && scrollRef.current;
+  render() {
+    const { children, isShown, onRequestClose } = this.props;
 
     return (
       <Portal>
@@ -181,13 +197,17 @@ class Panel extends Component<PanelProps> {
           {isShown && (
             <CSSTransition unmountOnExit timeout={400} classNames="panel">
               <div className={styles.container}>
-                <ScrollLock touchScrollTarget={scrollEl || undefined} />
                 <div
                   className={styles.background}
                   onClick={this.handleOverlayClick}
                 />
                 <div className={styles.menu}>
-                  {children({ isShown, scrollRef, onRequestClose })}
+                  <NodeResolver innerRef={this.getScrollEl}>
+                    {children({
+                      isShown,
+                      onRequestClose,
+                    })}
+                  </NodeResolver>
                   <button
                     className="d-none x-m w-100p bt-1 bc-gray1 xa-stretch"
                     onClick={this.handleOverlayClick}>

@@ -77,17 +77,14 @@ export default class ReaderNavigation extends Component<Props, State> {
   };
 
   scrollRef = React.createRef();
-  activeChapterRef = (el: HTMLElement) => {
-    this.activeChapterEl = el;
-  };
-  activeChapterEl: HTMLElement;
+  activeChapterRef = React.createRef();
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (
       prevState.showingPanel !== this.state.showingPanel &&
       this.state.showingPanel === true
     ) {
-      const activeChapterEl = this.activeChapterEl;
+      const activeChapterEl = this.activeChapterRef.current;
       const scrollEl = this.scrollRef.current;
 
       if (scrollEl && activeChapterEl) {
@@ -103,8 +100,7 @@ export default class ReaderNavigation extends Component<Props, State> {
     return (
       <Panel
         isShown={showingPanel}
-        onRequestClose={this.handlePickerPanelClose}
-        scrollRef={this.scrollRef}>
+        onRequestClose={this.handlePickerPanelClose}>
         {() => (
           <div ref={this.scrollRef} className={contentClassName}>
             <div className="pt-2 pb-3">

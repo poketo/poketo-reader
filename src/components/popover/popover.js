@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, type Node, type Element } from 'react';
-import ScrollLock from 'react-scrolllock';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import Positioner from './positioner';
 import PopoverStateless from './popover-stateless';
 import PopoverItem from './popover-item';
@@ -31,6 +31,9 @@ const hasRef = (ref: ReactObjRef<*>) => Boolean(ref && ref.current);
 const isOrContains = (el: any, target: any): boolean =>
   el === target || el.contains(target);
 
+const getIsShown = (props: Props, state: State) =>
+  props.isShown || state.isShown;
+
 export default class Popover extends Component<Props, State> {
   static defaultProps = {
     position: Position.BOTTOM,
@@ -54,6 +57,21 @@ export default class Popover extends Component<Props, State> {
     this.state = {
       isShown: props.isShown,
     };
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (
+      prevProps.isShown !== this.props.isShown ||
+      prevState.isShown !== this.state.isShown
+    ) {
+      const isShown = getIsShown(this.props, this.state);
+
+      if (isShown === false) {
+        clearAllBodyScrollLocks();
+      } else {
+        disableBodyScroll();
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -224,16 +242,14 @@ export default class Popover extends Component<Props, State> {
   };
 
   render() {
-    const { content, position, isShown, onCloseComplete } = this.props;
-    const { isShown: stateIsShown } = this.state;
-
-    const shown = isShown || stateIsShown;
+    const { content, position, onCloseComplete } = this.props;
+    const isShown = getIsShown(this.props, this.state);
 
     return (
       <Positioner
         target={this.renderTarget}
         position={position}
-        isShown={shown}
+        isShown={isShown}
         onOpenComplete={this.handleOpenComplete}
         onCloseComplete={onCloseComplete}>
         {({ className, style, ref }) => {
@@ -241,7 +257,6 @@ export default class Popover extends Component<Props, State> {
 
           return (
             <PopoverStateless ref={ref} className={className} style={style}>
-              <ScrollLock />
               {typeof content === 'function'
                 ? content({ close: this.close })
                 : content}
