@@ -63,10 +63,8 @@ export default class Positioner extends PureComponent<Props, State> {
   };
 
   state = initialState();
-  // $FlowFixMe
-  targetRef: RefObject = React.createRef();
-  // $FlowFixMe
-  positionerRef: RefObject = React.createRef();
+  targetRef = React.createRef<*>();
+  positionerRef = React.createRef<*>();
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.isShown === false && this.props.isShown === true) {

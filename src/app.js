@@ -1,6 +1,5 @@
 // @flow
 
-// $FlowFixMe: Flow doesn't support React 16.6 features yet
 import React, { Component, Suspense, lazy } from 'react';
 import Head from 'react-helmet';
 import BodyClassName from 'react-body-classname';

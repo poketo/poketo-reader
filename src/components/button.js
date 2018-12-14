@@ -94,8 +94,11 @@ const StyledButton = styled.button`
     `};
 `;
 
-// $FlowFixMe: Flow doesn't yet support React 16.3 features
-const Button = React.forwardRef(
+StyledButton.defaultProps = {
+  variant: 'ghost',
+};
+
+const Button = React.forwardRef<Props, HTMLButtonElement>(
   ({ children, iconBefore, loading, ...props }: Props, ref) => (
     <StyledButton innerRef={ref} {...props}>
       {loading ? <CircleLoader small /> : iconBefore}
@@ -103,9 +106,5 @@ const Button = React.forwardRef(
     </StyledButton>
   ),
 );
-
-Button.defaultProps = {
-  variant: 'ghost',
-};
 
 export default Button;

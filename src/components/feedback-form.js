@@ -65,7 +65,7 @@ export default class FeedbackForm extends Component<Props, State> {
   };
 
   sendFeedback = (message: string) =>
-    axios.post(`${config.apiFeedbackUrl}/v0/Feedback`, {
+    axios.post<{}, {}>(`${config.apiFeedbackUrl}/v0/Feedback`, {
       fields: {
         Feedback: message,
         Page: window.location.pathname,

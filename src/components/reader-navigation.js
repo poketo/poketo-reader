@@ -76,8 +76,8 @@ export default class ReaderNavigation extends Component<Props, State> {
     this.handlePickerPanelClose();
   };
 
-  scrollRef = React.createRef();
-  activeChapterRef = React.createRef();
+  scrollRef = React.createRef<HTMLDivElement>();
+  activeChapterRef = React.createRef<*>();
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (

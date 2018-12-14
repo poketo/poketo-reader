@@ -2,7 +2,9 @@
 
 import config from './config';
 import axios from 'axios';
-import type { BookmarkLastReadChapterId } from './types';
+import type { Series, Chapter } from 'poketo';
+import type { Bookmark } from '../shared/types';
+import type { BookmarkLastReadChapterId, Collection } from './types';
 
 export type AxiosResponse = {
   config: Object,
@@ -28,7 +30,7 @@ const instance = axios.create({
 
 const api = {
   fetchCollection: (collectionSlug: string) =>
-    instance.get(`/collection/${collectionSlug}`),
+    instance.get<Collection, Collection>(`/collection/${collectionSlug}`),
   fetchMarkAsRead: (
     collectionSlug: string,
     seriesId: string,
@@ -37,37 +39,49 @@ const api = {
       lastReadAt: number,
     },
   ) =>
-    instance.post(`/collection/${collectionSlug}/bookmark/${seriesId}/read`, {
-      lastReadChapterId: options.lastReadChapterId,
-      lastReadAt: options.lastReadAt,
-    }),
+    instance.post<Bookmark, Bookmark>(
+      `/collection/${collectionSlug}/bookmark/${seriesId}/read`,
+      {
+        lastReadChapterId: options.lastReadChapterId,
+        lastReadAt: options.lastReadAt,
+      },
+    ),
   fetchAddBookmarkToCollection: (
     collectionSlug: string,
     seriesUrl: string,
     linkToUrl: ?string,
     lastReadChapterId: BookmarkLastReadChapterId = null,
   ) =>
-    instance.post(`/collection/${collectionSlug}/bookmark/new`, {
-      seriesUrl,
-      linkToUrl,
-      lastReadChapterId,
-    }),
+    instance.post<Bookmark, Bookmark>(
+      `/collection/${collectionSlug}/bookmark/new`,
+      {
+        seriesUrl,
+        linkToUrl,
+        lastReadChapterId,
+      },
+    ),
   fetchRemoveBookmarkFromCollection: (
     collectionSlug: string,
     seriesId: string,
-  ) => instance.delete(`/collection/${collectionSlug}/bookmark/${seriesId}`),
+  ) =>
+    instance.delete<Collection, Collection>(
+      `/collection/${collectionSlug}/bookmark/${seriesId}`,
+    ),
   fetchChapter: (id: string) =>
-    instance.get(`/chapter`, {
+    instance.get<Chapter, Chapter>(`/chapter`, {
       params: { id },
       timeout: SCRAPING_TIMEOUT,
     }),
   fetchSeries: (id: string) =>
-    instance.get(`/series`, {
+    instance.get<Series, Series>(`/series`, {
       params: { id },
       timeout: SCRAPING_TIMEOUT,
     }),
   fetchSeriesByUrl: (url: string) =>
-    instance.get(`/series`, { params: { url }, timeout: SCRAPING_TIMEOUT }),
+    instance.get<Series, Series>(`/series`, {
+      params: { url },
+      timeout: SCRAPING_TIMEOUT,
+    }),
 };
 
 export default api;

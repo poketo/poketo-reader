@@ -12,8 +12,7 @@ type Props = {
   children?: Node,
 };
 
-// $FlowFixMe
-const PopoverStateless = React.forwardRef(
+const PopoverStateless = React.forwardRef<Props, HTMLDivElement>(
   ({ className, children, ...props }: Props, ref) => (
     <StyledPopover
       role="dialog"

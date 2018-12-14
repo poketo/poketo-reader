@@ -1,6 +1,5 @@
 // @flow
 
-// $FlowFixMe: Flow doesn't support React 16.6 features
 import React, { Component, Fragment, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'react-emotion/macro';
