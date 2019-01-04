@@ -70,7 +70,7 @@ export default class FeedbackForm extends Component<Props, State> {
       fields: {
         Feedback: message,
         Page: window.location.pathname,
-        Collection: getCollectionSlugFromLocalStorage(),
+        User: getCollectionSlugFromLocalStorage(),
       },
     });
 
