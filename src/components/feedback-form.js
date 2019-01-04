@@ -4,6 +4,7 @@ import React, { Component, type Node } from 'react';
 import axios from 'axios';
 
 import config from '../config';
+import { getCollectionSlugFromLocalStorage } from '../store/reducers/navigation';
 import Button from '../components/button';
 import TextArea from '../components/text-area';
 
@@ -69,7 +70,7 @@ export default class FeedbackForm extends Component<Props, State> {
       fields: {
         Feedback: message,
         Page: window.location.pathname,
-        Collection: null,
+        Collection: getCollectionSlugFromLocalStorage(),
       },
     });
 

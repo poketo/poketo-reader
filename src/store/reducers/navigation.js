@@ -18,6 +18,9 @@ const initialState = {
   lastSeenTab: localStorage.getItem(STORAGE_LAST_SEEN_TAB_KEY) || 'now-reading',
 };
 
+export const getCollectionSlugFromLocalStorage = () =>
+  localStorage.getItem(STORAGE_DEFAULT_COLLECTION_KEY) || null;
+
 export const getCollectionSlug = (state: { navigation: State }) =>
   state.navigation.collectionSlug || null;
 
