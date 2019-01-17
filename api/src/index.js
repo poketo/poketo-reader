@@ -8,6 +8,7 @@ import error from './handlers/error';
 import meta from './handlers/meta';
 import * as collections from './handlers/collections';
 import fetch from './handlers/fetch';
+import fetchFeed from './handlers/fetch-feed';
 
 app.use(error);
 app.on('error', () => {});
@@ -49,6 +50,7 @@ app.use(route.post(bookmarkRoot + '/:seriesId/read', collections.markAsRead));
 
 app.use(route.get('/series', fetch));
 app.use(route.get('/chapter', fetch));
+app.use(route.get('/feed/:id.json', fetchFeed));
 
 /**
  * Server
