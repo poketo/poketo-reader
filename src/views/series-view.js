@@ -92,7 +92,9 @@ const SeriesPage = ({
   return (
     <div className="pb-5">
       <ScrollReset />
-      <Head title={series.title} />
+      <Head title={series.title}>
+        <link href={utils.getFeedUrl(series.id)} rel="feed" type="application/json" title={series.title} />
+      </Head>
       <div className="mw-600 w-100p mh-auto p-relative">
         <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
           <BackButtonContainer>
@@ -117,6 +119,14 @@ const SeriesPage = ({
                   iconBefore={<Icon name="new-tab" {...iconProps} />}
                   label={`Open on /r/manga`}
                   href={utils.getRedditUrl(series.title)}
+                  onClick={close}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                />
+                <Popover.Item
+                  iconBefore={<Icon name="feed" {...iconProps} />}
+                  label={`Open feed`}
+                  href={utils.getFeedUrl(series.id)}
                   onClick={close}
                   target="_blank"
                   rel="noreferrer noopener"
