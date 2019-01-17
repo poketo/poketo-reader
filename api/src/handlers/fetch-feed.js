@@ -37,7 +37,7 @@ function jsonFeedForSeries(series: Series) {
       url: chapter.url,
       title: getChapterLabel(chapter),
       date_published: (new Date(chapter.createdAt * 1000)).toISOString(),
-      content_html: 'Read this chapter at ' + chapter.url,
+      content_html: `Read this chapter on <a href="${chapter.url}">${series.site.name}</a>.`,
     })) : [],
   };
   /* eslint-enable camelcase */
