@@ -89,6 +89,7 @@ const utils = {
     `https://www.reddit.com/r/manga/search?q=${encodeURIComponent(
       searchString,
     ).replace(/%20/g, '+')}${sortByNew ? '&sort=new' : ''}&restrict_sr=on`,
+  getFeedUrl: (seriesId: string) => `/feed/${seriesId}.json`,
 
   getUnfollowMessage: (series: { title: string }) =>
     `Do you want to unfollow ${
