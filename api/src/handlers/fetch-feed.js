@@ -47,5 +47,9 @@ export default async function(ctx: Context, id: string) {
   const type = poketo.getType(id);
   ctx.assert(type === 'series', 400, 'Please provide a valid Poketo ID.');
   const series = await poketo.getSeries(id);
+  ctx.log.info(
+    'Fetched series feed: %s',
+    id
+  );
   ctx.body = jsonFeedForSeries(series);
 }
