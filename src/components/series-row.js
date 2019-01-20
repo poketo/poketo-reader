@@ -26,13 +26,13 @@ const SeriesRow = ({ feedItem: item, onMoreClick, ...props }: Props) => {
     <div className="x xa-stretch" {...props}>
       <Component
         {...linkProps}
-        className="c-pointer x xa-center x-1 pa-2 pv-2 hover-bg">
+        className="c-pointer x xa-center x-1 pa-2 pv-2 hover-bg" style={{ width: 'auto', minWidth: 0 }}>
         <CoverImage
           className="mr-2 mr-3-m"
           series={item.series}
           variant="small"
         />
-        <div className="xs-1 w-100p of-hidden">
+        <div className="of-hidden">
           <div className="fs-16 fs-20-m fw-semibold lh-1d25 of-hidden to-ellipsis ws-noWrap">
             {item.series.title}
           </div>
@@ -41,7 +41,6 @@ const SeriesRow = ({ feedItem: item, onMoreClick, ...props }: Props) => {
       </Component>
       <Button
         inline
-        className="ph-2"
         style={{ height: 'auto', minWidth: '44px' }}
         onClick={() => onMoreClick(item.series.id)}>
         <Icon name="more-horizontal" size={20} iconSize={32} />
