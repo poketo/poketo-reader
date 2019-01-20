@@ -5573,10 +5573,15 @@ normalize-url@^2.0.1:
     query-string "^5.0.1"
     sort-keys "^2.0.0"
 
-normalize-url@^3.1.0, normalize-url@^3.2.0:
+normalize-url@^3.1.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-3.3.0.tgz#b2e1c4dc4f7c6d57743df733a4f5978d18650559"
   integrity sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==
+
+normalize-url@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-4.1.0.tgz#307e74c87473efa81969ad1b4bb91f1990178904"
+  integrity sha512-X781mkWeK6PDMAZJfGn/wnwil4dV6pIdF9euiNqtA89uJvZuNDJO2YyJxiwpPhTQcF5pYUU1v+kcOxzYV6rZlA==
 
 now-env@^3.1.0:
   version "3.1.0"
@@ -6099,10 +6104,10 @@ pn@^1.1.0:
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
   integrity sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
 
-poketo@^0.6.6:
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/poketo/-/poketo-0.6.6.tgz#176d8daa2623f038f04a4f574519f827fd2c484a"
-  integrity sha512-VUhzdf+W9NvT4RIucHZolcDxwpSj5v+pzQ7HIOE95zX0HF8HaguR53dD29LNGSUExVtbHoETRTolcjEURkdZOA==
+poketo@^0.6.8:
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/poketo/-/poketo-0.6.8.tgz#57a74d660642617abf76e44c27e7bc997e87fe64"
+  integrity sha512-cwLnWH/b2cQFGAI4rj+MkY6k+wkdFxgX74i5BXpyW5sCOSD7LN23eQn1Knk0SXtZy+qqGLQcfFyELt3gSUyxWw==
   dependencies:
     cheerio "^1.0.0-rc.2"
     cookie "^0.3.1"
@@ -6110,7 +6115,7 @@ poketo@^0.6.6:
     he "^1.1.1"
     moment "^2.22.0"
     moment-timezone "^0.5.14"
-    normalize-url "^3.2.0"
+    normalize-url "^4.1.0"
     p-map "^1.2.0"
     p-throttle "^1.1.0"
     path-match "^1.2.4"
