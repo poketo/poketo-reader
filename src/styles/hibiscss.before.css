@@ -132,6 +132,10 @@
   flex-shrink: 1;
 }
 
+.xjs-center {
+  justify-self: center;
+}
+
 .xs-center {
   align-self: center;
 }

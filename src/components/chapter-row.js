@@ -8,10 +8,6 @@ import type { Bookmark } from '../../shared/types';
 import Icon from './icon';
 import utils from '../utils';
 
-const offsetLeftClassName = css`
-  left: -2px;
-`;
-
 const newReleaseIndicatorClassName = css`
   width: 8px;
   height: 8px;
@@ -20,15 +16,18 @@ const newReleaseIndicatorClassName = css`
 const NewReleaseIndicator = () => (
   <div
     className={cx(
-      'p-relative ml-2 mr-3 br-round bgc-coral',
+      'p-relative br-round bgc-coral xjs-center',
       newReleaseIndicatorClassName,
-      offsetLeftClassName,
     )}
   />
 );
 
 const styles = {
   base: css`
+    display: grid;
+    grid-template-columns: 16px auto auto;
+    grid-column-gap: 8px;
+
     border-radius: 3px;
     min-height: 44px;
     transition: background-color 100ms ease;
@@ -74,7 +73,7 @@ const ChapterRow = ({
 
   return (
     <Link
-      className={cx('x xa-center xj-start pv-2 ph-3', styles.base, {
+      className={cx('pv-2 ph-3 xa-center', styles.base, {
         [styles.isActive]: isActive,
         [styles.isLastRead]: isLastRead && !isActive,
       })}
@@ -83,25 +82,27 @@ const ChapterRow = ({
       {isActive ? (
         <Icon
           name="check"
-          className="p-relative mr-2 c-gray3"
-          size={18}
-          iconSize={24}
+          className="c-gray3 xjs-center"
+          size={16}
+          iconSize={16}
         />
       ) : isLastRead ? (
         <Icon
           name="bookmark-filled"
-          className={cx('p-relative mr-2 c-green', offsetLeftClassName)}
-          size={24}
-          iconSize={24}
+          className="c-green xjs-center"
+          size={16}
+          iconSize={16}
         />
       ) : isNewRelease ? (
         <NewReleaseIndicator />
-      ) : null}
+      ) : (
+        <div />
+      )}
       <div className="of-hidden to-ellipsis ws-noWrap">
         <span className="fw-semibold">{chapterLabel}</span>
         {chapterTitle && <span className="ml-2">{chapterTitle}</span>}
       </div>
-      <span className="ml-auto pl-4 xs-0 fs-12 o-50p">
+      <span className="ta-right fs-12 o-50p">
         {utils.formatTimestamp(chapter.createdAt)}
       </span>
     </Link>
