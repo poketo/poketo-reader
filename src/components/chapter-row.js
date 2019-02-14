@@ -25,7 +25,7 @@ const NewReleaseIndicator = () => (
 const styles = {
   base: css`
     display: grid;
-    grid-template-columns: 16px auto auto;
+    grid-template-columns: auto auto;
     grid-column-gap: 8px;
 
     border-radius: 3px;
@@ -35,6 +35,9 @@ const styles = {
     .supports-hover &:hover {
       background-color: rgba(0, 0, 0, 0.05);
     }
+  `,
+  withIndicator: css`
+    grid-template-columns: 16px auto auto;
   `,
   isActive: css`
     background-color: #f2f2f2; /* gray0 */
@@ -70,10 +73,12 @@ const ChapterRow = ({
   const isNewRelease = bookmark
     ? bookmark.lastReadAt && chapter.createdAt > bookmark.lastReadAt
     : false;
+  const hasIndicator = isLastRead || isNewRelease || isActive;
 
   return (
     <Link
       className={cx('pv-2 ph-3 xa-center', styles.base, {
+        [styles.withIndicator]: hasIndicator,
         [styles.isActive]: isActive,
         [styles.isLastRead]: isLastRead && !isActive,
       })}
@@ -95,9 +100,7 @@ const ChapterRow = ({
         />
       ) : isNewRelease ? (
         <NewReleaseIndicator />
-      ) : (
-        <div />
-      )}
+      ) : null}
       <div className="of-hidden to-ellipsis ws-noWrap">
         <span className="fw-semibold">{chapterLabel}</span>
         {chapterTitle && <span className="ml-2">{chapterTitle}</span>}

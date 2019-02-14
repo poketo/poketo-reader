@@ -151,7 +151,11 @@ export default class ReaderNavigation extends Component<Props, State> {
             pickerClassName,
           )}
           onClick={this.handlePickerClick}>
-          {series && <div className="fs-12 o-50p">{series.title}</div>}
+          {series && (
+            <div className="fs-12 o-50p of-hidden to-ellipsis ws-noWrap">
+              {series.title}
+            </div>
+          )}
           <div className="x xa-center xj-center w-100p fs-14">
             <span className="mh-1 of-hidden to-ellipsis ws-noWrap">
               {chapterLabel}
