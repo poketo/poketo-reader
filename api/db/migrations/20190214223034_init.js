@@ -21,10 +21,10 @@ exports.up = knex => {
         .notNullable()
         .references('users.id')
         .onDelete('CASCADE');
-      t.string('seriesPid').notNullable();
+      t.string('seriesId').notNullable();
       t.string('seriesUrl').notNullable();
-      t.unique(['seriesPid', 'ownerId']);
-      t.string('lastReadChapterPid');
+      t.unique(['seriesId', 'ownerId']);
+      t.string('lastReadChapterId');
       t.timestamp('lastReadAt');
       t.string('linkToUrl');
       t.timestamp('createdAt').defaultTo(knex.fn.now());

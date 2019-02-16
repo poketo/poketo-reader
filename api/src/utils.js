@@ -20,6 +20,8 @@ export default {
   },
 
   timestamp: () => Math.round(Date.now() / 1000),
+  dateToTimestamp: (date: Date): number => Math.round(date.valueOf() / 1000),
+  timestampToDate: (timestamp: number) => new Date(timestamp * 1000),
 
   /*
    * Returns an Object keyed by the given function.

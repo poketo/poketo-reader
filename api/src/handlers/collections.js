@@ -16,7 +16,6 @@ export async function post(ctx: Context) {
   ctx
     .validateBody('bookmarks')
     .required()
-    .toArray()
     .isArray('Bookmarks must be an array');
 
   const {
@@ -40,9 +39,9 @@ export async function post(ctx: Context) {
     const bookmark = bodyBookmarks[i];
 
     newBookmarks.push({
-      seriesPid: series.id,
+      seriesId: series.id,
       seriesUrl: series.url,
-      lastReadChapterPid: bookmark.lastReadChapterId,
+      lastReadChapterId: bookmark.lastReadChapterId,
       linkToUrl: bookmark.linkTo,
     });
   });
@@ -53,7 +52,7 @@ export async function post(ctx: Context) {
   ctx.body = {
     id: user.id,
     slug: user.slug,
-    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.seriesPid),
+    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
   };
 }
 
@@ -64,7 +63,7 @@ export async function get(ctx: Context, slug: string) {
   ctx.body = {
     id: user.id,
     slug: user.slug,
-    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.seriesPid),
+    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
   };
 }
 
@@ -72,20 +71,21 @@ export async function addBookmark(ctx: Context, slug: string) {
   ctx
     .validateBody('seriesUrl')
     .required()
-    .isUrl(`'seriesUrl' is not a valid URL`);
+    .isUrl(`seriesUrl must be a valid URL`);
   ctx
     .validateBody('linkToUrl')
     .optional()
-    .isUrl(`'linkToUrl' is not a valid URL`);
+    .isUrl(`linkToUrl must be a valid URL`);
   ctx
     .validateBody('lastReadChapterId')
     .optional()
-    .isPoketoId(`'lastReadChapterId' is not a valid Poketo ID`);
+    .isPoketoId(`lastReadChapterId must be a valid Poketo ID`);
 
   const { seriesUrl, linkToUrl, lastReadChapterId } = ctx.vals;
 
   const user = await db.findUserBySlug(slug);
   ctx.assert(user.slug, 404, `Collection '${slug}' not found`);
+  invariant(user.slug, 'Cannot happen');
 
   // NOTE: we make a request to the series here to both: (a) validate that
   // we can read and support this series and (b) to normalize the URL and
@@ -93,19 +93,18 @@ export async function addBookmark(ctx: Context, slug: string) {
   const series = await poketo.getSeries(seriesUrl);
 
   await db.insertBookmark(user.id, {
-    seriesPid: series.id,
+    seriesId: series.id,
     seriesUrl: series.url,
-    lastReadChapterPid: lastReadChapterId,
+    lastReadChapterId: lastReadChapterId,
     linkToUrl,
   });
 
-  // $FlowFixMe: User is guaranteed to exist by ctx.assert above
   const bookmarks = await db.findBookmarksBySlug(user.slug);
 
   ctx.body = {
     collection: {
       slug: user.slug,
-      bookmarks: utils.keyArrayBy(bookmarks, obj => obj.seriesPid),
+      bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
     },
     series,
   };
@@ -114,29 +113,26 @@ export async function addBookmark(ctx: Context, slug: string) {
 export async function removeBookmark(
   ctx: Context,
   slug: string,
-  seriesPid: string,
+  seriesId: string,
 ) {
   const user = await db.findUserBySlug(slug);
   ctx.assert(user.slug, 404, `Collection '${slug}' not found`);
 
-  await db.deleteBookmark(user.id, seriesPid);
+  await db.deleteBookmark(user.id, seriesId);
   const bookmarks = await db.findBookmarksBySlug(slug);
 
   ctx.body = {
     slug,
-    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.seriesPid),
+    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
   };
 }
 
-export async function markAsRead(
-  ctx: Context,
-  slug: string,
-  seriesPid: string,
-) {
+export async function markAsRead(ctx: Context, slug: string, seriesId: string) {
   ctx
     .validateBody('lastReadAt')
     .optional()
-    .isInt();
+    .isInt()
+    .tap(val => utils.timestampToDate(val));
   ctx
     .validateBody('lastReadChapterId')
     .optional()
@@ -145,17 +141,19 @@ export async function markAsRead(
       if (val === null) {
         return true;
       }
-      return val && val.includes(seriesPid) && utils.isPoketoId(seriesPid);
-    }, `'lastReadChapterId' does not correspond to the series at '${seriesPid}'`);
+      return val && val.includes(seriesId) && utils.isPoketoId(seriesId);
+    }, `lastReadChapterId must belong to the series at '${seriesId}'`);
 
   const { lastReadAt, lastReadChapterId } = ctx.vals;
 
+  console.log(lastReadAt);
+
   ctx.assert(
-    lastReadAt || lastReadChapterId,
+    lastReadAt || lastReadChapterId || lastReadChapterId === null,
     400,
     new ValidationError(
       'lastReadChapterId',
-      `Please provide either a 'lastReadAt' timestamp or a 'lastReadChapterId' id`,
+      `Provide a lastReadAt timestamp or a lastReadChapterId id`,
     ),
   );
 
@@ -166,13 +164,13 @@ export async function markAsRead(
   }
 
   if (lastReadChapterId === null || lastReadChapterId) {
-    newBookmarkInfo.lastReadChapterPid = lastReadChapterId;
+    newBookmarkInfo.lastReadChapterId = lastReadChapterId;
   }
 
   const user = await db.findUserBySlug(slug);
   const newBookmark = await db.updateBookmark(
     user.id,
-    seriesPid,
+    seriesId,
     newBookmarkInfo,
   );
 

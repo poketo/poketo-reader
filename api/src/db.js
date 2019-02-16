@@ -13,6 +13,7 @@ import utils from './utils';
 export const pg = knex(knexfile);
 
 const isPostgresError = err => {
+  console.error(err);
   if (err.routine && err.severity) {
     return true;
   }
@@ -21,9 +22,8 @@ const isPostgresError = err => {
 
 const query = promise =>
   promise.catch(err => {
-    console.log(err);
     if (isPostgresError(err)) {
-      throw new QueryError(`The Poketo database threw an error.`);
+      throw new QueryError(`The Poketo database threw an unknown error.`);
     }
     throw err;
   });
@@ -51,9 +51,9 @@ const USER_FIELDS = ['id', 'slug', 'email', 'createdAt'];
 
 const BOOKMARK_FIELDS = [
   'id',
-  'seriesPid',
+  'seriesId',
   'seriesUrl',
-  'lastReadChapterPid',
+  'lastReadChapterId',
   'linkToUrl',
   'createdAt',
 ];
@@ -63,7 +63,7 @@ const PostgresErrorCodes = {
 };
 
 async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
-  const result = await query(
+  const result: DatabaseBookmark[] = await query(
     pg('users')
       .where('slug', userSlug)
       .leftJoin('bookmarks', 'bookmarks.ownerId', 'users.id')
@@ -74,11 +74,11 @@ async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
     throw new NotFoundError(`Collection '${userSlug}' not found`);
   }
 
-  return result;
+  return result.map(toBookmark);
 }
 
 async function findUserBySlug(userSlug: string): Promise<User> {
-  const result = await query(
+  const result: User | null = await query(
     pg('users')
       .where('slug', userSlug)
       .first(),
@@ -94,73 +94,107 @@ async function findUserBySlug(userSlug: string): Promise<User> {
 type User = {
   id: string,
   email: string,
-  slug: string | null,
+  slug: string,
   createdAt?: number,
 };
 
-async function insertUser(userInfo: { email: string, slug?: string }) {
+async function insertUser(userInfo: {
+  email: string,
+  slug?: string,
+}): Promise<User> {
   const user = {
     id: uuid(),
     email: userInfo.email,
     slug: userInfo.slug || shortid.generate(),
   };
 
-  const result = await query(pg('users').insert(user, USER_FIELDS));
+  const result: User[] = await query(pg('users').insert(user, USER_FIELDS));
+
+  if (result.length < 1) {
+    throw new QueryError('Unable to create user');
+  }
+
   return result[0];
 }
 
 type BookmarkInfo = {
-  seriesPid: string,
+  seriesId: string,
   seriesUrl: string,
-  lastReadChapterPid: string | null,
+  lastReadChapterId: string | null,
   linkToUrl: string | null,
 };
 
-const toBookmark = (bookmarkInfo: BookmarkInfo, userId: string) => ({
+type DatabaseBookmark = {
+  id: string,
+  ownerId: string,
+  seriesId: string,
+  seriesUrl: string,
+  lastReadChapterId: string | null,
+  lastReadAt: string | null,
+  linkToUrl: string | null,
+  createdAt: string,
+};
+
+const toDatabaseBookmark = (bookmarkInfo: BookmarkInfo, userId: string) => ({
   ...bookmarkInfo,
   id: uuid(),
   ownerId: userId,
 });
 
-async function insertBookmark(userId: string, bookmarkInfo: BookmarkInfo) {
-  const result = await query(
+const toBookmark = (bookmarkData: DatabaseBookmark): Bookmark => {
+  const bookmark: Bookmark = {
+    id: bookmarkData.seriesId,
+    lastReadChapterId: bookmarkData.lastReadChapterId,
+    lastReadAt: utils.dateToTimestamp(new Date(bookmarkData.createdAt)),
+    url: bookmarkData.seriesUrl,
+  };
+
+  if (bookmarkData.linkToUrl) {
+    bookmark.linkTo = bookmarkData.linkToUrl;
+  }
+
+  return bookmark;
+};
+
+async function insertBookmark(
+  userId: string,
+  bookmarkInfo: BookmarkInfo,
+): Promise<void> {
+  return query(
     pg('bookmarks')
-      .insert(toBookmark(bookmarkInfo, userId))
+      .insert(toDatabaseBookmark(bookmarkInfo, userId))
       .returning('*')
       .catch(err => {
-        if (
-          err.code === PostgresErrorCodes.UNIQUE_VIOLATION &&
-          err.constraint === 'bookmarks_seriespid_unique'
-        ) {
-          throw new Error(
-            `A bookmark for '${bookmarkInfo.seriesUrl}' already exists!`,
+        if (err.code === PostgresErrorCodes.UNIQUE_VIOLATION) {
+          throw new QueryError(
+            `A bookmark for '${bookmarkInfo.seriesUrl}' already exists`,
           );
         }
         throw err;
       }),
   );
-
-  return result;
 }
 
-async function insertBookmarks(userId: string, bookmarksInfo: BookmarkInfo[]) {
-  const bookmarks = bookmarksInfo.map(b => toBookmark(b, userId));
-  const result = await query(pg('bookmarks').insert(bookmarks));
+async function insertBookmarks(
+  userId: string,
+  bookmarksInfo: BookmarkInfo[],
+): Promise<void> {
+  const bookmarks = bookmarksInfo.map(b => toDatabaseBookmark(b, userId));
 
-  return result;
+  return query(pg('bookmarks').insert(bookmarks));
 }
 
 async function updateBookmark(
   userId: string,
   seriesId: string,
   bookmarkInfo: {
-    lastReadChapterPid?: string,
+    lastReadChapterId?: string,
     linkToUrl?: string,
   },
-) {
-  const result = await query(
+): Promise<Bookmark> {
+  const result: DatabaseBookmark[] = await query(
     pg('bookmarks')
-      .where({ ownerId: userId, seriesPid: seriesId })
+      .where({ ownerId: userId, seriesId: seriesId })
       .first()
       .update(bookmarkInfo, '*'),
   );
@@ -169,13 +203,13 @@ async function updateBookmark(
     throw new NotFoundError(`Bookmark '${seriesId}' not found`);
   }
 
-  return result[0];
+  return toBookmark(result[0]);
 }
 
 async function deleteBookmark(userId: string, seriesId: string): Promise<void> {
   const result = await query(
     pg('bookmarks')
-      .where({ ownerId: userId, seriesPid: seriesId })
+      .where({ ownerId: userId, seriesId: seriesId })
       .del(),
   );
 
