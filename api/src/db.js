@@ -50,12 +50,12 @@ inherits(QueryError, Error);
 const USER_FIELDS = ['id', 'slug', 'email', 'createdAt'];
 
 const BOOKMARK_FIELDS = [
-  'bookmarks.id',
+  'id',
   'seriesPid',
   'seriesUrl',
   'lastReadChapterPid',
   'linkToUrl',
-  'bookmarks.createdAt',
+  'createdAt',
 ];
 
 const PostgresErrorCodes = {
@@ -67,7 +67,7 @@ async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
     pg('users')
       .where('slug', userSlug)
       .leftJoin('bookmarks', 'bookmarks.ownerId', 'users.id')
-      .select(...BOOKMARK_FIELDS),
+      .select(...BOOKMARK_FIELDS.map(field => `bookmarks.${field}`)),
   );
 
   if (result.length < 1) {

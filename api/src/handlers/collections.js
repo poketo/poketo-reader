@@ -19,10 +19,16 @@ export async function post(ctx: Context) {
     .toArray()
     .isArray('Bookmarks must be an array');
 
-  const { bookmarks, slug } = ctx.vals;
+  const {
+    bookmarks: bodyBookmarks,
+    slug,
+  }: {
+    bookmarks: mixed[],
+    slug?: string,
+  } = ctx.vals;
 
   const series = await pmap(
-    bookmarks,
+    bodyBookmarks,
     bookmark => poketo.getSeries(bookmark.url),
     { concurrency: 3 },
   );
@@ -31,7 +37,7 @@ export async function post(ctx: Context) {
   const newBookmarks = [];
 
   series.forEach((series, i) => {
-    const bookmark = bookmarks[i];
+    const bookmark = bodyBookmarks[i];
 
     newBookmarks.push({
       seriesPid: series.id,
@@ -41,10 +47,14 @@ export async function post(ctx: Context) {
     });
   });
 
-  const result = await db.insertBookmarks(user.id, newBookmarks);
-  console.log(result);
+  await db.insertBookmarks(user.id, newBookmarks);
+  const bookmarks = await db.findBookmarksBySlug(user.slug);
 
-  ctx.body = user;
+  ctx.body = {
+    id: user.id,
+    slug: user.slug,
+    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.seriesPid),
+  };
 }
 
 export async function get(ctx: Context, slug: string) {
