@@ -1,131 +1,197 @@
 // @flow
 
 import 'now-env';
-import pg from 'pg';
+import { inherits } from 'util';
 import knex from 'knex';
 import knexfile from '../knexfile';
+import uuid from 'uuid/v4';
+import shortid from 'shortid';
 import type { Series } from 'poketo';
 import type { Bookmark } from '../../shared/types';
 import utils from './utils';
 
-export const db = knex(knexfile);
+export const pg = knex(knexfile);
 
-async function findCollectionBySlug(collectionSlug: string) {
-  const result = await db('collections')
-    .where({ slug: collectionSlug })
-    .first();
+const isPostgresError = err => {
+  if (err.routine && err.severity) {
+    return true;
+  }
+  return false;
+};
 
-  if (!result) {
-    throw new Error(`Collection '${collectionSlug}' not found`);
+const query = promise =>
+  promise.catch(err => {
+    console.log(err);
+    if (isPostgresError(err)) {
+      throw new QueryError(`The Poketo database threw an error.`);
+    }
+    throw err;
+  });
+
+export function NotFoundError(message: string) {
+  Error.captureStackTrace(this, this.constructor);
+  this.name = this.constructor.name;
+  this.code = 'NOT_FOUND';
+  this.message = message;
+  this.status = 404;
+}
+
+export function QueryError(message: string) {
+  Error.captureStackTrace(this, this.constructor);
+  this.name = this.constructor.name;
+  this.code = 'QUERY_ERROR';
+  this.message = message;
+  this.status = 500;
+}
+
+inherits(NotFoundError, Error);
+inherits(QueryError, Error);
+
+const USER_FIELDS = ['id', 'slug', 'email', 'createdAt'];
+
+const BOOKMARK_FIELDS = [
+  'bookmarks.id',
+  'seriesPid',
+  'seriesUrl',
+  'lastReadChapterPid',
+  'linkToUrl',
+  'bookmarks.createdAt',
+];
+
+const PostgresErrorCodes = {
+  UNIQUE_VIOLATION: '23505',
+};
+
+async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
+  const result = await query(
+    pg('users')
+      .where('slug', userSlug)
+      .leftJoin('bookmarks', 'bookmarks.ownerId', 'users.id')
+      .select(...BOOKMARK_FIELDS),
+  );
+
+  if (result.length < 1) {
+    throw new NotFoundError(`Collection '${userSlug}' not found`);
   }
 
   return result;
 }
 
-async function findBookmarksByCollectionSlug(collectionSlug: string) {
-  return db
-    .select('*')
-    .from('bookmarks')
-    .where({ collection: collectionSlug });
+async function findUserBySlug(userSlug: string): Promise<User> {
+  const result = await query(
+    pg('users')
+      .where('slug', userSlug)
+      .first(),
+  );
+
+  if (!result) {
+    throw new NotFoundError(`Collection '${userSlug}' not found`);
+  }
+
+  return result;
 }
 
-async function insertUser() {
-  //
+type User = {
+  id: string,
+  email: string,
+  slug: string | null,
+  createdAt?: number,
+};
+
+async function insertUser(userInfo: { email: string, slug?: string }) {
+  const user = {
+    id: uuid(),
+    email: userInfo.email,
+    slug: userInfo.slug || shortid.generate(),
+  };
+
+  const result = await query(pg('users').insert(user, USER_FIELDS));
+  return result[0];
 }
 
-async function insertCollection(slug: string, ownerId: string) {
-  //
-}
-
-async function insertBookmark(
-  collectionId: string,
-  seriesId: string,
+type BookmarkInfo = {
+  seriesPid: string,
   seriesUrl: string,
-  lastReadChapterId: string | null,
+  lastReadChapterPid: string | null,
   linkToUrl: string | null,
-) {
-  //
+};
+
+const toBookmark = (bookmarkInfo: BookmarkInfo, userId: string) => ({
+  ...bookmarkInfo,
+  id: uuid(),
+  ownerId: userId,
+});
+
+async function insertBookmark(userId: string, bookmarkInfo: BookmarkInfo) {
+  const result = await query(
+    pg('bookmarks')
+      .insert(toBookmark(bookmarkInfo, userId))
+      .returning('*')
+      .catch(err => {
+        if (
+          err.code === PostgresErrorCodes.UNIQUE_VIOLATION &&
+          err.constraint === 'bookmarks_seriespid_unique'
+        ) {
+          throw new Error(
+            `A bookmark for '${bookmarkInfo.seriesUrl}' already exists!`,
+          );
+        }
+        throw err;
+      }),
+  );
+
+  return result;
 }
 
-async function deleteBookmark(collectionId: string, seriesId: string) {
-  //
+async function insertBookmarks(userId: string, bookmarksInfo: BookmarkInfo[]) {
+  const bookmarks = bookmarksInfo.map(b => toBookmark(b, userId));
+  const result = await query(pg('bookmarks').insert(bookmarks));
+
+  return result;
+}
+
+async function updateBookmark(
+  userId: string,
+  seriesId: string,
+  bookmarkInfo: {
+    lastReadChapterPid?: string,
+    linkToUrl?: string,
+  },
+) {
+  const result = await query(
+    pg('bookmarks')
+      .where({ ownerId: userId, seriesPid: seriesId })
+      .first()
+      .update(bookmarkInfo, '*'),
+  );
+
+  if (result.length < 1) {
+    throw new NotFoundError(`Bookmark '${seriesId}' not found`);
+  }
+
+  return result[0];
+}
+
+async function deleteBookmark(userId: string, seriesId: string): Promise<void> {
+  const result = await query(
+    pg('bookmarks')
+      .where({ ownerId: userId, seriesPid: seriesId })
+      .del(),
+  );
+
+  const bookmarkWasDeleted = result !== 0;
+
+  if (!bookmarkWasDeleted) {
+    throw new NotFoundError(`Bookmark '${seriesId}' not found`);
+  }
 }
 
 export default {
-  findCollectionBySlug,
+  findBookmarksBySlug,
+  findUserBySlug,
   insertUser,
-  insertCollection,
   insertBookmark,
+  insertBookmarks,
+  updateBookmark,
   deleteBookmark,
 };
-
-// export class Collection extends Model {
-//   collection() {
-//     return 'collections';
-//   }
-// }
-//
-// const extendCollection = Collection => {
-//   Collection.prototype.addBookmark = function(
-//     series: Series,
-//     linkToUrl: ?string = null,
-//     lastReadChapterId: string | null = null,
-//   ) {
-//     const bookmarks = this.get('bookmarks');
-//     const existingBookmark = bookmarks.find(
-//       bookmark => bookmark.id === series.id,
-//     );
-//
-//     if (existingBookmark) {
-//       const err: any = new Error(
-//         `A bookmark for ${series.url} already exists!`,
-//       );
-//       err.status = 400;
-//       throw err;
-//     }
-//
-//     const bookmark: Bookmark = {
-//       id: series.id,
-//       url: series.url,
-//       lastReadChapterId,
-//       lastReadAt: utils.timestamp(),
-//     };
-//
-//     if (linkToUrl) {
-//       bookmark.linkTo = linkToUrl;
-//     }
-//
-//     const newBookmarks = [...bookmarks, bookmark];
-//
-//     this.set('bookmarks', newBookmarks);
-//   };
-//
-//   Collection.prototype.removeBookmark = function(seriesId) {
-//     const bookmarks = this.get('bookmarks');
-//     const bookmarkIndex = bookmarks.findIndex(
-//       bookmark => bookmark.id === seriesId,
-//     );
-//
-//     if (bookmarkIndex === -1) {
-//       const err: any = new Error(`Could not find bookmark with ID ${seriesId}`);
-//       err.status = 404;
-//       throw err;
-//     }
-//
-//     const newBookmarks = utils.deleteItemAtIndex(bookmarks, bookmarkIndex);
-//
-//     if (newBookmarks.length === 0) {
-//       const err: any = new Error(
-//         `Cannot delete last bookmark in a collection. Delete the collection instead.`,
-//       );
-//       err.status = 400;
-//       throw err;
-//     }
-//
-//     // NOTE: Due to a bug in mongorito (https://github.com/vadimdemedes/mongorito/issues/179)
-//     // we need to unset bookmarks first before setting it again to "clear" the
-//     // array field.
-//     this.unset('bookmarks');
-//     this.set('bookmarks', newBookmarks);
-//   };
-// };

@@ -1,53 +1,36 @@
 exports.up = knex => {
   return knex.schema
-    .createTable('users', table => {
-      table
-        .uuid('id')
+    .createTable('users', t => {
+      t.uuid('id')
         .unique()
         .primary()
         .notNullable();
-      table.string('email').notNullable();
-      table.timestamps(true, true);
+      t.string('email').notNullable();
+      t.string('password');
+      t.string('slug')
+        .unique()
+        .notNullable();
+      t.timestamp('createdAt').defaultTo(knex.fn.now());
     })
-    .createTable('collections', table => {
-      table
-        .uuid('id')
+    .createTable('bookmarks', t => {
+      t.uuid('id')
         .unique()
         .primary()
         .notNullable();
-      table
-        .string('slug')
-        .unique()
-        .notNullable();
-      table
-        .uuid('owner')
+      t.uuid('ownerId')
         .notNullable()
         .references('users.id')
         .onDelete('CASCADE');
-      table.timestamps(true, true);
-    })
-    .createTable('bookmarks', table => {
-      table
-        .uuid('id')
-        .unique()
-        .primary()
-        .notNullable();
-      table
-        .uuid('collection')
-        .notNullable()
-        .references('collections.id')
-        .onDelete('CASCADE');
-      table.string('series_pid').notNullable();
-      table.string('series_url').notNullable();
-      table.string('last_read_chapter_pid');
-      table.string('link_to_url');
-      table.timestamps(true, true);
+      t.string('seriesPid').notNullable();
+      t.string('seriesUrl').notNullable();
+      t.unique(['seriesPid', 'ownerId']);
+      t.string('lastReadChapterPid');
+      t.timestamp('lastReadAt');
+      t.string('linkToUrl');
+      t.timestamp('createdAt').defaultTo(knex.fn.now());
     });
 };
 
 exports.down = knex => {
-  return knex.schema
-    .dropTableIfExists('users')
-    .dropTableIfExists('collections')
-    .dropTableIfExists('bookmarks');
+  return knex.schema.dropTableIfExists('bookmarks').dropTableIfExists('users');
 };
