@@ -146,8 +146,6 @@ export async function markAsRead(ctx: Context, slug: string, seriesId: string) {
 
   const { lastReadAt, lastReadChapterId } = ctx.vals;
 
-  console.log(lastReadAt);
-
   ctx.assert(
     lastReadAt || lastReadChapterId || lastReadChapterId === null,
     400,
