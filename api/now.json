@@ -5,6 +5,7 @@
   "builds": [{ "src": "src/index.js", "use": "@now/node-server" }],
   "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }],
   "env": {
-    "MONGO_URL": "@poketo-mongo-url"
+    "MONGO_URL": "@poketo-mongo-url",
+    "POSTGRES_URL": "@poketo-postgres-url"
   }
 }

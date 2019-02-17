@@ -1,18 +1,16 @@
 // @flow
 
 import { URL } from 'url';
+import isUrl from 'is-url-superb';
 import normalizeUrl from 'normalize-url';
+
+export function invariant() {
+  // No-op
+}
 
 export default {
   isUrl: (input: string) => {
-    try {
-      // eslint-disable-next-line no-new
-      new URL(normalizeUrl(input));
-    } catch (err) {
-      return false;
-    }
-
-    return true;
+    return isUrl(input);
   },
 
   isPoketoId: (input: string) => {
@@ -22,6 +20,8 @@ export default {
   },
 
   timestamp: () => Math.round(Date.now() / 1000),
+  dateToTimestamp: (date: Date): number => Math.round(date.valueOf() / 1000),
+  timestampToDate: (timestamp: number) => new Date(timestamp * 1000),
 
   /*
    * Returns an Object keyed by the given function.

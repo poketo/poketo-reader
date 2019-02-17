@@ -6,22 +6,29 @@
     "start": "backpack dev | bunyan -o short",
     "build": "backpack build",
     "now-build": "mv src/ typed-src/ && yarn flow-remove-types typed-src/ -d src/",
+    "db:seed": "knex seed:run",
+    "db:migrate": "knex migrate:latest",
+    "db:migrate:rollback": "knex migrate:rollback",
     "lint": "xo && flow",
     "test": "jest"
   },
   "dependencies": {
     "@koa/cors": "^2.2.1",
     "backpack-core": "^0.8.3",
+    "is-url-superb": "^2.0.0",
+    "knex": "^0.16.3",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
+    "koa-bouncer": "^6.0.4",
     "koa-bunyan-logger": "^2.0.0",
     "koa-route": "^3.2.0",
-    "mongorito": "^3.0.4",
     "normalize-url": "^2.0.1",
     "now-env": "^3.1.0",
     "p-map": "^1.2.0",
+    "pg": "^7.8.0",
     "poketo": "^0.6.11",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/preset-flow": "^7.0.0",
@@ -41,7 +48,22 @@
     ],
     "rules": {
       "import/no-unassigned-import": 0
-    }
+    },
+    "overrides": [
+      {
+        "files": "db/**/*.js",
+        "rules": {
+          "unicorn/filename-case": 0,
+          "camelcase": 0
+        }
+      },
+      {
+        "files": "**/*.test.js",
+        "env": [
+          "jest"
+        ]
+      }
+    ]
   },
   "prettier": {
     "singleQuote": true,

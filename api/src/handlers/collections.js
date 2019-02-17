@@ -1,65 +1,96 @@
+// @flow
+
 import pmap from 'p-map';
+import type { Context } from 'koa';
+import { ValidationError } from 'koa-bouncer';
 import poketo from 'poketo';
-import shortid from 'shortid';
-import utils from '../utils';
-import { Collection } from '../db';
+import utils, { invariant } from '../utils';
+import db from '../db';
 
-export async function post(ctx) {
-  const { bookmarks } = ctx.request.body;
+export async function post(ctx: Context) {
+  ctx
+    .validateBody('slug')
+    .optional()
+    .isString()
+    .trim();
+  ctx
+    .validateBody('bookmarks')
+    .required()
+    .isArray('Bookmarks must be an array');
 
-  ctx.assert(Array.isArray(bookmarks), 400, `Bookmarks must be an array`);
-  ctx.assert(
-    bookmarks.length > 0,
-    400,
-    `Bookmarks must have at least one series URL`,
-  );
+  const {
+    bookmarks: bodyBookmarks,
+    slug,
+  }: {
+    bookmarks: mixed[],
+    slug?: string,
+  } = ctx.vals;
 
   const series = await pmap(
-    bookmarks,
+    bodyBookmarks,
     bookmark => poketo.getSeries(bookmark.url),
     { concurrency: 3 },
   );
 
-  const newCollection = new Collection({
-    slug: shortid.generate(),
-    bookmarks: [],
+  const user = await db.insertUser({ email: 'hello@example.com', slug });
+  const newBookmarks = [];
+
+  series.forEach((series, i) => {
+    const bookmark = bodyBookmarks[i];
+
+    newBookmarks.push({
+      seriesId: series.id,
+      seriesUrl: series.url,
+      lastReadChapterId: bookmark.lastReadChapterId,
+      linkToUrl: bookmark.linkTo,
+    });
   });
 
-  series.forEach((s, i) => {
-    const bookmark = bookmarks[i];
-    newCollection.addBookmark(s, bookmark.linkTo, bookmark.lastReadChapterId);
-  });
-
-  await newCollection.save();
-
-  ctx.body = newCollection;
-};
-
-async function getCollectionBySlug(ctx, slug) {
-  const collection = await Collection.findOne({ slug });
-  ctx.assert(collection, 404);
-  return collection;
-}
-
-export async function get(ctx, slug) {
-  const collection = await getCollectionBySlug(ctx, slug);
-  const bookmarks = collection.get('bookmarks');
+  await db.insertBookmarks(user.id, newBookmarks);
+  const bookmarks = await db.findBookmarksBySlug(user.slug);
 
   ctx.body = {
-    slug,
+    id: user.id,
+    slug: user.slug,
     bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
   };
 }
 
-export async function addBookmark(ctx, slug) {
-  const collection = await getCollectionBySlug(ctx, slug);
-  const { seriesUrl, linkToUrl, lastReadChapterId } = ctx.request.body;
+export async function get(ctx: Context, slug: string) {
+  const user = await db.findUserBySlug(slug);
+  const bookmarks = await db.findBookmarksBySlug(slug);
 
-  ctx.assert(utils.isUrl(seriesUrl), 400, `Invalid URL '${seriesUrl}'`);
+  ctx.body = {
+    id: user.id,
+    slug: user.slug,
+    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
+  };
+}
+
+export async function addBookmark(ctx: Context, slug: string) {
+  ctx
+    .validateBody('seriesUrl')
+    .required()
+    .isUrl(`seriesUrl must be a valid URL`);
+  ctx.validateBody('linkToUrl').optional();
+  ctx.validateBody('lastReadChapterId').optional();
+
+  const { seriesUrl, linkToUrl, lastReadChapterId } = ctx.vals;
+
+  const user = await db.findUserBySlug(slug);
+  ctx.assert(user.slug, 404, `Collection '${slug}' not found`);
+  invariant(user.slug, 'Cannot happen');
+
+  ctx.assert(
+    !linkToUrl || utils.isPoketoId(lastReadChapterId),
+    400,
+    new ValidationError(`linkToUrl must be a valid Poketo ID`),
+  );
+
   ctx.assert(
     !linkToUrl || utils.isUrl(linkToUrl),
     400,
-    `Invalid URL '${linkToUrl ? linkToUrl : ''}'`,
+    new ValidationError(`linkToUrl must be a valid URL`),
   );
 
   // NOTE: we make a request to the series here to both: (a) validate that
@@ -67,83 +98,85 @@ export async function addBookmark(ctx, slug) {
   // ID through poketo so we're not storing duplicates.
   const series = await poketo.getSeries(seriesUrl);
 
-  collection.addBookmark(series, linkToUrl, lastReadChapterId);
-  await collection.save();
+  await db.insertBookmark(user.id, {
+    seriesId: series.id,
+    seriesUrl: series.url,
+    lastReadChapterId,
+    linkToUrl,
+  });
+
+  const bookmarks = await db.findBookmarksBySlug(user.slug);
 
   ctx.body = {
     collection: {
-      slug: collection.get('slug'),
-      bookmarks: utils.keyArrayBy(collection.get('bookmarks'), obj => obj.id),
+      slug: user.slug,
+      bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
     },
     series,
   };
 }
 
-export async function removeBookmark(ctx, slug, seriesId) {
-  const collection = await getCollectionBySlug(ctx, slug);
-  collection.removeBookmark(seriesId);
-  await collection.save();
+export async function removeBookmark(
+  ctx: Context,
+  slug: string,
+  seriesId: string,
+) {
+  const user = await db.findUserBySlug(slug);
+  ctx.assert(user.slug, 404, `Collection '${slug}' not found`);
+
+  await db.deleteBookmark(user.id, seriesId);
+  const bookmarks = await db.findBookmarksBySlug(slug);
 
   ctx.body = {
-    slug: collection.get('slug'),
-    bookmarks: utils.keyArrayBy(collection.get('bookmarks'), obj => obj.id),
+    slug,
+    bookmarks: utils.keyArrayBy(bookmarks, obj => obj.id),
   };
 }
 
-export async function markAsRead(ctx, slug, seriesId) {
-  const collection = await getCollectionBySlug(ctx, slug);
-  const bookmarks = collection.get('bookmarks');
-  const currentBookmarkIndex = bookmarks.findIndex(
-    bookmark => bookmark.id === seriesId,
-  );
-  const currentBookmark = bookmarks[currentBookmarkIndex];
+export async function markAsRead(ctx: Context, slug: string, seriesId: string) {
+  ctx
+    .validateBody('lastReadAt')
+    .optional()
+    .isInt()
+    .tap(val => utils.timestampToDate(val));
+  ctx
+    .validateBody('lastReadChapterId')
+    .optional()
+    .checkPred(val => typeof val !== 'undefined')
+    .checkPred(val => {
+      if (val === null) {
+        return true;
+      }
+      return val && val.includes(seriesId) && utils.isPoketoId(seriesId);
+    }, `lastReadChapterId must belong to the series at '${seriesId}'`);
+
+  const { lastReadAt, lastReadChapterId } = ctx.vals;
+
   ctx.assert(
-    currentBookmarkIndex !== -1,
-    404,
-    `Could not find bookmark with ID ${seriesId}`,
-  );
-
-  const { lastReadAt, lastReadChapterId } = ctx.request.body;
-
-  const hasValidLastReadId =
-    lastReadChapterId === null || utils.isPoketoId(lastReadChapterId);
-  const hasValidLastReadAt = Number.isInteger(lastReadAt);
-  const hasValidReadIndicator = hasValidLastReadId || hasValidLastReadAt;
-
-  ctx.assert(
-    hasValidReadIndicator,
+    lastReadAt || lastReadChapterId || lastReadChapterId === null,
     400,
-    `Could not parse 'lastReadAt' timestamp or 'lastReadChapterId' id`,
+    new ValidationError(
+      'lastReadChapterId',
+      `Provide a lastReadAt timestamp or a lastReadChapterId id`,
+    ),
   );
 
-  if (hasValidLastReadId) {
-    ctx.assert(
-      lastReadChapterId === null ||
-        lastReadChapterId.includes(currentBookmark.id),
-      400,
-      `The ID '${lastReadChapterId}' does not correspond to the series at '${
-        currentBookmark.id
-      }'`,
-    );
+  const newBookmarkInfo = {};
+
+  if (lastReadAt) {
+    newBookmarkInfo.lastReadAt = lastReadAt;
   }
 
-  const newBookmark = { ...currentBookmark };
-
-  if (hasValidLastReadAt) {
-    newBookmark.lastReadAt = lastReadAt;
+  if (lastReadChapterId === null || lastReadChapterId) {
+    newBookmarkInfo.lastReadChapterId = lastReadChapterId;
   }
 
-  if (hasValidLastReadId) {
-    newBookmark.lastReadChapterId = lastReadChapterId;
-  }
-
-  const newBookmarks = utils.replaceItemAtIndex(
-    bookmarks,
-    currentBookmarkIndex,
-    newBookmark,
+  const user = await db.findUserBySlug(slug);
+  const newBookmark = await db.updateBookmark(
+    user.id,
+    seriesId,
+    newBookmarkInfo,
   );
-  collection.set('bookmarks', newBookmarks);
-  await collection.save();
 
   ctx.body = newBookmark;
 }
