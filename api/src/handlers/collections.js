@@ -72,20 +72,26 @@ export async function addBookmark(ctx: Context, slug: string) {
     .validateBody('seriesUrl')
     .required()
     .isUrl(`seriesUrl must be a valid URL`);
-  ctx
-    .validateBody('linkToUrl')
-    .optional()
-    .isUrl(`linkToUrl must be a valid URL`);
-  ctx
-    .validateBody('lastReadChapterId')
-    .optional()
-    .isPoketoId(`lastReadChapterId must be a valid Poketo ID`);
+  ctx.validateBody('linkToUrl').optional();
+  ctx.validateBody('lastReadChapterId').optional();
 
   const { seriesUrl, linkToUrl, lastReadChapterId } = ctx.vals;
 
   const user = await db.findUserBySlug(slug);
   ctx.assert(user.slug, 404, `Collection '${slug}' not found`);
   invariant(user.slug, 'Cannot happen');
+
+  ctx.assert(
+    !linkToUrl || utils.isPoketoId(lastReadChapterId),
+    400,
+    new ValidationError(`linkToUrl must be a valid Poketo ID`),
+  );
+
+  ctx.assert(
+    !linkToUrl || utils.isUrl(linkToUrl),
+    400,
+    new ValidationError(`linkToUrl must be a valid URL`),
+  );
 
   // NOTE: we make a request to the series here to both: (a) validate that
   // we can read and support this series and (b) to normalize the URL and
@@ -95,7 +101,7 @@ export async function addBookmark(ctx: Context, slug: string) {
   await db.insertBookmark(user.id, {
     seriesId: series.id,
     seriesUrl: series.url,
-    lastReadChapterId: lastReadChapterId,
+    lastReadChapterId,
     linkToUrl,
   });
 
