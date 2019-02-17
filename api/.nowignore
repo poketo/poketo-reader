@@ -4,3 +4,4 @@
 !yarn.lock
 !*/
 !src
+!knexfile.js
