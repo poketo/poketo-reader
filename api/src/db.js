@@ -54,6 +54,7 @@ const BOOKMARK_FIELDS = [
   'seriesId',
   'seriesUrl',
   'lastReadChapterId',
+  'lastReadAt',
   'linkToUrl',
   'createdAt',
 ];
@@ -145,7 +146,9 @@ const toBookmark = (bookmarkData: DatabaseBookmark): Bookmark => {
   const bookmark: Bookmark = {
     id: bookmarkData.seriesId,
     lastReadChapterId: bookmarkData.lastReadChapterId,
-    lastReadAt: utils.dateToTimestamp(new Date(bookmarkData.createdAt)),
+    lastReadAt: bookmarkData.lastReadAt
+      ? utils.dateToTimestamp(new Date(bookmarkData.lastReadAt))
+      : null,
     url: bookmarkData.seriesUrl,
   };
 
