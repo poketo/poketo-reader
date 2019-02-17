@@ -136,7 +136,12 @@ type DatabaseBookmark = {
   createdAt: string,
 };
 
-const toDatabaseBookmark = (bookmarkInfo: BookmarkInfo, userId: string) => ({
+const createNewDatabaseBookmark = (
+  bookmarkInfo: BookmarkInfo,
+  userId: string,
+) => ({
+  // Default new bookmarks to be "last read at" the current time
+  lastReadAt: new Date(),
   ...bookmarkInfo,
   id: uuid(),
   ownerId: userId,
@@ -165,7 +170,7 @@ async function insertBookmark(
 ): Promise<void> {
   return query(
     pg('bookmarks')
-      .insert(toDatabaseBookmark(bookmarkInfo, userId))
+      .insert(createNewDatabaseBookmark(bookmarkInfo, userId))
       .returning('*')
       .catch(err => {
         if (err.code === PostgresErrorCodes.UNIQUE_VIOLATION) {
@@ -182,7 +187,9 @@ async function insertBookmarks(
   userId: string,
   bookmarksInfo: BookmarkInfo[],
 ): Promise<void> {
-  const bookmarks = bookmarksInfo.map(b => toDatabaseBookmark(b, userId));
+  const bookmarks = bookmarksInfo.map(b =>
+    createNewDatabaseBookmark(b, userId),
+  );
 
   return query(pg('bookmarks').insert(bookmarks));
 }
