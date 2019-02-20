@@ -130,6 +130,7 @@ type DatabaseBookmark = {
   ownerId: string,
   seriesId: string,
   seriesUrl: string,
+  seriesTitle: string | null,
   lastReadChapterId: string | null,
   lastReadAt: string | null,
   linkToUrl: string | null,
@@ -216,6 +217,17 @@ async function updateBookmark(
   return toBookmark(result[0]);
 }
 
+async function updateAllBookmarksForSeries(
+  seriesId: string,
+  series: Series,
+): Promise<void> {
+  await query(
+    pg('bookmarks')
+      .where({ seriesId: seriesId })
+      .update({ seriesPoketoCache: JSON.stringify(series) }),
+  );
+}
+
 async function deleteBookmark(userId: string, seriesId: string): Promise<void> {
   const result = await query(
     pg('bookmarks')
@@ -237,5 +249,6 @@ export default {
   insertBookmark,
   insertBookmarks,
   updateBookmark,
+  updateAllBookmarksForSeries,
   deleteBookmark,
 };

@@ -4,6 +4,8 @@ import poketo from 'poketo';
 import type { Context } from 'koa';
 import { ValidationError } from 'koa-bouncer';
 
+import db from '../db';
+
 function getUrl(ctx: Context) {
   ctx
     .validateQuery('url')
@@ -41,8 +43,19 @@ export default async function(ctx: Context) {
     ),
   );
 
-  ctx.body =
-    type === 'chapter'
-      ? await poketo.getChapter(target)
-      : await poketo.getSeries(target);
+  let result;
+
+  if (type === 'series') {
+    result = await poketo.getSeries(target);
+    try {
+      await db.updateAllBookmarksForSeries(result.id, result);
+    } catch (err) {
+      // Log and swallow error
+      ctx.log.error(err, 'Error during request');
+    }
+  } else {
+    result = await poketo.getChapter(target);
+  }
+
+  ctx.body = result;
 }
