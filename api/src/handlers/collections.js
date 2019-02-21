@@ -33,7 +33,7 @@ export async function post(ctx: Context) {
     email: string,
   } = ctx.vals;
 
-  const series = await pmap(
+  const seriesList = await pmap(
     bodyBookmarks,
     bookmark => poketo.getSeries(bookmark.url),
     { concurrency: 3 },
@@ -42,15 +42,13 @@ export async function post(ctx: Context) {
   const user = await db.insertUser({ email, slug });
   const newBookmarks = [];
 
-  series.forEach((series, i) => {
+  seriesList.forEach((series, i) => {
     const bookmark = bodyBookmarks[i];
 
     newBookmarks.push({
+      title: series.title,
       seriesId: series.id,
       seriesUrl: series.url,
-      seriesTitle: series.title,
-      seriesDescription: series.description || null,
-      seriesCoverImageUrl: series.coverImageUrl || null,
       lastReadChapterId: bookmark.lastReadChapterId,
       linkToUrl: bookmark.linkTo,
     });
