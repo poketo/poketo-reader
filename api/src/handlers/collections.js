@@ -41,6 +41,9 @@ export async function post(ctx: Context) {
     newBookmarks.push({
       seriesId: series.id,
       seriesUrl: series.url,
+      seriesTitle: series.title,
+      seriesDescription: series.description || null,
+      seriesCoverImageUrl: series.coverImageUrl || null,
       lastReadChapterId: bookmark.lastReadChapterId,
       linkToUrl: bookmark.linkTo,
     });

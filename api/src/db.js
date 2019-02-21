@@ -118,24 +118,29 @@ async function insertUser(userInfo: {
   return result[0];
 }
 
-type BookmarkInfo = {
-  seriesId: string,
-  seriesUrl: string,
-  lastReadChapterId: string | null,
-  linkToUrl: string | null,
-};
-
-type DatabaseBookmark = {
+type DatabaseBookmark = {|
   id: string,
   ownerId: string,
   seriesId: string,
   seriesUrl: string,
   seriesTitle: string | null,
+  seriesDescription: string | null,
+  seriesCoverImageUrl: string | null,
   lastReadChapterId: string | null,
   lastReadAt: string | null,
   linkToUrl: string | null,
   createdAt: string,
+|};
+
+type UneditableDatabaseBookmarkFields = {
+  id: string,
+  ownerId: string,
+  createdAt: string,
 };
+
+type BookmarkInfo = $Shape<
+  $Diff<DatabaseBookmark, UneditableDatabaseBookmarkFields>,
+>;
 
 const createNewDatabaseBookmark = (
   bookmarkInfo: BookmarkInfo,
@@ -198,10 +203,7 @@ async function insertBookmarks(
 async function updateBookmark(
   userId: string,
   seriesId: string,
-  bookmarkInfo: {
-    lastReadChapterId?: string,
-    linkToUrl?: string,
-  },
+  bookmarkInfo: BookmarkInfo,
 ): Promise<Bookmark> {
   const result: DatabaseBookmark[] = await query(
     pg('bookmarks')
@@ -224,7 +226,11 @@ async function updateAllBookmarksForSeries(
   await query(
     pg('bookmarks')
       .where({ seriesId: seriesId })
-      .update({ seriesPoketoCache: JSON.stringify(series) }),
+      .update({
+        seriesTitle: series.title,
+        seriesDescription: series.description,
+        seriesCoverImageUrl: series.coverImageUrl,
+      }),
   );
 }
 
