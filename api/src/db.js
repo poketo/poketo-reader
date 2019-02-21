@@ -156,6 +156,9 @@ const createNewDatabaseBookmark = (
 const toBookmark = (bookmarkData: DatabaseBookmark): Bookmark => {
   const bookmark: Bookmark = {
     id: bookmarkData.seriesId,
+    title: bookmarkData.seriesTitle,
+    description: bookmarkData.seriesDescription,
+    coverImageUrl: bookmarkData.seriesCoverImageUrl,
     lastReadChapterId: bookmarkData.lastReadChapterId,
     lastReadAt: bookmarkData.lastReadAt
       ? utils.dateToTimestamp(new Date(bookmarkData.lastReadAt))
