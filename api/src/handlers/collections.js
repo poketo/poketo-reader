@@ -9,6 +9,11 @@ import db from '../db';
 
 export async function post(ctx: Context) {
   ctx
+    .validateBody('email')
+    .required()
+    .isEmail()
+    .trim();
+  ctx
     .validateBody('slug')
     .optional()
     .isString()
@@ -20,10 +25,12 @@ export async function post(ctx: Context) {
 
   const {
     bookmarks: bodyBookmarks,
+    email,
     slug,
   }: {
     bookmarks: mixed[],
     slug?: string,
+    email: string,
   } = ctx.vals;
 
   const series = await pmap(
@@ -32,7 +39,7 @@ export async function post(ctx: Context) {
     { concurrency: 3 },
   );
 
-  const user = await db.insertUser({ email: 'hello@example.com', slug });
+  const user = await db.insertUser({ email, slug });
   const newBookmarks = [];
 
   series.forEach((series, i) => {
