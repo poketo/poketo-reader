@@ -62,11 +62,7 @@ class BookmarkActionPanel extends Component<Props> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const {
-    collections: collectionsById,
-    series: seriesById,
-    navigation,
-  } = state;
+  const { collections: collectionsById, navigation } = state;
 
   const slug = navigation.collectionSlug;
 

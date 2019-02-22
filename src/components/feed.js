@@ -7,7 +7,7 @@ import { Route, NavLink, withRouter } from 'react-router-dom';
 import FeedItemRow from './feed-item-row';
 import Panel from './panel';
 import SeriesRow from './series-row';
-import SeriesActionPanel from './collection-series-actions-panel';
+import BookmarkActionsPanel from './collection-bookmark-actions-panel';
 import Icon from './icon';
 import utils from '../utils';
 import { setLastSeenTab } from '../store/reducers/navigation';
@@ -147,7 +147,7 @@ class Feed extends Component<Props, State> {
           isShown={Boolean(this.state.seriesActionPanelId)}
           onRequestClose={this.closePanel}>
           {() => (
-            <SeriesActionPanel
+            <BookmarkActionsPanel
               // $FlowFixMe: The `isShown` conditional ensures this is always true.
               seriesId={this.state.seriesActionPanelId}
               onRequestClose={this.closePanel}
