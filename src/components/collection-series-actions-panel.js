@@ -7,6 +7,7 @@ import Icon from './icon';
 import Panel from './panel';
 import api from '../api';
 import utils from '../utils';
+import { removeBookmark } from '../store/reducers/collections';
 import type { Dispatch } from '../store/types';
 
 type Props = {
@@ -27,10 +28,7 @@ class SeriesActionPanel extends Component<Props> {
     api
       .fetchRemoveBookmarkFromCollection(collectionSlug, series.id)
       .then(response => {
-        dispatch({
-          type: 'REMOVE_BOOKMARK',
-          payload: { collectionSlug, seriesId: series.id },
-        });
+        dispatch(removeBookmark(collectionSlug, series.id));
         onRequestClose();
       })
       .catch(err => {

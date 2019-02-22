@@ -150,18 +150,10 @@ export function addBookmark(
 export function removeBookmark(
   collectionSlug: string,
   seriesId: string,
-): Thunk {
-  return (dispatch, getState, api) => {
-    dispatch({
-      type: 'REMOVE_BOOKMARK',
-      payload: { collectionSlug, seriesId },
-    });
-
-    api
-      .fetchRemoveBookmarkFromCollection(collectionSlug, seriesId)
-      .catch(err => {
-        // swallow errors
-      });
+): Action {
+  return {
+    type: 'REMOVE_BOOKMARK',
+    payload: { collectionSlug, seriesId },
   };
 }
 
