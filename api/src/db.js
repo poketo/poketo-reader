@@ -205,11 +205,7 @@ async function updateAllBookmarksForSeries(
   await query(
     pg('bookmarks')
       .where({ seriesId })
-      .update({
-        seriesTitle: series.title,
-        seriesDescription: series.description,
-        seriesCoverImageUrl: series.coverImageUrl,
-      }),
+      .update({ title: series.title }),
   );
 }
 

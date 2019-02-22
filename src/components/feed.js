@@ -93,7 +93,7 @@ class LibraryFeed extends Component<LibraryProps> {
   render() {
     return this.props.feedItems.map(item => (
       <SeriesRow
-        key={item.series.id}
+        key={item.id}
         feedItem={item}
         onMoreClick={this.props.onMoreClick}
       />
@@ -206,20 +206,26 @@ function mapStateToProps(state, ownProps) {
         ? nextChapter.createdAt > bookmark.lastReadAt
         : false;
 
+      console.log(
+        bookmark ? bookmark.title : null,
+        series ? series.title : null,
+      );
+
       return {
         series,
         chapters,
         isCaughtUp,
         isNewRelease: hasNewRelease,
-        title: bookmark.title || series.title,
+        id: bookmark.id,
+        title: bookmark ? bookmark.title || series.title : series.title,
         lastReadChapterId: bookmark.lastReadChapterId,
         linkTo: bookmark.linkTo,
       };
     })
     // Ignore bookmarks where the series hasn't loaded
-    .filter(item => item.series)
+    // .filter(item => item)
     .sort((a, b) => {
-      return a.series.title.localeCompare(b.series.title);
+      return a.title.localeCompare(b.title);
     });
 
   return { feedItems };
