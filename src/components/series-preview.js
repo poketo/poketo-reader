@@ -30,7 +30,10 @@ const SeriesPreview = ({ series, isFetching }: Props) => (
       series && (
         <Fragment>
           <div className={cx('mr-3', previewClassName)}>
-            <CoverImage series={series} />
+            <CoverImage
+              alt={series.title}
+              coverImageUrl={series.coverImageUrl}
+            />
           </div>
           <div>
             <h3 className="fs-18 fw-semibold lh-1d25">{series.title}</h3>

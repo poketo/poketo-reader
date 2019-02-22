@@ -26,10 +26,12 @@ const SeriesRow = ({ feedItem: item, onMoreClick, ...props }: Props) => {
     <div className="x xa-stretch" {...props}>
       <Component
         {...linkProps}
-        className="c-pointer x xa-center x-1 pa-2 pv-2 hover-bg" style={{ width: 'auto', minWidth: 0 }}>
+        className="c-pointer x xa-center x-1 pa-2 pv-2 hover-bg"
+        style={{ width: 'auto', minWidth: 0 }}>
         <CoverImage
           className="mr-2 mr-3-m"
-          series={item.series}
+          alt={item.title}
+          coverImageUrl={item.series && item.series.coverImageUrl}
           variant="small"
         />
         <div className="of-hidden">

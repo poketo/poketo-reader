@@ -206,11 +206,6 @@ function mapStateToProps(state, ownProps) {
         ? nextChapter.createdAt > bookmark.lastReadAt
         : false;
 
-      console.log(
-        bookmark ? bookmark.title : null,
-        series ? series.title : null,
-      );
-
       return {
         series,
         chapters,

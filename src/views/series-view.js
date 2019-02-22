@@ -170,13 +170,11 @@ const SeriesPage = ({
               href={series.coverImageUrl}
               target="_blank"
               rel="noreferrer noopener">
-              <CoverImage series={series} />
+              <CoverImage alt={title} coverImageUrl={series.coverImageUrl} />
             </a>
           </div>
           <div>
-            <h1 className="fs-24 fw-semibold lh-1d25 mb-1">
-              {bookmark ? bookmark.title : series.title}
-            </h1>
+            <h1 className="fs-24 fw-semibold lh-1d25 mb-1">{title}</h1>
             <a
               href={series.url}
               className="fs-14 fs-16-m c-gray3"

@@ -2,33 +2,33 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { Series } from 'poketo';
 import Icon from './icon';
 import Panel from './panel';
 import api from '../api';
 import utils from '../utils';
 import { removeBookmark } from '../store/reducers/collections';
 import type { Dispatch } from '../store/types';
+import type { Bookmark } from '../../shared/types';
 
 type Props = {
   dispatch: Dispatch,
-  series: Series,
+  bookmark: Bookmark,
   collectionSlug: string,
   onRequestClose: () => void,
 };
 
-class SeriesActionPanel extends Component<Props> {
+class BookmarkActionPanel extends Component<Props> {
   handleUnfollowClick = () => {
-    const { series, dispatch, collectionSlug, onRequestClose } = this.props;
+    const { bookmark, dispatch, collectionSlug, onRequestClose } = this.props;
 
-    if (!window.confirm(utils.getUnfollowMessage(series))) {
+    if (!window.confirm(utils.getUnfollowMessage(bookmark.title))) {
       return;
     }
 
     api
-      .fetchRemoveBookmarkFromCollection(collectionSlug, series.id)
+      .fetchRemoveBookmarkFromCollection(collectionSlug, bookmark.id)
       .then(response => {
-        dispatch(removeBookmark(collectionSlug, series.id));
+        dispatch(removeBookmark(collectionSlug, bookmark.id));
         onRequestClose();
       })
       .catch(err => {
@@ -37,19 +37,19 @@ class SeriesActionPanel extends Component<Props> {
   };
 
   render() {
-    const { series } = this.props;
+    const { bookmark } = this.props;
 
     return (
       <div>
         <div className="ph-3 pt-3 pb-1 mb-2 bb-1 bc-gray1">
-          <Panel.Title>{series.title}</Panel.Title>
+          <Panel.Title>{bookmark.title}</Panel.Title>
         </div>
         <Panel.Link
           icon={<Icon name="new-tab" className="c-gray4" />}
-          label={`Open on ${series.site.name}`}
+          label={`Open on ${utils.getSiteNameFromId(bookmark.id)}`}
           target="_blank"
           rel="noopener noreferrer"
-          href={series.url}
+          href={bookmark.url}
         />
         <Panel.Button
           icon={<Icon name="bookmark" className="c-coral" />}
@@ -62,12 +62,18 @@ class SeriesActionPanel extends Component<Props> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { series: seriesById, navigation } = state;
+  const {
+    collections: collectionsById,
+    series: seriesById,
+    navigation,
+  } = state;
+
+  const slug = navigation.collectionSlug;
 
   return {
-    collectionSlug: navigation.collectionSlug,
-    series: seriesById[ownProps.seriesId],
+    collectionSlug: slug,
+    bookmark: collectionsById[slug].bookmarks[ownProps.seriesId],
   };
 };
 
-export default connect(mapStateToProps)(SeriesActionPanel);
+export default connect(mapStateToProps)(BookmarkActionPanel);
