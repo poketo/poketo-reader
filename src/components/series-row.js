@@ -38,9 +38,9 @@ const SeriesRow = ({ feedItem: item, onMoreClick, ...props }: Props) => {
           <div className="fs-16 fs-20-m fw-semibold lh-1d25 of-hidden to-ellipsis ws-noWrap">
             {item.title}
           </div>
-          {item.series && (
-            <div className="fs-12 fs-14-m o-50p">{item.series.site.name}</div>
-          )}
+          <div className="fs-12 fs-14-m o-50p">
+            {utils.getSiteNameFromId(item.id)}
+          </div>
         </div>
       </Component>
       <Button

@@ -88,12 +88,19 @@ const SeriesPage = ({
 
   const supportsReading = series.supportsReading;
   const hasChapters = chapters.length > 0;
+  const title = bookmark ? bookmark.title : series.title;
+  const siteName = utils.getSiteNameFromId(series.id);
 
   return (
     <div className="pb-5">
       <ScrollReset />
       <Head title={series.title}>
-        <link href={utils.getFeedUrl(series.id)} rel="feed" type="application/json" title={series.title} />
+        <link
+          href={utils.getFeedUrl(series.id)}
+          rel="feed"
+          type="application/json"
+          title={series.title}
+        />
       </Head>
       <div className="mw-600 w-100p mh-auto p-relative">
         <header className="p-relative z-3 x xa-center xj-spaceBetween pa-2 mb-3 c-white">
@@ -109,7 +116,7 @@ const SeriesPage = ({
               <div className="pa-2">
                 <Popover.Item
                   iconBefore={<Icon name="new-tab" {...iconProps} />}
-                  label={`Open on ${series.site.name}`}
+                  label={`Open on ${siteName}`}
                   href={series.url}
                   onClick={close}
                   target="_blank"
@@ -180,7 +187,7 @@ const SeriesPage = ({
               className="fs-14 fs-16-m c-gray3"
               target="_blank"
               rel="noopener noreferrer">
-              {series.site.name}
+              {siteName}
               <Icon name="new-tab" size={16} iconSize={16} />
             </a>
           </div>
@@ -243,7 +250,7 @@ const SeriesPage = ({
               <p className="c-gray4">
                 {supportsReading
                   ? `This series has no chapters available to read.`
-                  : `${series.site.name} doesn't support reading on Poketo.`}
+                  : `${siteName} doesn't support reading on Poketo.`}
               </p>
             </div>
           )}

@@ -143,6 +143,7 @@ class ReaderViewContainer extends Component<ContainerProps> {
     const isLoading = isFetching || !chapter || !chapter.pages || !series;
 
     const showNavigation = chapter && series && seriesChapters;
+    const siteName = utils.getSiteNameFromId(seriesId);
 
     return (
       <div className="mh-100vh bgc-gray4">
@@ -163,10 +164,7 @@ class ReaderViewContainer extends Component<ContainerProps> {
                 <div className="mb-2 c-white o-50p">
                   <Icon name="warning" />
                 </div>
-                <div className="mb-3 o-50p">
-                  Error loading
-                  {series ? ` from ${series.site.name}` : ''}
-                </div>
+                <div className="mb-3 o-50p">Error loading from {siteName}</div>
                 <Button inline onClick={this.handleRetryButtonClick}>
                   <span className="ph-3">Try again</span>
                 </Button>
@@ -176,10 +174,7 @@ class ReaderViewContainer extends Component<ContainerProps> {
                 <div className="mb-4">
                   <DotLoader />
                 </div>
-                <div className="fs-12 o-50p">
-                  Loading
-                  {series ? ` from ${series.site.name}` : ''}
-                </div>
+                <div className="fs-12 o-50p">Loading from {siteName}</div>
               </div>
             )}
           </div>
