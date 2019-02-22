@@ -174,7 +174,9 @@ const SeriesPage = ({
             </a>
           </div>
           <div>
-            <h1 className="fs-24 fw-semibold lh-1d25 mb-1">{series.title}</h1>
+            <h1 className="fs-24 fw-semibold lh-1d25 mb-1">
+              {bookmark ? bookmark.title : series.title}
+            </h1>
             <a
               href={series.url}
               className="fs-14 fs-16-m c-gray3"

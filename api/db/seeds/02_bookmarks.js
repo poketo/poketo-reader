@@ -19,10 +19,10 @@ exports.seed = knex => {
           id: '3c407aee-c119-46ba-9454-8a9dc5546afc',
           ownerId: '12e63540-9a2e-4a39-9560-87fc82ea1c6c',
           seriesId: 'mangadex:22482',
-          title: 'Senryu Girl',
+          title: 'Senryu Shoujo',
           seriesUrl: 'https://mangadex.org/title/22482',
           lastReadChapterId: 'mangadex:22482:533655',
-          lastReadAt: null,
+          lastReadAt: '2019-02-22T06:45:38.727Z',
           linkToUrl: null,
         },
         {

@@ -7,37 +7,9 @@ import uuid from 'uuid/v4';
 import shortid from 'shortid';
 import type { Series } from 'poketo';
 import type { Bookmark } from '../../shared/types';
+import type { DatabaseBookmark, BookmarkInfo, User } from './types';
 import knexfile from '../knexfile';
 import utils from './utils';
-
-type User = {
-  id: string,
-  email: string,
-  slug: string,
-  createdAt?: number,
-};
-
-type DatabaseBookmark = {|
-  id: string,
-  ownerId: string,
-  seriesId: string,
-  seriesUrl: string,
-  title: string | null,
-  lastReadChapterId: string | null,
-  lastReadAt: string | null,
-  linkToUrl: string | null,
-  createdAt: string,
-|};
-
-type UneditableDatabaseBookmarkFields = {
-  id: string,
-  ownerId: string,
-  createdAt: string,
-};
-
-type BookmarkInfo = $Shape<
-  $Diff<DatabaseBookmark, UneditableDatabaseBookmarkFields>,
->;
 
 export const pg = knex(knexfile);
 
@@ -76,10 +48,9 @@ export function QueryError(message: string) {
 inherits(NotFoundError, Error);
 inherits(QueryError, Error);
 
-const USER_FIELDS = ['id', 'slug', 'email', 'createdAt'];
+const USER_FIELDS: Array<$Keys<User>> = ['id', 'slug', 'email', 'createdAt'];
 
-type DatabaseBookmark$Keys = $Keys<DatabaseBookmark>;
-const BOOKMARK_FIELDS: DatabaseBookmark$Keys = [
+const BOOKMARK_FIELDS: Array<$Keys<DatabaseBookmark>> = [
   'id',
   'seriesId',
   'seriesUrl',

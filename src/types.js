@@ -10,6 +10,7 @@ export type PageDimensions = {
 export type FeedItem = {
   linkTo?: string,
   lastReadChapterId: BookmarkLastReadChapterId,
+  title: string,
   chapters: ChapterMetadata[],
   series: Series,
 };

@@ -186,22 +186,24 @@ function mapStateToProps(state, ownProps) {
   const seriesIds = Object.keys(bookmarks);
   const feedItems: FeedItem[] = seriesIds
     .map(seriesId => {
-      const { lastReadAt, lastReadChapterId, linkTo } = bookmarks[seriesId];
+      const bookmark = bookmarks[seriesId];
 
       const series = seriesById[seriesId];
       const chapterIds = (series ? series.chapters : null) || [];
       const chapters = chapterIds.map(id => chaptersById[id]);
 
       const isCaughtUp =
-        chapters.length > 0 ? chapters[0].id === lastReadChapterId : true;
+        chapters.length > 0
+          ? chapters[0].id === bookmark.lastReadChapterId
+          : true;
 
       const nextChapter =
         isCaughtUp === false
-          ? utils.nextChapterToRead(chapters, lastReadChapterId)
+          ? utils.nextChapterToRead(chapters, bookmark.lastReadChapterId)
           : null;
 
       const hasNewRelease = nextChapter
-        ? nextChapter.createdAt > lastReadAt
+        ? nextChapter.createdAt > bookmark.lastReadAt
         : false;
 
       return {
@@ -209,8 +211,9 @@ function mapStateToProps(state, ownProps) {
         chapters,
         isCaughtUp,
         isNewRelease: hasNewRelease,
-        lastReadChapterId,
-        linkTo,
+        title: bookmark.title || series.title,
+        lastReadChapterId: bookmark.lastReadChapterId,
+        linkTo: bookmark.linkTo,
       };
     })
     // Ignore bookmarks where the series hasn't loaded
