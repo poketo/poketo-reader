@@ -5,6 +5,7 @@ import { css, cx } from 'react-emotion/macro';
 import type { Series } from 'poketo';
 import CoverImage from './series-cover-image';
 import DotLoader from './loader-dots';
+import utils from '../utils';
 
 type Props = {
   series: ?Series,
@@ -16,29 +17,35 @@ const previewClassName = css`
   max-width: 80px;
 `;
 
-const SeriesPreview = ({ series, isFetching }: Props) => (
-  <div className="x xa-center pa-3 ba-1 bc-gray1 e-1 br-4">
-    {isFetching && (
-      <div className="w-100p ta-center">
-        <div className="mb-2">
-          <DotLoader />
+const SeriesPreview = ({ series, isFetching }: Props) => {
+  const siteName = series ? utils.getSiteNameFromId(series.id) : null;
+  return (
+    <div className="x xa-center pa-3 ba-1 bc-gray1 e-1 br-4">
+      {isFetching && (
+        <div className="w-100p ta-center">
+          <div className="mb-2">
+            <DotLoader />
+          </div>
+          <div className="fs-12 c-gray3">Loading preview</div>
         </div>
-        <div className="fs-12 c-gray3">Loading preview</div>
-      </div>
-    )}
-    {!isFetching &&
-      series && (
-        <Fragment>
-          <div className={cx('mr-3', previewClassName)}>
-            <CoverImage series={series} />
-          </div>
-          <div>
-            <h3 className="fs-18 fw-semibold lh-1d25">{series.title}</h3>
-            <h4 className="fs-14 c-gray3">{series.site.name}</h4>
-          </div>
-        </Fragment>
       )}
-  </div>
-);
+      {!isFetching &&
+        series && (
+          <Fragment>
+            <div className={cx('mr-3', previewClassName)}>
+              <CoverImage
+                alt={series.title}
+                coverImageUrl={series.coverImageUrl}
+              />
+            </div>
+            <div>
+              <h3 className="fs-18 fw-semibold lh-1d25">{series.title}</h3>
+              <h4 className="fs-14 c-gray3">{siteName}</h4>
+            </div>
+          </Fragment>
+        )}
+    </div>
+  );
+};
 
 export default SeriesPreview;

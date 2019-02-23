@@ -22,7 +22,7 @@ const FeedItemRow = ({ feedItem: item }: Props) => {
     <div>
       <Link to={seriesTo}>
         <span className="d-inlineBlock c-gray3 fs-14 fs-16-m ph-2 pv-1 mb-1 hover-bg">
-          {item.series.title}
+          {item.title}
         </span>
       </Link>
       <NextChapterRow chapter={chapter} isNewRelease={item.isNewRelease} />

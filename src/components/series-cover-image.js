@@ -5,10 +5,8 @@ import styled, { css } from 'react-emotion/macro';
 
 type Props = {
   className?: string,
-  series: {
-    coverImageUrl: ?string,
-    title: string,
-  },
+  alt: ?string,
+  coverImageUrl: ?string,
   variant?: 'small' | 'medium' | 'large',
 };
 
@@ -61,11 +59,11 @@ const StyledFill = styled.div`
   box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
 `;
 
-const SeriesCoverImage = ({ series, ...props }: Props) => (
+const SeriesCoverImage = ({ coverImageUrl, alt, ...props }: Props) => (
   <StyledContainerContainer {...props}>
-    <StyledContainer role="img" aria-label={series.title}>
-      {series.coverImageUrl && (
-        <StyledImage className="p-fill" imageUrl={series.coverImageUrl} />
+    <StyledContainer role="img" aria-label={alt}>
+      {coverImageUrl && (
+        <StyledImage className="p-fill" imageUrl={coverImageUrl} />
       )}
       <StyledFill className="p-fill" />
     </StyledContainer>

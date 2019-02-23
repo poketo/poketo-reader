@@ -13,9 +13,11 @@ type Props = {
 };
 
 const CollectionErrorMessage = ({ errorCode }: Props) => {
+  let title = 'Something went wrong.';
   let message = null;
 
   if (errorCode === 'NOT_FOUND') {
+    title = 'Missing account.';
     message = (
       <Fragment>
         <p>
@@ -28,7 +30,7 @@ const CollectionErrorMessage = ({ errorCode }: Props) => {
   } else if (errorCode === 'TIMED_OUT') {
     message = (
       <Fragment>
-        Loading your collection timed out.{' '}
+        Loading your collection took too long.{' '}
         <button className="Link" onClick={() => window.location.reload()}>
           Refresh to try again.
         </button>
@@ -50,7 +52,7 @@ const CollectionErrorMessage = ({ errorCode }: Props) => {
 
   return (
     <Markdown>
-      <h2 className="fw-semibold mb-2">Something went wrong.</h2>
+      <h2 className="fw-semibold mb-2">{title}</h2>
       {message}
     </Markdown>
   );

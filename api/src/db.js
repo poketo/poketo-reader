@@ -3,11 +3,12 @@
 import 'now-env';
 import { inherits } from 'util';
 import knex from 'knex';
-import knexfile from '../knexfile';
 import uuid from 'uuid/v4';
 import shortid from 'shortid';
 import type { Series } from 'poketo';
 import type { Bookmark } from '../../shared/types';
+import type { DatabaseBookmark, BookmarkInfo, User } from './types';
+import knexfile from '../knexfile';
 import utils from './utils';
 
 export const pg = knex(knexfile);
@@ -47,12 +48,13 @@ export function QueryError(message: string) {
 inherits(NotFoundError, Error);
 inherits(QueryError, Error);
 
-const USER_FIELDS = ['id', 'slug', 'email', 'createdAt'];
+const USER_FIELDS: Array<$Keys<User>> = ['id', 'slug', 'email', 'createdAt'];
 
-const BOOKMARK_FIELDS = [
+const BOOKMARK_FIELDS: Array<$Keys<DatabaseBookmark>> = [
   'id',
   'seriesId',
   'seriesUrl',
+  'title',
   'lastReadChapterId',
   'lastReadAt',
   'linkToUrl',
@@ -63,6 +65,35 @@ const PostgresErrorCodes = {
   UNIQUE_VIOLATION: '23505',
 };
 
+const createNewDatabaseBookmark = (
+  bookmarkInfo: BookmarkInfo,
+  userId: string,
+) => ({
+  // Default new bookmarks to be "last read at" the current time
+  lastReadAt: new Date(),
+  ...bookmarkInfo,
+  id: uuid(),
+  ownerId: userId,
+});
+
+const toBookmark = (bookmarkData: DatabaseBookmark): Bookmark => {
+  const bookmark: Bookmark = {
+    id: bookmarkData.seriesId,
+    title: bookmarkData.title,
+    lastReadChapterId: bookmarkData.lastReadChapterId,
+    lastReadAt: bookmarkData.lastReadAt
+      ? utils.dateToTimestamp(new Date(bookmarkData.lastReadAt))
+      : null,
+    url: bookmarkData.seriesUrl,
+  };
+
+  if (bookmarkData.linkToUrl) {
+    bookmark.linkTo = bookmarkData.linkToUrl;
+  }
+
+  return bookmark;
+};
+
 async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
   const result: DatabaseBookmark[] = await query(
     pg('users')
@@ -71,7 +102,7 @@ async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
       .select(...BOOKMARK_FIELDS.map(field => `bookmarks.${field}`)),
   );
 
-  if (result.length < 1) {
+  if (result.length === 0) {
     throw new NotFoundError(`Collection '${userSlug}' not found`);
   }
 
@@ -92,13 +123,6 @@ async function findUserBySlug(userSlug: string): Promise<User> {
   return result;
 }
 
-type User = {
-  id: string,
-  email: string,
-  slug: string,
-  createdAt?: number,
-};
-
 async function insertUser(userInfo: {
   email: string,
   slug?: string,
@@ -111,58 +135,12 @@ async function insertUser(userInfo: {
 
   const result: User[] = await query(pg('users').insert(user, USER_FIELDS));
 
-  if (result.length < 1) {
+  if (result.length === 0) {
     throw new QueryError('Unable to create user');
   }
 
   return result[0];
 }
-
-type BookmarkInfo = {
-  seriesId: string,
-  seriesUrl: string,
-  lastReadChapterId: string | null,
-  linkToUrl: string | null,
-};
-
-type DatabaseBookmark = {
-  id: string,
-  ownerId: string,
-  seriesId: string,
-  seriesUrl: string,
-  lastReadChapterId: string | null,
-  lastReadAt: string | null,
-  linkToUrl: string | null,
-  createdAt: string,
-};
-
-const createNewDatabaseBookmark = (
-  bookmarkInfo: BookmarkInfo,
-  userId: string,
-) => ({
-  // Default new bookmarks to be "last read at" the current time
-  lastReadAt: new Date(),
-  ...bookmarkInfo,
-  id: uuid(),
-  ownerId: userId,
-});
-
-const toBookmark = (bookmarkData: DatabaseBookmark): Bookmark => {
-  const bookmark: Bookmark = {
-    id: bookmarkData.seriesId,
-    lastReadChapterId: bookmarkData.lastReadChapterId,
-    lastReadAt: bookmarkData.lastReadAt
-      ? utils.dateToTimestamp(new Date(bookmarkData.lastReadAt))
-      : null,
-    url: bookmarkData.seriesUrl,
-  };
-
-  if (bookmarkData.linkToUrl) {
-    bookmark.linkTo = bookmarkData.linkToUrl;
-  }
-
-  return bookmark;
-};
 
 async function insertBookmark(
   userId: string,
@@ -197,29 +175,44 @@ async function insertBookmarks(
 async function updateBookmark(
   userId: string,
   seriesId: string,
-  bookmarkInfo: {
-    lastReadChapterId?: string,
-    linkToUrl?: string,
-  },
+  bookmarkInfo: BookmarkInfo,
 ): Promise<Bookmark> {
   const result: DatabaseBookmark[] = await query(
     pg('bookmarks')
-      .where({ ownerId: userId, seriesId: seriesId })
+      .where({ ownerId: userId, seriesId })
       .first()
       .update(bookmarkInfo, '*'),
   );
 
-  if (result.length < 1) {
+  if (result.length === 0) {
     throw new NotFoundError(`Bookmark '${seriesId}' not found`);
   }
 
   return toBookmark(result[0]);
 }
 
+/**
+ * A method to update cached values from a poketo fetch on series bookmarks.
+ * Updates all bookmarks with a given series ID across Poketo.
+ *
+ * @param {string} seriesId  The Poketo ID of the series to update.
+ * @param {Series} series    The Poketo response to update with.
+ */
+async function updateAllBookmarksForSeries(
+  seriesId: string,
+  series: Series,
+): Promise<void> {
+  await query(
+    pg('bookmarks')
+      .where({ seriesId })
+      .update({ title: series.title }),
+  );
+}
+
 async function deleteBookmark(userId: string, seriesId: string): Promise<void> {
   const result = await query(
     pg('bookmarks')
-      .where({ ownerId: userId, seriesId: seriesId })
+      .where({ ownerId: userId, seriesId })
       .del(),
   );
 
@@ -237,5 +230,6 @@ export default {
   insertBookmark,
   insertBookmarks,
   updateBookmark,
+  updateAllBookmarksForSeries,
   deleteBookmark,
 };

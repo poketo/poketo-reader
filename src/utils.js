@@ -15,6 +15,26 @@ import type { BookmarkLastReadChapterId } from './types';
 
 const toDate = (n: number): Date => new Date(n * 1000);
 
+const SiteNames = {
+  'helvetica-scans': 'Helvetica Scans',
+  'hot-chocolate-scans': 'Hot Chocolate Scans',
+  'jaiminis-box': `Jaimini’s Box`,
+  'kirei-cake': 'Kirei Cake',
+  'manga-fox': 'MangaFox',
+  'manga-here': 'MangaHere',
+  'manga-rock': 'MangaRock',
+  'manga-updates': 'Manga Updates',
+  mangadex: 'MangaDex',
+  mangakakalot: 'Mangakakalot',
+  manganelo: 'Manganelo',
+  'meraki-scans': 'Meraki Scans',
+  'phoenix-serenade': 'Phoenix Serenade',
+  'sen-manga': 'Sen Manga',
+  'sense-scans': 'Sense Scans',
+  'silent-sky-scans': 'Silent Sky Scans',
+  'tuki-scans': 'Tuki Scans',
+};
+
 const utils = {
   formatTimestamp: (timestamp: number): string => {
     const date = toDate(timestamp);
@@ -55,6 +75,10 @@ const utils = {
   /**
    * Store helpers
    */
+  toSiteId: (seriesId: string) => {
+    return seriesId.split(':').shift();
+  },
+
   toSeriesId: (chapterId: string) => {
     return chapterId
       .split(':')
@@ -91,10 +115,14 @@ const utils = {
     ).replace(/%20/g, '+')}${sortByNew ? '&sort=new' : ''}&restrict_sr=on`,
   getFeedUrl: (seriesId: string) => `/feed/${seriesId}.json`,
 
-  getUnfollowMessage: (series: { title: string }) =>
-    `Do you want to unfollow ${
-      series.title
-    }? Your reading progress will be lost.`,
+  getUnfollowMessage: (seriesTitle: ?string) =>
+    `Do you want to unfollow ${seriesTitle ||
+      'this series'}? Your reading progress will be lost.`,
+
+  getSiteNameFromId: (seriesId: string) => {
+    const siteId = utils.toSiteId(seriesId);
+    return SiteNames[siteId] || 'site';
+  },
 
   /**
    * Chapter Helpers

@@ -8,7 +8,7 @@ import api from '../api';
 import utils from '../utils';
 import { type Dispatch } from '../store/types';
 import { getCollectionSlug } from '../store/reducers/navigation';
-import { addBookmark } from '../store/reducers/collections';
+import { addBookmark, removeBookmark } from '../store/reducers/collections';
 import Icon from '../components/icon';
 
 const StyledFollowButton = styled.button`
@@ -75,16 +75,13 @@ class FollowButton extends Component<Props, State> {
     const { id: seriesId, url: seriesUrl } = series;
 
     if (isFollowing) {
-      if (window.confirm(utils.getUnfollowMessage(series))) {
+      if (window.confirm(utils.getUnfollowMessage(series.title))) {
         this.setState({ isFetching: true });
         api
           .fetchRemoveBookmarkFromCollection(collectionSlug, series.id)
           .then(response => {
             this.setState({ isFetching: false });
-            dispatch({
-              type: 'REMOVE_BOOKMARK',
-              payload: { collectionSlug, seriesId },
-            });
+            dispatch(removeBookmark(collectionSlug, seriesId));
           })
           .catch(err => {
             this.setState({ isFetching: false });

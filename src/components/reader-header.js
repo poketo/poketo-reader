@@ -127,7 +127,7 @@ export default class ReaderHeader extends Component<Props, State> {
                           <div>
                             <div className="fw-semibold">{series.title}</div>
                             <div className="fs-14 c-gray3">
-                              {series.site.name}
+                              {utils.getSiteNameFromId(series.id)}
                             </div>
                           </div>
                         </Link>
@@ -135,7 +135,9 @@ export default class ReaderHeader extends Component<Props, State> {
                         {chapter && (
                           <Popover.Item
                             iconBefore={<Icon name="new-tab" {...iconProps} />}
-                            label={`Open on ${series.site.name}`}
+                            label={`Open on ${utils.getSiteNameFromId(
+                              series.id,
+                            )}`}
                             href={chapter.url}
                             onClick={close}
                             target="_blank"

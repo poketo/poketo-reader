@@ -7,7 +7,7 @@ import { Route, NavLink, withRouter } from 'react-router-dom';
 import FeedItemRow from './feed-item-row';
 import Panel from './panel';
 import SeriesRow from './series-row';
-import SeriesActionPanel from './collection-series-actions-panel';
+import BookmarkActionsPanel from './collection-bookmark-actions-panel';
 import Icon from './icon';
 import utils from '../utils';
 import { setLastSeenTab } from '../store/reducers/navigation';
@@ -93,7 +93,7 @@ class LibraryFeed extends Component<LibraryProps> {
   render() {
     return this.props.feedItems.map(item => (
       <SeriesRow
-        key={item.series.id}
+        key={item.id}
         feedItem={item}
         onMoreClick={this.props.onMoreClick}
       />
@@ -147,7 +147,7 @@ class Feed extends Component<Props, State> {
           isShown={Boolean(this.state.seriesActionPanelId)}
           onRequestClose={this.closePanel}>
           {() => (
-            <SeriesActionPanel
+            <BookmarkActionsPanel
               // $FlowFixMe: The `isShown` conditional ensures this is always true.
               seriesId={this.state.seriesActionPanelId}
               onRequestClose={this.closePanel}
@@ -186,22 +186,24 @@ function mapStateToProps(state, ownProps) {
   const seriesIds = Object.keys(bookmarks);
   const feedItems: FeedItem[] = seriesIds
     .map(seriesId => {
-      const { lastReadAt, lastReadChapterId, linkTo } = bookmarks[seriesId];
+      const bookmark = bookmarks[seriesId];
 
       const series = seriesById[seriesId];
       const chapterIds = (series ? series.chapters : null) || [];
       const chapters = chapterIds.map(id => chaptersById[id]);
 
       const isCaughtUp =
-        chapters.length > 0 ? chapters[0].id === lastReadChapterId : true;
+        chapters.length > 0
+          ? chapters[0].id === bookmark.lastReadChapterId
+          : true;
 
       const nextChapter =
         isCaughtUp === false
-          ? utils.nextChapterToRead(chapters, lastReadChapterId)
+          ? utils.nextChapterToRead(chapters, bookmark.lastReadChapterId)
           : null;
 
       const hasNewRelease = nextChapter
-        ? nextChapter.createdAt > lastReadAt
+        ? nextChapter.createdAt > bookmark.lastReadAt
         : false;
 
       return {
@@ -209,14 +211,16 @@ function mapStateToProps(state, ownProps) {
         chapters,
         isCaughtUp,
         isNewRelease: hasNewRelease,
-        lastReadChapterId,
-        linkTo,
+        id: bookmark.id,
+        title: bookmark ? bookmark.title || series.title : series.title,
+        lastReadChapterId: bookmark.lastReadChapterId,
+        linkTo: bookmark.linkTo,
       };
     })
     // Ignore bookmarks where the series hasn't loaded
-    .filter(item => item.series)
+    // .filter(item => item)
     .sort((a, b) => {
-      return a.series.title.localeCompare(b.series.title);
+      return a.title.localeCompare(b.title);
     });
 
   return { feedItems };

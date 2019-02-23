@@ -14,7 +14,7 @@ type Props = {
 };
 
 const SeriesRow = ({ feedItem: item, onMoreClick, ...props }: Props) => {
-  const seriesTo = utils.getSeriesUrl(item.series.id);
+  const seriesTo = utils.getSeriesUrl(item.id);
 
   const isExternalLink = seriesTo.startsWith('http');
   const Component = isExternalLink ? 'a' : Link;
@@ -26,23 +26,27 @@ const SeriesRow = ({ feedItem: item, onMoreClick, ...props }: Props) => {
     <div className="x xa-stretch" {...props}>
       <Component
         {...linkProps}
-        className="c-pointer x xa-center x-1 pa-2 pv-2 hover-bg" style={{ width: 'auto', minWidth: 0 }}>
+        className="c-pointer x xa-center x-1 pa-2 pv-2 hover-bg"
+        style={{ width: 'auto', minWidth: 0 }}>
         <CoverImage
           className="mr-2 mr-3-m"
-          series={item.series}
+          alt={item.title}
+          coverImageUrl={item.series && item.series.coverImageUrl}
           variant="small"
         />
         <div className="of-hidden">
           <div className="fs-16 fs-20-m fw-semibold lh-1d25 of-hidden to-ellipsis ws-noWrap">
-            {item.series.title}
+            {item.title}
           </div>
-          <div className="fs-12 fs-14-m o-50p">{item.series.site.name}</div>
+          <div className="fs-12 fs-14-m o-50p">
+            {utils.getSiteNameFromId(item.id)}
+          </div>
         </div>
       </Component>
       <Button
         inline
         style={{ height: 'auto', minWidth: '44px' }}
-        onClick={() => onMoreClick(item.series.id)}>
+        onClick={() => onMoreClick(item.id)}>
         <Icon name="more-horizontal" size={20} iconSize={32} />
       </Button>
     </div>

@@ -9,6 +9,11 @@ import db from '../db';
 
 export async function post(ctx: Context) {
   ctx
+    .validateBody('email')
+    .required()
+    .isEmail()
+    .trim();
+  ctx
     .validateBody('slug')
     .optional()
     .isString()
@@ -20,25 +25,28 @@ export async function post(ctx: Context) {
 
   const {
     bookmarks: bodyBookmarks,
+    email,
     slug,
   }: {
     bookmarks: mixed[],
     slug?: string,
+    email: string,
   } = ctx.vals;
 
-  const series = await pmap(
+  const seriesList = await pmap(
     bodyBookmarks,
     bookmark => poketo.getSeries(bookmark.url),
     { concurrency: 3 },
   );
 
-  const user = await db.insertUser({ email: 'hello@example.com', slug });
+  const user = await db.insertUser({ email, slug });
   const newBookmarks = [];
 
-  series.forEach((series, i) => {
+  seriesList.forEach((series, i) => {
     const bookmark = bodyBookmarks[i];
 
     newBookmarks.push({
+      title: series.title,
       seriesId: series.id,
       seriesUrl: series.url,
       lastReadChapterId: bookmark.lastReadChapterId,
@@ -99,6 +107,7 @@ export async function addBookmark(ctx: Context, slug: string) {
   const series = await poketo.getSeries(seriesUrl);
 
   await db.insertBookmark(user.id, {
+    title: series.title,
     seriesId: series.id,
     seriesUrl: series.url,
     lastReadChapterId,
