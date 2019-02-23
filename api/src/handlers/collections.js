@@ -107,6 +107,7 @@ export async function addBookmark(ctx: Context, slug: string) {
   const series = await poketo.getSeries(seriesUrl);
 
   await db.insertBookmark(user.id, {
+    title: series.title,
     seriesId: series.id,
     seriesUrl: series.url,
     lastReadChapterId,
