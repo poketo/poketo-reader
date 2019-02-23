@@ -47,12 +47,6 @@ export default async function(ctx: Context) {
 
   if (type === 'series') {
     result = await poketo.getSeries(target);
-    try {
-      await db.updateAllBookmarksForSeries(result.id, result);
-    } catch (err) {
-      // Log and swallow error
-      ctx.log.error(err, 'Error during request');
-    }
   } else {
     result = await poketo.getChapter(target);
   }

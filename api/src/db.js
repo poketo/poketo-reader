@@ -191,24 +191,6 @@ async function updateBookmark(
   return toBookmark(result[0]);
 }
 
-/**
- * A method to update cached values from a poketo fetch on series bookmarks.
- * Updates all bookmarks with a given series ID across Poketo.
- *
- * @param {string} seriesId  The Poketo ID of the series to update.
- * @param {Series} series    The Poketo response to update with.
- */
-async function updateAllBookmarksForSeries(
-  seriesId: string,
-  series: Series,
-): Promise<void> {
-  await query(
-    pg('bookmarks')
-      .where({ seriesId })
-      .update({ title: series.title }),
-  );
-}
-
 async function deleteBookmark(userId: string, seriesId: string): Promise<void> {
   const result = await query(
     pg('bookmarks')
@@ -230,6 +212,5 @@ export default {
   insertBookmark,
   insertBookmarks,
   updateBookmark,
-  updateAllBookmarksForSeries,
   deleteBookmark,
 };
