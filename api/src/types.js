@@ -12,7 +12,7 @@ export type DatabaseBookmark = {|
   ownerId: string,
   seriesId: string,
   seriesUrl: string,
-  title: string | null,
+  title: string,
   lastReadChapterId: string | null,
   lastReadAt: string | null,
   linkToUrl: string | null,
