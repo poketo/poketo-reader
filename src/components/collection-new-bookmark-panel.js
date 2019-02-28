@@ -23,6 +23,7 @@ type NewSeriesErrorCode =
   | 'REQUEST_FAILED'
   | 'INVALID_SERIES'
   | 'INVALID_URL'
+  | 'LICENSE_ERROR'
   | 'UNSUPPORTED_SITE'
   | 'SERIES_NOT_FOUND'
   | 'SERIES_ALREADY_EXISTS'
@@ -101,6 +102,10 @@ const getHttpErrorCode = (err: AxiosError): NewSeriesErrorCode => {
     return 'SERIES_NOT_FOUND';
   }
 
+  if (err.response.status === 451) {
+    return 'LICENSE_ERROR';
+  }
+
   if (err.response.status === 400) {
     switch (err.response.data.code) {
       case undefined:
@@ -150,7 +155,9 @@ const getErrorMessage = (errorCode: NewSeriesErrorCode, url: string): Node => {
     case 'SERIES_NOT_FOUND':
       return `We couldn't find a series at that URL.`;
     case 'SERIES_ALREADY_EXISTS':
-      return `That series is already in your collection!`;
+      return `This series is already in your collection!`;
+    case 'LICENSE_ERROR':
+      return `This series is licensed on this site in North America, where Poketo is hosted. It isn't available for reading. Sorry!`;
     case 'UNKNOWN_ERROR':
       return `Something went wrong fetching the series. Try again later.`;
     default:
@@ -254,7 +261,10 @@ class NewBookmarkPanel extends Component<Props, State> {
         });
       })
       .catch(err => {
+        const errorCode = getHttpErrorCode(err);
         this.setState({
+          bookmarkFetchState: 'UNREADY',
+          errorCode,
           isFetchingPreview: false,
           seriesPreview: null,
         });
@@ -332,24 +342,23 @@ class NewBookmarkPanel extends Component<Props, State> {
               {getErrorMessage(errorCode, seriesUrl)}
             </p>
           )}
-          {seriesUrl &&
-            showLinkToForm && (
-              <Fragment>
-                <p className="mb-2">
-                  <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
-                  support reading on Poketo. You can add a different link to
-                  open for reading.
-                </p>
-                <Input
-                  type="url"
-                  name="linkToUrl"
-                  readOnly={disableFormFields}
-                  onChange={this.handleLinkToUrlChange}
-                  placeholder="Reading URL (optional)"
-                  value={linkToUrl || ''}
-                />
-              </Fragment>
-            )}
+          {seriesUrl && showLinkToForm && (
+            <Fragment>
+              <p className="mb-2">
+                <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
+                support reading on Poketo. You can add a different link to open
+                for reading.
+              </p>
+              <Input
+                type="url"
+                name="linkToUrl"
+                readOnly={disableFormFields}
+                onChange={this.handleLinkToUrlChange}
+                placeholder="Reading URL (optional)"
+                value={linkToUrl || ''}
+              />
+            </Fragment>
+          )}
           <Button
             variant="primary"
             disabled={bookmarkFetchState !== 'READY' || errorCode !== null}
