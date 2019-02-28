@@ -108,9 +108,9 @@ const getHttpErrorCode = (err: AxiosError): NewSeriesErrorCode => {
       return 'SERIES_NOT_FOUND';
     case 451:
       return 'LICENSE_ERROR';
+    default:
+      return 'UNKNOWN_ERROR';
   }
-
-  return 'UNKNOWN_ERROR';
 };
 
 const getErrorMessage = (errorCode: NewSeriesErrorCode, url: string): Node => {
