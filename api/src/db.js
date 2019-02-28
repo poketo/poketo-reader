@@ -109,6 +109,24 @@ async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
   return result.map(toBookmark);
 }
 
+async function checkBookmarkExists(
+  userId: string,
+  seriesId: string,
+): Promise<boolean> {
+  const result = await query(
+    pg('users')
+      .leftJoin('bookmarks', 'bookmarks.ownerId', 'users.id')
+      .where({ 'users.id': userId, 'bookmarks.seriesId': seriesId })
+      .select(...BOOKMARK_FIELDS.map(field => `bookmarks.${field}`)),
+  );
+
+  if (result) {
+    return true;
+  }
+
+  return false;
+}
+
 async function findUserBySlug(userSlug: string): Promise<User> {
   const result: User | null = await query(
     pg('users')
@@ -206,6 +224,7 @@ async function deleteBookmark(userId: string, seriesId: string): Promise<void> {
 }
 
 export default {
+  checkBookmarkExists,
   findBookmarksBySlug,
   findUserBySlug,
   insertUser,

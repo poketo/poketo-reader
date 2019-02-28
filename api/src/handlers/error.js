@@ -35,10 +35,11 @@ export default async function(ctx: Context, next: () => Promise<void>) {
       message: err.message,
     };
 
-    if (err.code) {
-      body.code = err.code;
-    } else if (err instanceof ValidationError) {
+    if (err instanceof ValidationError) {
       body.code = 'INVALID_REQUEST';
+      body.message = err.message;
+    } else if (err.code) {
+      body.code = err.code;
     }
 
     ctx.status = err.statusCode || err.status || getErrorStatus(body.code);
