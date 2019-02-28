@@ -3,20 +3,26 @@
 import { type Context } from 'koa';
 import { ValidationError } from 'koa-bouncer';
 import { NotFoundError } from '../db';
+import type { ApiErrorCode } from '../../../shared/types';
 
-function getErrorStatus(code) {
-  switch (code) {
-    case 'INVALID_REQUEST':
-    case 'INVALID_ID':
-    case 'INVALID_URL':
-    case 'UNSUPPORTED_SITE':
-    case 'UNSUPPORTED_SITE_REQUEST':
-      return 400;
-    case 'TIMEOUT':
-      return 504;
-    default:
-      return 500;
+const errorCodeToStatus: { [ApiErrorCode]: number } = {
+  INVALID_REQUEST: 400,
+  INVALID_ID: 400,
+  INVALID_URL: 400,
+  UNSUPPORTED_SITE: 400,
+  UNSUPPORTED_SITE_REQUEST: 400,
+  LICENSE_ERROR: 451,
+  TIMEOUT: 504,
+};
+
+function getErrorStatus(code?: string): number {
+  if (!code) {
+    return 500;
   }
+
+  // $FlowFixMe: Flow doesn't like accessing a map with a generic string
+  const statusNumber = errorCodeToStatus[code];
+  return statusNumber || 500;
 }
 
 export default async function(ctx: Context, next: () => Promise<void>) {
