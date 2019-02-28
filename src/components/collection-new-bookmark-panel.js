@@ -79,7 +79,7 @@ const isValidUrl = (url: string) => {
   return utils.isUrl(normalizedUrl) && isSupportedUrl(normalizedUrl);
 };
 
-const getUrlErrorCode = (url: string): NewSeriesErrorCode | null => {
+const getStaticUrlErrors = (url: string): NewSeriesErrorCode | null => {
   const normalizedUrl = utils.normalizeUrl(url);
 
   if (!utils.isUrl(normalizedUrl)) {
@@ -98,23 +98,16 @@ const getHttpErrorCode = (err: AxiosError): NewSeriesErrorCode => {
     return 'REQUEST_FAILED';
   }
 
-  if (err.response.status === 404) {
-    return 'SERIES_NOT_FOUND';
-  }
-
-  if (err.response.status === 451) {
-    return 'LICENSE_ERROR';
-  }
-
-  if (err.response.status === 400) {
-    switch (err.response.data.code) {
-      case undefined:
-        return /already exists/i.test(err.response.data.message)
-          ? 'SERIES_ALREADY_EXISTS'
-          : 'INVALID_SERIES';
-      default:
-        return 'INVALID_SERIES';
-    }
+  switch (err.response.status) {
+    case 400:
+      if (err.response.data.message.includes('already exists')) {
+        return 'SERIES_ALREADY_EXISTS';
+      }
+      return 'INVALID_SERIES';
+    case 404:
+      return 'SERIES_NOT_FOUND';
+    case 451:
+      return 'LICENSE_ERROR';
   }
 
   return 'UNKNOWN_ERROR';
@@ -228,7 +221,7 @@ class NewBookmarkPanel extends Component<Props, State> {
       return;
     }
 
-    const errorCode = getUrlErrorCode(seriesUrl);
+    const errorCode = getStaticUrlErrors(seriesUrl);
 
     this.setState({
       errorCode,
