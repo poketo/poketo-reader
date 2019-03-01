@@ -10,6 +10,9 @@ export type Bookmark = {
   linkTo?: string,
 };
 
+/**
+ * All possible error codes returned by the API.
+ */
 export type ApiErrorCode =
   | 'INVALID_REQUEST'
   | 'INVALID_SERIES'
@@ -18,4 +21,5 @@ export type ApiErrorCode =
   | 'UNSUPPORTED_SITE'
   | 'UNSUPPORTED_SITE_REQUEST'
   | 'LICENSE_ERROR'
-  | 'TIMEOUT';
+  | 'TIMEOUT'
+  | 'SERVER_ERROR';

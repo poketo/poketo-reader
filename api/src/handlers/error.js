@@ -13,14 +13,10 @@ const errorCodeToStatus: { [ApiErrorCode]: number } = {
   UNSUPPORTED_SITE_REQUEST: 400,
   LICENSE_ERROR: 451,
   TIMEOUT: 504,
+  SERVER_ERROR: 500,
 };
 
-function getErrorStatus(code?: string): number {
-  if (!code) {
-    return 500;
-  }
-
-  // $FlowFixMe: Flow doesn't like accessing a map with a generic string
+function getErrorStatus(code: ApiErrorCode): number {
   const statusNumber = errorCodeToStatus[code];
   return statusNumber || 500;
 }
@@ -31,7 +27,8 @@ export default async function(ctx: Context, next: () => Promise<void>) {
     const status = ctx.status || 404;
     ctx.assert(status !== 404, 404);
   } catch (err) {
-    const body: { message: string, code?: string } = {
+    const body: { message: string, code: ApiErrorCode } = {
+      code: 'SERVER_ERROR',
       message: err.message,
     };
 
