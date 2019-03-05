@@ -6315,10 +6315,10 @@ pn@^1.1.0:
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
   integrity sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
 
-poketo@^0.6.11:
-  version "0.6.11"
-  resolved "https://registry.yarnpkg.com/poketo/-/poketo-0.6.11.tgz#fcea8f9bc45413e20f910414a262068b52b7aecd"
-  integrity sha512-yuY77tgbBIKVSTZtLi9ZkJgyia+2dqeUnRd2yCUCizZd/d76/A+jOjBzml8kcAwQFlKBd1lhCfvO8zowae7OPg==
+poketo@^0.6.12:
+  version "0.6.12"
+  resolved "https://registry.yarnpkg.com/poketo/-/poketo-0.6.12.tgz#1584f323b3c266ef2d18c616a4cdf8ad7b4f8220"
+  integrity sha512-5hmamXllQtcstfeoJLMn4RCxxrd7cbuK4+zbiG8l8hx0RwSYgFkiO3rn1oEnghuOWplhE1fP5ZF0A3mXz8e7pw==
   dependencies:
     cheerio "^1.0.0-rc.2"
     cookie "^0.3.1"

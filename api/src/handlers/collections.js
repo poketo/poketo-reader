@@ -89,16 +89,22 @@ export async function addBookmark(ctx: Context, slug: string) {
   ctx.assert(user.slug, 404, `Collection '${slug}' not found`);
   invariant(user.slug, 'Cannot happen');
 
-  ctx.assert(
-    !linkToUrl || utils.isPoketoId(lastReadChapterId),
-    400,
-    new ValidationError(`linkToUrl must be a valid Poketo ID`),
+  ctx.check(
+    !lastReadChapterId || utils.isPoketoId(lastReadChapterId),
+    `lastReadChapterId must be a valid Poketo ID`,
   );
 
-  ctx.assert(
+  ctx.check(
     !linkToUrl || utils.isUrl(linkToUrl),
-    400,
-    new ValidationError(`linkToUrl must be a valid URL`),
+    `linkToUrl must be a valid URL`,
+  );
+
+  const seriesId = poketo.getId(seriesUrl);
+  const hasExistingBookmark = await db.checkBookmarkExists(user.id, seriesId);
+
+  ctx.check(
+    !hasExistingBookmark,
+    `A bookmark for '${seriesUrl}' already exists.`,
   );
 
   // NOTE: we make a request to the series here to both: (a) validate that
@@ -161,13 +167,9 @@ export async function markAsRead(ctx: Context, slug: string, seriesId: string) {
 
   const { lastReadAt, lastReadChapterId } = ctx.vals;
 
-  ctx.assert(
+  ctx.check(
     lastReadAt || lastReadChapterId || lastReadChapterId === null,
-    400,
-    new ValidationError(
-      'lastReadChapterId',
-      `Provide a lastReadAt timestamp or a lastReadChapterId id`,
-    ),
+    `Provide a lastReadAt timestamp or a lastReadChapterId id`,
   );
 
   const newBookmarkInfo = {};

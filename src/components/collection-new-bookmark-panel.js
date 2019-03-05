@@ -23,6 +23,7 @@ type NewSeriesErrorCode =
   | 'REQUEST_FAILED'
   | 'INVALID_SERIES'
   | 'INVALID_URL'
+  | 'LICENSE_ERROR'
   | 'UNSUPPORTED_SITE'
   | 'SERIES_NOT_FOUND'
   | 'SERIES_ALREADY_EXISTS'
@@ -78,7 +79,7 @@ const isValidUrl = (url: string) => {
   return utils.isUrl(normalizedUrl) && isSupportedUrl(normalizedUrl);
 };
 
-const getUrlErrorCode = (url: string): NewSeriesErrorCode | null => {
+const getStaticUrlErrors = (url: string): NewSeriesErrorCode | null => {
   const normalizedUrl = utils.normalizeUrl(url);
 
   if (!utils.isUrl(normalizedUrl)) {
@@ -97,22 +98,19 @@ const getHttpErrorCode = (err: AxiosError): NewSeriesErrorCode => {
     return 'REQUEST_FAILED';
   }
 
-  if (err.response.status === 404) {
-    return 'SERIES_NOT_FOUND';
+  switch (err.response.status) {
+    case 400:
+      if (err.response.data.message.includes('already exists')) {
+        return 'SERIES_ALREADY_EXISTS';
+      }
+      return 'INVALID_SERIES';
+    case 404:
+      return 'SERIES_NOT_FOUND';
+    case 451:
+      return 'LICENSE_ERROR';
+    default:
+      return 'UNKNOWN_ERROR';
   }
-
-  if (err.response.status === 400) {
-    switch (err.response.data.code) {
-      case undefined:
-        return /already exists/i.test(err.response.data.message)
-          ? 'SERIES_ALREADY_EXISTS'
-          : 'INVALID_SERIES';
-      default:
-        return 'INVALID_SERIES';
-    }
-  }
-
-  return 'UNKNOWN_ERROR';
 };
 
 const getErrorMessage = (errorCode: NewSeriesErrorCode, url: string): Node => {
@@ -150,7 +148,9 @@ const getErrorMessage = (errorCode: NewSeriesErrorCode, url: string): Node => {
     case 'SERIES_NOT_FOUND':
       return `We couldn't find a series at that URL.`;
     case 'SERIES_ALREADY_EXISTS':
-      return `That series is already in your collection!`;
+      return `This series is already in your collection!`;
+    case 'LICENSE_ERROR':
+      return `This series is licensed on this site in North America, where Poketo is hosted. It isn't available for reading. Sorry!`;
     case 'UNKNOWN_ERROR':
       return `Something went wrong fetching the series. Try again later.`;
     default:
@@ -221,7 +221,7 @@ class NewBookmarkPanel extends Component<Props, State> {
       return;
     }
 
-    const errorCode = getUrlErrorCode(seriesUrl);
+    const errorCode = getStaticUrlErrors(seriesUrl);
 
     this.setState({
       errorCode,
@@ -254,7 +254,10 @@ class NewBookmarkPanel extends Component<Props, State> {
         });
       })
       .catch(err => {
+        const errorCode = getHttpErrorCode(err);
         this.setState({
+          bookmarkFetchState: 'UNREADY',
+          errorCode,
           isFetchingPreview: false,
           seriesPreview: null,
         });
@@ -332,24 +335,23 @@ class NewBookmarkPanel extends Component<Props, State> {
               {getErrorMessage(errorCode, seriesUrl)}
             </p>
           )}
-          {seriesUrl &&
-            showLinkToForm && (
-              <Fragment>
-                <p className="mb-2">
-                  <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
-                  support reading on Poketo. You can add a different link to
-                  open for reading.
-                </p>
-                <Input
-                  type="url"
-                  name="linkToUrl"
-                  readOnly={disableFormFields}
-                  onChange={this.handleLinkToUrlChange}
-                  placeholder="Reading URL (optional)"
-                  value={linkToUrl || ''}
-                />
-              </Fragment>
-            )}
+          {seriesUrl && showLinkToForm && (
+            <Fragment>
+              <p className="mb-2">
+                <strong>{utils.getDomainName(seriesUrl)}</strong> doesn't
+                support reading on Poketo. You can add a different link to open
+                for reading.
+              </p>
+              <Input
+                type="url"
+                name="linkToUrl"
+                readOnly={disableFormFields}
+                onChange={this.handleLinkToUrlChange}
+                placeholder="Reading URL (optional)"
+                value={linkToUrl || ''}
+              />
+            </Fragment>
+          )}
           <Button
             variant="primary"
             disabled={bookmarkFetchState !== 'READY' || errorCode !== null}
