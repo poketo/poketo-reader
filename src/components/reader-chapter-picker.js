@@ -2,13 +2,13 @@
 
 import React, { PureComponent, type ElementRef } from 'react';
 import { FixedSizeList as List } from 'react-window';
-import type { ChapterMetadata } from 'poketo';
-import { BookmarkContext } from '../views/reader-view';
-// import utils from '../utils';
 import ChapterRow from '../components/chapter-row';
+import type { Bookmark } from '../../shared/types';
+import type { ChapterMetadata } from 'poketo';
 
 type Props = {
   className?: string,
+  bookmark: ?Bookmark,
   innerRef: ElementRef<*>,
   activeChapterId?: string,
   seriesChapters: ChapterMetadata[],
@@ -46,7 +46,13 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
   };
 
   render() {
-    const { seriesChapters, activeChapterId, innerRef, className } = this.props;
+    const {
+      seriesChapters,
+      bookmark,
+      activeChapterId,
+      innerRef,
+      className,
+    } = this.props;
 
     return (
       <List
@@ -61,18 +67,14 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
           const chapter = data[index];
           const isActive = chapter.id === activeChapterId;
 
-          return(
-            <BookmarkContext.Consumer>
-              {bookmark => (
-                <ChapterRow
-                  chapter={chapter}
-                  style={style}
-                  bookmark={bookmark}
-                  isActive={isActive}
-                  onClick={this.handleChapterClick}
-                />
-              )}
-            </BookmarkContext.Consumer>
+          return (
+            <ChapterRow
+              chapter={chapter}
+              style={style}
+              bookmark={bookmark}
+              isActive={isActive}
+              onClick={this.handleChapterClick}
+            />
           );
         }}
       </List>

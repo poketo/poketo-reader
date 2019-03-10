@@ -6,6 +6,7 @@ import Icon from '../components/icon';
 import Panel from '../components/panel';
 import ReaderChapterPicker from '../components/reader-chapter-picker';
 import ReaderChapterLink from '../components/reader-chapter-link';
+import { BookmarkContext } from '../views/reader-view';
 import utils from '../utils';
 
 import type { ChapterMetadata, Series } from 'poketo';
@@ -48,7 +49,6 @@ export default class ReaderNavigation extends Component<Props, State> {
   };
 
   listRef = React.createRef<*>();
-  activeChapterRef = React.createRef<*>();
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (
@@ -58,7 +58,9 @@ export default class ReaderNavigation extends Component<Props, State> {
       const listEl = this.listRef.current;
 
       if (listEl) {
-        const index = this.props.seriesChapters.findIndex(c => c.id === this.props.chapter.id);
+        const index = this.props.seriesChapters.findIndex(
+          c => c.id === this.props.chapter.id,
+        );
         listEl.scrollToItem(index, 'center');
       }
     }
@@ -73,12 +75,17 @@ export default class ReaderNavigation extends Component<Props, State> {
         isShown={showingPanel}
         onRequestClose={this.handlePickerPanelClose}>
         {() => (
-          <ReaderChapterPicker
-            innerRef={this.listRef}
-            activeChapterId={chapter.id}
-            seriesChapters={seriesChapters}
-            onChapterClick={this.handleChapterClick}
-          />
+          <BookmarkContext.Consumer>
+            {bookmark => (
+              <ReaderChapterPicker
+                innerRef={this.listRef}
+                bookmark={bookmark}
+                activeChapterId={chapter.id}
+                seriesChapters={seriesChapters}
+                onChapterClick={this.handleChapterClick}
+              />
+            )}
+          </BookmarkContext.Consumer>
         )}
       </Panel>
     );
