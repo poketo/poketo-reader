@@ -18,8 +18,14 @@ type Props = {
 type RowProps = {
   data: ChapterMetadata[],
   index: number,
-  style: { position: string, left: number, top: number, height: number, width: string}
-}
+  style: {
+    position: string,
+    left: number,
+    top: number,
+    height: number,
+    width: string,
+  },
+};
 
 export default class ReaderChapterPicker extends PureComponent<Props> {
   static defaultProps = {
@@ -46,7 +52,7 @@ export default class ReaderChapterPicker extends PureComponent<Props> {
       <List
         className={className}
         ref={innerRef}
-        height={500}
+        height={400}
         width="100%"
         itemData={seriesChapters}
         itemCount={seriesChapters.length}

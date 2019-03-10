@@ -26,16 +26,6 @@ const pickerClassName = css`
   line-height: 1.5;
 `;
 
-const contentClassName = css`
-  overflow-y: scroll;
-  max-height: 60vh;
-  -webkit-overflow-scrolling: touch;
-
-  @media only screen and (orientation: landscape) {
-    max-height: 80vh;
-  }
-`;
-
 export default class ReaderNavigation extends Component<Props, State> {
   static defaultProps = {
     showNextPreviousLinks: false,
@@ -84,7 +74,6 @@ export default class ReaderNavigation extends Component<Props, State> {
         onRequestClose={this.handlePickerPanelClose}>
         {() => (
           <ReaderChapterPicker
-            className={contentClassName}
             innerRef={this.listRef}
             activeChapterId={chapter.id}
             seriesChapters={seriesChapters}
