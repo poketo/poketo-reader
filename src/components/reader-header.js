@@ -13,13 +13,11 @@ import Icon from '../components/icon';
 import Panel from '../components/panel';
 import Popover from '../components/popover';
 import type { Collection } from '../types';
-import type { Bookmark } from '../../shared/types';
 import utils from '../utils';
 
 const LazyFeedbackForm = lazy(() => import('../components/feedback-form'));
 
 type Props = {
-  bookmark?: Bookmark,
   collection?: Collection,
   seriesId: string,
   series?: Series,
@@ -64,7 +62,6 @@ export default class ReaderHeader extends Component<Props, State> {
 
   render() {
     const {
-      bookmark,
       collection,
       chapter,
       series,
@@ -110,7 +107,6 @@ export default class ReaderHeader extends Component<Props, State> {
                 <div className="p-absolute p-fill ph-5 x xa-center xj-center">
                   <ReaderNavigation
                     chapter={chapter}
-                    bookmark={bookmark}
                     series={series}
                     seriesChapters={seriesChapters}
                   />

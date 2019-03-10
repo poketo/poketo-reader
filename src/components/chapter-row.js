@@ -49,7 +49,7 @@ const styles = {
 
 type Props = {
   chapter: ChapterMetadata,
-  bookmark?: Bookmark,
+  bookmark: ?Bookmark,
   collectionSlug?: string,
   extendedLabel?: boolean,
   isActive?: boolean,
