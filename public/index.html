@@ -16,7 +16,7 @@
   <script>
     var _rollbarConfig = {
       accessToken: '%REACT_APP_ROLLBAR_KEY%',
-      enabled: '%NODE_ENV%' === 'production',
+      enabled: String('%NODE_ENV%') === 'production',
       captureUncaught: true,
       captureUnhandledRejections: true,
       payload: {

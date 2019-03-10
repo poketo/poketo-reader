@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:api": "(cd api && yarn start)",
-    "build": "NODE_ENV=production REACT_APP_COMMIT_REF=$COMMIT_REF react-scripts build",
+    "build": "REACT_APP_COMMIT_REF=$COMMIT_REF react-scripts build",
     "build:css": "bin/build-css",
     "build:icons": "bin/build-icons",
     "build:api": "(cd api && yarn build)",
