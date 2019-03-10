@@ -190,7 +190,7 @@ function mapStateToProps(state, ownProps) {
 
       const series = seriesById[seriesId];
       const chapterIds = (series ? series.chapters : null) || [];
-      const chapters = chapterIds.map(id => chaptersById[id]);
+      const chapters = chapterIds.map(id => chaptersById[id]).filter(Boolean);
 
       const isCaughtUp =
         chapters.length > 0
