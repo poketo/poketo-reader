@@ -24,6 +24,7 @@ const SiteNames = {
   'manga-here': 'MangaHere',
   'manga-rock': 'MangaRock',
   'manga-updates': 'Manga Updates',
+  'manga-stream': 'MangaStream',
   mangadex: 'MangaDex',
   mangakakalot: 'Mangakakalot',
   manganelo: 'Manganelo',
