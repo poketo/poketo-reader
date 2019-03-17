@@ -11,21 +11,18 @@ type Props = {
 type State = {
   hasError: boolean,
   errorMessage: ?string,
-  errorStack: ?string,
 };
 
 export default class ErrorBoundary extends Component<Props, State> {
   state = {
     hasError: false,
     errorMessage: null,
-    errorStack: null,
   };
 
   componentDidCatch(error: Error, info: { componentStack: string }) {
     this.setState({
       hasError: true,
       errorMessage: error.message,
-      errorStack: info.componentStack,
     });
     window.Rollbar.error(error);
   }
@@ -38,7 +35,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   render() {
     const { children } = this.props;
-    const { hasError, errorMessage, errorStack } = this.state;
+    const { hasError, errorMessage } = this.state;
 
     if (hasError) {
       return (
