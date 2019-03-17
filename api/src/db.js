@@ -97,14 +97,11 @@ const toBookmark = (bookmarkData: DatabaseBookmark): Bookmark => {
 async function findBookmarksBySlug(userSlug: string): Promise<Bookmark[]> {
   const result: DatabaseBookmark[] = await query(
     pg('users')
-      .where('slug', userSlug)
       .leftJoin('bookmarks', 'bookmarks.ownerId', 'users.id')
+      .where('users.slug', userSlug)
+      .whereNotNull('bookmarks.id')
       .select(...BOOKMARK_FIELDS.map(field => `bookmarks.${field}`)),
   );
-
-  if (result.length === 0) {
-    throw new NotFoundError(`Collection '${userSlug}' not found`);
-  }
 
   return result.map(toBookmark);
 }

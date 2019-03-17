@@ -2,6 +2,7 @@
 
 import React, { Component, type Node } from 'react';
 import CodeBlock from './code-block';
+import cache from '../store/cache';
 
 type Props = {
   children: Node,
@@ -30,7 +31,9 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   handleReloadClick = () => {
-    window.location.reload();
+    cache.clear().then(() => {
+      window.location.reload();
+    });
   };
 
   render() {
@@ -50,12 +53,9 @@ export default class ErrorBoundary extends Component<Props, State> {
             <a href="https://github.com/poketo/site/issues/new">
               reporting this issue
             </a>{' '}
-            with the error below.
+            with the following error message:
           </p>
-          <CodeBlock>
-            {errorMessage}
-            {errorStack}
-          </CodeBlock>
+          <CodeBlock>{errorMessage}</CodeBlock>
         </div>
       );
     }

@@ -24,6 +24,17 @@ const nextChapterDivider = css`
   }
 `;
 
+const CollectionMessage = ({ title, body }) => (
+  <div className="ta-center pt-4">
+    <h3 className="fs-18 fw-semibold">{title}</h3>
+    <p>{body}</p>
+  </div>
+);
+
+const EmptyMessage = () => (
+  <CollectionMessage title="Welcome!" body="Follow a series to get started." />
+);
+
 const CollectionNavigation = () => (
   <header className="x ph-2 mb-4 fw-semibold ta-center ta-left-m">
     <NavLink
@@ -53,6 +64,7 @@ const CollectionNavigation = () => (
 
 type NowReadingProps = {
   dispatch: Dispatch,
+  hasSeries: boolean,
   feedItems: FeedItem[],
 };
 
@@ -62,12 +74,16 @@ class NowReadingFeed extends Component<NowReadingProps> {
   }
 
   render() {
+    if (this.props.hasSeries === false) {
+      return <EmptyMessage />;
+    }
+
     if (this.props.feedItems.length < 1) {
       return (
-        <div className="ta-center pt-4">
-          <h3 className="fs-18 fw-semibold">You're all caught up!</h3>
-          <p>Check back later for more updates.</p>
-        </div>
+        <CollectionMessage
+          title="You're all caught up!"
+          body="Check back later for more updates."
+        />
       );
     }
 
@@ -91,6 +107,10 @@ class LibraryFeed extends Component<LibraryProps> {
   }
 
   render() {
+    if (this.props.feedItems.length < 1) {
+      return <EmptyMessage />;
+    }
+
     return this.props.feedItems.map(item => (
       <SeriesRow
         key={item.id}
@@ -108,20 +128,20 @@ type Props = {
 };
 
 type State = {
-  seriesActionPanelId: string | null,
+  activeBookmarkId: string | null,
 };
 
 class Feed extends Component<Props, State> {
   state = {
-    seriesActionPanelId: null,
+    activeBookmarkId: null,
   };
 
   handleMoreClick = seriesId => {
-    this.setState({ seriesActionPanelId: seriesId });
+    this.setState({ activeBookmarkId: seriesId });
   };
 
   closePanel = () => {
-    this.setState({ seriesActionPanelId: null });
+    this.setState({ activeBookmarkId: null });
   };
 
   render() {
@@ -140,16 +160,20 @@ class Feed extends Component<Props, State> {
         return 0;
       });
 
+    const activeFeedItem = this.state.activeBookmarkId
+      ? feedItems.find(item => item.id === this.state.activeBookmarkId)
+      : null;
+
     return (
       <div className="pt-4 ph-2 pb-6 mw-600 mh-auto">
         <CollectionNavigation />
         <Panel
-          isShown={Boolean(this.state.seriesActionPanelId)}
+          isShown={Boolean(activeFeedItem)}
           onRequestClose={this.closePanel}>
           {() => (
             <BookmarkActionsPanel
               // $FlowFixMe: The `isShown` conditional ensures this is always true.
-              seriesId={this.state.seriesActionPanelId}
+              bookmark={activeFeedItem}
               onRequestClose={this.closePanel}
             />
           )}
@@ -159,7 +183,11 @@ class Feed extends Component<Props, State> {
             path="/feed"
             exact
             render={() => (
-              <NowReadingFeed dispatch={dispatch} feedItems={unreadFeedItems} />
+              <NowReadingFeed
+                dispatch={dispatch}
+                hasSeries={feedItems.length > 0}
+                feedItems={unreadFeedItems}
+              />
             )}
           />
           <Route

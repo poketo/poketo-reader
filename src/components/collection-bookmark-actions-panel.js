@@ -28,8 +28,8 @@ class BookmarkActionPanel extends Component<Props> {
     api
       .fetchRemoveBookmarkFromCollection(collectionSlug, bookmark.id)
       .then(response => {
-        dispatch(removeBookmark(collectionSlug, bookmark.id));
         onRequestClose();
+        dispatch(removeBookmark(collectionSlug, bookmark.id));
       })
       .catch(err => {
         // TODO: Handle errors
@@ -62,13 +62,12 @@ class BookmarkActionPanel extends Component<Props> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { collections: collectionsById, navigation } = state;
+  const { navigation } = state;
 
   const slug = navigation.collectionSlug;
 
   return {
     collectionSlug: slug,
-    bookmark: collectionsById[slug].bookmarks[ownProps.seriesId],
   };
 };
 
