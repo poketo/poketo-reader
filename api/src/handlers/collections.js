@@ -103,7 +103,7 @@ export async function addBookmark(ctx: Context, slug: string) {
   const hasExistingBookmark = await db.checkBookmarkExists(user.id, seriesId);
 
   ctx.check(
-    !hasExistingBookmark,
+    hasExistingBookmark,
     `A bookmark for '${seriesUrl}' already exists.`,
   );
 
