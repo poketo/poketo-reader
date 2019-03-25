@@ -114,7 +114,7 @@ const utils = {
     `https://www.reddit.com/r/manga/search?q=${encodeURIComponent(
       searchString,
     ).replace(/%20/g, '+')}${sortByNew ? '&sort=new' : ''}&restrict_sr=on`,
-  getFeedUrl: (seriesId: string) => `/rss/${seriesId}.json`,
+  getFeedUrl: (seriesId: string) => `https://api.poketo.app/feed/${seriesId}.json`,
 
   getUnfollowMessage: (seriesTitle: ?string) =>
     `Do you want to unfollow ${seriesTitle ||

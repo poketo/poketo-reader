@@ -1,6 +1,5 @@
 # proxy api requests
 /api/* https://api.poketo.app/:splat 200
-/rss/* https://api.poketo.app/rss/:splat.json 200
 
 # serve index.html for all pages
 /*  /index.html  200

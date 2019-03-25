@@ -49,7 +49,7 @@ app.use(route.post(bookmarkRoot + '/:seriesId/read', collections.markAsRead));
 
 app.use(route.get('/series', fetch));
 app.use(route.get('/chapter', fetch));
-app.use(route.get('/rss/:id.json', fetchFeed));
+app.use(route.get('/feed/:id.json', fetchFeed));
 
 /**
  * Server
