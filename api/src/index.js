@@ -15,11 +15,10 @@ app.on('error', () => {});
 
 app.use(
   route.get('/', async ctx => {
-    ctx.assert(
-      false,
-      404,
-      `Welcome to the Poketo API! If you're looking for documentation, check out https://github.com/poketo/poketo-reader/tree/master/api`,
-    );
+    ctx.statusCode = 404;
+    ctx.body = {
+      message: `Welcome to the Poketo API! If you're looking for documentation, check out https://github.com/poketo/poketo-reader/tree/master/api`
+    }
   }),
 );
 
