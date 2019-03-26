@@ -27,6 +27,13 @@ const pickerClassName = css`
   line-height: 1.5;
 `;
 
+const contentClassName = css`
+  max-height: 60vh;
+   @media only screen and (orientation: landscape) {
+    max-height: 80vh;
+  }
+`;
+
 export default class ReaderNavigation extends Component<Props, State> {
   static defaultProps = {
     showNextPreviousLinks: false,
@@ -78,6 +85,7 @@ export default class ReaderNavigation extends Component<Props, State> {
           <BookmarkContext.Consumer>
             {bookmark => (
               <ReaderChapterPicker
+                className={contentClassName}
                 innerRef={this.listRef}
                 bookmark={bookmark}
                 activeChapterId={chapter.id}
