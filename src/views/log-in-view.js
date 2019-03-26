@@ -120,12 +120,11 @@ class LogInView extends Component<Props, State> {
         <Head title="Log In" />
         <HomeHeader />
         <div className="pt-4 ph-3 mw-500 mh-auto ta-center">
-          {hasUniqueRedirect &&
-            errorCode === null && (
-              <Alert className="mb-4">
-                You need to log in to access that page.
-              </Alert>
-            )}
+          {hasUniqueRedirect && errorCode === null && (
+            <Alert className="mb-4">
+              You need to log in to access that page.
+            </Alert>
+          )}
           <div className="mb-4">
             <h2 className="fw-semibold">Log in to Poketo</h2>
             <p>Enter your Poketo code below.</p>
@@ -147,7 +146,7 @@ class LogInView extends Component<Props, State> {
             <div className="mb-3">
               <div className="x">
                 <div className="x xa-center ph-2 ba-1 bc-gray1 c-gray4 pe-none br-3 br-flushRight bgc-gray0 ff-mono fs-14">
-                  <span className="pl-1">https://poketo.app/c/</span>
+                  <span className="pl-1">poketo.app/c/</span>
                 </div>
                 <Input
                   type="text"
@@ -156,6 +155,8 @@ class LogInView extends Component<Props, State> {
                   pattern="[A-Za-z0-9_-]{7,10}"
                   autoFocus
                   maxLength="10"
+                  autocorrect="off"
+                  autocapitalize="none"
                   value={slug}
                   disabled={isFetching}
                   required
