@@ -29,7 +29,7 @@ const styles = {
     grid-column-gap: 8px;
 
     border-radius: 3px;
-    min-height: 44px;
+    height: 44px;
     transition: background-color 100ms ease;
 
     .supports-hover &:hover {
@@ -49,7 +49,7 @@ const styles = {
 
 type Props = {
   chapter: ChapterMetadata,
-  bookmark?: Bookmark,
+  bookmark: ?Bookmark,
   collectionSlug?: string,
   extendedLabel?: boolean,
   isActive?: boolean,
@@ -77,7 +77,7 @@ const ChapterRow = ({
 
   return (
     <Link
-      className={cx('pv-2 ph-3 xa-center', styles.base, {
+      className={cx('ph-3 xa-center', styles.base, {
         [styles.withIndicator]: hasIndicator,
         [styles.isActive]: isActive,
         [styles.isLastRead]: isLastRead && !isActive,

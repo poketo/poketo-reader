@@ -25,6 +25,7 @@ import {
 
 import type { Chapter, ChapterMetadata, Series } from 'poketo';
 import type { Collection } from '../types';
+import type { Bookmark } from '../../shared/types';
 import type { Dispatch, FetchStatusState } from '../store/types';
 
 type ContainerProps = {
@@ -44,6 +45,8 @@ type ContainerProps = {
     |},
   |},
 };
+
+export const BookmarkContext = React.createContext<?Bookmark>();
 
 class ReaderViewContainer extends Component<ContainerProps> {
   componentDidMount() {
@@ -146,62 +149,64 @@ class ReaderViewContainer extends Component<ContainerProps> {
     const siteName = utils.getSiteNameFromId(seriesId);
 
     return (
-      <div className="mh-100vh bgc-gray4">
-        <BodyClassName className="ff-sans bgc-black" />
-        <ReaderHeader
-          collection={collection}
-          chapter={chapter}
-          bookmark={bookmark}
-          series={series}
-          seriesId={seriesId}
-          seriesChapters={seriesChapters}
-          onMarkAsReadClick={this.handleMarkAsReadClick}
-        />
-        {isLoading || errorCode ? (
-          <div className="x xa-center xj-center h-100p ta-center pv-6 c-white">
-            {errorCode ? (
-              <div>
-                <div className="mb-2 c-white o-50p">
-                  <Icon name="warning" />
+      <BookmarkContext.Provider value={bookmark}>
+        <div className="mh-100vh bgc-gray4">
+          <BodyClassName className="ff-sans bgc-black" />
+          <ReaderHeader
+            collection={collection}
+            chapter={chapter}
+            series={series}
+            seriesId={seriesId}
+            seriesChapters={seriesChapters}
+            onMarkAsReadClick={this.handleMarkAsReadClick}
+          />
+          {isLoading || errorCode ? (
+            <div className="x xa-center xj-center h-100p ta-center pv-6 c-white">
+              {errorCode ? (
+                <div>
+                  <div className="mb-2 c-white o-50p">
+                    <Icon name="warning" />
+                  </div>
+                  <div className="mb-3 o-50p">
+                    Error loading from {siteName}
+                  </div>
+                  <Button inline onClick={this.handleRetryButtonClick}>
+                    <span className="ph-3">Try again</span>
+                  </Button>
                 </div>
-                <div className="mb-3 o-50p">Error loading from {siteName}</div>
-                <Button inline onClick={this.handleRetryButtonClick}>
-                  <span className="ph-3">Try again</span>
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <div className="mb-4">
-                  <DotLoader />
+              ) : (
+                <div>
+                  <div className="mb-4">
+                    <DotLoader />
+                  </div>
+                  <div className="fs-12 o-50p">Loading from {siteName}</div>
                 </div>
-                <div className="fs-12 o-50p">Loading from {siteName}</div>
-              </div>
-            )}
-          </div>
-        ) : (
-          <Fragment>
-            {series && (
-              <ReaderView
-                chapter={chapter}
-                series={series}
-                onMarkAsRead={this.handleMarkAsReadPassive}
-              />
-            )}
-            {showNavigation && (
-              <div className="pb-3">
-                <ReaderNavigation
-                  series={series}
+              )}
+            </div>
+          ) : (
+            <Fragment>
+              {series && (
+                <ReaderView
                   chapter={chapter}
-                  bookmark={bookmark}
-                  seriesChapters={seriesChapters}
-                  showNextPreviousLinks
+                  series={series}
+                  onMarkAsRead={this.handleMarkAsReadPassive}
                 />
-              </div>
-            )}
-            <ReaderFooter />
-          </Fragment>
-        )}
-      </div>
+              )}
+              {showNavigation && (
+                <div className="pb-3">
+                  <ReaderNavigation
+                    series={series}
+                    chapter={chapter}
+                    seriesChapters={seriesChapters}
+                    showNextPreviousLinks
+                  />
+                </div>
+              )}
+              <ReaderFooter />
+            </Fragment>
+          )}
+        </div>
+      </BookmarkContext.Provider>
     );
   }
 }
