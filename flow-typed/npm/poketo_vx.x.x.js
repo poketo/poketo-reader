@@ -49,6 +49,7 @@ declare module 'poketo' {
     constructUrl: (id: string) => string,
     getId: (url: string) => string,
     getType: (idOrUrl: string) => 'series' | 'chapter',
+    setDefaultHeaders: (headers: Object) => void,
     getSeries: (idOrUrl: string) => Promise<Series>,
     getChapter: (idOrUrl: string) => Promise<Chapter>,
   };

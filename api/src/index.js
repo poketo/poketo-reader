@@ -1,6 +1,7 @@
 // @flow
 
 import route from 'koa-route';
+import poketo from 'poketo';
 import app from './app';
 import utils from './utils';
 
@@ -13,12 +14,19 @@ import fetchFeed from './handlers/fetch-feed';
 app.use(error);
 app.on('error', () => {});
 
+app.use(async (ctx, next) => {
+  const ipAddress = ctx.get('X-Forwarded-For') || ctx.request.ip;
+  poketo.setDefaultHeaders({ 'X-Forwarded-For': ipAddress });
+
+  await next();
+});
+
 app.use(
   route.get('/', async ctx => {
     ctx.statusCode = 404;
     ctx.body = {
-      message: `Welcome to the Poketo API! If you're looking for documentation, check out https://github.com/poketo/poketo-reader/tree/master/api`
-    }
+      message: `Welcome to the Poketo API! If you're looking for documentation, check out https://github.com/poketo/poketo-reader/tree/master/api`,
+    };
   }),
 );
 
