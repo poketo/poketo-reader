@@ -230,7 +230,7 @@ function mapStateToProps(state, ownProps: ContainerProps) {
     series,
     seriesChapters:
       series && series.chapters
-        ? series.chapters.map(id => state.chapters[id])
+        ? series.chapters.map(id => state.chapters[id]).filter(Boolean)
         : null,
     seriesId,
   };
