@@ -34,7 +34,7 @@
     "@babel/preset-flow": "^7.0.0",
     "babel-eslint": "^9.0.0",
     "flow-remove-types": "^1.2.3",
-    "got": "^9.3.2",
+    "got": "^11.8.5",
     "jest": "^22.2.1",
     "prettier": "^1.14.2",
     "xo": "^0.22.0"
